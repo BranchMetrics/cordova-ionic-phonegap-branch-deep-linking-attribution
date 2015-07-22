@@ -39,27 +39,20 @@ dist/build.js: $(SOURCES) $(EXTERN) compiler/compiler.jar
 dist/build.min.js: $(SOURCES) $(EXTERN) compiler/compiler.jar
 	$(COMPILER) $(COMPILER_ARGS) $(COMPILER_MIN_ARGS) --define 'CORDOVA_BUILD=true' > dist/build.min.js
 
-testbeds/web/example.html: src/web/example.template.html
-ifeq ($(MAKECMDGOALS), release)
-	perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' src/web/example.template.html > testbeds/web/example.html
-else
-	perl -pe 'BEGIN{$$a="$(ONPAGE_DEV)"}; s#// INSERT INIT CODE#$$a#' src/web/example.template.html > testbeds/web/example.html
-endif
-
 # Documentation
 
 docs/cordova/3_branch_cordova.md: $(SOURCES)
-	perl -pe 's/\/\*\*\ =WEB/\/\*\*\*/gx' src/3_branch.js > src/3_branch_cordova.js
-	perl -p -i -e 's/=CORDOVA//gx' src/3_branch_cordova.js
-	jsdox src/3_branch_cordova.js --output docs/cordova
-	rm src/3_branch_cordova.js
+	perl -pe 's/\/\*\*\ =WEB/\/\*\*\*/gx' Web-SDK/src/3_branch.js > Web-SDK/src/3_branch_cordova.js
+	perl -p -i -e 's/=CORDOVA//gx' Web-SDK/src/3_branch_cordova.js
+	jsdox Web-SDK/src/3_branch_cordova.js --output docs/cordova
+	rm Web-SDK/src/3_branch_cordova.js
 
 README.md: docs/0_notice.md docs/readme/1_main.md docs/4_footer.md
 	cat docs/0_notice.md docs/readme/1_main.md docs/4_footer.md | \
 		perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' > README.md
 
-CORDOVA_GUIDE.md: docs/0_notice.md docs/cordova/1_intro.md docs/cordova/3_branch_cordova.md docs/4_footer.md
-	perl build_utils/toc_generator.pl src/3_branch.js docs/cordova/2_table_of_contents.md CORDOVA
+README.md: docs/0_notice.md docs/cordova/1_intro.md docs/cordova/3_branch_cordova.md docs/4_footer.md
+	perl build_utils/toc_generator.pl Web-SDK/src/3_branch.js docs/cordova/2_table_of_contents.md CORDOVA
 	cat docs/0_notice.md docs/cordova/1_intro.md docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md | \
-		perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' > CORDOVA_GUIDE.md
-	perl -p -i -e 's/# Global//' CORDOVA_GUIDE.md
+		perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' > README.md
+	perl -p -i -e 's/# Global//' README.md
