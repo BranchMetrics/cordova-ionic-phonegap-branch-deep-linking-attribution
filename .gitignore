@@ -43,3 +43,5 @@ testbeds/titanium/Branch-SDK-Testbed/app/assets/*
 testbeds/titanium/Branch-SDK-Testbed/MarketplaceArtwork.png
 testbeds/titanium/Branch-SDK-Testbed/iTunesConnect.png
 testbeds/titanium/Branch-SDK-Testbed/platform/*
+/dist/*
+
