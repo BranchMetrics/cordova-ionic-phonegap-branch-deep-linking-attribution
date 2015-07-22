@@ -52,7 +52,7 @@ README.md: docs/0_notice.md docs/readme/1_main.md docs/4_footer.md
 		perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' > README.md
 
 README.md: docs/0_notice.md docs/cordova/1_intro.md docs/cordova/3_branch_cordova.md docs/4_footer.md
-	perl build_utils/toc_generator.pl Web-SDK/src/3_branch.js docs/cordova/2_table_of_contents.md CORDOVA
+	perl Web-SDK/build_utils/toc_generator.pl Web-SDK/src/3_branch.js docs/cordova/2_table_of_contents.md CORDOVA
 	cat docs/0_notice.md docs/cordova/1_intro.md docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md | \
 		perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' > README.md
 	perl -p -i -e 's/# Global//' README.md
