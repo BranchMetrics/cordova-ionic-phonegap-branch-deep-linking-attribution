@@ -3,7 +3,7 @@ All notable changes to the Branch Web SDK will be documented here.
 The Branch Web SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ## [VERSION] - unreleased
-- Fixes undefined function `a.L()` with minified build in `addListener()` method
+- Splits out Web SDK from Cordova SDK into a new repo
 
 ## [v1.6.3] - 2015-07-20
 - Fixed an issue that only loaded the first link click data the user ever clicked on
