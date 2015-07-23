@@ -20,6 +20,24 @@ cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Defer
 
 Note that this SDK is meant for use with full Cordova/PhoneGap apps.  If you are building a hybrid app using an embedded web view and you want to access the Branch API from native code you will want to use the platform specific SDKs and pass data into Javascript if needed.
 
+### Running Cordova Testbed App
+This repo includes a sample app, that demonstrates all of the available methods in the Branch Cordova SDK.
+Building this app is very simple:
+1. Switch to the Cordova dir
+```
+$ cd cordova-testbed
+```
+
+2. Run the init script to install all the required plugins
+```
+$ ./init.sh
+```
+
+3. Build the Cordova app and launch in the iOS emulator
+```
+$ cordova emulate ios
+```
+
 #### Initialization and Event Handling
 
 You should initialize the Branch SDK session once the ‘deviceready’ event fires and each time the ‘resume’ event fires.  See the example code below. You will need your Branch Key from the Branch dashboard.
