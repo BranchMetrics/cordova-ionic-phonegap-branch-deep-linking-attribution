@@ -14,9 +14,9 @@ ONPAGE_CORDOVA_TEST=$(subst ",\",$(shell perl -pe 'BEGIN{$$sub="../dist/build.js
 
 .PHONY: clean
 
-all: dist/build.min.js dist/build.js README.md CORDOVA_GUIDE.md
+all: dist/build.min.js dist/build.js README.md README.md
 clean:
-	rm -f dist/** docs/cordova/3_branch_cordova.md README.md CORDOVA_GUIDE.md
+	rm -f dist/** docs/cordova/3_branch_cordova.md README.md README.md
 release: clean all
 	@echo "released"
 
@@ -46,10 +46,6 @@ docs/cordova/3_branch_cordova.md: $(SOURCES)
 	perl -p -i -e 's/=CORDOVA//gx' Web-SDK/src/3_branch_cordova.js
 	jsdox Web-SDK/src/3_branch_cordova.js --output docs/cordova
 	rm Web-SDK/src/3_branch_cordova.js
-
-README.md: docs/0_notice.md docs/readme/1_main.md docs/4_footer.md
-	cat docs/0_notice.md docs/readme/1_main.md docs/4_footer.md | \
-		perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' > README.md
 
 README.md: docs/0_notice.md docs/cordova/1_intro.md docs/cordova/3_branch_cordova.md docs/4_footer.md
 	perl Web-SDK/build_utils/toc_generator.pl Web-SDK/src/3_branch.js docs/cordova/2_table_of_contents.md CORDOVA
