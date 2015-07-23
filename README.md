@@ -24,17 +24,18 @@ Note that this SDK is meant for use with full Cordova/PhoneGap apps.  If you are
 ### Running Cordova Testbed App
 This repo includes a sample app, that demonstrates all of the available methods in the Branch Cordova SDK.
 Building this app is very simple:
-1. Switch to the Cordova dir
+
+Switch to the Cordova dir
 ```
 $ cd cordova-testbed
 ```
 
-2. Run the init script to install all the required plugins
+Run the init script to install all the required plugins
 ```
 $ ./init.sh
 ```
 
-3. Build the Cordova app and launch in the iOS emulator
+Build the Cordova app and launch in the iOS emulator
 ```
 $ cordova emulate ios
 ```
