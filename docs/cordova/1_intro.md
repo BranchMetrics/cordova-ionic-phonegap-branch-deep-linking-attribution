@@ -33,7 +33,7 @@ You should initialize the Branch SDK session once the ‘deviceready’ event fi
 
 Here is the location of the Branch Key that you will need for the `branch.init` call above (_formerly app id, which is now depreciated_):
 
-![app id](resources/app_id.png)
+![app id](Web-SDK/resources/app_id.png)
 
 The session close will be sent automatically on any ‘pause’ event.
 
