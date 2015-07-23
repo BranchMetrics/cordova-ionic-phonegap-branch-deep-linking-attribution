@@ -8,17 +8,11 @@ COMPILER_DEBUG_ARGS=--formatting=print_input_delimiter --formatting=pretty_print
 SOURCES=Web-SDK/src/0_config.js Web-SDK/src/0_storage.js Web-SDK/src/0_session.js Web-SDK/src/0_utils.js Web-SDK/src/0_queue.js Web-SDK/src/0_banner_utils.js Web-SDK/src/1_api.js Web-SDK/src/1_resources.js Web-SDK/src/1_banner_css.js Web-SDK/src/1_banner_html.js Web-SDK/src/2_banner.js Web-SDK/src/3_branch.js Web-SDK/src/4_initialization.js $(COMPILER_LIBRARY)/goog/**
 EXTERN=Web-SDK/src/extern.js
 
-VERSION=$(shell grep "version" Web-SDK/package.json | perl -pe 's/\s+"version": "(.*)",/$$1/')
-
-ONPAGE_CORDOVA_TEST=$(subst ",\",$(shell perl -pe 'BEGIN{$$sub="../dist/build.js"};s\#SCRIPT_URL_HERE\#$$sub\#' src/onpage.js | $(COMPILER) | node transform.js branch_sdk))
-
 .PHONY: clean
 
 all: dist/build.min.js dist/build.js README.md README.md
 clean:
 	rm -f dist/** docs/cordova/3_branch_cordova.md README.md README.md
-release: clean all
-	@echo "released"
 
 # Kinda gross, but will download closure compiler if you don't have it.
 compiler/compiler.jar:
@@ -49,6 +43,5 @@ docs/cordova/3_branch_cordova.md: $(SOURCES)
 
 README.md: docs/0_notice.md docs/cordova/1_intro.md docs/cordova/3_branch_cordova.md docs/4_footer.md
 	perl Web-SDK/build_utils/toc_generator.pl Web-SDK/src/3_branch.js docs/cordova/2_table_of_contents.md CORDOVA
-	cat docs/0_notice.md docs/cordova/1_intro.md docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md | \
-		perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' > README.md
+	cat docs/0_notice.md docs/cordova/1_intro.md docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md > README.md
 	perl -p -i -e 's/# Global//' README.md
