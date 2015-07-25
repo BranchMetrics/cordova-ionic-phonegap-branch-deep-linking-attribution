@@ -26,17 +26,17 @@ This repo includes a sample app, that demonstrates all of the available methods 
 Building this app is very simple:
 
 Switch to the Cordova dir
-```
+```js
 $ cd cordova-testbed
 ```
 
 Run the init script to install all the required plugins
-```
+```sh
 $ ./init.sh
 ```
 
 Build the Cordova app and launch in the iOS emulator
-```
+```sh
 $ cordova emulate ios
 ```
 
