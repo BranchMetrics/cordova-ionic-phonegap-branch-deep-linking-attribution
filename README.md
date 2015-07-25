@@ -864,7 +864,6 @@ callback(
 );
 ```
 
----
 
 ## Credit redemption
 
