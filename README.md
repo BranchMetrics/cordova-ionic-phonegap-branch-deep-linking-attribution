@@ -26,7 +26,7 @@ This repo includes a sample app, that demonstrates all of the available methods 
 Building this app is very simple:
 
 Switch to the Cordova dir
-```js
+```sh
 $ cd cordova-testbed
 ```
 
