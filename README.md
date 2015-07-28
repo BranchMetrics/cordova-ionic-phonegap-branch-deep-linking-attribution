@@ -26,12 +26,12 @@ This repo includes a sample app, that demonstrates all of the available methods 
 Building this app is very simple:
 
 Switch to the Cordova dir
-```sh
+```js
 $ cd cordova-testbed
 ```
 
 Run the init script to install all the required plugins
-```sh
+```js
 $ ./init.sh
 ```
 
@@ -631,7 +631,7 @@ The `options` object can containt the following properties:
 | --- | ---
 | amount | *reqruied* - An integer specifying the number of credits added when the code is applied.
 | calculation_type | *required* - An integer of 1 for unlimited uses, or 0 for one use.
-| location | *required* - An integer that etermines who get's the credits:  0 for the referree, 2 for the referring user or 3 for both.
+| location | *required* - An integer that determines who get's the credits:  0 for the referree, 2 for the referring user or 3 for both.
 | bucket | *optional* - The bucket to apply the credits to.  Defaults to "default".
 | prefix | *optional* - A string to be prepended to the code.
 | expiration | *optional* - A date string that if present, determines the date on which the code expires.
@@ -864,6 +864,7 @@ callback(
 );
 ```
 
+---
 
 ## Credit redemption
 

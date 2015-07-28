@@ -4,7 +4,7 @@ var app = {
     // ------------------ Inititalization & Utility Methods ------------------
 
     initialize: function() {
-        app.branch_key = "key_live_hohBTjb6eJS9jou8Tl1kIhddokjfbXJF";
+        app.branch_key = "key_test_hdiu9rtcwDTTZy8PPw3sylhewveqJnUu";
         document.addEventListener('deviceready', app.onDeviceReady, false);
     },
 
