@@ -17,7 +17,7 @@ instead of possibly using the same device id.  This is useful when testing.
 
 This needs to be set before the Branch.init call!!!
 
----
+___
 
 
 
@@ -52,7 +52,7 @@ the link the user was referred by.
 ```js
 branch.init(
     branch_key,
-    options
+    options,
     callback (err, data),
 );
 ```
@@ -340,7 +340,7 @@ callback(
 A robust function to give your users the ability to share links via SMS. If
 the user navigated to this page via a Branch link, `sendSMS` will send that
 same link. Otherwise, it will create a new link with the data provided in
-the `params` argument. `sendSMS` also  registers a click event with the
+the `params` argument. `sendSMS` also registers a click event with the
 `channel` pre-filled with `'sms'` before sending an sms to the provided
 `phone` parameter. This way the entire link click event is recorded starting
 with the user sending an sms.
@@ -388,7 +388,7 @@ branch.sendSMS(
     },
     { make_new_link: true }, // Default: false. If set to true, sendSMS will generate a new link even if one already exists.
     function(err) { console.log(err); }
-});
+);
 ```
 
 ##### Callback Format
@@ -535,7 +535,8 @@ branch.validateCode(
     function(err) {
         if (err) {
             console.log(err);
-        } else {
+        }
+        else {
             console.log("Code is valid");
         }
     }
@@ -580,7 +581,8 @@ branch.applyCode(
     function(err) {
         if (err) {
             console.log(err);
-        } else {
+        }
+        else {
             console.log("Code applied");
         }
     }
@@ -702,7 +704,7 @@ callback(
 );
 ```
 
----
+___
 
 ## Credit redemption
 
