@@ -17,7 +17,7 @@ instead of possibly using the same device id.  This is useful when testing.
 
 This needs to be set before the Branch.init call!!!
 
----
+___
 
 
 
@@ -52,7 +52,7 @@ the link the user was referred by.
 ```js
 branch.init(
     branch_key,
-    options
+    options,
     callback (err, data),
 );
 ```
@@ -704,7 +704,7 @@ callback(
 );
 ```
 
----
+___
 
 ## Credit redemption
 
