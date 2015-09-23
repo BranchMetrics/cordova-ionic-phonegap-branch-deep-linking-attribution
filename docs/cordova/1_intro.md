@@ -41,7 +41,7 @@ $ cordova emulate ios
 
 #### Initialization and Event Handling
 
-You should initialize the Branch SDK session once the ‘deviceready’ event fires and each time the ‘resume’ event fires.  See the example code below. You will need your Branch Key from the Branch dashboard.
+You should initialize the Branch SDK session once the ‘deviceready' event fires and each time the ‘resume’ event fires.  See the example code below. You will need your Branch Key from the Branch dashboard.
 
 ```js
   branch.init("YOUR BRANCH KEY HERE", function(err, data) {
@@ -54,7 +54,7 @@ Here is the location of the Branch Key that you will need for the `branch.init` 
 
 ![app id](https://raw.githubusercontent.com/BranchMetrics/Smart-App-Banner-Deep-Linking-Web-SDK/master/resources/app_id.png)
 
-The session close will be sent automatically on any ‘pause’ event.
+The session close will be sent automatically on any ‘pause' event.
 
 _____
 
