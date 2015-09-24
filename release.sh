@@ -33,16 +33,6 @@ cd Web-SDK/
 check_git_branch
 cd ..
 
-# check whether web SDK on master branch
-cd Web-SDK/
-branch_name="$(git symbolic-ref HEAD 2>/dev/null)"
-branch_name=${branch_name##refs/heads/}
-if [ "$branch" == "master" ]; then
-  echo "ERROR: not on master branch"
-	exit 1
-fi
-cd ..
-
 # update to the latest
 git pull origin master
 git submodule foreach git pull origin master
