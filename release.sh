@@ -8,20 +8,40 @@ DATE=$(date "+%Y-%m-%d")
 
 echo "Releasing Branch Cordova SDK"
 
+check_git_branch() {
 # check whether on master branch
+  branch_name="$(git symbolic-ref HEAD 2>/dev/null)"
+  branch_name=${branch_name##refs/heads/}
+  if [ "$branch" == "master" ]; then
+    echo "ERROR: not on master branch"
+    exit 1
+  fi
+
+# check whether the branch is clean
+  if [[ $(git status --porcelain 2> /dev/null | tail -n1) != "" ]]
+  then
+    echo 'ERROR: branch dirty'
+    exit 1
+  fi
+}
+
+# check main module
+check_git_branch
+
+# check Web-SDK submodule
+cd Web-SDK/
+check_git_branch
+cd ..
+
+# check whether web SDK on master branch
+cd Web-SDK/
 branch_name="$(git symbolic-ref HEAD 2>/dev/null)"
 branch_name=${branch_name##refs/heads/}
 if [ "$branch" == "master" ]; then
   echo "ERROR: not on master branch"
 	exit 1
 fi
-
-# check whether the branch is clean
-if [[ $(git status --porcelain 2> /dev/null | tail -n1) != "" ]]
-then
-  echo 'ERROR: branch dirty'
-  exit 1
-fi
+cd ..
 
 # update to the latest
 git pull origin master
