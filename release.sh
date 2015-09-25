@@ -13,7 +13,7 @@ check_git_branch() {
   branch_name="$(git symbolic-ref HEAD 2>/dev/null)"
   branch_name=${branch_name##refs/heads/}
   if [ $branch_name != "master" ]; then
-    echo "ERROR: not on master branch"
+    echo "ERROR: not on master branch: "$PWD":"$branch_name
     exit 1
   fi
 
