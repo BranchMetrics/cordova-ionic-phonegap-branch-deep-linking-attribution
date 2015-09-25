@@ -66,7 +66,7 @@ read -p "Update plugin.xml? " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	sed -i -e "s/version=\".*\"/version=\"$VERSION_NO_V\"/" plugin.xml
+	sed -i -e "s/\" version=\".*\"/\" version=\"$VERSION_NO_V\"/" plugin.xml
 fi
 
 read -p "Commit? " -n 1 -r
@@ -75,6 +75,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	git commit -am "Tagging release $VERSION"
 fi
+
+make clean
+make
 
 read -p "Tag? " -n 1 -r
 echo
@@ -95,7 +98,6 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	perl -i -pe '$_ = "\n## [VERSION] - unreleased\n\n" if $. ==4' CHANGELOG.md
-	make clean && make
 	git commit -am "Resetting to HEAD"
 fi
 
