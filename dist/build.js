@@ -613,7 +613,8 @@ goog.tagUnsealableClass = function(a) {
 };
 goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = "goog_defineClass_legacy_unsealable";
 // Input 1
-var config = {link_service_endpoint:"https://bnc.lt", api_endpoint:"https://api.branch.io", version:"1.6.11"}, WEB_BUILD = !1, CORDOVA_BUILD = !0, TITANIUM_BUILD = !1;
+var config = {link_service_endpoint:"https://bnc.lt", api_endpoint:"https://api.branch.io", version:"1.7.0"}, WEB_BUILD = !1, CORDOVA_BUILD = !0, TITANIUM_BUILD = !1, IS_CORDOVA_APP = !!window.cordova;
+IS_CORDOVA_APP && WEB_BUILD && window.alert("Please use Branch Cordova SDK instead. Visit https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK for more details.");
 // Input 2
 var task_queue = function() {
   var a = [], b = function() {
