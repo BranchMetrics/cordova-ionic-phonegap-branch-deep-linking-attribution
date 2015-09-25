@@ -4,6 +4,7 @@ The Branch Web SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ## [VERSION] - unreleased
 - Splits out Cordova SDK from the Web SDK into a new repo
+- Fixed error in network failure handling that caused subsequent calls to fail once an early network connection failure has occurred.
 
 ## [v1.6.3] - 2015-07-20
 - Fixed an issue that only loaded the first link click data the user ever clicked on
