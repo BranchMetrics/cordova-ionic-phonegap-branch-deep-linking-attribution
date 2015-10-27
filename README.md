@@ -1,3 +1,6 @@
+# Branch Cordova SDK
+
+## Full Documentation
 Find exhaustive documentation at our [New documentation portal](https://dev.branch.io).  You may also find our [support portal](http://support.branch.io), complete with with user forums, useful.
 
 The Cordova SDK shares the same code base as the Branch Web SDK, and includes functions to call all of the same API endpoints.
