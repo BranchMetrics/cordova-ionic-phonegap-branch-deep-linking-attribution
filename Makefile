@@ -10,9 +10,9 @@ EXTERN=Web-SDK/src/extern.js
 
 .PHONY: clean
 
-all: dist/build.min.js dist/build.js README.md README.md
+all: dist/build.min.js dist/build.js Reference.md README.md
 clean:
-	rm -f dist/** docs/cordova/3_branch_cordova.md README.md README.md
+	rm -f dist/** docs/cordova/3_branch_cordova.md Reference.md README.md
 
 # Kinda gross, but will download closure compiler if you don't have it.
 compiler/compiler.jar:
@@ -41,7 +41,7 @@ docs/cordova/3_branch_cordova.md: $(SOURCES)
 	jsdox Web-SDK/src/3_branch_cordova.js --output docs/cordova
 	rm Web-SDK/src/3_branch_cordova.js
 
-README.md: docs/0_notice.md docs/cordova/1_intro.md docs/cordova/3_branch_cordova.md docs/4_footer.md
+Reference.md: docs/cordova/3_branch_cordova.md docs/4_footer.md
 	perl Web-SDK/build_utils/toc_generator.pl Web-SDK/src/6_branch.js docs/cordova/2_table_of_contents.md CORDOVA
-	cat docs/0_notice.md docs/cordova/1_intro.md docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md > README.md
-	perl -p -i -e 's/# Global//' README.md
+	cat docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md > Reference.md
+	perl -p -i -e 's/# Global//' Reference.md
