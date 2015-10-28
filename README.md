@@ -8,4 +8,3 @@ The Cordova SDK shares the same code base as the Branch Web SDK, and includes fu
 Live demo of the Web SDK: [https://cdn.branch.io/example.html](https://cdn.branch.io/example.html)
 
 To use the Cordova SDK, you'll need to first initialize it with your Branch Key found in your [Branch dashboard](https://dashboard.branch.io/#/settings). You'll also need to register when your users login with `setIdentity`, and when they logout with `logout`.
-
