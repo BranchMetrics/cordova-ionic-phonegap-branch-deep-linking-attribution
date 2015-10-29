@@ -87,6 +87,7 @@ public class BranchDevice extends CordovaPlugin {
 			int isReferrable = args.optInt(1, -1);
 			Log.d("BranchDevice", "getInstallData isReferrable value is " + isReferrable);
 			String idStr = getUniqueID(debug);
+			installPost.put("debug_set", debug);
 			if (!idStr.equals(BLANK)) {
 				installPost.put("hardware_id", idStr);
 				installPost.put("is_hardware_id_real", hasRealHardwareId());

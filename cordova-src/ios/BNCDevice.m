@@ -47,6 +47,7 @@ static NSString *link_click_identifier = nil;
     NSMutableDictionary *post = [[NSMutableDictionary alloc] init];
     BOOL isRealHardwareId;
     NSString *hardwareId = [BNCDevice getUniqueHardwareId:&isRealHardwareId andIsDebug:debug];
+    [post setObject:[NSNumber numberWithBool:debug] forKey:@"debug_set"];
     if (hardwareId) {
         [post setObject:hardwareId forKey:@"hardware_id"];
         [post setObject:[NSNumber numberWithBool:isRealHardwareId] forKey:@"is_hardware_id_real"];
@@ -125,7 +126,7 @@ static NSString *link_click_identifier = nil;
         uid = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
 
-    if (!uid) {
+    if (!uid || debug) {
         uid = [[NSUUID UUID] UUIDString];
         *isReal = NO;
     }
