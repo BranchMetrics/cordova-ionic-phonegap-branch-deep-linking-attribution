@@ -42,7 +42,7 @@ static NSString *link_click_identifier = nil;
 
 - (void)getInstallData:(CDVInvokedUrlCommand *)command {
     BOOL debug = [[command argumentAtIndex:0 withDefault:[NSNumber numberWithBool:NO]] boolValue];
-    int isReferrable = [[command argumentAtIndex:0 withDefault:[NSNumber numberWithInt:-1]] intValue];
+    int isReferrable = [[command argumentAtIndex:1 withDefault:[NSNumber numberWithInt:-1]] intValue];
 
     NSMutableDictionary *post = [[NSMutableDictionary alloc] init];
     BOOL isRealHardwareId;
