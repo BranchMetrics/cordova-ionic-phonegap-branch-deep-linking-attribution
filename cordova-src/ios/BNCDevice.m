@@ -42,11 +42,12 @@ static NSString *link_click_identifier = nil;
 
 - (void)getInstallData:(CDVInvokedUrlCommand *)command {
     BOOL debug = [[command argumentAtIndex:0 withDefault:[NSNumber numberWithBool:NO]] boolValue];
-    int isReferrable = [[command argumentAtIndex:0 withDefault:[NSNumber numberWithInt:-1]] intValue];
+    int isReferrable = [[command argumentAtIndex:1 withDefault:[NSNumber numberWithInt:-1]] intValue];
 
     NSMutableDictionary *post = [[NSMutableDictionary alloc] init];
     BOOL isRealHardwareId;
     NSString *hardwareId = [BNCDevice getUniqueHardwareId:&isRealHardwareId andIsDebug:debug];
+    [post setObject:[NSNumber numberWithBool:debug] forKey:@"debug_set"];
     if (hardwareId) {
         [post setObject:hardwareId forKey:@"hardware_id"];
         [post setObject:[NSNumber numberWithBool:isRealHardwareId] forKey:@"is_hardware_id_real"];
@@ -125,7 +126,7 @@ static NSString *link_click_identifier = nil;
         uid = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
 
-    if (!uid) {
+    if (!uid || debug) {
         uid = [[NSUUID UUID] UUIDString];
         *isReal = NO;
     }
