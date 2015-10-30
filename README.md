@@ -7,7 +7,7 @@ This is the readme file of our open source Cordova SDK. The Cordova SDK shares t
 
 ## Integration Checklist
 
-- Create Branch Account and get your [Branch Key]((https://dashboard.branch.io/#/settings)
+- Create Branch Account and get your [Branch Key](https://dashboard.branch.io/#/settings)
 - Install SDK
 - Configure Manifest
 - Set up routing for incoming deep links
@@ -18,8 +18,8 @@ This is the readme file of our open source Cordova SDK. The Cordova SDK shares t
 - Set up referrals (optional)
 
 ## Additional Resources
-- [Integration guide](https://dev.branch.io/recipes/quickstart_guide/cordova/)
-- Technical Reference (in this repo)
-- Changelog (in this repo)
+- [Integration guide](https://dev.branch.io/recipes/quickstart_guide/cordova/) *Start Here*
+- [Technical Reference](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/Reference.md)
+- [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/CHANGELOG.md)
 - [Testing](https://dev.branch.io/recipes/testing_your_integration/cordova/)
 - [Support portal, FAQ, and user forums](http://support.branch.io)
