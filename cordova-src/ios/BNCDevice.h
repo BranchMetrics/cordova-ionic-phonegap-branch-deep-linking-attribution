@@ -13,6 +13,7 @@
 
 - (void)getInstallData:(CDVInvokedUrlCommand *)command;
 - (void)getOpenData:(CDVInvokedUrlCommand *)command;
+- (BOOL)handleUserActivity:(NSUserActivity *)userActivity;
 
 + (NSString *)getUniqueHardwareId:(BOOL *)isReal andIsDebug:(BOOL)debug;
 + (NSString *)getURIScheme;

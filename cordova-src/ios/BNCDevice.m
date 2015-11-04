@@ -7,6 +7,7 @@
 @implementation BNCDevice
 
 static NSString *link_click_identifier = nil;
+static NSString *universal_link_url = nil;
 
 - (void)pluginInitialize {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenUrl:) name:CDVPluginHandleOpenURLNotification object:nil];
@@ -79,6 +80,9 @@ static NSString *link_click_identifier = nil;
     } else {
         [post setObject:[NSNumber numberWithInt:isReferrable] forKey:@"is_referrable"];
     }
+    if (universal_link_url) {
+        [post setObject:universal_link_url forKey:@"universal_link_url"];
+    }
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:post];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -103,11 +107,20 @@ static NSString *link_click_identifier = nil;
         [post setObject:[NSNumber numberWithInt:isReferrable] forKey:@"is_referrable"];
     }
     if (link_click_identifier) [post setObject:link_click_identifier forKey:@"link_identifier"];
+    if (universal_link_url) {
+        [post setObject:universal_link_url forKey:@"universal_link_url"];
+    }
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:post];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+
+- (BOOL)handleUserActivity:(NSUserActivity *)userActivity {
+    universal_link_url = [userActivity.webpageURL absoluteString];
+
+    return YES;
+}
 
 + (NSString *)getUniqueHardwareId:(BOOL *)isReal andIsDebug:(BOOL)debug {
     NSString *uid = nil;
