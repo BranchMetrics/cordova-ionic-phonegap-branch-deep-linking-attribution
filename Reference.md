@@ -11,7 +11,6 @@
 
 3. Deep Linking
   + [.link()](#linkdata-callback)
-  + [.sendSMS()](#sendsmsphone-linkdata-options-callback)
   + [.deepview()](#deepviewdata-options-callback)
   + [.deepviewCta()](#deepviewcta)
 
