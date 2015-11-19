@@ -1,5 +1,3 @@
-# Branch Cordova Reference
-
 1. Branch Session
   + [.init()](#initbranch_key-options-callback)
   + [.data()](#datacallback)
@@ -14,6 +12,8 @@
 3. Deep Linking
   + [.link()](#linkdata-callback)
   + [.sendSMS()](#sendsmsphone-linkdata-options-callback)
+  + [.deepview()](#deepviewdata-options-callback)
+  + [.deepviewCta()](#deepviewcta)
 
 4. Referrals and Credits
   + [.referrals()](#referralscallback)
@@ -25,6 +25,11 @@
   + [.redeem()](#redeemamount-bucket-callback)
 
 ___
+
+
+
+
+
 
 * * *
 
@@ -51,7 +56,8 @@ ___
 
 **options**: `Object`, _optional_ - { *isReferrable*: _Is this a referrable session_ }.
 
-**callback**: `function`, _optional_ - callback to read the session data.
+**callback**: `function`, _optional_ - callback to read the
+session data.
 
 THE "isReferrable" OPTION IS ONLY USED IN THE CORDOVA/PHONEGAP PLUGIN
 AND THE TITANIUM MODULE
@@ -61,7 +67,8 @@ object with all the external methods described below. All calls made to
 Branch methods are stored in a queue, so even if the SDK is not fully
 instantiated, calls made to it will be queued in the order they were
 originally called.
-If the session was opened from a referring link, `data()` will also return the referring link click as `referring_link`, which gives you the ability to continue the click flow.
+If the session was opened from a referring link, `data()` will also return the referring link
+click as `referring_link`, which gives you the ability to continue the click flow.
 
 The init function on the Branch object initiates the Branch session and
 creates a new user session, if it doesn't already exist, in
@@ -88,7 +95,7 @@ callback(
           referring_identity: '12345',                      // If the user was referred from a link, and the link was created by a user with an identity, that identity is here.
           has_app:            true,                         // Does the user have the app installed already?
           identity:           'BranchUser',                 // Unique string that identifies the user
-          referring_link:          'https://bnc.lt/c/jgg75-Gjd3' // The referring link click, if available.
+          referring_link:     'https://bnc.lt/c/jgg75-Gjd3' // The referring link click, if available.
      }
 );
 ```
@@ -102,7 +109,8 @@ ___
 
 **Parameters**
 
-**callback**: `function`, _optional_ - callback to read the session data.
+**callback**: `function`, _optional_ - callback to read the
+session data.
 
 Returns the same session information and any referring data, as
 `Branch.init`, but does not require the `app_id`. This is meant to be called
@@ -118,7 +126,8 @@ ___
 
 **Parameters**
 
-**callback**: `function`, _optional_ - callback to read the session data.
+**callback**: `function`, _optional_ - callback to read the
+session data.
 
 Returns the same session information and any referring data, as
 `Branch.init` did when the app was first installed. This is meant to be called
@@ -135,9 +144,11 @@ ___
 
 **Parameters**
 
-**identity**: `string`, _required_ - a string uniquely identifying the user - often a user ID or email address.
+**identity**: `string`, _required_ - a string uniquely identifying the user - often a user ID
+or email address.
 
-**callback**: `function`, _optional_ - callback that returns the user's Branch identity id and unique link.
+**callback**: `function`, _optional_ - callback that returns the user's
+Branch identity id and unique link.
 
 **[Formerly `identify()`](CHANGELOG.md)**
 
@@ -231,8 +242,9 @@ ___
 
 **callback**: `function`, _optional_
 
-This function allows you to track any event with supporting metadata. Use the events you track to create funnels in the Branch dashboard.
-The `metadata` parameter is a formatted JSON object that can contain any data and has limitless hierarchy.
+This function allows you to track any event with supporting metadata. Use the events you track to
+create funnels in the Branch dashboard.  The `metadata` parameter is a formatted JSON object that
+can contain any data and has limitless hierarchy.
 
 ##### Usage
 ```js
@@ -261,7 +273,8 @@ ___
 
 **data**: `Object`, _required_ - link data and metadata.
 
-**callback**: `function`, _required_ - returns a string of the Branch deep linking URL.
+**callback**: `function`, _required_ - returns a string of the Branch deep
+linking URL.
 
 **[Formerly `createLink()`](CHANGELOG.md)**
 
@@ -269,10 +282,13 @@ Creates and returns a deep linking URL.  The `data` parameter can include an
 object with optional data you would like to store, including Facebook
 [Open Graph data](https://developers.facebook.com/docs/opengraph).
 
-**data** The dictionary to embed with the link. Accessed as session or install parameters from the SDK.
+**data** The dictionary to embed with the link. Accessed as session or install parameters from
+the SDK.
 
 **Note**
-You can customize the Facebook OG tags of each URL if you want to dynamically share content by using the following optional keys in the data dictionary. Please use this [Facebook tool](https://developers.facebook.com/tools/debug/og/object) to debug your OG tags!
+You can customize the Facebook OG tags of each URL if you want to dynamically share content by
+using the following optional keys in the data dictionary. Please use this
+[Facebook tool](https://developers.facebook.com/tools/debug/og/object) to debug your OG tags!
 
 | Key | Value
 | --- | ---
@@ -345,90 +361,121 @@ callback(
 
 
 
-### sendSMS(phone, linkData, options, callback) 
+### deepview(data, options, callback) 
 
 **Parameters**
 
-**phone**: `string`, _required_ - phone number to send SMS to
+**data**: `Object`, _required_ - object of all link data, same as branch.link().
 
-**linkData**: `Object`, _required_ - object of link data
+**options**: `Object`, _optional_ - { *make_new_link*: _whether to create a new link even if
+one already exists_. *open_app*, _whether to try to open the app passively (as opposed to
+opening it upon user clicking); defaults to true_
+}.
 
-**options**: `Object`, _optional_ - options: make_new_link, which forces the creation of a new link even if one already exists
+**callback**: `function`, _optional_ - returns an error if the API call is unsuccessful
 
-**callback**: `function`, _optional_ - Returns an error if unsuccessful
+Turns the current page into a "deepview" – a preview of app content. This gives the page two
+special behaviors: (1) when the page is viewed on a mobile browser, if the user has the app
+installed on their phone, we will try to open the app automaticaly and deeplink them to this
+content (this can be toggled off by turning open_app to false, but this is not recommended),
+and (2) provides a callback to open the app directly, accessible as `branch.deepviewCta()`;
+you'll want to have a button on your web page that says something like "View in app", which
+calls this function.
 
-**[Formerly `SMSLink()`](CHANGELOG.md)**
-
-A robust function to give your users the ability to share links via SMS. If
-the user navigated to this page via a Branch link, `sendSMS` will send that
-same link. Otherwise, it will create a new link with the data provided in
-the `params` argument. `sendSMS` also registers a click event with the
-`channel` pre-filled with `'sms'` before sending an sms to the provided
-`phone` parameter. This way the entire link click event is recorded starting
-with the user sending an sms.
-
-**Note**: `sendSMS` will *automatically* send a previously generated link click,
-along with the `data` object in the original link. Therefore, it is unneccessary for the
-`data()` method to be called to check for an already existing link. If a link already
-exists, `sendSMS` will simply ignore the `data` object passed to it, and send the existing link.
-If this behaivior is not desired, set `make_new_link: true` in the `options` object argument
-of `sendSMS`, and `sendSMS` will always make a new link.
-
-**Supports international SMS**.
+See [this tutorial](https://blog.branch.io/how-to-deep-link-from-your-mobile-website) for a full
+guide on how to use the deepview functionality of the Web SDK.
 
 #### Usage
 ```js
-branch.sendSMS(
-    phone,
-    linkData,
+branch.deepview(
+    data,
     options,
-    callback (err, data)
+    callback (err)
 );
 ```
 
-##### Example
+#### Example
 ```js
-branch.sendSMS(
-    '9999999999',
+branch.deepview(
     {
-        tags: ['tag1', 'tag2'],
         channel: 'facebook',
+        data: {
+            mydata: 'content of my data',
+            foo: 'bar',
+            '$deepview_path': 'item_id=12345'
+        },
         feature: 'dashboard',
         stage: 'new user',
-        data: {
-            mydata: 'something',
-            foo: 'bar',
-            '$desktop_url': 'http://myappwebsite.com',
-            '$ios_url': 'http://myappwebsite.com/ios',
-            '$ipad_url': 'http://myappwebsite.com/ipad',
-            '$android_url': 'http://myappwebsite.com/android',
-            '$og_app_id': '12345',
-            '$og_title': 'My App',
-            '$og_description': 'My app\'s description.',
-            '$og_image_url': 'http://myappwebsite.com/image.png'
-        }
+        tags: [ 'tag1', 'tag2' ],
     },
-    { make_new_link: true }, // Default: false. If set to true, sendSMS will generate a new link even if one already exists.
-    function(err) { console.log(err); }
+    {
+        make_new_link: true,
+        open_app: true
+    },
+    function(err) {
+        console.log(err || 'no error');
+    }
 );
 ```
 
 ##### Callback Format
 ```js
-callback("Error message");
+callback(
+    "Error message"
+);
+```
+
+
+
+### deepviewCta() 
+
+Perform the branch deepview CTA (call to action) on mobile after `branch.deepview()` call is
+finished. If the `branch.deepview()` call is finished with no error, when `branch.deepviewCta()` is called,
+an attempt is made to open the app and deeplink the end user into it; if the end user does not
+have the app installed, they will be redirected to the platform-appropriate app stores. If on the
+other hand, `branch.deepview()` returns with an error, `branch.deepviewCta()` will fall back to
+redirect the user using
+[Branch dynamic links](https://github.com/BranchMetrics/Deferred-Deep-Linking-Public-API#structuring-a-dynamic-deeplink).
+
+If `branch.deepview()` has not been called, an error will arise with a reminder to call
+`branch.deepview()` first.
+
+##### Usage
+```js
+$('a.deepview-cta').click(branch.deepviewCta); // If you are using jQuery
+
+document.getElementById('my-elem').onClick = branch.deepviewCta; // Or generally
+
+<a href='...' onclick='branch.deepviewCta()'> // In HTML
+
+// We recommend to assign deepviewCta in deepview callback:
+branch.deepview(data, option, function(err) {
+    if (err) {
+        throw err;
+    }
+    ${'a.deepview-cta').click(branch.deepviewCta);
+});
+
+// You can call this function any time after branch.deepview() is finished by simply:
+branch.deepviewCta();
 ```
 
 ___
 
 # Referral system rewarding functionality
-In a standard referral system, you have 2 parties: the original user and the invitee. Our system is flexible enough to handle rewards for all users for any actions. Here are a couple example scenarios:
+In a standard referral system, you have 2 parties: the original user and the invitee. Our system
+is flexible enough to handle rewards for all users for any actions. Here are a couple example
+scenarios:
 1. Reward the original user for taking action (eg. inviting, purchasing, etc)
 2. Reward the invitee for installing the app from the original user's referral link
-3. Reward the original user when the invitee takes action (eg. give the original user credit when their the invitee buys something)
+3. Reward the original user when the invitee takes action (eg. give the original user credit when
+    their the invitee buys something)
 
-These reward definitions are created on the dashboard, under the 'Reward Rules' section in the 'Referrals' tab on the dashboard.
+These reward definitions are created on the dashboard, under the 'Reward Rules' section in the
+'Referrals' tab on the dashboard.
 
-Warning: For a referral program, you should not use unique awards for custom events and redeem pre-identify call. This can allow users to cheat the system.
+Warning: For a referral program, you should not use unique awards for custom events and redeem
+pre-identify call. This can allow users to cheat the system.
 
 ## Retrieve referrals list
 
@@ -484,14 +531,15 @@ callback(
 
 **callback**: `function`, _optional_ - returns an error if unsuccessful
 
-Create a referral code using the supplied parameters.  The code can be given to other users to enter.  Applying the code will add credits to the referrer, referree or both.
+Create a referral code using the supplied parameters.  The code can be given to other users to
+enter.  Applying the code will add credits to the referrer, referree or both.
 The `options` object can containt the following properties:
 
 | Key | Value
 | --- | ---
 | amount | *reqruied* - An integer specifying the number of credits added when the code is applied.
 | calculation_type | *required* - An integer of 1 for unlimited uses, or 0 for one use.
-| location | *required* - An integer that determines who get's the credits:  0 for the referree, 2 for the referring user or 3 for both.
+| location | *required* - An integer that determines who gets the credits:  0 for the referree, 2 for the referring user or 3 for both.
 | bucket | *optional* - The bucket to apply the credits to.  Defaults to "default".
 | prefix | *optional* - A string to be prepended to the code.
 | expiration | *optional* - A date string that if present, determines the date on which the code expires.
@@ -660,7 +708,8 @@ callback(
 
 **options**: `Object`, _optional_ - options controlling the returned history.
 
-**callback**: `function`, _required_ - returns an array with credit history data.
+**callback**: `function`, _required_ - returns an array with credit history
+data.
 
 This call will retrieve the entire history of credits and redemptions from the individual user.
 Properties available in the `options` object:
@@ -744,7 +793,9 @@ ___
 
 **[Formerly `redeemCredits()`](CHANGELOG.md)**
 
-Credits are stored in `buckets`, which you can define as points, currency, whatever makes sense for your app. When you want to redeem credits, call this method with the number of points to be redeemed, and the bucket to redeem them from.
+Credits are stored in `buckets`, which you can define as points, currency, whatever makes sense
+for your app. When you want to redeem credits, call this method with the number of points to be
+redeemed, and the bucket to redeem them from.
 
 ```js
 branch.redeem(
