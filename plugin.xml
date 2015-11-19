@@ -15,6 +15,8 @@
 				<param name="onload" value="true" />
 			</feature>
 		</config-file>
+		<header-file src="cordova-src/ios/AppDelegate+BNCDevice.h" />
+		<source-file src="cordova-src/ios/AppDelegate+BNCDevice.m" />
 		<header-file src="cordova-src/ios/BNCDevice.h" />
 		<source-file src="cordova-src/ios/BNCDevice.m" />
 	</platform>
