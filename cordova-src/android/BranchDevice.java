@@ -39,6 +39,10 @@ public class BranchDevice extends CordovaPlugin {
 	public static final String BLANK = "bnc_no_value";
 	private static boolean isRealHardwareId;
     private static String linkClickIdentifier;
+    private static String pushLinkIdentifier;
+    private static String appLinkIdentifier;
+    private static String externalIntent;
+    private static String externalIntentExtras;
     
 	private static final int STATE_FRESH_INSTALL = 0;
 	private static final int STATE_UPDATE = 2;
@@ -47,13 +51,72 @@ public class BranchDevice extends CordovaPlugin {
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-        Intent intent = cordova.getActivity().getIntent();
-        if (intent != null) {
-            Uri data = intent.getData();
+        readAndStripParam(cordova.getActivity());
+    }
+
+    private void readAndStripParam(Activity activity) {
+    	Uri data;
+    	if (activity.getIntent() != null) {
+    		data = activity.getIntent().getData();
+    	}
+        // Capture the intent URI and extra for analytics in case started by external intents such as  google app search
+        try {
             if (data != null) {
-                linkClickIdentifier = data.getQueryParameter("link_click_id");
+                externalIntent = data.toString();
+            }
+            if (activity != null && activity.getIntent() != null && activity.getIntent().getExtras() != null) {
+                Bundle bundle = activity.getIntent().getExtras();
+                Set<String> extraKeys = bundle.keySet();
+
+                if (extraKeys.size() > 0) {
+                    JSONObject extrasJson = new JSONObject();
+                    for (String key : extraKeys) {
+                        extrasJson.put(key, bundle.get(key));
+                    }
+                    externalIntentExtras = extrasJson.toString();
+                }
+            }
+        } catch (Exception ignore) { }
+
+        // Check for any push identifier in case app is launched by a push notification
+        if (activity != null && activity.getIntent() != null && activity.getIntent().getExtras() != null) {
+            String pushIdentifier = activity.getIntent().getExtras().getString("branch");
+            if (pushIdentifier != null && pushIdentifier.length() > 0) {
+                pushLinkIdentifier = pushIdentifier;
+                return false;
             }
         }
+
+        // Check for link click id or app link
+        if (data != null && data.isHierarchical() && activity != null) {
+            if (data.getQueryParameter("link_click_id") != null) {
+                linkClickIdentifier = data.getQueryParameter("link_click_id");
+                String paramString = "link_click_id=" + data.getQueryParameter("link_click_id");
+                String uriString = activity.getIntent().getDataString();
+                if (data.getQuery().length() == paramString.length()) {
+                    paramString = "\\?" + paramString;
+                } else if ((uriString.length() - paramString.length()) == uriString.indexOf(paramString)) {
+                    paramString = "&" + paramString;
+                } else {
+                    paramString = paramString + "&";
+                }
+                Uri newData = Uri.parse(uriString.replaceFirst(paramString, ""));
+                activity.getIntent().setData(newData);
+                return true;
+            } else {
+                // Check if the clicked url is an app link pointing to this app
+                String scheme = data.getScheme();
+                if (scheme != null) {
+                    if ((scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"))
+                            && data.getHost() != null && data.getHost().length() > 0) {
+                        appLinkIdentifier = data.toString();
+                        return false;
+                    }
+
+                }
+            }
+        }
+        return false;
     }
     
     @Override
@@ -126,6 +189,23 @@ public class BranchDevice extends CordovaPlugin {
 			installPost.put("update", getUpdateState(true));
 			if (linkClickIdentifier != null) {
 				installPost.put("link_identifier", linkClickIdentifier);
+				linkClickIdentifier = null;
+			}
+			if (pushLinkIdentifier != null) {
+				installPost.put("push_identifier", pushLinkIdentifier);
+				pushIdentifier = null;
+			}
+			if (appLinkIdentifier != null) {
+				installPost.put("android_app_link_url", appLinkIdentifier);
+				appLinkIdentifier = null;
+			}
+			if (externalIntent != null) {
+				installPost.put("external_intent_uri", externalIntent);
+				externalIntent = null;
+			}
+			if (externalIntentExtras != null) {
+				installPost.put("external_intent_extra", externalIntentExtras);
+				externalIntentExtras = null;
 			}
 			Log.d("BranchDevice", "data: " + installPost.toString());
 			callbackContext.success(installPost);
@@ -155,6 +235,23 @@ public class BranchDevice extends CordovaPlugin {
 				openPost.put("os", getOS());
 			if (linkClickIdentifier != null) {
 				openPost.put("link_identifier", linkClickIdentifier);
+				linkClickIdentifier = null;
+			}
+			if (pushLinkIdentifier != null) {
+				openPost.put("push_identifier", pushLinkIdentifier);
+				pushIdentifier = null;
+			}
+			if (appLinkIdentifier != null) {
+				openPost.put("android_app_link_url", appLinkIdentifier);
+				appLinkIdentifier = null;
+			}
+			if (externalIntent != null) {
+				openPost.put("external_intent_uri", externalIntent);
+				externalIntent = null;
+			}
+			if (externalIntentExtras != null) {
+				openPost.put("external_intent_extra", externalIntentExtras);
+				externalIntentExtras = null;
 			}
 			callbackContext.success(openPost);
 		} catch (JSONException ex) {
