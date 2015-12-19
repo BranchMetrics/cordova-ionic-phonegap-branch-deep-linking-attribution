@@ -1,8 +1,12 @@
 # Change Log
-All notable changes to the Branch Web SDK will be documented here.
-The Branch Web SDK adheres to [Semantic Versioning](http://semver.org/).
+All notable changes to the Branch Cordova Deep Linking SDK will be documented here.
+The Branch Cordova Deep Linking SDK adheres to [Semantic Versioning](http://semver.org/).
 
-## [VERSION] - unreleased
+## [v1.8.0] - 2015-12-18
+- Support added for iOS9 Universal Links
+- Support added for Android App Links
+- setDebug() can be used for easier testing
+- Updated with the latest Web SDK
 
 ## [v1.7.0] - 2015-09-25
 - Splits out Cordova SDK from the Web SDK into a new repo
