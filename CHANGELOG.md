@@ -2,8 +2,9 @@
 All notable changes to the Branch Cordova Deep Linking SDK will be documented here.
 The Branch Cordova Deep Linking SDK adheres to [Semantic Versioning](http://semver.org/).
 
-## [v1.8.0] - 2015-12-08
+## [v1.8.0] - 2015-12-18
 - Support added for iOS9 Universal Links
+- Support added for Android App Links
 - setDebug() can be used for easier testing
 - Updated with the latest Web SDK
 
