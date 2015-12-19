@@ -18,7 +18,7 @@ This is the readme file of our open source Cordova SDK. The Cordova SDK shares t
 - Set up referrals (optional)
 
 ## Additional Resources
-- [Integration guide](https://dev.branch.io/recipes/quickstart_guide/cordova/) *Start Here*
+- [Integration guide](https://dev.branch.io/recipes/add_the_sdk/cordova/) *Start Here*
 - [Technical Reference](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/Reference.md)
 - [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/CHANGELOG.md)
 - [Testing](https://dev.branch.io/recipes/testing_your_integration/cordova/)
