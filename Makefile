@@ -10,9 +10,9 @@ EXTERN=Web-SDK/src/extern.js
 
 .PHONY: clean
 
-all: dist/build.min.js dist/build.js Reference.md README.md
+all: dist/build.min.js dist/build.js Reference.md
 clean:
-	rm -f dist/** docs/cordova/3_branch_cordova.md Reference.md README.md
+	rm -f dist/** docs/cordova/3_branch_cordova.md Reference.md
 
 # Kinda gross, but will download closure compiler if you don't have it.
 compiler/compiler.jar:

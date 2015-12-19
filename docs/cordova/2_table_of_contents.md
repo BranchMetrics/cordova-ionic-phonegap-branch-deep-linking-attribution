@@ -1,5 +1,3 @@
-# Branch Cordova Reference
-
 1. Branch Session
   + [.init()](#initbranch_key-options-callback)
   + [.data()](#datacallback)
@@ -13,7 +11,6 @@
 
 3. Deep Linking
   + [.link()](#linkdata-callback)
-  + [.sendSMS()](#sendsmsphone-linkdata-options-callback)
 
 4. Referrals and Credits
   + [.referrals()](#referralscallback)
