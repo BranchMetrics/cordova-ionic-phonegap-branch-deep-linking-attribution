@@ -4,7 +4,7 @@
 	<description>Branch SDK Plugin</description>
 	<license>Apache 2.0</license>
 	<keywords>branch</keywords>
-	<js-module src="dist/build.js" name="branch">
+	<js-module src="dist/build.min.js" name="branch">
 		<clobbers target="branch" />
 		<clobbers target="Branch" />
 	</js-module>
@@ -15,6 +15,8 @@
 				<param name="onload" value="true" />
 			</feature>
 		</config-file>
+		<header-file src="cordova-src/ios/AppDelegate+BNCDevice.h" />
+		<source-file src="cordova-src/ios/AppDelegate+BNCDevice.m" />
 		<header-file src="cordova-src/ios/BNCDevice.h" />
 		<source-file src="cordova-src/ios/BNCDevice.m" />
 	</platform>

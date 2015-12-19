@@ -83,10 +83,11 @@ public class BranchDevice extends CordovaPlugin {
 		JSONObject installPost = new JSONObject();
 		try {
 			boolean debug = args.optBoolean(0);
-			Log.d("BranchDevice", "GetInstallData debug value is " + debug);
+			Log.d("BranchDevice", "getInstallData debug value is " + debug);
 			int isReferrable = args.optInt(1, -1);
-			Log.d("BranchDevice", "GetInstallData isReferrable value is " + isReferrable);
+			Log.d("BranchDevice", "getInstallData isReferrable value is " + isReferrable);
 			String idStr = getUniqueID(debug);
+			installPost.put("debug_set", debug);
 			if (!idStr.equals(BLANK)) {
 				installPost.put("hardware_id", idStr);
 				installPost.put("is_hardware_id_real", hasRealHardwareId());
@@ -138,7 +139,7 @@ public class BranchDevice extends CordovaPlugin {
 		JSONObject openPost = new JSONObject();
 		try {
 			int isReferrable = args.optInt(0, -1);
-			Log.d("BranchDevice", "GetInstallData isReferrable value is " + isReferrable);
+			Log.d("BranchDevice", "getOpenData isReferrable value is " + isReferrable);
 			if (isReferrable < 0) {
 				openPost.put("is_referrable", 0);
 			} else {

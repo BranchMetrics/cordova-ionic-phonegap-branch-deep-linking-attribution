@@ -7,6 +7,7 @@
 @implementation BNCDevice
 
 static NSString *link_click_identifier = nil;
+static NSString *universal_link_url = nil;
 
 - (void)pluginInitialize {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenUrl:) name:CDVPluginHandleOpenURLNotification object:nil];
@@ -42,11 +43,12 @@ static NSString *link_click_identifier = nil;
 
 - (void)getInstallData:(CDVInvokedUrlCommand *)command {
     BOOL debug = [[command argumentAtIndex:0 withDefault:[NSNumber numberWithBool:NO]] boolValue];
-    int isReferrable = [[command argumentAtIndex:0 withDefault:[NSNumber numberWithInt:-1]] intValue];
+    int isReferrable = [[command argumentAtIndex:1 withDefault:[NSNumber numberWithInt:-1]] intValue];
 
     NSMutableDictionary *post = [[NSMutableDictionary alloc] init];
     BOOL isRealHardwareId;
     NSString *hardwareId = [BNCDevice getUniqueHardwareId:&isRealHardwareId andIsDebug:debug];
+    [post setObject:[NSNumber numberWithBool:debug] forKey:@"debug_set"];
     if (hardwareId) {
         [post setObject:hardwareId forKey:@"hardware_id"];
         [post setObject:[NSNumber numberWithBool:isRealHardwareId] forKey:@"is_hardware_id_real"];
@@ -78,6 +80,9 @@ static NSString *link_click_identifier = nil;
     } else {
         [post setObject:[NSNumber numberWithInt:isReferrable] forKey:@"is_referrable"];
     }
+    if (universal_link_url) {
+        [post setObject:universal_link_url forKey:@"universal_link_url"];
+    }
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:post];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -102,11 +107,20 @@ static NSString *link_click_identifier = nil;
         [post setObject:[NSNumber numberWithInt:isReferrable] forKey:@"is_referrable"];
     }
     if (link_click_identifier) [post setObject:link_click_identifier forKey:@"link_identifier"];
+    if (universal_link_url) {
+        [post setObject:universal_link_url forKey:@"universal_link_url"];
+    }
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:post];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+
+- (BOOL)handleUserActivity:(NSUserActivity *)userActivity {
+    universal_link_url = [userActivity.webpageURL absoluteString];
+
+    return YES;
+}
 
 + (NSString *)getUniqueHardwareId:(BOOL *)isReal andIsDebug:(BOOL)debug {
     NSString *uid = nil;
@@ -125,7 +139,7 @@ static NSString *link_click_identifier = nil;
         uid = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
 
-    if (!uid) {
+    if (!uid || debug) {
         uid = [[NSUUID UUID] UUIDString];
         *isReal = NO;
     }
