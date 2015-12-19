@@ -38,111 +38,111 @@ import android.util.Log;
 public class BranchDevice extends CordovaPlugin {
 	public static final String BLANK = "bnc_no_value";
 	private static boolean isRealHardwareId;
-    private static String linkClickIdentifier;
-    private static String pushLinkIdentifier;
-    private static String appLinkIdentifier;
-    private static String externalIntent;
-    private static String externalIntentExtras;
-    
+	private static String linkClickIdentifier;
+	private static String pushLinkIdentifier;
+	private static String appLinkIdentifier;
+	private static String externalIntent;
+	private static String externalIntentExtras;
+	
 	private static final int STATE_FRESH_INSTALL = 0;
 	private static final int STATE_UPDATE = 2;
 	private static final int STATE_NO_CHANGE = 1;
-    
-    @Override
-    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-        super.initialize(cordova, webView);
-        readAndStripParam(cordova.getActivity());
-    }
+	
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+		super.initialize(cordova, webView);
+		readAndStripParam(cordova.getActivity());
+	}
 
-    private void readAndStripParam(Activity activity) {
-    	Uri data;
-    	if (activity.getIntent() != null) {
-    		data = activity.getIntent().getData();
-    	}
-        // Capture the intent URI and extra for analytics in case started by external intents such as  google app search
-        try {
-            if (data != null) {
-                externalIntent = data.toString();
-            }
-            if (activity != null && activity.getIntent() != null && activity.getIntent().getExtras() != null) {
-                Bundle bundle = activity.getIntent().getExtras();
-                Set<String> extraKeys = bundle.keySet();
+	private void readAndStripParam(Activity activity) {
+		Uri data;
+		if (activity.getIntent() != null) {
+			data = activity.getIntent().getData();
+		}
+		// Capture the intent URI and extra for analytics in case started by external intents such as  google app search
+		try {
+			if (data != null) {
+				externalIntent = data.toString();
+			}
+			if (activity != null && activity.getIntent() != null && activity.getIntent().getExtras() != null) {
+				Bundle bundle = activity.getIntent().getExtras();
+				Set<String> extraKeys = bundle.keySet();
 
-                if (extraKeys.size() > 0) {
-                    JSONObject extrasJson = new JSONObject();
-                    for (String key : extraKeys) {
-                        extrasJson.put(key, bundle.get(key));
-                    }
-                    externalIntentExtras = extrasJson.toString();
-                }
-            }
-        } catch (Exception ignore) { }
+				if (extraKeys.size() > 0) {
+					JSONObject extrasJson = new JSONObject();
+					for (String key : extraKeys) {
+						extrasJson.put(key, bundle.get(key));
+					}
+					externalIntentExtras = extrasJson.toString();
+				}
+			}
+		} catch (Exception ignore) { }
 
-        // Check for any push identifier in case app is launched by a push notification
-        if (activity != null && activity.getIntent() != null && activity.getIntent().getExtras() != null) {
-            String pushIdentifier = activity.getIntent().getExtras().getString("branch");
-            if (pushIdentifier != null && pushIdentifier.length() > 0) {
-                pushLinkIdentifier = pushIdentifier;
-                return false;
-            }
-        }
+		// Check for any push identifier in case app is launched by a push notification
+		if (activity != null && activity.getIntent() != null && activity.getIntent().getExtras() != null) {
+			String pushIdentifier = activity.getIntent().getExtras().getString("branch");
+			if (pushIdentifier != null && pushIdentifier.length() > 0) {
+				pushLinkIdentifier = pushIdentifier;
+				return false;
+			}
+		}
 
-        // Check for link click id or app link
-        if (data != null && data.isHierarchical() && activity != null) {
-            if (data.getQueryParameter("link_click_id") != null) {
-                linkClickIdentifier = data.getQueryParameter("link_click_id");
-                String paramString = "link_click_id=" + data.getQueryParameter("link_click_id");
-                String uriString = activity.getIntent().getDataString();
-                if (data.getQuery().length() == paramString.length()) {
-                    paramString = "\\?" + paramString;
-                } else if ((uriString.length() - paramString.length()) == uriString.indexOf(paramString)) {
-                    paramString = "&" + paramString;
-                } else {
-                    paramString = paramString + "&";
-                }
-                Uri newData = Uri.parse(uriString.replaceFirst(paramString, ""));
-                activity.getIntent().setData(newData);
-                return true;
-            } else {
-                // Check if the clicked url is an app link pointing to this app
-                String scheme = data.getScheme();
-                if (scheme != null) {
-                    if ((scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"))
-                            && data.getHost() != null && data.getHost().length() > 0) {
-                        appLinkIdentifier = data.toString();
-                        return false;
-                    }
+		// Check for link click id or app link
+		if (data != null && data.isHierarchical() && activity != null) {
+			if (data.getQueryParameter("link_click_id") != null) {
+				linkClickIdentifier = data.getQueryParameter("link_click_id");
+				String paramString = "link_click_id=" + data.getQueryParameter("link_click_id");
+				String uriString = activity.getIntent().getDataString();
+				if (data.getQuery().length() == paramString.length()) {
+					paramString = "\\?" + paramString;
+				} else if ((uriString.length() - paramString.length()) == uriString.indexOf(paramString)) {
+					paramString = "&" + paramString;
+				} else {
+					paramString = paramString + "&";
+				}
+				Uri newData = Uri.parse(uriString.replaceFirst(paramString, ""));
+				activity.getIntent().setData(newData);
+				return true;
+			} else {
+				// Check if the clicked url is an app link pointing to this app
+				String scheme = data.getScheme();
+				if (scheme != null) {
+					if ((scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"))
+							&& data.getHost() != null && data.getHost().length() > 0) {
+						appLinkIdentifier = data.toString();
+						return false;
+					}
 
-                }
-            }
-        }
-        return false;
-    }
-    
-    @Override
-    public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    	Log.d("BranchDevice", "Action: " + action + " Args: " + args);
-        if ("getInstallData".equals(action)) {
-        	cordova.getThreadPool().execute(new Runnable() {
-        		@Override
-        		public void run() {
-        			getInstallData(args, callbackContext);
-        		}
-        	});
-        } else if ("getOpenData".equals(action)) {
-        	cordova.getThreadPool().execute(new Runnable() {
-        		@Override
-        		public void run() {
-        			getOpenData(args, callbackContext);
-        		}
-        	});
-        } else {
-            return false;
-        }
-        return true;
-    }
-    
-    private void getInstallData(JSONArray args, CallbackContext callbackContext) {
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+		Log.d("BranchDevice", "Action: " + action + " Args: " + args);
+		if ("getInstallData".equals(action)) {
+			cordova.getThreadPool().execute(new Runnable() {
+				@Override
+				public void run() {
+					getInstallData(args, callbackContext);
+				}
+			});
+		} else if ("getOpenData".equals(action)) {
+			cordova.getThreadPool().execute(new Runnable() {
+				@Override
+				public void run() {
+					getOpenData(args, callbackContext);
+				}
+			});
+		} else {
+			return false;
+		}
+		return true;
+	}
+	
+	private void getInstallData(JSONArray args, CallbackContext callbackContext) {
 		JSONObject installPost = new JSONObject();
 		try {
 			boolean debug = args.optBoolean(0);
@@ -213,9 +213,9 @@ public class BranchDevice extends CordovaPlugin {
 			Log.e("BranchDevice", "Exception creatin install data: " + ex.getMessage());
 			callbackContext.error(ex.getMessage());
 		}
-    }
+	}
 	
-    private void getOpenData(JSONArray args, CallbackContext callbackContext) {
+	private void getOpenData(JSONArray args, CallbackContext callbackContext) {
 		JSONObject openPost = new JSONObject();
 		try {
 			int isReferrable = args.optInt(0, -1);
@@ -258,8 +258,8 @@ public class BranchDevice extends CordovaPlugin {
 			Log.e("BranchDevice", "Exception creatin open data: " + ex.getMessage());
 			callbackContext.error(ex.getMessage());
 		}
-    }
-    
+	}
+	
 	public String getUniqueID(boolean debug) {
 		if (cordova.getActivity() != null) { 
 			String androidID = null;
@@ -280,7 +280,7 @@ public class BranchDevice extends CordovaPlugin {
 	}
 	
 	public String getURIScheme() {
-	    return getURIScheme(cordova.getActivity().getPackageName());
+		return getURIScheme(cordova.getActivity().getPackageName());
 	}
 	
 	public String getURIScheme(String packageName) {
@@ -288,34 +288,34 @@ public class BranchDevice extends CordovaPlugin {
 		if (!isLowOnMemory()) {
 			PackageManager pm = cordova.getActivity().getPackageManager();
 			try {
-		        ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
-		        String sourceApk = ai.publicSourceDir;
-		        JarFile jf = null;
-		        InputStream is = null;
-		        byte[] xml = null;
-		        try {
-		            jf = new JarFile(sourceApk);
-	            	is = jf.getInputStream(jf.getEntry("AndroidManifest.xml"));
-		            xml = new byte[is.available()];
-	                is.read(xml);
-		            scheme = new ApkParser().decompressXML(xml);
-		        } catch (Exception ignored) {
-                } catch (OutOfMemoryError ignored) {
-		        } finally {
-		        	xml = null;
-		        	try {
-		        		if (is != null) {
-		        			is.close();
-		        			is = null;
-		        		}
-		        		if (jf != null) {
-		        			jf.close();	
-		        			jf = null;
-		        		}
-		        	} catch (IOException ignored) {}
-		        }
-		    } catch (NameNotFoundException ignored) {
-		    }
+				ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
+				String sourceApk = ai.publicSourceDir;
+				JarFile jf = null;
+				InputStream is = null;
+				byte[] xml = null;
+				try {
+					jf = new JarFile(sourceApk);
+					is = jf.getInputStream(jf.getEntry("AndroidManifest.xml"));
+					xml = new byte[is.available()];
+					is.read(xml);
+					scheme = new ApkParser().decompressXML(xml);
+				} catch (Exception ignored) {
+				} catch (OutOfMemoryError ignored) {
+				} finally {
+					xml = null;
+					try {
+						if (is != null) {
+							is.close();
+							is = null;
+						}
+						if (jf != null) {
+							jf.close();	
+							jf = null;
+						}
+					} catch (IOException ignored) {}
+				}
+			} catch (NameNotFoundException ignored) {
+			}
 		}
 		return scheme;
 	}
@@ -340,36 +340,36 @@ public class BranchDevice extends CordovaPlugin {
 	}
 	
 	public String getCarrier() {
-        TelephonyManager telephonyManager = (TelephonyManager) cordova.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        if (telephonyManager != null) {
-        	String ret = telephonyManager.getNetworkOperatorName();
-            if (ret != null)
-            	return ret;
-        }
-        return BLANK;
+		TelephonyManager telephonyManager = (TelephonyManager) cordova.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+		if (telephonyManager != null) {
+			String ret = telephonyManager.getNetworkOperatorName();
+			if (ret != null)
+				return ret;
+		}
+		return BLANK;
 	}
 	
 	public boolean getBluetoothPresent() {
-        try {
-            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            if (bluetoothAdapter != null) {
-                return bluetoothAdapter.isEnabled();
-            }
-        } catch (SecurityException ignored ) {
-        }
-        return false;
+		try {
+			BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+			if (bluetoothAdapter != null) {
+				return bluetoothAdapter.isEnabled();
+			}
+		} catch (SecurityException ignored ) {
+		}
+		return false;
 	}
 	
 	public String getBluetoothVersion() {
-        if (android.os.Build.VERSION.SDK_INT >= 8) {
-            if(android.os.Build.VERSION.SDK_INT >= 18 &&
-                    cordova.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-                return "ble";
-            } else if(cordova.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
-                return "classic";
-            }
-        }
-        return BLANK;
+		if (android.os.Build.VERSION.SDK_INT >= 8) {
+			if(android.os.Build.VERSION.SDK_INT >= 18 &&
+					cordova.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+				return "ble";
+			} else if(cordova.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
+				return "classic";
+			}
+		}
+		return BLANK;
 	}
 	
 	public boolean getNFCPresent() {
@@ -448,10 +448,10 @@ public class BranchDevice extends CordovaPlugin {
 	
 	public boolean getWifiConnected() {
 		if (PackageManager.PERMISSION_GRANTED == cordova.getActivity().checkCallingOrSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE)) {
-            ConnectivityManager connManager = (ConnectivityManager) cordova.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            return wifiInfo.isConnected();
-        }
+			ConnectivityManager connManager = (ConnectivityManager) cordova.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			return wifiInfo.isConnected();
+		}
 		return false;
 	}
 	
@@ -459,11 +459,11 @@ public class BranchDevice extends CordovaPlugin {
 		String advertisingId = null;
 		
 		try {
-		    Class<?> AdvertisingIdClientClass = Class.forName("com.google.android.gms.ads.identifier.AdvertisingIdClient");
-		    Method getAdvertisingIdInfoMethod = AdvertisingIdClientClass.getMethod("getAdvertisingIdInfo", Context.class);
-		    Object adInfoObj = getAdvertisingIdInfoMethod.invoke(null, cordova.getActivity());
-		    Method getIdMethod = adInfoObj.getClass().getMethod("getId");
-		    advertisingId = (String) getIdMethod.invoke(adInfoObj);
+			Class<?> AdvertisingIdClientClass = Class.forName("com.google.android.gms.ads.identifier.AdvertisingIdClient");
+			Method getAdvertisingIdInfoMethod = AdvertisingIdClientClass.getMethod("getAdvertisingIdInfo", Context.class);
+			Object adInfoObj = getAdvertisingIdInfoMethod.invoke(null, cordova.getActivity());
+			Method getIdMethod = adInfoObj.getClass().getMethod("getId");
+			advertisingId = (String) getIdMethod.invoke(adInfoObj);
 		} catch(IllegalStateException ex) {
 			ex.printStackTrace();
 		} catch(Exception ignore) {
