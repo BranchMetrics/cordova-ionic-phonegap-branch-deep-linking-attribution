@@ -45,3 +45,9 @@ Reference.md: docs/cordova/3_branch_cordova.md docs/4_footer.md
 	perl Web-SDK/build_utils/toc_generator.pl Web-SDK/src/6_branch.js docs/cordova/2_table_of_contents.md CORDOVA
 	cat docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md > Reference.md
 	perl -p -i -e 's/# Global//' Reference.md
+
+README.md: docs/0_notice.md docs/cordova/1_intro.md docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md
+	cat docs/0_notice.md docs/cordova/1_intro.md docs/cordova/2_table_of_contents.md docs/cordova/3_branch_cordova.md docs/4_footer.md | \
+		perl -pe 'BEGIN{$$a="$(ONPAGE_RELEASE)"}; s#// INSERT INIT CODE#$$a#' > README.md
+	perl -p -i -e 's/# Global//' README.md
+
