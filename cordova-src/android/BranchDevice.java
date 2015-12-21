@@ -35,6 +35,10 @@ import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import android.app.Activity;
+import android.os.Bundle;
+import java.util.Set;
+
 public class BranchDevice extends CordovaPlugin {
 	public static final String BLANK = "bnc_no_value";
 	private static boolean isRealHardwareId;
@@ -55,7 +59,7 @@ public class BranchDevice extends CordovaPlugin {
 	}
 
 	private void readAndStripParam(Activity activity) {
-		Uri data;
+		Uri data = null;
 		if (activity.getIntent() != null) {
 			data = activity.getIntent().getData();
 		}
