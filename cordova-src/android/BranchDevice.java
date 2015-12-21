@@ -83,7 +83,7 @@ public class BranchDevice extends CordovaPlugin {
 			String pushIdentifier = activity.getIntent().getExtras().getString("branch");
 			if (pushIdentifier != null && pushIdentifier.length() > 0) {
 				pushLinkIdentifier = pushIdentifier;
-				return false;
+				return;
 			}
 		}
 
@@ -102,7 +102,6 @@ public class BranchDevice extends CordovaPlugin {
 				}
 				Uri newData = Uri.parse(uriString.replaceFirst(paramString, ""));
 				activity.getIntent().setData(newData);
-				return true;
 			} else {
 				// Check if the clicked url is an app link pointing to this app
 				String scheme = data.getScheme();
@@ -110,13 +109,11 @@ public class BranchDevice extends CordovaPlugin {
 					if ((scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"))
 							&& data.getHost() != null && data.getHost().length() > 0) {
 						appLinkIdentifier = data.toString();
-						return false;
 					}
 
 				}
 			}
 		}
-		return false;
 	}
 	
 	@Override
@@ -193,7 +190,7 @@ public class BranchDevice extends CordovaPlugin {
 			}
 			if (pushLinkIdentifier != null) {
 				installPost.put("push_identifier", pushLinkIdentifier);
-				pushIdentifier = null;
+				pushLinkIdentifier = null;
 			}
 			if (appLinkIdentifier != null) {
 				installPost.put("android_app_link_url", appLinkIdentifier);
@@ -239,7 +236,7 @@ public class BranchDevice extends CordovaPlugin {
 			}
 			if (pushLinkIdentifier != null) {
 				openPost.put("push_identifier", pushLinkIdentifier);
-				pushIdentifier = null;
+				pushLinkIdentifier = null;
 			}
 			if (appLinkIdentifier != null) {
 				openPost.put("android_app_link_url", appLinkIdentifier);
