@@ -615,7 +615,7 @@ goog.tagUnsealableClass = function(a) {
 };
 goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = "goog_defineClass_legacy_unsealable";
 // Input 1
-var config = {link_service_endpoint:"https://bnc.lt", api_endpoint:"https://api.branch.io", version:"1.8.3"}, WEB_BUILD = !1, CORDOVA_BUILD = !0, TITANIUM_BUILD = !1, IS_CORDOVA_APP = !!window.cordova;
+var config = {link_service_endpoint:"https://bnc.lt", api_endpoint:"https://api.branch.io", version:"1.8.4"}, WEB_BUILD = !1, CORDOVA_BUILD = !0, TITANIUM_BUILD = !1, IS_CORDOVA_APP = !!window.cordova;
 IS_CORDOVA_APP && WEB_BUILD && window.alert("Please use Branch Cordova SDK instead. Visit https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK for more details.");
 // Input 2
 var task_queue = function() {
@@ -731,7 +731,7 @@ goog.json.Serializer.prototype.serializeObject_ = function(a, b) {
 var utils = {}, DEBUG = !0, message;
 utils.httpMethod = {POST:"POST", GET:"GET"};
 utils.messages = {missingParam:"API request $1 missing parameter $2", invalidType:"API request $1, parameter $2 is not $3", nonInit:"Branch SDK not initialized", initPending:"Branch SDK initialization pending and a Branch method was called outside of the queue order", initFailed:"Branch SDK initialization failed, so further methods cannot be called", existingInit:"Branch SDK already initilized", missingAppId:"Missing Branch app ID", callBranchInitFirst:"Branch.init must be called first", timeout:"Request timed out", 
-missingUrl:"Required argument: URL, is missing"};
+blockedByClient:"Request blocked by client, probably adblock", missingUrl:"Required argument: URL, is missing"};
 utils.bannerThemes = ["light", "dark"];
 utils.getLocationSearch = function() {
   return window.location.search;
@@ -780,7 +780,8 @@ utils.hashValue = function(a) {
   }
 };
 utils.mobileUserAgent = function() {
-  return navigator.userAgent.match(/android/i) ? "android" : navigator.userAgent.match(/ipad/i) ? "ipad" : navigator.userAgent.match(/i(os|p(hone|od))/i) ? "ios" : !1;
+  var a = navigator.userAgent;
+  return a.match(/android/i) ? "android" : a.match(/ipad/i) ? "ipad" : a.match(/i(os|p(hone|od))/i) ? "ios" : a.match(/\(BB[1-9][0-9]*\;/i) ? "blackberry" : a.match(/Windows Phone/i) ? "windows_phone" : a.match(/Kindle/i) || a.match(/Silk/i) || a.match(/KFTT/i) || a.match(/KFOT/i) || a.match(/KFJWA/i) || a.match(/KFJWI/i) || a.match(/KFSOWI/i) || a.match(/KFTHWA/i) || a.match(/KFTHWI/i) || a.match(/KFAPWA/i) || a.match(/KFAPWI/i) ? "kindle" : !1;
 };
 utils.getParamValue = function(a) {
   try {
@@ -872,10 +873,11 @@ WEB_BUILD && (resources.open = {destination:config.api_endpoint, endpoint:"/v1/o
 validationTypes.STRING)}}, resources.linkClick = {destination:config.link_service_endpoint, endpoint:"", method:utils.httpMethod.GET, queryPart:{link_url:validator(!0, validationTypes.STRING)}, params:{click:validator(!0, validationTypes.STRING)}}, resources.SMSLinkSend = {destination:config.link_service_endpoint, endpoint:"/c", method:utils.httpMethod.POST, queryPart:{link_url:validator(!0, validationTypes.STRING)}, params:{sdk:validator(!1, validationTypes.STRING), phone:validator(!0, validationTypes.STRING)}});
 if (CORDOVA_BUILD || TITANIUM_BUILD) {
   resources.install = {destination:config.api_endpoint, endpoint:"/v1/install", method:utils.httpMethod.POST, params:{add_tracking_enabled:validator(!1, validationTypes.BOOLEAN), app_version:validator(!1, validationTypes.STRING), bluetooth:validator(!1, validationTypes.BOOLEAN), bluetooth_version:validator(!1, validationTypes.STRING), brand:validator(!1, validationTypes.STRING), carrier:validator(!1, validationTypes.STRING), hardware_id:validator(!1, validationTypes.STRING), has_nfc:validator(!1, 
-  validationTypes.BOOLEAN), has_telephone:validator(!1, validationTypes.BOOLEAN), is_hardware_id_real:validator(!1, validationTypes.BOOLEAN), is_referrable:validator(!1, validationTypes.NUMBER), link_identifier:validator(!1, validationTypes.STRING), model:validator(!1, validationTypes.STRING), os:validator(!1, validationTypes.STRING), os_version:validator(!1, validationTypes.STRING), screen_dpi:validator(!1, validationTypes.NUMBER), screen_height:validator(!1, validationTypes.NUMBER), screen_width:validator(!1, 
-  validationTypes.NUMBER), sdk:validator(!1, validationTypes.STRING), universal_link_url:validator(!1, validationTypes.STRING), update:validator(!1, validationTypes.NUMBER), uri_scheme:validator(!1, validationTypes.STRING)}}, resources.open = {destination:config.api_endpoint, endpoint:"/v1/open", method:utils.httpMethod.POST, params:{app_version:validator(!1, validationTypes.STRING), device_fingerprint_id:validator(!0, branch_id), hardware_id:validator(!1, validationTypes.STRING), identity_id:validator(!0, 
-  branch_id), is_hardware_id_real:validator(!1, validationTypes.BOOLEAN), is_referrable:validator(!1, validationTypes.NUMBER), link_identifier:validator(!1, validationTypes.STRING), os:validator(!1, validationTypes.STRING), os_version:validator(!1, validationTypes.STRING), sdk:validator(!1, validationTypes.STRING), universal_link_url:validator(!1, validationTypes.STRING), uri_scheme:validator(!1, validationTypes.STRING)}}, resources.close = {destination:config.api_endpoint, endpoint:"/v1/close", 
-  method:utils.httpMethod.POST, params:{device_fingerprint_id:validator(!0, branch_id), identity_id:validator(!0, branch_id), link_click_id:validator(!1, branch_id), sdk:validator(!0, validationTypes.STRING), session_id:validator(!0, branch_id)}};
+  validationTypes.BOOLEAN), has_telephone:validator(!1, validationTypes.BOOLEAN), is_hardware_id_real:validator(!1, validationTypes.BOOLEAN), is_referrable:validator(!1, validationTypes.NUMBER), link_identifier:validator(!1, validationTypes.STRING), push_identifier:validator(!1, validationTypes.STRING), android_app_link_url:validator(!1, validationTypes.STRING), external_intent_uri:validator(!1, validationTypes.STRING), external_intent_extra:validator(!1, validationTypes.STRING), model:validator(!1, 
+  validationTypes.STRING), os:validator(!1, validationTypes.STRING), os_version:validator(!1, validationTypes.STRING), screen_dpi:validator(!1, validationTypes.NUMBER), screen_height:validator(!1, validationTypes.NUMBER), screen_width:validator(!1, validationTypes.NUMBER), sdk:validator(!1, validationTypes.STRING), universal_link_url:validator(!1, validationTypes.STRING), update:validator(!1, validationTypes.NUMBER), uri_scheme:validator(!1, validationTypes.STRING)}}, resources.open = {destination:config.api_endpoint, 
+  endpoint:"/v1/open", method:utils.httpMethod.POST, params:{app_version:validator(!1, validationTypes.STRING), device_fingerprint_id:validator(!0, branch_id), hardware_id:validator(!1, validationTypes.STRING), identity_id:validator(!0, branch_id), is_hardware_id_real:validator(!1, validationTypes.BOOLEAN), is_referrable:validator(!1, validationTypes.NUMBER), link_identifier:validator(!1, validationTypes.STRING), push_identifier:validator(!1, validationTypes.STRING), android_app_link_url:validator(!1, 
+  validationTypes.STRING), external_intent_uri:validator(!1, validationTypes.STRING), external_intent_extra:validator(!1, validationTypes.STRING), os:validator(!1, validationTypes.STRING), os_version:validator(!1, validationTypes.STRING), sdk:validator(!1, validationTypes.STRING), universal_link_url:validator(!1, validationTypes.STRING), uri_scheme:validator(!1, validationTypes.STRING)}}, resources.close = {destination:config.api_endpoint, endpoint:"/v1/close", method:utils.httpMethod.POST, params:{device_fingerprint_id:validator(!0, 
+  branch_id), identity_id:validator(!0, branch_id), link_click_id:validator(!1, branch_id), sdk:validator(!0, validationTypes.STRING), session_id:validator(!0, branch_id)}};
 }
 resources.getCode = {destination:config.api_endpoint, endpoint:"/v1/referralcode", method:utils.httpMethod.POST, params:defaults({amount:validator(!0, validationTypes.NUMBER), bucket:validator(!1, validationTypes.STRING), calculation_type:validator(!0, validationTypes.NUMBER), creation_source:validator(!0, validationTypes.NUMBER), expiration:validator(!1, validationTypes.STRING), location:validator(!0, validationTypes.NUMBER), prefix:validator(!1, validationTypes.STRING), type:validator(!0, validationTypes.STRING)})};
 resources.validateCode = {destination:config.api_endpoint, endpoint:"/v1/referralcode", method:utils.httpMethod.POST, queryPart:{code:validator(!0, validationTypes.STRING)}, params:defaults({})};
@@ -1105,12 +1107,13 @@ Server.prototype.getUrl = function(a, b) {
   "/v1/event" === a.endpoint && (h.metadata = JSON.stringify(h.metadata || {}));
   return {data:this.serializeObject(h, ""), url:e};
 };
-Server.prototype.createScript = function(a) {
-  var b = document.createElement("script");
-  b.type = "text/javascript";
-  b.async = !0;
-  b.src = a;
-  document.getElementsByTagName("head")[0].appendChild(b);
+Server.prototype.createScript = function(a, b) {
+  var c = document.createElement("script");
+  c.type = "text/javascript";
+  c.async = !0;
+  c.src = a;
+  c.onerror = b;
+  document.getElementsByTagName("head")[0].appendChild(c);
 };
 var jsonp_callback_index = 0;
 Server.prototype.jsonpRequest = function(a, b, c, d) {
@@ -1125,7 +1128,9 @@ Server.prototype.jsonpRequest = function(a, b, c, d) {
     window.clearTimeout(g);
     d(null, a);
   };
-  this.createScript(a + (0 > a.indexOf("?") ? "?" : "") + (b ? f + b : "") + (0 <= a.indexOf("/c/") ? "&click=1" : "") + "&callback=" + e);
+  this.createScript(a + (0 > a.indexOf("?") ? "?" : "") + (b ? f + b : "") + (0 <= a.indexOf("/c/") ? "&click=1" : "") + "&callback=" + e, function() {
+    d(Error(utils.messages.blockedByClient), null);
+  });
 };
 Server.prototype.XHRRequest = function(a, b, c, d, e) {
   var f = TITANIUM_BUILD ? Ti.Network.createHTTPClient() : window.XMLHttpRequest ? new XMLHttpRequest : new ActiveXObject("Microsoft.XMLHTTP");
@@ -1173,7 +1178,7 @@ Server.prototype.request = function(a, b, c, d) {
   var g, k = "";
   "GET" === a.method ? g = f.url + "?" + f.data : (g = f.url, k = f.data);
   var h = RETRIES, l = function(a, b, c) {
-    a && 0 < h && "5" === c.toString().substring(0, 1) ? (h--, window.setTimeout(function() {
+    a && 0 < h && "5" === (c || "").toString().substring(0, 1) ? (h--, window.setTimeout(function() {
       m();
     }, RETRY_DELAY)) : d(a, b);
   }, m = function() {
@@ -1229,17 +1234,18 @@ var banner_utils = {animationSpeed:250, animationDelay:20, bannerHeight:"76px", 
 }, shouldAppend:function(a, b) {
   var c = a.get("hideBanner"), c = "number" === typeof c ? new Date >= new Date(c) : !c, d = b.forgetHide;
   "number" === typeof d && (d = !1);
-  return !document.getElementById("branch-banner") && !document.getElementById("branch-banner-iframe") && (c || d) && (b.showDesktop && !utils.mobileUserAgent() || b.showAndroid && "android" === utils.mobileUserAgent() || b.showiPad && "ipad" === utils.mobileUserAgent() || b.showiOS && "ios" === utils.mobileUserAgent());
+  return !document.getElementById("branch-banner") && !document.getElementById("branch-banner-iframe") && (c || d) && (b.showDesktop && !utils.mobileUserAgent() || b.showAndroid && "android" === utils.mobileUserAgent() || b.showiPad && "ipad" === utils.mobileUserAgent() || b.showiOS && "ios" === utils.mobileUserAgent() || b.showBlackberry && "blackberry" === utils.mobileUserAgent() || b.showWindowsPhone && "windows_phone" === utils.mobileUserAgent() || b.showKindle && "kindle" === utils.mobileUserAgent());
 }};
 // Input 10
 var banner_css = {banner:function(a) {
   return ".branch-banner-is-active { -webkit-transition: all " + 1.5 * banner_utils.animationSpeed / 1E3 + "s ease; transition: all 0" + 1.5 * banner_utils.animationSpeed / 1E3 + "s ease; }\n#branch-banner { width:100%; z-index: 99999; font-family: Helvetica Neue, Sans-serif; -webkit-font-smoothing: antialiased; -webkit-user-select: none; -moz-user-select: none; user-select: none; -webkit-transition: all " + banner_utils.animationSpeed / 1E3 + "s ease; transition: all 0" + banner_utils.animationSpeed / 
   1E3 + "s ease; }\n#branch-banner .button{ border: 1px solid " + (a.buttonBorderColor || ("dark" === a.theme ? "transparent" : "#ccc")) + "; background: " + (a.buttonBackgroundColor || "#fff") + "; color: " + (a.buttonFontColor || "#000") + "; cursor: pointer; margin-top: 0px; font-size: 14px; display: inline-block; margin-left: 5px; font-weight: 400; text-decoration: none;  border-radius: 4px; padding: 6px 12px; transition: all .2s ease;}\n#branch-banner .button:hover {  border: 1px solid " + (a.buttonBorderColorHover || 
   ("dark" === a.theme ? "transparent" : "#BABABA")) + "; background: " + (a.buttonBackgroundColorHover || "#E0E0E0") + "; color: " + (a.buttonFontColorHover || "#000") + ";}\n#branch-banner .button:focus { outline: none; }\n#branch-banner * { margin-right: 4px; position: relative; line-height: 1.2em; }\n#branch-banner-close { font-weight: 400; cursor: pointer; float: left; z-index: 2;padding: 0 5px 0 5px; margin-right: 0; }\n#branch-banner .content { width:100%; overflow: hidden; height: " + banner_utils.bannerHeight + 
-  "; background: rgba(255, 255, 255, 0.95); color: #333; " + ("top" === a.position ? "border-bottom" : "border-top") + ': 1px solid #ddd; }\n#branch-banner-close { color: #000; font-size: 24px; top: 14px; opacity: .5; transition: opacity .3s ease; }\n#branch-banner-close:hover { opacity: 1; }\n#branch-banner .title { font-size: 18px; font-weight:bold; color: #555; }\n#branch-banner .description { font-size: 12px; font-weight: normal; color: #777; }\n#branch-banner .icon { float: left; padding-bottom: 40px; margin-right: 10px; margin-left: 5px; }\n#branch-banner .icon img { width: 63px; height: 63px; margin-right: 0; }\n#branch-banner .reviews { font-size:13px; margin: 1px 0 3px 0; color: #777; }\n#branch-banner .reviews .star { display:inline-block; position: relative; margin-right:0; }\n#branch-banner .reviews .star span { display: inline-block; margin-right: 0; color: #555; position: absolute; top: 0; left: 0; }\n#branch-banner .reviews .review-count { font-size:10px; }\n#branch-banner .reviews .star .half { width: 50%; overflow: hidden; display: block; }\n#branch-banner .content .left { padding: 6px 5px 6px 5px; }\n#branch-banner .vertically-align-middle { top: 50%; transform: translateY(-50%); -webkit-transform: translateY(-50%); -ms-transform: translateY(-50%); }\n#branch-banner .details > * { display: block; }\n#branch-banner .content .left { height: 63px; }\n#branch-banner .content .right { float: right; height: 63px; margin-bottom: 50px; padding-top: 22px; z-index: 1; }\n#branch-banner .right > div { float: left; }\n#branch-banner-action { top: 17px; }\n#branch-banner .content:after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 1px; background: rgba(0, 0, 0, 0.2); }\n#branch-banner .theme-dark.content { background: rgba(51, 51, 51, 0.95); }\n#branch-banner .theme-dark #branch-banner-close{ color: #fff; text-shadow: 0 1px 1px rgba(0, 0, 0, .15); }\n#branch-banner .theme-dark .details { text-shadow: 0 1px 1px rgba(0, 0, 0, .15); }\n#branch-banner .theme-dark .title { color: #fff; }\n#branch-banner .theme-dark .description { color: #fff; }\n#branch-banner .theme-dark .reviews { color: #888; }\n#branch-banner .theme-dark .reviews .star span{ color: #fff; }\n#branch-banner .theme-dark .reviews .review-count{ color: #fff; }\n';
+  "; background: rgba(255, 255, 255, 0.95); color: #333; " + ("top" === a.position ? "border-bottom" : "border-top") + ': 1px solid #ddd; }\n#branch-banner-close { color: #000; font-size: 24px; top: 14px; opacity: .5; transition: opacity .3s ease; }\n#branch-banner-close:hover { opacity: 1; }\n#branch-banner .title { font-size: 18px; font-weight:bold; color: #555; }\n#branch-banner .description { font-size: 12px; font-weight: normal; color: #777; max-height: 30px; overflow: hidden; }\n#branch-banner .icon { float: left; padding-bottom: 40px; margin-right: 10px; margin-left: 5px; }\n#branch-banner .icon img { width: 63px; height: 63px; margin-right: 0; }\n#branch-banner .reviews { font-size:13px; margin: 1px 0 3px 0; color: #777; }\n#branch-banner .reviews .star { display:inline-block; position: relative; margin-right:0; }\n#branch-banner .reviews .star span { display: inline-block; margin-right: 0; color: #555; position: absolute; top: 0; left: 0; }\n#branch-banner .reviews .review-count { font-size:10px; }\n#branch-banner .reviews .star .half { width: 50%; overflow: hidden; display: block; }\n#branch-banner .content .left { padding: 6px 5px 6px 5px; }\n#branch-banner .vertically-align-middle { top: 50%; transform: translateY(-50%); -webkit-transform: translateY(-50%); -ms-transform: translateY(-50%); }\n#branch-banner .details > * { display: block; }\n#branch-banner .content .left { height: 63px; }\n#branch-banner .content .right { float: right; height: 63px; margin-bottom: 50px; padding-top: 22px; z-index: 1; }\n#branch-banner .right > div { float: left; }\n#branch-banner-action { top: 17px; }\n#branch-banner .content:after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 1px; background: rgba(0, 0, 0, 0.2); }\n#branch-banner .theme-dark.content { background: rgba(51, 51, 51, 0.95); }\n#branch-banner .theme-dark #branch-banner-close{ color: #fff; text-shadow: 0 1px 1px rgba(0, 0, 0, .15); }\n#branch-banner .theme-dark .details { text-shadow: 0 1px 1px rgba(0, 0, 0, .15); }\n#branch-banner .theme-dark .title { color: #fff; }\n#branch-banner .theme-dark .description { color: #fff; }\n#branch-banner .theme-dark .reviews { color: #888; }\n#branch-banner .theme-dark .reviews .star span{ color: #fff; }\n#branch-banner .theme-dark .reviews .review-count{ color: #fff; }\n';
 }, desktop:"#branch-banner { position: fixed; min-width: 600px; }\n#branch-sms-block * { vertical-align: bottom; font-size: 15px; }\n#branch-sms-block { display: inline-block; }\n#branch-banner input{ border: 1px solid #ccc;  font-weight: 400;  border-radius: 4px; height: 30px; padding: 5px 7px 4px; width: 145px; font-size: 14px;}\n#branch-banner input:focus { outline: none; }\n#branch-banner input.error { color: rgb(194, 0, 0); border-color: rgb(194, 0, 0); }\n#branch-banner .branch-icon-wrapper { width:25px; height: 25px; vertical-align: middle; display: inline-block; margin-top: -18px; }\n@keyframes branch-spinner { 0% { transform: rotate(0deg); -webkit-transform: rotate(0deg); -ms-transform: rotate(0deg); } 100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -ms-transform: rotate(360deg); } }\n@-webkit-keyframes branch-spinner { 0% { transform: rotate(0deg); -webkit-transform: rotate(0deg); -ms-transform: rotate(0deg); } 100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -ms-transform: rotate(360deg); } }\n#branch-spinner { -webkit-animation: branch-spinner 1s ease-in-out infinite; animation: branch-spinner 1s ease-in-out infinite; transition: all 0.7s ease-in-out; border:2px solid #ddd; border-bottom-color:#428bca; width:80%; height:80%; border-radius:50%; -webkit-font-smoothing: antialiased !important; }\n#branch-banner .theme-dark input { border-color: transparent; }\n", 
 nonie:"#branch-banner .checkmark { stroke: #428bca; stroke-dashoffset: 745.74853515625; stroke-dasharray: 745.74853515625; -webkit-animation: dash 2s ease-out forwards; animation: dash 2s ease-out forwards; }\n@-webkit-keyframes dash { 0% { stroke-dashoffset: 745.748535 15625; } 100% { stroke-dashoffset: 0; } }\n@keyframes dash { 0% { stroke-dashoffset: 745.74853515625; } 100% { stroke-dashoffset: 0; } }\n", ie:"#branch-banner .checkmark { color: #428bca; font-size: 22px; }\n", mobile:"#branch-banner { position: absolute; }\n#branch-banner .content .left .details .title { font-size: 12px; }\n#branch-mobile-action { white-space: nowrap; }\n#branch-banner .content .left .details .description { font-size: 11px; font-weight: normal; }\n@media only screen and (min-device-width: 320px) and (max-device-width: 350px) { #branch-banner .content .right { max-width: 120px; } }\n@media only screen and (min-device-width: 351px) and (max-device-width: 400px) and (orientation: landscape) { #branch-banner .content .right { max-width: 150px; } }\n@media only screen and (min-device-width: 401px) and (max-device-width: 480px) and (orientation: landscape) { #branch-banner .content .right { max-width: 180px; } }\n", 
-ios:"", android:"#branch-banner #branch-banner-close,#branch-banner .theme-dark #branch-banner-close { height:17px; width: 17px; text-align: center; font-size: 15px; top: 24px;  border-radius:14px; border:0; line-height:14px; color:#b1b1b3; background:#efefef; padding: 0; opacity: 1; }\n#branch-banner .button { top: 0; text-decoration:none; border-bottom: 3px solid #A4C639; padding: 0 10px; height: 24px; line-height: 24px; text-align: center; color: #fff; margin-top: 2px;  font-weight: bold; background-color: #A4C639; border-radius: 5px; }\n#branch-banner .button:hover { border-bottom:3px solid #8c9c29; background-color: #c1d739; }\n"};
+ios:"", android:"#branch-banner #branch-banner-close,#branch-banner .theme-dark #branch-banner-close { height:17px; width: 17px; text-align: center; font-size: 15px; top: 24px;  border-radius:14px; border:0; line-height:14px; color:#b1b1b3; background:#efefef; padding: 0; opacity: 1; }\n#branch-banner .button { top: 0; text-decoration:none; border-bottom: 3px solid #A4C639; padding: 0 10px; height: 24px; line-height: 24px; text-align: center; color: #fff; margin-top: 2px;  font-weight: bold; background-color: #A4C639; border-radius: 5px; }\n#branch-banner .button:hover { border-bottom:3px solid #8c9c29; background-color: #c1d739; }\n", 
+blackberry:"", windows_phone:"", kindle:""};
 banner_css.iframe = "body { -webkit-transition: all " + 1.5 * banner_utils.animationSpeed / 1E3 + "s ease; transition: all 0" + 1.5 * banner_utils.animationSpeed / 1E3 + "s ease; }\n#branch-banner-iframe { box-shadow: 0 0 5px rgba(0, 0, 0, .35); width: 1px; min-width:100%; left: 0; right: 0; border: 0; height: " + banner_utils.bannerHeight + "; z-index: 99999; -webkit-transition: all " + banner_utils.animationSpeed / 1E3 + "s ease; transition: all 0" + banner_utils.animationSpeed / 1E3 + "s ease; }\n";
 banner_css.inneriframe = "body { margin: 0; }\n";
 banner_css.iframe_position = function(a, b) {
@@ -1247,7 +1253,8 @@ banner_css.iframe_position = function(a, b) {
 };
 banner_css.css = function(a, b) {
   var c = banner_css.banner(a), d = utils.mobileUserAgent();
-  "ios" !== d && "ipad" !== d || !a.showiOS ? "android" === d && a.showAndroid ? c += banner_css.mobile + banner_css.android : (c += banner_css.desktop, c = window.ActiveXObject ? c + banner_css.ie : c + banner_css.nonie) : c += banner_css.mobile + banner_css.ios;
+  "ios" !== d && "ipad" !== d || !a.showiOS ? "android" === d && a.showAndroid ? c += banner_css.mobile + banner_css.android : "blackberry" === d && a.showBlackberry ? c += banner_css.mobile + banner_css.blackberry : "windows_phone" === d && a.showWindowsPhone ? c += banner_css.mobile + banner_css.windows_phone : "kindle" === d && a.showKindle ? c += banner_css.mobile + banner_css.kindle : (c += banner_css.desktop, c = window.ActiveXObject ? c + banner_css.ie : c + banner_css.nonie) : c += banner_css.mobile + 
+  banner_css.ios;
   c += a.customCSS;
   a.iframe && (c += banner_css.inneriframe, d = document.createElement("style"), d.type = "text/css", d.id = "branch-iframe-css", d.innerHTML = banner_css.iframe + (utils.mobileUserAgent() ? banner_css.iframe_position(a.mobileSticky, a.position) : banner_css.iframe_position(a.desktopSticky, a.position)), document.head.appendChild(d));
   d = document.createElement("style");
@@ -1276,7 +1283,7 @@ var banner_html = {banner:function(a, b) {
   }
   return c + d + '<div class="description">' + a.description + "</div></div></div></div>";
 }, mobileAction:function(a, b, c) {
-  return '<a id="branch-mobile-action" class="button" href="#" target="_parent">' + (session.get(b).has_app ? a.openAppButtonText : a.downloadAppButtonText) + "</a>";
+  return '<a id="branch-mobile-action" class="button" href="#" target="_parent">' + ((session.get(b) || {}).has_app ? a.openAppButtonText : a.downloadAppButtonText) + "</a>";
 }, desktopAction:function(a) {
   return '<div class="branch-icon-wrapper" id="branch-loader-wrapper" style="opacity: 0;"><div id="branch-spinner"></div></div><div id="branch-sms-block"><form id="sms-form"><input type="phone" class="branch-animation" name="branch-sms-phone" id="branch-sms-phone" placeholder="' + a.phonePreviewText + '"><button type="submit" id="branch-sms-send" class="branch-animation button">' + a.sendLinkText + "</button></form></div>";
 }, checkmark:function() {
@@ -1503,7 +1510,7 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
     WEB_BUILD && e._api(resources._r, {sdk:config.version}, function(a, b) {
       b && (c.browser_fingerprint_id = b);
     });
-    var c = a || session.get(e._storage);
+    var c = a || session.get(e._storage) || {};
     e._api(resources.hasApp, {browser_fingerprint_id:c.browser_fingerprint_id}, function(a, d) {
       d && !c.has_app && (c.has_app = !0, session.update(e._storage, c), e._publishEvent("didDownloadApp"));
       b && b(a, c);
@@ -1679,6 +1686,7 @@ Branch.prototype.deepviewCta = wrap(callback_params.NO_CALLBACK, function(a) {
     throw Error("Cannot call Deepview CTA, please call branch.deepview() first.");
   }
   window.event && (window.event.preventDefault ? window.event.preventDefault() : window.event.returnValue = !1);
+  this._publishEvent("didDeepviewCTA");
   this._deepviewCta();
   a();
 });
@@ -1719,10 +1727,10 @@ WEB_BUILD && (Branch.prototype.addListener = function(a, b) {
 }, Branch.prototype.banner = wrap(callback_params.NO_CALLBACK, function(a, b, c) {
   "undefined" === typeof b.showAgain && "undefined" !== typeof b.forgetHide && (b.showAgain = b.forgetHide);
   var d = {icon:b.icon || "", title:b.title || "", description:b.description || "", reviewCount:"number" === typeof b.reviewCount && 0 < b.reviewCount ? Math.floor(b.reviewCount) : null, rating:"number" === typeof b.rating && 5 >= b.rating && 0 < b.rating ? Math.round(2 * b.rating) / 2 : null, openAppButtonText:b.openAppButtonText || "View in app", downloadAppButtonText:b.downloadAppButtonText || "Download App", sendLinkText:b.sendLinkText || "Send Link", phonePreviewText:b.phonePreviewText || "(999) 999-9999", 
-  iframe:"undefined" === typeof b.iframe ? !0 : b.iframe, showiOS:"undefined" === typeof b.showiOS ? !0 : b.showiOS, showiPad:"undefined" === typeof b.showiPad ? !0 : b.showiPad, showAndroid:"undefined" === typeof b.showAndroid ? !0 : b.showAndroid, showDesktop:"undefined" === typeof b.showDesktop ? !0 : b.showDesktop, disableHide:!!b.disableHide, forgetHide:"number" === typeof b.forgetHide ? b.forgetHide : !!b.forgetHide, position:b.position || "top", customCSS:b.customCSS || "", mobileSticky:"undefined" === 
-  typeof b.mobileSticky ? !1 : b.mobileSticky, desktopSticky:"undefined" === typeof b.desktopSticky ? !0 : b.desktopSticky, theme:"string" === typeof b.theme && -1 < utils.bannerThemes.indexOf(b.theme) ? b.theme : utils.bannerThemes[0], buttonBorderColor:b.buttonBorderColor || "", buttonBackgroundColor:b.buttonBackgroundColor || "", buttonFontColor:b.buttonFontColor || "", buttonBorderColorHover:b.buttonBorderColorHover || "", buttonBackgroundColorHover:b.buttonBackgroundColorHover || "", buttonFontColorHover:b.buttonFontColorHover || 
-  "", make_new_link:!!b.make_new_link, open_app:!!b.open_app};
-  "undefined" !== typeof b.showMobile && (d.showiOS = b.showMobile, d.showAndroid = b.showMobile);
+  iframe:"undefined" === typeof b.iframe ? !0 : b.iframe, showiOS:"undefined" === typeof b.showiOS ? !0 : b.showiOS, showiPad:"undefined" === typeof b.showiPad ? !0 : b.showiPad, showAndroid:"undefined" === typeof b.showAndroid ? !0 : b.showAndroid, showBlackberry:"undefined" === typeof b.showBlackberry ? !0 : b.showBlackberry, showWindowsPhone:"undefined" === typeof b.showWindowsPhone ? !0 : b.showWindowsPhone, showKindle:"undefined" === typeof b.showKindle ? !0 : b.showKindle, showDesktop:"undefined" === 
+  typeof b.showDesktop ? !0 : b.showDesktop, disableHide:!!b.disableHide, forgetHide:"number" === typeof b.forgetHide ? b.forgetHide : !!b.forgetHide, position:b.position || "top", customCSS:b.customCSS || "", mobileSticky:"undefined" === typeof b.mobileSticky ? !1 : b.mobileSticky, desktopSticky:"undefined" === typeof b.desktopSticky ? !0 : b.desktopSticky, theme:"string" === typeof b.theme && -1 < utils.bannerThemes.indexOf(b.theme) ? b.theme : utils.bannerThemes[0], buttonBorderColor:b.buttonBorderColor || 
+  "", buttonBackgroundColor:b.buttonBackgroundColor || "", buttonFontColor:b.buttonFontColor || "", buttonBorderColorHover:b.buttonBorderColorHover || "", buttonBackgroundColorHover:b.buttonBackgroundColorHover || "", buttonFontColorHover:b.buttonFontColorHover || "", make_new_link:!!b.make_new_link, open_app:!!b.open_app};
+  "undefined" !== typeof b.showMobile && (d.showiOS = b.showMobile, d.showAndroid = b.showMobile, d.showBlackberry = b.showMobile, d.showWindowsPhone = b.showMobile, d.showKindle = b.showMobile);
   this.closeBannerPointer = banner(this, d, c, this._storage);
   a();
 }), Branch.prototype.closeBanner = wrap(0, function(a) {
@@ -1743,7 +1751,7 @@ if (!TITANIUM_BUILD && window.branch && window.branch._q) {
     branch_instance[task[0]].apply(branch_instance, task[1]);
   }
 }
-"function" === typeof define && define.amd ? define("branch", function() {
+"function" === typeof define && define.amd ? define(["branch"], function() {
   return branch_instance;
 }) : "object" === typeof exports && (module.exports = branch_instance);
 TITANIUM_BUILD || window && (window.branch = branch_instance);
