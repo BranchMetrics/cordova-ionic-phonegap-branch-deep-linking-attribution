@@ -1,6 +1,6 @@
 {
   "name": "branch-cordova-sdk",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Branch Metrics Cordova SDK",
   "main": "dist/web/build.min.js",
   "scripts": {
@@ -23,5 +23,5 @@
   "dependencies": {
     "request": "^2.55.0"
   },
-  "build": "1.7.0"
+  "build": "1.8.0"
 }
