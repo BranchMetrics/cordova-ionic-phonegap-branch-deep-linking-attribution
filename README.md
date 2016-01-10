@@ -7,7 +7,13 @@ _____
 
 ## Demo App
 
-There's a full demo app embedded in the repository, but you should also check out our live demo: Branch Monster Factory. We've open sourced the Branchster's app as well if you'd like to dig in.
+This repo includes a sample app, that demonstrates all of the available methods in the Branch Cordova SDK. Building this app is very simple:
+
+1. Switch to the Cordova dir: `$ cd cordova-testbed`
+2. Run the init script to install all the required plugins
+3. `$ ./init.sh`
+4. Build the Cordova app and launch in the iOS emulator
+5. `$ cordova emulate ios`
 
 _____
 
