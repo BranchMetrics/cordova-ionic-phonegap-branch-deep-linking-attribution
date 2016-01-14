@@ -97,6 +97,8 @@ public class BranchSDK extends CordovaPlugin {
             instance.setDebug();
         }
 
+        callbackContext.success("Success");
+
     }
 
     /**
@@ -113,6 +115,8 @@ public class BranchSDK extends CordovaPlugin {
 
         instance.setIdentity(newIdentity);
 
+        callbackContext.success("Success");
+
     }
 
     /**
@@ -128,6 +132,22 @@ public class BranchSDK extends CordovaPlugin {
         instance = Branch.getInstance(activity);
 
         instance.userCompletedAction(action);
+
+        callbackContext.success("Success");
+
+    }
+
+    /**
+     * Get user current points/rewards.
+     */
+    private void loadRewards() {
+
+        Log.d(LCAT, "start loadRewards()");
+
+        activity = this.cordova.getActivity();
+        instance = Branch.getInstance(activity);
+
+        instance.loadRewards(new LoadRewardsListener());
 
     }
 
@@ -160,6 +180,32 @@ public class BranchSDK extends CordovaPlugin {
 
                 callbackContext.success("initialize success");
 
+            } else {
+                String errorMessage = error.getMessage();
+
+                Log.d(LCAT, errorMessage);
+
+                callbackContext.error(errorMessage);
+            }
+
+        }
+
+    }
+
+    protected class LoadRewardsListener implements Branch.BranchReferralInitListener
+    {
+
+        @Override
+        public void onStateChanged(boolean isChanged, BranchError error) {
+
+            Log.d(LCAT, "LoadRewardsListener onStateChanged()");
+
+            if (error == null) {
+                final Activity currentActivity = this.cordova.getActivity();
+                final Branch currentBranch = Branch.getInstance(currentActivity);
+                int credits = instance.getCredits();
+
+                callbackContext.success(credits);
             } else {
                 String errorMessage = error.getMessage();
 
