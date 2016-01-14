@@ -1,1 +1,4 @@
 .DS_Store
+src/android/lextab.py
+src/android/parsetab.py
+src/android/parser.out
