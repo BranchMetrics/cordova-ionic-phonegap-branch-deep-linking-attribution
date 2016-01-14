@@ -1,7 +1,6 @@
 package io.branch;
 
 import android.app.Activity;
-import android.net.LinkAddress;
 import android.util.Log;
 
 import io.branch.referral.Branch;
@@ -19,7 +18,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BranchSDK extends CordovaPlugin {
+public class BranchSDK extends CordovaPlugin
+{
 
     // Standard Debugging Variables
     private static final String LCAT = "CordovaBranchSDK";
@@ -30,37 +30,56 @@ public class BranchSDK extends CordovaPlugin {
     private Branch instance;
 
     @Override
-    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+    public void initialize(CordovaInterface cordova, CordovaWebView webView)
+    {
         super.initialize(cordova, webView);
         // Initialization codes here
     }
 
     /**
-     * <p>
-     * cordova.exec() method reference.
-     * All exec() calls goes to this part.
-     * </p>
+     * <p>cordova.exec() method reference.</p>
+     * <p>All exec() calls goes to this part.</p>
      *
-     * @param  action [Action name/label to execute]
-     * @param  args [Action parameters to pass]
-     * @param  callbackContext [Callback function]
+     * @param  action A {@link String} value method to be executed.
+     * @param  args   A {@link JSONArray} value parameters passed along with the action param.
+     * @param  callbackContext A {@link CallbackContext} function passed for executing callbacks.
      */
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
+    {
 
         this.callbackContext = callbackContext;
+        this.activity = this.cordova.getActivity();
+        this.instance = Branch.getInstance(activity);
 
         if (action.equals("initSession")) {
             this.initSession();
             return true;
         } else if (action.equals("setDebug")) {
-            this.setDebug(args.getBoolean(0));
+            if (args.length() == 1) {
+                this.setDebug(args.getBoolean(0));
+            }
             return true;
         } else if (action.equals("setIdentity")) {
-            this.setIdentity(args.getString(0));
+            if (args.length() == 1) {
+                this.setIdentity(args.getString(0));
+            }
             return true;
         } else if (action.equals("userCompletedAction")) {
-            this.userCompletedAction(args.getString(0));
+            if (args.length() == 2) {
+                this.userCompletedAction (args.getString(0), args.getJSONObject(1));
+            } else if (args.length() == 1) {
+                this.userCompletedAction(args.getString(0));
+            }
+            return true;
+        } else if (action.equals("getFirstReferringParams")) {
+            this.getFirstReferringParams();
+            return true;
+        } else if (action.equals("getLatestReferringParams")) {
+            this.getLatestReferringParams();
+            return true;
+        } else if (action.equals("logout")) {
+            this.logout();
             return true;
         }
 
@@ -69,7 +88,7 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     //////////////////////////////////////////////////
-    //=-------------- CLASS METHODS ----------------//
+    //--------------- CLASS METHODS ----------------//
     //////////////////////////////////////////////////
 
     /**
@@ -77,14 +96,71 @@ public class BranchSDK extends CordovaPlugin {
      * Initialize Branch Session.
      * </p>
      */
-    private void initSession() {
+    private void initSession()
+    {
 
         Log.d(LCAT, "start initSession()");
 
-        activity = this.cordova.getActivity();
-        instance = Branch.getInstance(activity);
+        this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
 
-        instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
+    }
+
+    /**
+     * <p>
+     * Logout current session.
+     * </p>
+     */
+    private void logout()
+    {
+
+        Log.d(LCAT, "start logout()");
+
+        this.instance.logout();
+        this.callbackContext.success("Success");
+
+    }
+
+    /**
+     * <p>
+     * Get latest referring parameters.
+     * </p>
+     */
+    private void getLatestReferringParams()
+    {
+
+        Log.d(LCAT, "start getLatestReferringParams()");
+
+        JSONObject sessionParams = this.instance.getLatestReferringParams();
+
+        if (sessionParams == null) {
+            Log.d(LCAT, "return is null");
+        } else {
+            Log.d(LCAT, sessionParams.toString());
+        }
+
+        this.callbackContext.success(sessionParams.toString());
+
+    }
+
+    /**
+     * <p>
+     * Get first referring parameters.
+     * </p>
+     */
+    private void getFirstReferringParams()
+    {
+
+        Log.d(LCAT, "start getFirstReferringParams()");
+
+        JSONObject installParams = this.instance.getFirstReferringParams();
+
+        if (installParams == null) {
+            Log.d(LCAT, "return is null");
+        } else {
+            Log.d(LCAT, installParams.toString());
+        }
+
+        this.callbackContext.success(installParams.toString());
 
     }
 
@@ -93,21 +169,16 @@ public class BranchSDK extends CordovaPlugin {
      * Enable debug mode for the app.
      * </p>
      *
-     * @param isEnable [Boolean flag value to enable/disable debugging mode]
-     *
+     * @param isEnable A {@link Boolean} value to enable/disable debugging mode for the app.
      */
     private void setDebug(boolean isEnable) {
 
         Log.d(LCAT, "start setDebug()");
 
-        activity = this.cordova.getActivity();
-        instance = Branch.getInstance(activity);
-
         if (isEnable) {
-            instance.setDebug();
+            this.instance.setDebug();
+            this.callbackContext.success("Success");
         }
-
-        callbackContext.success("Success");
 
     }
 
@@ -116,18 +187,15 @@ public class BranchSDK extends CordovaPlugin {
      * Set instance identity.
      * </p>
      *
-     * @param newIdentity [The identity name/identity for the current session]
+     * @param newIdentity A {@link String} value containing the unique identifier of the user.
      */
-    private void setIdentity(String newIdentity) {
+    private void setIdentity(String newIdentity)
+    {
 
         Log.d(LCAT, "start setIdentity()");
 
-        activity = this.cordova.getActivity();
-        instance = Branch.getInstance(activity);
-
-        instance.setIdentity(newIdentity);
-
-        callbackContext.success("Success");
+        this.instance.setIdentity(newIdentity);
+        this.callbackContext.success("Success");
 
     }
 
@@ -136,27 +204,46 @@ public class BranchSDK extends CordovaPlugin {
      * Set user completed action
      * </p>
      *
-     * @param action [Name of the completed user action]
+     * @param action A {@link String} value to be passed as an action that the user has carried out.
+     *               For example "logged in" or "registered".
      */
-    private void userCompletedAction(String action) {
+    private void userCompletedAction(String action)
+    {
 
         Log.d(LCAT, "start userCompletedAction()");
 
-        activity = this.cordova.getActivity();
-        instance = Branch.getInstance(activity);
-
-        instance.userCompletedAction(action);
-
-        callbackContext.success("Success");
+        this.instance.userCompletedAction(action);
+        this.callbackContext.success("Success");
 
     }
-    
+
+    /**
+     * <p>
+     * Set user completed action
+     * </p>
+     *
+     * @param action    A {@link String} value to be passed as an action that the user has carried
+     *                  out. For example "logged in" or "registered".
+     * @param metaData  A {@link JSONObject} containing app-defined meta-data to be attached to a
+     *                  user action that has just been completed.
+     */
+    private void userCompletedAction(String action, JSONObject metaData)
+    {
+
+        Log.d(LCAT, "start userCompletedAction()");
+
+        this.instance.userCompletedAction(action, metaData);
+        this.callbackContext.success("Success");
+
+    }
+
     /**
      * <p>
      * Creates a dictionary for session returns.
      * </p>
      */
-    private Map createSessionDict(JSONObject data) {
+    private Map createSessionDict(JSONObject data)
+    {
         Log.d(LCAT, "start createSessionDict()");
 
         Map<String, String> sessionDict = new HashMap<String, String>();

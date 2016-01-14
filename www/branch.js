@@ -17,10 +17,6 @@ var _API_CLASS = 'BranchSDK'; // SDK Class
  * @param  (Array) params  - Method parameter(s) to pass
  * 
  * @return (Promise)
- *
- * Method reference:
- *     Please see the native source codes for the available methods to call/execute
- *
  */
 function execute(method, params) {
     
@@ -58,13 +54,6 @@ Branch.prototype.getInstallData = function () {
  * Initialize the Branch instance.
  *
  * @return (Promise)
- *
- *  ---------------
- * | Sample Usage |
- * ----------------
- *
- *     Branch.initSession();
- * 
  */
 Branch.prototype.initSession = function () {
     
@@ -79,13 +68,6 @@ Branch.prototype.initSession = function () {
  * @param (Boolean) isEnabled. Default = false
  * 
  * @return (Promise)
- * 
- *  ---------------
- * | Sample Usage |
- * ----------------
- *
- *    Branch.setDebug(true);
- * 
  */
 Branch.prototype.setDebug = function (isEnabled) {
     
@@ -99,12 +81,6 @@ Branch.prototype.setDebug = function (isEnabled) {
  * Retrieves the install session parameters.
  *
  * @return (Promise)
- * 
- *  ---------------
- * | Sample Usage |
- * ----------------
- *
- *    Branch.getFirstReferringParams();
  */
 Branch.prototype.getFirstReferringParams = function () {
     
@@ -119,14 +95,6 @@ Branch.prototype.getFirstReferringParams = function () {
  *
  * @return (Promise)
  * 
- *  ---------------
- * | Sample Usage |
- * ----------------
- *
- *     Branch.setIdentity('Batman').then(successCallback, errorCallback);
- * 
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
- * 
  */
 Branch.prototype.setIdentity = function (identity) {
     
@@ -137,14 +105,7 @@ Branch.prototype.setIdentity = function (identity) {
 /**
  * Logout from the current session. Replace session and identity IDs.
  *
- * @return (Promise) 
- * 
- *  ---------------
- * | Sample Usage |
- * ----------------
- *
- *    Branch.logout();
- * 
+ * @return (Promise)
  */
 Branch.prototype.logout = function () {
     
@@ -156,21 +117,19 @@ Branch.prototype.logout = function () {
  * Register custom events.
  *
  * @param (String) action - Name of the custom action
+ * @param (Object) metaData - Data to pass with the action [OPTIONAL]
  * 
  * @return (Promise)
- * 
- *  ---------------
- * | Sample Usage |
- * ----------------
- *
- *    Branch.userCompletedAction('complete_purchase').then(successCallback, errorCallback)
- * 
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
- * 
  */
-Branch.prototype.userCompletedAction = function (action) {
+Branch.prototype.userCompletedAction = function (action, metaData) {
     
-    return execute('userCompletedAction', [action]);
+    var args = [action];
+
+    if (metaData) {
+        args.push(metaData);
+    }
+
+    return execute('userCompletedAction', args);
 
 };
 
@@ -193,25 +152,6 @@ Branch.prototype.userCompletedAction = function (action) {
  *    |                       |            |('private' or 'public')|
  *    |    contentMetadata    |   Object   |   Custom key/value    |
  *    --------------------------------------------------------------
- *
- *  ---------------
- * | Sample Usage |
- * ----------------
- *
- *     Branch.createBranchUniversalObject({
- *         canonicalIdentifier : "sample-id",
- *         title : "Sample",
- *         contentDescription : "This is a sample",
- *         contentImageUrl : "http://sample-host.com/media/1235904.jpg",
- *         contentIndexingMode : "private",
- *         contentMetadata : {
- *             "key" : "value",
- *             "key2" : "value2"
- *         },
- *     }).then(successCallback, errorCallback)
- *
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
- * 
  */
 Branch.prototype.createBranchUniversalObject = function (options) {
     
@@ -223,15 +163,6 @@ Branch.prototype.createBranchUniversalObject = function (options) {
  * Register view count.
  *
  * @return (Promise)
- *
- *  ---------------
- * | Sample Usage |
- * ---------------
- *
- *     Branch.registerView().then(successCallback, errorCallback)
- *
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
- * 
  */
 Branch.prototype.registerView = function () {
     
@@ -242,8 +173,8 @@ Branch.prototype.registerView = function () {
 /**
  * Generates a short url.
  * 
- * @param (Object) options [REQUIRED]
- * @param (Object) controlParameters [REQUIRED]
+ * @param (Object) options
+ * @param (Object) controlParameters
  *
  * @return (Promise)
  *
@@ -271,26 +202,6 @@ Branch.prototype.registerView = function () {
  *    |  $blackberry_url   |   String   |   Blackberry URL  |
  *    | $windows_phone_url |   String   |  Kindle Fire URL  |
  *    -------------------------------------------------------
- *
- *  ---------------
- * | Sample Usage |
- * ---------------
- * 
- *    Branch.generateShortUrl({
- *        feature: 'sample-feature',
- *        alias: 'sample-alias',
- *        channel: 'sample-channel',
- *        stage: 'sample-stage',
- *        duration: 100
- *    }, {
- *        $fallback_url: 'http://this-fallback-url.com',
- *        $desktop_url:  'http://this-desktop-url.com',
- *        $android_url:  'http://this-android-url.com',
- *        $ios_url:  'http://this-ios-url.com'
- *    }).then(successCallback, errorCallback);
- *    
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
- * 
  */
 Branch.prototype.generateShortUrl = function (options, controlParameters) {
     
@@ -301,8 +212,8 @@ Branch.prototype.generateShortUrl = function (options, controlParameters) {
 /**
  * Show the share dialog.
  *
- * @param (Object) options [REQUIRED]
- * @param (Object) controlParameters [REQUIRED]
+ * @param (Object) options
+ * @param (Object) controlParameters
  * 
  * @return (Promise)
  *
@@ -330,26 +241,6 @@ Branch.prototype.generateShortUrl = function (options, controlParameters) {
  *    |  $blackberry_url   |   String   |   Blackberry URL  |
  *    | $windows_phone_url |   String   |  Kindle Fire URL  |
  *    -------------------------------------------------------
- *
- *  ---------------
- * | Sample Usage |
- * ---------------
- * 
- *    Branch.showShareSheet({
- *        feature: 'sample-feature',
- *        alias: 'sample-alias',
- *        channel: 'sample-channel',
- *        stage: 'sample-stage',
- *        duration: 100
- *    }, {
- *        $fallback_url: 'http://this-fallback-url.com',
- *        $desktop_url:  'http://this-desktop-url.com',
- *        $android_url:  'http://this-android-url.com',
- *        $ios_url:  'http://this-ios-url.com'
- *    }).then(successCallback, errorCallback);
- *    
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
- * 
  */
 Branch.prototype.showShareSheet = function (options, controlParameters) {
     
@@ -361,14 +252,6 @@ Branch.prototype.showShareSheet = function (options, controlParameters) {
  * Retrieve the current reward balance.
  *
  * @return (Promise)
- * 
- *  ---------------
- * | Sample Usage |
- * ---------------
- *
- *      Branch.loadRewards().then(successCallback, errorCallback);
- *
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
  */
 Branch.prototype.loadRewards = function () {
    
@@ -382,14 +265,6 @@ Branch.prototype.loadRewards = function () {
  * @param (Int) value - The amount to redeem
  *
  * @return (Promise)
- *
- *  ---------------
- * | Sample Usage |
- * ---------------
- *
- *     Branch.redeemRewards(100).then(successCallback, errorCallback)
- *
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
  */
 Branch.prototype.redeemRewards = function (value) {
     
@@ -401,15 +276,6 @@ Branch.prototype.redeemRewards = function (value) {
  * Retrieve the entire history of credits and redemptions from the individual user.
  *
  * @return (Promise)
- *
- *  ---------------
- * | Sample Usage |
- * ---------------
- *
- *     Branch.creditHistory().then(successCallback, errorCallback);   
- *
- * Wherein 'successCallback' and 'errorCallback' are callback functions.
- * 
  */
 Branch.prototype.creditHistory = function () {
     
