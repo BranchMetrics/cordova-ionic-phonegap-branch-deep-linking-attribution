@@ -35,6 +35,10 @@ public class BranchSDK extends CordovaPlugin {
     /**
      * cordova.exec() method reference.
      * All exec() calls goes to this part.
+     *
+     * @param  action [Action name/label to execute]
+     * @param  args [Action parameters to pass]
+     * @param  callbackContext [Callback function]
      */
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -49,6 +53,9 @@ public class BranchSDK extends CordovaPlugin {
             return true;
         } else if (action.equals("setIdentity")) {
             this.setIdentity(args.getString(0));
+            return true;
+        } else if (action.equals("userCompletedAction")) {
+            this.userCompletedAction(args.getString(0));
             return true;
         }
 
@@ -77,7 +84,7 @@ public class BranchSDK extends CordovaPlugin {
     /**
      * Enable debug mode for the app.
      * 
-     * @param isEnable - Boolean flag value to enable/disable debugging mode
+     * @param isEnable [Boolean flag value to enable/disable debugging mode]
      */
     private void setDebug(boolean isEnable) {
 
@@ -95,9 +102,9 @@ public class BranchSDK extends CordovaPlugin {
     /**
      * Set instance identity.
      * 
-     * @param newIdentity - The identity name/identity for the current session
+     * @param newIdentity [The identity name/identity for the current session]
      */
-    private void setIdentity(string newIdentity) {
+    private void setIdentity(String newIdentity) {
 
         Log.d(LCAT, "start setIdentity()");
 
@@ -105,6 +112,22 @@ public class BranchSDK extends CordovaPlugin {
         instance = Branch.getInstance(activity);
 
         instance.setIdentity(newIdentity);
+
+    }
+
+    /**
+     * Set user completed action
+     * 
+     * @param action [Name of the completed user action]
+     */
+    private void userCompletedAction(String action) {
+
+        Log.d(LCAT, "start userCompletedAction()");
+
+        activity = this.cordova.getActivity();
+        instance = Branch.getInstance(activity);
+
+        instance.userCompletedAction(action);
 
     }
 
