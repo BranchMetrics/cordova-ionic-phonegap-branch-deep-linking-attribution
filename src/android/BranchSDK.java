@@ -23,6 +23,8 @@ public class BranchSDK extends CordovaPlugin {
 
     // Private Method Properties
     private CallbackContext callbackContext;
+    private Activity activity;
+    private Branch instance;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -42,6 +44,9 @@ public class BranchSDK extends CordovaPlugin {
         if (action.equals("initSession")) {
             this.initSession();
             return true;
+        } else if (action.equals("setDebug")) {
+            this.setDebug(args.getBoolean(0));
+            return true;
         }
 
         return false;
@@ -52,14 +57,35 @@ public class BranchSDK extends CordovaPlugin {
     //=-------------- CLASS METHODS ----------------//
     //////////////////////////////////////////////////
 
+    /**
+     * Initialize Branch Session.
+     */
     private void initSession() {
 
         Log.d(LCAT, "start initSession()");
 
-        final Activity activity = this.cordova.getActivity();
-        final Branch instance = Branch.getInstance(activity);
+        activity = this.cordova.getActivity();
+        instance = Branch.getInstance(activity);
 
         instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
+
+    }
+
+    /**
+     * Enable debug mode for the app.
+     * 
+     * @param isEnable - Boolean flag value to enable/disable debugging mode
+     */
+    private void setDebug(boolean isEnable) {
+
+        Log.d(LCAT, "start setDebug()");
+
+        activity = this.cordova.getActivity();
+        instance = Branch.getInstance(activity);
+
+        if (isEnable) {
+            instance.setDebug();
+        }
 
     }
 
