@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,8 +38,10 @@ public class BranchSDK extends CordovaPlugin
     }
 
     /**
-     * <p>cordova.exec() method reference.</p>
-     * <p>All exec() calls goes to this part.</p>
+     * <p>
+     * cordova.exec() method reference.
+     * All exec() calls goes to this part.
+     * </p>
      *
      * @param  action A {@link String} value method to be executed.
      * @param  args   A {@link JSONArray} value parameters passed along with the action param.
@@ -81,6 +84,14 @@ public class BranchSDK extends CordovaPlugin
         } else if (action.equals("logout")) {
             this.logout();
             return true;
+        } else if (action.equals("loadRewards")) {
+            this.loadRewards();
+            return true;
+        } else if (action.equals("redeemRewards")) {
+            if (args.length() == 1) {
+                this.redeemRewards(args.getInt(0));
+            }
+            return true;
         }
 
         return false;
@@ -88,13 +99,12 @@ public class BranchSDK extends CordovaPlugin
     }
 
     //////////////////////////////////////////////////
-    //--------------- CLASS METHODS ----------------//
+    //----------- CLASS PRIVATE METHODS ------------//
     //////////////////////////////////////////////////
 
     /**
-     * <p>
-     * Initialize Branch Session.
-     * </p>
+     * <p>Initialises a session with the Branch API, assigning a {@link BranchUniversalReferralInitListener}
+     * to perform an action upon successful initialisation.</p>
      */
     private void initSession()
     {
@@ -106,9 +116,9 @@ public class BranchSDK extends CordovaPlugin
     }
 
     /**
-     * <p>
-     * Logout current session.
-     * </p>
+     * <p>This method should be called if you know that a different person is about to use the app. For example,
+     * if you allow users to log out and let their friend use the app, you should call this to notify Branch
+     * to create a new user for this device. This will clear the first and latest params, as a new session is created.</p>
      */
     private void logout()
     {
@@ -121,9 +131,46 @@ public class BranchSDK extends CordovaPlugin
     }
 
     /**
-     * <p>
-     * Get latest referring parameters.
-     * </p>
+     * <p>Redeems the specified number of credits from the "default" bucket, if there are sufficient
+     * credits within it. If the number to redeem exceeds the number available in the bucket, all of
+     * the available credits will be redeemed instead.</p>
+     *
+     * @param count A {@link Integer} specifying the number of credits to attempt to redeem from
+     *              the bucket.
+     */
+    private void redeemRewards(int value)
+    {
+
+        Log.d(LCAT, "start redeemRewards()");
+
+        this.instance.redeemRewards(value);
+        this.callbackContext.success("Success");
+
+    }
+
+    /**
+     * <p>Retrieves rewards for the current session, with a callback to perform a predefined
+     * action following successful report of state change. You'll then need to call getCredits
+     * in the callback to update the credit totals in your UX.</p>
+     */
+    private void loadRewards()
+    {
+
+        Log.d(LCAT, "start loadRewards()");
+
+        this.instance.loadRewards(new LoadRewardsListener());
+
+    }
+
+    /**
+     * <p>Returns the parameters associated with the link that referred the session. If a user
+     * clicks a link, and then opens the app, initSession will return the paramters of the link
+     * and then set them in as the latest parameters to be retrieved by this method. By default,
+     * sessions persist for the duration of time that the app is in focus. For example, if you
+     * minimize the app, these parameters will be cleared when closeSession is called.</p>
+     *
+     * @return A {@link JSONObject} containing the latest referring parameters as
+     * configured locally.
      */
     private void getLatestReferringParams()
     {
@@ -138,14 +185,16 @@ public class BranchSDK extends CordovaPlugin
             Log.d(LCAT, sessionParams.toString());
         }
 
-        this.callbackContext.success(sessionParams.toString());
+        this.callbackContext.success(sessionParams);
 
     }
 
     /**
-     * <p>
-     * Get first referring parameters.
-     * </p>
+     * <p>Returns the parameters associated with the link that referred the user. This is only set once,
+     * the first time the user is referred by a link. Think of this as the user referral parameters.
+     * It is also only set if isReferrable is equal to true, which by default is only true
+     * on a fresh install (not upgrade or reinstall). This will change on setIdentity (if the
+     * user already exists from a previous device) and logout.</p>
      */
     private void getFirstReferringParams()
     {
@@ -165,9 +214,8 @@ public class BranchSDK extends CordovaPlugin
     }
 
     /**
-     * <p>
-     * Enable debug mode for the app.
-     * </p>
+     * <p>Sets the library to function in debug mode, enabling logging of all requests.</p>
+     * <p>If you want to flag debug, call this <b>before</b> initUserSession</p>
      *
      * @param isEnable A {@link Boolean} value to enable/disable debugging mode for the app.
      */
@@ -183,9 +231,8 @@ public class BranchSDK extends CordovaPlugin
     }
 
     /**
-     * <p>
-     * Set instance identity.
-     * </p>
+     * <p>Identifies the current user to the Branch API by supplying a unique
+     * identifier as a {@link String} value.</p>
      *
      * @param newIdentity A {@link String} value containing the unique identifier of the user.
      */
@@ -200,9 +247,8 @@ public class BranchSDK extends CordovaPlugin
     }
 
     /**
-     * <p>
-     * Set user completed action
-     * </p>
+     * <p>A void call to indicate that the user has performed a specific action and for that to be
+     * reported to the Branch API.</p>
      *
      * @param action A {@link String} value to be passed as an action that the user has carried out.
      *               For example "logged in" or "registered".
@@ -218,9 +264,8 @@ public class BranchSDK extends CordovaPlugin
     }
 
     /**
-     * <p>
-     * Set user completed action
-     * </p>
+     * <p>A void call to indicate that the user has performed a specific action and for that to be
+     * reported to the Branch API.</p>
      *
      * @param action    A {@link String} value to be passed as an action that the user has carried
      *                  out. For example "logged in" or "registered".
@@ -328,6 +373,82 @@ public class BranchSDK extends CordovaPlugin
 
         }
 
+    }
+
+    protected class LoadRewardsListener implements Branch.BranchReferralStateChangedListener
+    {
+
+        // Listener that implements BranchReferralStateChangedListener for loadRewards
+        @Override
+        public void onStateChanged(boolean changed, BranchError error) {
+
+            Log.d(LCAT, "LoadRewardsListener onStateChanged()");
+
+            JSONObject result = new JSONObject();
+
+            if (error == null) {
+                int credits = instance.getCredits();
+
+                try {
+                    result.put("credits", credits);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                callbackContext.success(result);
+            } else {
+                String errorMessage = error.getMessage();
+
+                Log.d(LCAT, errorMessage);
+
+                try {
+                    result.put("error", errorMessage);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                callbackContext.error(result);
+            }
+
+        }
+    }
+
+    protected class CreditHistoryListener implements Branch.BranchListResponseListener
+    {
+        // Listener that implements BranchListResponseListener for getCreditHistory()
+        @Override
+        public void onReceivingResponse(JSONArray list, BranchError error) {
+            Log.d(LCAT, "inside onReceivingResponse");
+
+            JSONObject response = new JSONObject();
+
+            if (error == null) {
+                ArrayList<JSONObject> data = new ArrayList<JSONObject>();
+
+                /*if (list != null) {
+                    for (int i = 0, limit = list.length(); i < limit; ++i) {
+                        try {
+                            JSONObject entry = list.getJSONObject(i);
+                            Map<String, String> dict = parse
+                        }
+                    }
+                }*/
+
+                callbackContext.success(response);
+            } else {
+                String errorMessage = error.getMessage();
+
+                Log.d(LCAT, errorMessage);
+
+                try {
+                    response.put("error", errorMessage);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                callbackContext.error(response);
+            }
+        }
     }
 
 }
