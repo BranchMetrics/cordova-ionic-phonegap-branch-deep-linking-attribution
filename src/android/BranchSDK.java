@@ -47,6 +47,9 @@ public class BranchSDK extends CordovaPlugin {
         } else if (action.equals("setDebug")) {
             this.setDebug(args.getBoolean(0));
             return true;
+        } else if (action.equals("setIdentity")) {
+            this.setIdentity(args.getString(0));
+            return true;
         }
 
         return false;
@@ -86,6 +89,22 @@ public class BranchSDK extends CordovaPlugin {
         if (isEnable) {
             instance.setDebug();
         }
+
+    }
+
+    /**
+     * Set instance identity.
+     * 
+     * @param newIdentity - The identity name/identity for the current session
+     */
+    private void setIdentity(string newIdentity) {
+
+        Log.d(LCAT, "start setIdentity()");
+
+        activity = this.cordova.getActivity();
+        instance = Branch.getInstance(activity);
+
+        instance.setIdentity(newIdentity);
 
     }
 
