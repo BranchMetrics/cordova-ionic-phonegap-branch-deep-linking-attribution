@@ -16,6 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BranchSDK extends CordovaPlugin {
 
     // Standard Debugging Variables
@@ -33,8 +36,10 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
+     * <p>
      * cordova.exec() method reference.
      * All exec() calls goes to this part.
+     * </p>
      *
      * @param  action [Action name/label to execute]
      * @param  args [Action parameters to pass]
@@ -68,7 +73,9 @@ public class BranchSDK extends CordovaPlugin {
     //////////////////////////////////////////////////
 
     /**
+     * <p>
      * Initialize Branch Session.
+     * </p>
      */
     private void initSession() {
 
@@ -82,9 +89,12 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
+     * <p>
      * Enable debug mode for the app.
-     * 
+     * </p>
+     *
      * @param isEnable [Boolean flag value to enable/disable debugging mode]
+     *
      */
     private void setDebug(boolean isEnable) {
 
@@ -102,8 +112,10 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
+     * <p>
      * Set instance identity.
-     * 
+     * </p>
+     *
      * @param newIdentity [The identity name/identity for the current session]
      */
     private void setIdentity(String newIdentity) {
@@ -120,8 +132,10 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
+     * <p>
      * Set user completed action
-     * 
+     * </p>
+     *
      * @param action [Name of the completed user action]
      */
     private void userCompletedAction(String action) {
@@ -136,18 +150,55 @@ public class BranchSDK extends CordovaPlugin {
         callbackContext.success("Success");
 
     }
-
+    
     /**
-     * Get user current points/rewards.
+     * <p>
+     * Creates a dictionary for session returns.
+     * </p>
      */
-    private void loadRewards() {
+    private Map createSessionDict(JSONObject data) {
+        Log.d(LCAT, "start createSessionDict()");
 
-        Log.d(LCAT, "start loadRewards()");
+        Map<String, String> sessionDict = new HashMap<String, String>();
 
-        activity = this.cordova.getActivity();
-        instance = Branch.getInstance(activity);
+        if (data.has("~channel")) {
+            sessionDict.put("~channel", data.optString("~channel"));
+        }
+        if (data.has("~feature")) {
+            sessionDict.put("~feature", data.optString("~feature"));
+        }
+        if (data.has("~tags")) {
+            sessionDict.put("~tags", data.optString("~tags"));
+        }
+        if (data.has("~campaign")) {
+            sessionDict.put("~campaign", data.optString("~campaign"));
+        }
+        if (data.has("~stage")) {
+            sessionDict.put("~stage", data.optString("~stage"));
+        }
+        if (data.has("~creation_source")) {
+            sessionDict.put("~creation_source", data.optString("~creation_source"));
+        }
+        if (data.has("+match_guaranteed")) {
+            sessionDict.put("+match_guaranteed", data.optString("+match_guaranteed"));
+        }
+        if (data.has("+referrer")) {
+            sessionDict.put("+referrer", data.optString("+referrer"));
+        }
+        if (data.has("+phone_number")) {
+            sessionDict.put("+phone_number", data.optString("+phone_number"));
+        }
+        if (data.has("+is_first_session")) {
+            sessionDict.put("+is_first_session", data.optString("+is_first_session"));
+        }
+        if (data.has("+clicked_branch_link")) {
+            sessionDict.put("+clicked_branch_link", data.optString("+clicked_branch_link"));
+        }
+        if (data.has("+click_timestamp")) {
+            sessionDict.put("+click_timestamp", data.optString("+click_timestamp"));
+        }
 
-        instance.loadRewards(new LoadRewardsListener());
+        return sessionDict;
 
     }
 
@@ -160,7 +211,7 @@ public class BranchSDK extends CordovaPlugin {
 
         /**
          * Listener that implements BranchReferralInitListener for initSession
-         * */
+         */
         @Override
         public void onInitFinished(JSONObject referringParams, BranchError error) {
 
@@ -180,32 +231,6 @@ public class BranchSDK extends CordovaPlugin {
 
                 callbackContext.success("initialize success");
 
-            } else {
-                String errorMessage = error.getMessage();
-
-                Log.d(LCAT, errorMessage);
-
-                callbackContext.error(errorMessage);
-            }
-
-        }
-
-    }
-
-    protected class LoadRewardsListener implements Branch.BranchReferralInitListener
-    {
-
-        @Override
-        public void onStateChanged(boolean isChanged, BranchError error) {
-
-            Log.d(LCAT, "LoadRewardsListener onStateChanged()");
-
-            if (error == null) {
-                final Activity currentActivity = this.cordova.getActivity();
-                final Branch currentBranch = Branch.getInstance(currentActivity);
-                int credits = instance.getCredits();
-
-                callbackContext.success(credits);
             } else {
                 String errorMessage = error.getMessage();
 
