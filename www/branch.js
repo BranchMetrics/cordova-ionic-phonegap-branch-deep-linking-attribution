@@ -70,8 +70,8 @@ Branch.prototype.initSession = function () {
  * @return (Promise)
  */
 Branch.prototype.setDebug = function (isEnabled) {
-    
-    isEnabled = (typeof isEnabled === 'undefined') ? false : isEnabled;
+
+    isEnabled = (typeof isEnabled !== 'boolean') ? false : isEnabled;
 
     return execute('setDebug', [isEnabled]);
     
