@@ -38,6 +38,7 @@ SOFTWARE.
         <clobbers target="Branch" />
     </js-module>
 
+    <!-- android -->
     <platform name="android">
         <config-file target="config.xml" parent="/*">
             <feature name="BranchSDK">
@@ -50,6 +51,26 @@ SOFTWARE.
         </config-file>
         <source-file src="src/android/BranchSDK.java" target-dir="src/io/branch" />
         <lib-file src="src/android/dependencies/Branch-1.10.3.jar" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="BranchSDK">
+                <param name="ios-package" value="BranchSDK" />
+            </feature>
+        </config-file>
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>branch_key</key>
+                    <string>key_live_feebgAAhbH9Tv85H5wLQhpdaefiZv5Dv</string>
+                </dict>
+            </array>
+        </config-file>
+        <header-file src="src/ios/BranchSDK.h" />
+        <source-file src="src/ios/BranchSDK.m" />
+        <framework src="src/ios/dependencies/Branch.framework" custom="true" />
     </platform>
 
 </plugin>
