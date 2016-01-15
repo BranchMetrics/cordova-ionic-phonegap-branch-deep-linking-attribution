@@ -89,6 +89,17 @@ Branch.prototype.getFirstReferringParams = function () {
 };
 
 /**
+ * Retrieves the latest referring parameters.
+ *
+ * @return (Promise)
+ */
+Branch.prototype.getLatestReferringParams = function () {
+    
+    return execute('getLatestReferringParams');
+
+};
+
+/**
  * Sets the identity of a user and returns the data.
  *
  * @param (String) identity - A unique identifier for the user [REQUIRED]
