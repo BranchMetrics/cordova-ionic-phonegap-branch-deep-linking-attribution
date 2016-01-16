@@ -174,6 +174,8 @@ onResume: function() {
 
 If `branch.init()` fails, all subsequent branch methods will fail.
 
+**Note** If data is null and err contains a string denoting a request timeout then inspect your app's [content security policies](https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy) as they may block your app from communicating with Branch's servers. Make sure to whitelist `api.branch.io` and `bnc.lt` in your CSP if so.
+
 _____
 
 ## API Reference
