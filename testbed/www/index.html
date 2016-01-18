@@ -33,16 +33,28 @@
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Branch.IO TestBed</title>
+        <title>Branch.IO SDK TestBed</title>
     </head>
     <body>
         <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+            <div class="logo">
+                <img src="img/logo.png" />
             </div>
-            <div id="content"></div>
+            <h2 class="title">Branch.IO SDK Testbed</h2>
+            <div class="status">
+                <div class="status--info">
+                    <h4>Status</h4>
+                    <p>Initializing...</p>
+                </div>
+                <div class="status--info">
+                    <h4>First Params</h4>
+                    <p>Fetching data...</p>
+                </div>
+                <div class="status--info">
+                    <h4>Latest Params</h4>
+                    <p>Fetching data...</p>
+                </div>
+            </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
