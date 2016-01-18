@@ -166,96 +166,110 @@ Branch.prototype.userCompletedAction = function (action, metaData) {
  */
 Branch.prototype.createBranchUniversalObject = function (options) {
     
-    return execute('createBranchUniversalObject', [options]);
+    return new Promise(function (resolve, reject) {
+        execute('createBranchUniversalObject', [options]).then(function (res) {
 
-};
+            // Attach object functions
+            /**
+             * Register view count.
+             *
+             * @return (Promise)
+             */
+            res.registerView = function () {
+                return execute('registerView');
+            };
 
-/**
- * Register view count.
- *
- * @return (Promise)
- */
-Branch.prototype.registerView = function () {
-    
-    return execute('registerView');
+            /**
+             * Generates a short url.
+             * 
+             * @param (Object) options
+             * @param (Object) controlParameters
+             *
+             * @return (Promise)
+             *
+             * options:
+             *    --------------------------------------------------
+             *    |    KEY    |    TYPE    |      DESCRIPTION      |
+             *    --------------------------------------------------
+             *    |  feature  |   String   |   The link feature    |
+             *    |   alias   |   String   |    The link alias     |
+             *    |  channel  |   String   |   The link channel    |
+             *    |   stage   |   String   |    The link stage     |
+             *    |  duration |    Int     |   The link duration   |
+             *    --------------------------------------------------
+             *    
+             * controlParameters:
+             *    -------------------------------------------------------
+             *    |         KEY        |    TYPE    |    DESCRIPTION    |
+             *    -------------------------------------------------------
+             *    |    $fallback_url   |   String   |   Fallback URL    |
+             *    |    $desktop_url    |   String   |   Desktop URL     |
+             *    |    $android_url    |   String   |   Android URL     |
+             *    |      $ios_url      |   String   |     iOS URL       |
+             *    |      $ipad_url     |   String   |    iPad URL       |
+             *    |      $fire_url     |   String   |  Kindle Fire URL  |
+             *    |  $blackberry_url   |   String   |   Blackberry URL  |
+             *    | $windows_phone_url |   String   |  Kindle Fire URL  |
+             *    -------------------------------------------------------
+             */
+            res.generateShortUrl = function (options, controlParameters) {
 
-};
+                return execute('generateShortUrl', [options, controlParameters]);
 
-/**
- * Generates a short url.
- * 
- * @param (Object) options
- * @param (Object) controlParameters
- *
- * @return (Promise)
- *
- * options:
- *    --------------------------------------------------
- *    |    KEY    |    TYPE    |      DESCRIPTION      |
- *    --------------------------------------------------
- *    |  feature  |   String   |   The link feature    |
- *    |   alias   |   String   |    The link alias     |
- *    |  channel  |   String   |   The link channel    |
- *    |   stage   |   String   |    The link stage     |
- *    |  duration |    Int     |   The link duration   |
- *    --------------------------------------------------
- *    
- * controlParameters:
- *    -------------------------------------------------------
- *    |         KEY        |    TYPE    |    DESCRIPTION    |
- *    -------------------------------------------------------
- *    |    $fallback_url   |   String   |   Fallback URL    |
- *    |    $desktop_url    |   String   |   Desktop URL     |
- *    |    $android_url    |   String   |   Android URL     |
- *    |      $ios_url      |   String   |     iOS URL       |
- *    |      $ipad_url     |   String   |    iPad URL       |
- *    |      $fire_url     |   String   |  Kindle Fire URL  |
- *    |  $blackberry_url   |   String   |   Blackberry URL  |
- *    | $windows_phone_url |   String   |  Kindle Fire URL  |
- *    -------------------------------------------------------
- */
-Branch.prototype.generateShortUrl = function (options, controlParameters) {
-    
-    return execute('generateShortUrl', [options, controlParameters]);
+            };
 
-};
+            /**
+             * Show the share dialog.
+             *
+             * @param (Object) options
+             * @param (Object) controlParameters
+             * 
+             * @return (Promise)
+             *
+             * options:
+             *    --------------------------------------------------
+             *    |    KEY    |    TYPE    |      DESCRIPTION      |
+             *    --------------------------------------------------
+             *    |  feature  |   String   |   The link feature    |
+             *    |   alias   |   String   |    The link alias     |
+             *    |  channel  |   String   |   The link channel    |
+             *    |   stage   |   String   |    The link stage     |
+             *    |  duration |    Int     |   The link duration   |
+             *    --------------------------------------------------
+             *    
+             * controlParameters:
+             *    -------------------------------------------------------
+             *    |         KEY        |    TYPE    |    DESCRIPTION    |
+             *    -------------------------------------------------------
+             *    |    $fallback_url   |   String   |   Fallback URL    |
+             *    |    $desktop_url    |   String   |   Desktop URL     |
+             *    |    $android_url    |   String   |   Android URL     |
+             *    |      $ios_url      |   String   |     iOS URL       |
+             *    |      $ipad_url     |   String   |    iPad URL       |
+             *    |      $fire_url     |   String   |  Kindle Fire URL  |
+             *    |  $blackberry_url   |   String   |   Blackberry URL  |
+             *    | $windows_phone_url |   String   |  Kindle Fire URL  |
+             *    -------------------------------------------------------
+             */
+            res.showShareSheet = function (options, controlParameters) {
 
-/**
- * Show the share dialog.
- *
- * @param (Object) options
- * @param (Object) controlParameters
- * 
- * @return (Promise)
- *
- * options:
- *    --------------------------------------------------
- *    |    KEY    |    TYPE    |      DESCRIPTION      |
- *    --------------------------------------------------
- *    |  feature  |   String   |   The link feature    |
- *    |   alias   |   String   |    The link alias     |
- *    |  channel  |   String   |   The link channel    |
- *    |   stage   |   String   |    The link stage     |
- *    |  duration |    Int     |   The link duration   |
- *    --------------------------------------------------
- *    
- * controlParameters:
- *    -------------------------------------------------------
- *    |         KEY        |    TYPE    |    DESCRIPTION    |
- *    -------------------------------------------------------
- *    |    $fallback_url   |   String   |   Fallback URL    |
- *    |    $desktop_url    |   String   |   Desktop URL     |
- *    |    $android_url    |   String   |   Android URL     |
- *    |      $ios_url      |   String   |     iOS URL       |
- *    |      $ipad_url     |   String   |    iPad URL       |
- *    |      $fire_url     |   String   |  Kindle Fire URL  |
- *    |  $blackberry_url   |   String   |   Blackberry URL  |
- *    | $windows_phone_url |   String   |  Kindle Fire URL  |
- *    -------------------------------------------------------
- */
-Branch.prototype.showShareSheet = function (options, controlParameters) {
-    
-    return execute('showShareSheet', [options, controlParameters]);
+                return execute('showShareSheet', [options, controlParameters]);
+
+            };
+
+            /**
+             * List item on Spotlight (iOS Only).
+             */
+            res.listOnSpotlight = function () {
+                return execute('registerView');
+            };
+
+            resolve(res);
+
+        }, function (err) {
+            reject(err);
+        });
+    });
 
 };
 
