@@ -246,7 +246,7 @@ public class BranchSDK extends CordovaPlugin
 
         result.put("data", installParams);
 
-        this.callbackContext.success(installParams);
+        this.callbackContext.success(result);
 
     }
 
