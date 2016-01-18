@@ -55,12 +55,16 @@ var app = {
                 console.log('Get first referring params: ');
                 console.log(res);
                 initStatusDOM[1].childNodes[3].innerHTML = JSON.stringify(res);
+            }, function (err) {
+                initStatusDOM[1].childNodes[3].innerHTML = 'Error';
             });
 
             Branch.getLatestReferringParams().then(function (res) {
                 console.log('Get getLatestReferringParams: ');
                 console.log(res);
                 initStatusDOM[2].childNodes[3].innerHTML = JSON.stringify(res);
+            }, function (err) {
+                initStatusDOM[2].childNodes[3].innerHTML = 'Error';
             });
 
             // Branch.createBranchUniversalObject({
