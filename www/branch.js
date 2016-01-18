@@ -261,7 +261,9 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              * List item on Spotlight (iOS Only).
              */
             res.listOnSpotlight = function () {
-                return execute('registerView');
+
+                return execute('listOnSpotlight');
+                
             };
 
             resolve(res);
