@@ -44,79 +44,25 @@ var app = {
     
         console.log('Getting installation details');
 
-        Branch.initSession().then(function (initRes) {
-            
-            // Set app initSession success
-            var initStatusDOM = document.getElementsByClassName('status--info');
-                initStatusDOM[0].childNodes[3].innerHTML = 'Branch SDK Init Success';
-                initStatusDOM[0].childNodes[3].className += ' success';
+        // Set app initSession success
+        var initStatusDOM = document.getElementsByClassName('status--info');
+            initStatusDOM[0].childNodes[3].innerHTML = 'Branch SDK Init Success';
+            initStatusDOM[0].childNodes[3].className += ' success';
 
-            Branch.getFirstReferringParams().then(function (res) {
-                console.log('Get first referring params: ');
-                console.log(res);
-                initStatusDOM[1].childNodes[3].innerHTML = JSON.stringify(res);
-            }, function (err) {
-                initStatusDOM[1].childNodes[3].innerHTML = 'Error';
-            });
-
-            Branch.getLatestReferringParams().then(function (res) {
-                console.log('Get getLatestReferringParams: ');
-                console.log(res);
-                initStatusDOM[2].childNodes[3].innerHTML = JSON.stringify(res);
-            }, function (err) {
-                initStatusDOM[2].childNodes[3].innerHTML = 'Error';
-            });
-
-            // Branch.createBranchUniversalObject({
-            //     "canonicalIdentifier" : "sample-id",
-            //     "title" : "Sample",
-            //     "contentDescription" : "This is a sample",
-            //     "contentImageUrl" : "http://sample-host.com/media/1235904.jpg",
-            //     "contentIndexingMode" : "private",
-            //     "contentMetadata" : {
-            //         "key" : "value",
-            //         "key2" : "value2"
-            //     }
-            // }).then(function (branch) {
-
-            //     console.log('createBranchUniversalObject');
-            //     branch.generateShortUrl({
-            //       "feature" : "sample-feature",
-            //       "alias" : "sample-alias",
-            //       "channel" : "sample-channel",
-            //       "stage" : "sample-stage"
-            //     }, {
-            //       "$desktop_url" : "http://desktop-url.com",
-            //     }).then(function (link) {
-            //         console.log('Generate Short Url');
-            //         console.log(link);
-            //     });
-
-            //     console.log('RegisterView');
-            //     branch.registerView();
-
-            //     console.log('Share Sheet');
-            //     branch.showShareSheet({
-            //       "feature" : "sample-feature",
-            //       "alias" : "sample-alias",
-            //       "channel" : "sample-channel",
-            //       "stage" : "sample-stage",
-            //       "duration" : 1,
-            //     }, {
-            //       "$desktop_url" : "http://desktop-url.com"
-            //     });
-
-            // });
-            
-            // Branch.creditHistory().then(function (res) {
-            //     console.log('Credit history:');
-            //     console.log(res);
-            // }, function (err) {
-            //     console.log(err);
-            // });
-
+        Branch.getFirstReferringParams().then(function (res) {
+            console.log('Get first referring params: ');
+            console.log(res);
+            initStatusDOM[1].childNodes[3].innerHTML = JSON.stringify(res);
         }, function (err) {
-            console.error(err);
+            initStatusDOM[1].childNodes[3].innerHTML = 'Error';
+        });
+
+        Branch.getLatestReferringParams().then(function (res) {
+            console.log('Get getLatestReferringParams: ');
+            console.log(res);
+            initStatusDOM[2].childNodes[3].innerHTML = JSON.stringify(res);
+        }, function (err) {
+            initStatusDOM[2].childNodes[3].innerHTML = 'Error';
         });
 
     }
