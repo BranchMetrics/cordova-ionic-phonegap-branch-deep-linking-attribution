@@ -40,17 +40,6 @@ function execute(method, params) {
 var Branch = function () {};
 
 /**
- * Get installation data.
- * 
- * @return (Object) - Installation details
- */
-Branch.prototype.getInstallData = function () {
-
-    return execute('getInstallData');
-
-};
-
-/**
  * Initialize the Branch instance.
  *
  * @return (Promise)
