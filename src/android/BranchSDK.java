@@ -45,7 +45,8 @@ public class BranchSDK extends CordovaPlugin
      * @param multitasking A {@link boolean} flag indicating if multitasking is turned on for app
      */
     @Override
-    public void onResume(boolean multitasking) {
+    public void onResume(boolean multitasking)
+    {
 
         Log.d(LCAT, "(Re)Initialize SDK session");
 
@@ -60,7 +61,8 @@ public class BranchSDK extends CordovaPlugin
      * Called when the activity is no longer visible to the user.
      */
     @Override
-    public void onStop() {
+    public void onStop()
+    {
 
         Log.d(LCAT, "Stopping SDK session");
 
@@ -222,7 +224,8 @@ public class BranchSDK extends CordovaPlugin
      * @return A {@link JSONObject} containing the latest referring parameters as
      * configured locally.
      */
-    private void getLatestReferringParams() throws JSONException {
+    private void getLatestReferringParams() throws JSONException
+    {
 
         Log.d(LCAT, "start getLatestReferringParams()");
 
@@ -279,7 +282,8 @@ public class BranchSDK extends CordovaPlugin
      *
      * @return A {@link JSONObject} value of BranchUniversalObject instance.
      */
-    private void createBranchUniversalObject(JSONObject options) throws JSONException {
+    private void createBranchUniversalObject(JSONObject options) throws JSONException
+    {
 
         Log.d(LCAT, "start createBranchUniversalObject()");
 
@@ -518,7 +522,8 @@ public class BranchSDK extends CordovaPlugin
      *
      * @param isEnable A {@link Boolean} value to enable/disable debugging mode for the app.
      */
-    private void setDebug(boolean isEnable) {
+    private void setDebug(boolean isEnable)
+    {
 
         Log.d(LCAT, "start setDebug()");
 
