@@ -39,11 +39,33 @@ public class BranchSDK extends CordovaPlugin
     private Activity activity;
     private Branch instance;
 
+    /**
+     * Called when the activity will start interacting with the user.
+     *
+     * @param multitasking A {@link boolean} flag indicating if multitasking is turned on for app
+     */
     @Override
-    public void initialize(CordovaInterface cordova, CordovaWebView webView)
-    {
-        super.initialize(cordova, webView);
-        // Initialization codes here
+    public void onResume(boolean multitasking) {
+
+        Log.d(LCAT, "(Re)Initialize SDK session");
+
+        this.activity = this.cordova.getActivity();
+        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
+
+        initSession();
+
+    }
+
+    /**
+     * Called when the activity is no longer visible to the user.
+     */
+    @Override
+    public void onStop() {
+
+        Log.d(LCAT, "Stopping SDK session");
+
+        this.instance.closeSession();
+
     }
 
     /**
@@ -61,8 +83,6 @@ public class BranchSDK extends CordovaPlugin
     {
 
         this.callbackContext = callbackContext;
-        this.activity = this.cordova.getActivity();
-        this.instance = Branch.getInstance(activity);
 
         if (action.equals("initSession")) {
             this.initSession();
