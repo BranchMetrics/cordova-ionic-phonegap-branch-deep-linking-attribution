@@ -1,10 +1,8 @@
 /**
  * Branch.IO SDK
  * -------------
- *
- * 
  * Method usage:
- *     All methods are promisified, therefore you can call .then() for any of the method
+ *     All methods are promisified, therefore you can call .then(successCallback, errorCallback) for any of the method
  *     called for executing success or error callbacks.
  */
 var exec = require('cordova/exec');
@@ -158,7 +156,6 @@ Branch.prototype.createBranchUniversalObject = function (options) {
     return new Promise(function (resolve, reject) {
         execute('createBranchUniversalObject', [options]).then(function (res) {
 
-            // Attach object functions
             /**
              * Register view count.
              *
