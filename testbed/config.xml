@@ -16,6 +16,21 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <feature name="Branch">
+        <platform name="android">
+            <config-file target="AndroidManifest.xml" parent="/manifest/application">
+                <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_feebgAAhbH9Tv85H5wLQhpdaefiZv5Dv" />
+            </config-file>
+        </platform>
+        <platform name="ios">
+            <config-file target="*-Info.plist" parent="branch_key">
+                <dict>
+                    <key>live</key>
+                    <string>key_live_feebgAAhbH9Tv85H5wLQhpdaefiZv5Dv</string>
+                </dict>
+            </config-file>
+        </platform>
+    </feature>
     <platform name="android">
         <allow-intent href="market:*" />
     </platform>
