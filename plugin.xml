@@ -27,16 +27,23 @@ SOFTWARE.
         id="io.branch.sdk"
         version="1.0.0">
 
-    <name>BranchSDK</name>
+    <name>branch-cordova-sdk</name>
     <description>Branch SDK Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,branch</keywords>
-    <repo></repo>
-    <issue></issue>
+    <repo>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git</repo>
+    <issue>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues</issue>
 
     <js-module src="www/branch.js" name="Branch">
         <clobbers target="Branch" />
     </js-module>
+
+    <preference name="APP_NAME" />
+    <preference name="BRANCH_LIVE_KEY" />
+
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
 
     <!-- android -->
     <platform name="android">
@@ -46,7 +53,20 @@ SOFTWARE.
                 <param name="onload" value="true" />
             </feature>
         </config-file>
-        <source-file src="src/android/BranchSDK.java" target-dir="src/io/branch" />
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_LIVE_KEY" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <data android:scheme="$APP_NAME" android:host="open" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </config-file>
+        <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
         <lib-file src="src/android/dependencies/Branch-1.10.3.jar" />
     </platform>
 
@@ -56,6 +76,21 @@ SOFTWARE.
             <feature name="BranchSDK">
                 <param name="ios-package" value="BranchSDK" />
             </feature>
+        </config-file>
+        <config-file target="*-Info.plist" parent="branch_key">
+            <dict>
+                <key>live</key>
+                <string>$BRANCH_LIVE_KEY</string>
+                <key>CFBundleURLTypes</key>
+                <array>
+                    <dict>
+                        <key>CFBundleURLSchemes</key>
+                        <array>
+                        <string>$APP_NAME</string>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
         </config-file>
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
