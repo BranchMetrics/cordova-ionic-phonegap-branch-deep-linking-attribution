@@ -37,7 +37,7 @@ public class BranchSDK extends CordovaPlugin
     private BranchUniversalObject branchObj;
     private CallbackContext callbackContext;
     private Activity activity;
-    private Branch instance;
+    private Branch instance = null;
 
     /**
      * Called when the activity will start interacting with the user.
@@ -48,12 +48,11 @@ public class BranchSDK extends CordovaPlugin
     public void onResume(boolean multitasking)
     {
 
-        Log.d(LCAT, "(Re)Initialize SDK session");
+        Log.d(LCAT, "SDK On Resume");
 
-        this.activity = this.cordova.getActivity();
-        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-
-        initSession();
+        if (this.instance != null) {
+            initSession();
+        }
 
     }
 
@@ -64,9 +63,12 @@ public class BranchSDK extends CordovaPlugin
     public void onStop()
     {
 
-        Log.d(LCAT, "Stopping SDK session");
+        Log.d(LCAT, "SDK On Stop");
 
-        this.instance.closeSession();
+        if (this.instance != null) {
+            Log.d(LCAT, "instance.closeSession()");
+            this.instance.closeSession();
+        }
 
     }
 
@@ -86,64 +88,68 @@ public class BranchSDK extends CordovaPlugin
 
         this.callbackContext = callbackContext;
 
-        if (action.equals("initSession")) {
-            this.initSession();
-            return true;
-        } else if (action.equals("setDebug")) {
+        if (action.equals("setDebug")) {
             if (args.length() == 1) {
                 this.setDebug(args.getBoolean(0));
             }
             return true;
-        } else if (action.equals("setIdentity")) {
-            if (args.length() == 1) {
-                this.setIdentity(args.getString(0));
+        } else if (action.equals("initSession")) {
+            this.initSession();
+            return true;
+        } else {
+            if (this.instance != null) {
+                if (action.equals("setIdentity")) {
+                    if (args.length() == 1) {
+                        this.setIdentity(args.getString(0));
+                    }
+                    return true;
+                } else if (action.equals("userCompletedAction")) {
+                    if (args.length() == 2) {
+                        this.userCompletedAction (args.getString(0), args.getJSONObject(1));
+                    } else if (args.length() == 1) {
+                        this.userCompletedAction(args.getString(0));
+                    }
+                    return true;
+                } else if (action.equals("getFirstReferringParams")) {
+                    this.getFirstReferringParams();
+                    return true;
+                } else if (action.equals("getLatestReferringParams")) {
+                    this.getLatestReferringParams();
+                    return true;
+                } else if (action.equals("logout")) {
+                    this.logout();
+                    return true;
+                } else if (action.equals("loadRewards")) {
+                    this.loadRewards();
+                    return true;
+                } else if (action.equals("redeemRewards")) {
+                    if (args.length() == 1) {
+                        this.redeemRewards(args.getInt(0));
+                    }
+                    return true;
+                } else if (action.equals("creditHistory")) {
+                    this.creditHistory();
+                    return true;
+                } else if (action.equals("createBranchUniversalObject")) {
+                    if (args.length() == 1) {
+                        this.createBranchUniversalObject(args.getJSONObject(0));
+                    }
+                    return true;
+                } else if (action.equals(("generateShortUrl"))) {
+                    if (args.length() == 2) {
+                        this.generateShortUrl(args.getJSONObject(0), args.getJSONObject(1));
+                    }
+                    return true;
+                } else if (action.equals("registerView")) {
+                    this.registerView();
+                    return true;
+                } else if (action.equals("showShareSheet")) {
+                    if (args.length() == 2) {
+                        this.showShareSheet(args.getJSONObject(0), args.getJSONObject(1));
+                    }
+                    return true;
+                }
             }
-            return true;
-        } else if (action.equals("userCompletedAction")) {
-            if (args.length() == 2) {
-                this.userCompletedAction (args.getString(0), args.getJSONObject(1));
-            } else if (args.length() == 1) {
-                this.userCompletedAction(args.getString(0));
-            }
-            return true;
-        } else if (action.equals("getFirstReferringParams")) {
-            this.getFirstReferringParams();
-            return true;
-        } else if (action.equals("getLatestReferringParams")) {
-            this.getLatestReferringParams();
-            return true;
-        } else if (action.equals("logout")) {
-            this.logout();
-            return true;
-        } else if (action.equals("loadRewards")) {
-            this.loadRewards();
-            return true;
-        } else if (action.equals("redeemRewards")) {
-            if (args.length() == 1) {
-                this.redeemRewards(args.getInt(0));
-            }
-            return true;
-        } else if (action.equals("creditHistory")) {
-            this.creditHistory();
-            return true;
-        } else if (action.equals("createBranchUniversalObject")) {
-            if (args.length() == 1) {
-                this.createBranchUniversalObject(args.getJSONObject(0));
-            }
-            return true;
-        } else if (action.equals(("generateShortUrl"))) {
-            if (args.length() == 2) {
-                this.generateShortUrl(args.getJSONObject(0), args.getJSONObject(1));
-            }
-            return true;
-        } else if (action.equals("registerView")) {
-            this.registerView();
-            return true;
-        } else if (action.equals("showShareSheet")) {
-            if (args.length() == 2) {
-                this.showShareSheet(args.getJSONObject(0), args.getJSONObject(1));
-            }
-            return true;
         }
 
         return false;
@@ -163,6 +169,8 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start initSession()");
 
+        this.activity = this.cordova.getActivity();
+        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
         this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
 
     }
@@ -527,10 +535,14 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start setDebug()");
 
+        Activity act = this.cordova.getActivity();
+        Branch inst = Branch.getAutoInstance(act.getApplicationContext());
+
         if (isEnable) {
-            this.instance.setDebug();
-            this.callbackContext.success("Success");
+            inst.setDebug();
         }
+
+        this.callbackContext.success("Success");
 
     }
 
