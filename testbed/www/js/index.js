@@ -16,6 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+var app = {
+    // Application Constructor
+    initialize: function() {
+        this.bindEvents();
+    },
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
+    bindEvents: function() {
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicitly call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+        app.receivedEvent('app');
+    },
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        
+        SetDebug(true);
+
+    }
+};
+
+app.initialize();
+
 function SetDebug(isEnabled)
 {
     console.log('Trigger SetDebug()');
@@ -23,6 +53,7 @@ function SetDebug(isEnabled)
     Branch.setDebug(isEnabled).then(function (res) {
         console.log(res);
         alert('Success: ' + JSON.stringify(res));
+        InitSession();
     }).catch(function (err) {
         console.error('Set debug fail: ' + err);
         alert('Set debug fail: ' + err);
