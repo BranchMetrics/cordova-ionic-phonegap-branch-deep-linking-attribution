@@ -35,7 +35,9 @@ function execute(method, params) {
 /**
  * @class Branch
  */
-var Branch = function () {};
+var Branch = function () {
+    this.debugMode = null;
+};
 
 /**
  * Initialize the Branch instance.
@@ -44,7 +46,13 @@ var Branch = function () {};
  */
 Branch.prototype.initSession = function () {
     
-    return execute('initSession');
+    if (this.debugMode !== null) {
+        return execute('initSession');
+    } else {
+        return new Promise (function (resolve, reject) {
+            reject('Please set debug mode first.');
+        });
+    }
 
 };
 
@@ -59,6 +67,8 @@ Branch.prototype.initSession = function () {
 Branch.prototype.setDebug = function (isEnabled) {
 
     isEnabled = (typeof isEnabled !== 'boolean') ? false : isEnabled;
+
+    this.debugMode = isEnabled;
 
     return execute('setDebug', [isEnabled]);
     
@@ -96,7 +106,13 @@ Branch.prototype.getLatestReferringParams = function () {
  */
 Branch.prototype.setIdentity = function (identity) {
     
-    return execute('setIdentity', [identity]);
+    if (identity) {
+        return execute('setIdentity', [identity]);
+    } else {
+        return new Promise(function (resolve, reject) {
+            reject('Please set an identity');
+        });
+    }
 
 };
 
@@ -162,7 +178,9 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              * @return (Promise)
              */
             res.registerView = function () {
+
                 return execute('registerView');
+
             };
 
             /**
@@ -200,7 +218,13 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             res.generateShortUrl = function (options, controlParameters) {
 
-                return execute('generateShortUrl', [options, controlParameters]);
+                var args = [options];
+
+                if (controlParameters) {
+                    args.push(controlParameters);
+                }
+
+                return execute('generateShortUrl', args);
 
             };
 
@@ -239,7 +263,13 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             res.showShareSheet = function (options, controlParameters) {
 
-                return execute('showShareSheet', [options, controlParameters]);
+                var args = [options];
+
+                if (controlParameters) {
+                    args.push(controlParameters);
+                }
+
+                return execute('showShareSheet', args);
 
             };
 
