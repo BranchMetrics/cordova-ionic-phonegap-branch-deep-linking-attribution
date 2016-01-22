@@ -28,7 +28,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -36,25 +36,51 @@
         <title>Branch.IO SDK TestBed</title>
     </head>
     <body>
-        <div class="app">
-            <div class="logo">
-                <img src="img/logo.png" />
-            </div>
-            <h2 class="title">Branch.IO SDK Testbed</h2>
-            <div class="status">
-                <div class="status--info">
-                    <h4>Status</h4>
-                    <p>Initializing...</p>
+        <div>
+            <button onclick="SetDebug(true)">Set Debug On</button>
+            <button onclick="SetDebug(false)">Set Debug Off</button>
+        </div>
+        <div>
+            <button onclick="InitSession()">Init Session</button>
+            <button onclick="Logout()">Logout</button>
+        </div>
+        <div>
+            <button onclick="GetLatestReferringParams()">Get Latest Referring Params</button>
+            <button onclick="GetFirstReferringParams()">Get First Referring Params</button>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Identity</legend>
+                <div>
+                    <input type="text" id="identity" name="identity">
+                    <button onclick="SetIdentity()">Set Identity</button>
                 </div>
-                <div class="status--info">
-                    <h4>First Params</h4>
-                    <p>Fetching data...</p>
+                <div>
+                    <input type="text" id="custom-action" name="custom-action">
+                    <button onclick="CustomAction()">Custom Action</button>
                 </div>
-                <div class="status--info">
-                    <h4>Latest Params</h4>
-                    <p>Fetching data...</p>
+            </fieldset>
+        </div>
+        <div>
+            <button onclick="LoadRewards()">Load Rewards</button>
+            <button onclick="RedeemRewards()">Redeem Reward</button>
+            <button onclick="CreditHistory()">Credit History</button>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Branch Universal Object</legend>
+                <div>
+                    <button onclick="CreateBranchUniversalObject()">Init Branch Universal Object</button>
+                    <button onclick="RegisterView()">Register View</button>
                 </div>
-            </div>
+                <div>
+                    <input id="url" name="url" type="text">
+                    <button onclick="GenerateShortUrl()">Generate URL</button>
+                </div>
+                <div>
+                    <button onclick="ShowShareSheet()">Share Sheet</button>
+                </div>
+            </fieldset>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>

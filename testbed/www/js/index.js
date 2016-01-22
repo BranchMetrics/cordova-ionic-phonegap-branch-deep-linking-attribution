@@ -16,56 +16,252 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var app = {
-    // Application Constructor
-    initialize: function() {
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('app');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        
-        var parentElement = document.getElementById(id);
+function SetDebug(isEnabled)
+{
+    console.log('Trigger SetDebug()');
 
-        console.log('Received Event: ' + id);
+    Branch.setDebug(isEnabled).then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error('Set debug fail: ' + err);
+        alert('Set debug fail: ' + err);
+    });
+}
+
+function InitSession()
+{
+    console.log('Trigger InitSession()');
+
+    Branch.initSession().then(function (res) {
+        console.log("Initialized Successfully:" + JSON.stringify(res));
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error('Error: ' + err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function CustomAction()
+{
+    console.log('Trigger CustomAction()');
+
+    var action = document.getElementById('custom-action').value;
+
+    Branch.userCompletedAction(action).then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function GetLatestReferringParams()
+{
+    console.log('Trigger GetLatestReferringParams()');
+
+    Branch.getLatestReferringParams().then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function GetFirstReferringParams()
+{
+    console.log('Trigger GetFirstReferringParams()');
     
-        console.log('Getting installation details');
+    Branch.getFirstReferringParams().then(function (res) {
+        alert('Success: ' + JSON.stringify(res));
+        console.log(res);
+    }).catch(function (err) {
+        alert('Error: ' + JSON.stringify(err));
+        console.error(err);
+    });
+}
 
-        // Set app initSession success
-        var initStatusDOM = document.getElementsByClassName('status--info');
-            initStatusDOM[0].childNodes[3].innerHTML = 'Branch SDK Init Success';
-            initStatusDOM[0].childNodes[3].className += ' success';
+function SetIdentity()
+{
+    console.log('Trigger SetIdentity()');
 
-        Branch.getFirstReferringParams().then(function (res) {
-            console.log('Get first referring params: ');
+    var newIdentity = document.getElementById('identity').value;
+
+    Branch.setIdentity(newIdentity).then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function Logout()
+{
+    console.log('Trigger Logout()');
+
+    Branch.logout().then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+var branchUniversalObj = null;
+
+function CreateBranchUniversalObject()
+{
+
+    console.log('Trigger CreateBranchUniversalObject()');
+
+    var properties = {
+        canonicalIdentifier: 'testbed',
+        title: 'testbed',
+        contentDescription: 'Testbed Application',
+        contentImageUrl: 'https://imgflip.com/s/meme/Derp.jpg',
+        contentIndexingMode: 'public',
+        contentMetadata: {}
+    };
+
+    Branch.createBranchUniversalObject(properties)
+        .then(function (res) {
             console.log(res);
-            initStatusDOM[1].childNodes[3].innerHTML = JSON.stringify(res);
-        }, function (err) {
-            initStatusDOM[1].childNodes[3].innerHTML = 'Error';
+            alert('Success: ' + JSON.stringify(res));
+            branchUniversalObj = res;
+        })
+        .catch(function (err) {
+            console.error(err);
+            alert('Error: ' + JSON.stringify(err));
         });
 
-        Branch.getLatestReferringParams().then(function (res) {
-            console.log('Get getLatestReferringParams: ');
-            console.log(res);
-            initStatusDOM[2].childNodes[3].innerHTML = JSON.stringify(res);
-        }, function (err) {
-            initStatusDOM[2].childNodes[3].innerHTML = 'Error';
-        });
+}
 
-    }
-};
+function RegisterView()
+{
+    console.log('Trigger RegisterView()');
 
-app.initialize();
+    branchUniversalObj.registerView().then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+
+}
+
+function GenerateShortUrl()
+{
+    console.log('Trigger GenerateShortUrl()');
+
+    var properties = {
+        feature: 'test',
+        alias: document.getElementById('url').value,
+        channel: 'test',
+        stage: 'test',
+        duration: 10000
+    };
+    var controlParams = {
+        $fallback_url: 'www.another.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'test',
+        $ios_url: 'ios',
+        $ipad_url: 'ipad',
+        $fire_url: 'fire',
+        $blackberry_url: 'blackberry',
+        $windows_phone_url: 'win-phone'
+    };
+
+    branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function ShowShareSheet()
+{
+    console.log('Trigger ShowShareSheet()');
+
+    var properties = {
+        feature: 'test',
+        alias: document.getElementById('url').value,
+        channel: 'test',
+        stage: 'test',
+        duration: 10000
+    };
+    var controlParams = {
+        $fallback_url: 'www.another.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'test',
+        $ios_url: 'ios',
+        $ipad_url: 'ipad',
+        $fire_url: 'fire',
+        $blackberry_url: 'blackberry',
+        $windows_phone_url: 'win-phone'
+    };
+
+    branchUniversalObj.showShareSheet(properties, controlParams).then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function ListOnSpotlight()
+{
+    console.log('Trigger ListOnSpotlight()');
+    branchUniversalObj.listOnSpotlight().then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function LoadRewards()
+{
+    console.log('Trigger LoadRewards()');
+    Branch.loadRewards().then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function RedeemRewards()
+{
+    console.log('Trigger RedeemRewards()');
+    var reward = 1000;
+
+    Branch.redeemRewards(reward).then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}
+
+function CreditHistory()
+{
+    console.log('Trigger CreditHistory()');
+    Branch.creditHistory().then(function (res) {
+        console.log(res);
+        alert('Success: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+}

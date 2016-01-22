@@ -22,15 +22,22 @@ h4,h5,h6, p {
   word-wrap: break-word; }
 .status--info {
   margin: 10px 0; }
-.app {}
-.logo {
-  width: 100px;
-  margin: auto;
-  text-align: center; }
-  .logo img {
-    width: 100%; }
-.title {
-  margin-bottom: 15px;
-  text-align: center; }
+button {
+  border: none;
+  padding: 20px; }
+div, fieldset {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  margin: 10px 0; }
+fieldset > div > *,
+div > * {
+  margin: 0 5px;
+  width: 10vw;
+  flex-grow: 1;}
 .success {
   color: rgb(0, 255, 0); }
+.error {
+  color: rgb(255, 0, 0); }
