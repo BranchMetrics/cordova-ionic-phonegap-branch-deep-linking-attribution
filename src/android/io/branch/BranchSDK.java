@@ -99,14 +99,12 @@ public class BranchSDK extends CordovaPlugin
         } else {
             if (this.instance != null) {
                 if (action.equals("setIdentity")) {
-                    if (args.length() == 1) {
-                        this.setIdentity(args.getString(0));
-                    }
+                    this.setIdentity(args.getString(0));
                     return true;
                 } else if (action.equals("userCompletedAction")) {
                     if (args.length() == 2) {
                         this.userCompletedAction (args.getString(0), args.getJSONObject(1));
-                    } else if (args.length() == 1) {
+                    } else {
                         this.userCompletedAction(args.getString(0));
                     }
                     return true;
@@ -123,30 +121,22 @@ public class BranchSDK extends CordovaPlugin
                     this.loadRewards();
                     return true;
                 } else if (action.equals("redeemRewards")) {
-                    if (args.length() == 1) {
-                        this.redeemRewards(args.getInt(0));
-                    }
+                    this.redeemRewards(args.getInt(0));
                     return true;
                 } else if (action.equals("creditHistory")) {
                     this.creditHistory();
                     return true;
                 } else if (action.equals("createBranchUniversalObject")) {
-                    if (args.length() == 1) {
-                        this.createBranchUniversalObject(args.getJSONObject(0));
-                    }
+                    this.createBranchUniversalObject(args.getJSONObject(0));
                     return true;
                 } else if (action.equals(("generateShortUrl"))) {
-                    if (args.length() == 2) {
-                        this.generateShortUrl(args.getJSONObject(0), args.getJSONObject(1));
-                    }
+                    this.generateShortUrl(args.getJSONObject(0), args.getJSONObject(1));
                     return true;
                 } else if (action.equals("registerView")) {
                     this.registerView();
                     return true;
                 } else if (action.equals("showShareSheet")) {
-                    if (args.length() == 2) {
-                        this.showShareSheet(args.getJSONObject(0), args.getJSONObject(1));
-                    }
+                    this.showShareSheet(args.getJSONObject(0), args.getJSONObject(1));
                     return true;
                 }
             }

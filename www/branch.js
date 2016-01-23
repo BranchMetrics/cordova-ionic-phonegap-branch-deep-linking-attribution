@@ -218,13 +218,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             res.generateShortUrl = function (options, controlParameters) {
 
-                var args = [options];
-
-                if (controlParameters) {
-                    args.push(controlParameters);
-                }
-
-                return execute('generateShortUrl', args);
+                return execute('generateShortUrl', [options, controlParameters]);
 
             };
 
@@ -263,13 +257,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             res.showShareSheet = function (options, controlParameters) {
 
-                var args = [options];
-
-                if (controlParameters) {
-                    args.push(controlParameters);
-                }
-
-                return execute('showShareSheet', args);
+                return execute('showShareSheet', [options, controlParameters]);
 
             };
 
