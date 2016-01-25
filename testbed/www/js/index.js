@@ -110,7 +110,7 @@ function GetLatestReferringParams()
 function GetFirstReferringParams()
 {
     console.log('Trigger GetFirstReferringParams()');
-    
+
     Branch.getFirstReferringParams().then(function (res) {
         alert('Success: ' + JSON.stringify(res));
         console.log(res);
