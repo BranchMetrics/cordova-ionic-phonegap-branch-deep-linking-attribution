@@ -38,7 +38,13 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        
+
+        if (navigator.userAgent.indexOf('iPhone') >= 0) {
+            document.getElementsByTagName("html")[0].className = 'ios';
+        } else if (navigator.userAgent.indexOf('Android') >= 0) {
+            document.getElementsByTagName("html")[0].className = 'android';
+        }
+
         SetDebug(true);
 
     }

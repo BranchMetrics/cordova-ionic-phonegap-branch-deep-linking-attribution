@@ -22,7 +22,10 @@ h4,h5,h6, p {
   word-wrap: break-word; }
 .status--info {
   margin: 10px 0; }
+.ios body {
+  margin-top: 30px; }
 button {
+  background:rgb(220,220,220);
   border: none;
   padding: 20px; }
 div, fieldset {
