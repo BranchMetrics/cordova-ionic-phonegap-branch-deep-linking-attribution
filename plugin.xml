@@ -55,6 +55,8 @@ SOFTWARE.
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_LIVE_KEY" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
