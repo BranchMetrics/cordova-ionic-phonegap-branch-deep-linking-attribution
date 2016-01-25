@@ -1,4 +1,4 @@
-#branch-io-sdk
+#branch-cordova-sdk
 
 > Branch Metrics Cordova SDK
 
@@ -33,7 +33,30 @@ npm install branch-cordova-sdk
 
 ## Additional App Permissions
 
-Some
+To be able to use some of the deep linking capabilities of the app, some manifest files are needed to be configured.
+Please note that you don't have to do anything anymore for setting up the `Register a URI Scheme and add your Branch key`
+as this was already done for you automatically on installing the plugin.
+
+#### iOS: Enable Universal Links
+
+In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Universal Links if you want Branch-generated links to work in your iOS app. To do this:
+
+1. enable `Associated Domains` capability on the Apple Developer portal when you create your app's bundle identifier.
+2. In https://dashboard.branch.io/#/settings/link, tick the `Enable Universal Links` checkbox and provide the Bundle Identifier and Apple Team ID in the appropriate boxes.
+3. Finally, create a new file named `Entitlements.plist` in the same directory as your Titanium app's `tiapp.xml` with the `associated-domains` key like below. You may add more entitlement keys if you have any.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>com.apple.developer.associated-domains</key>
+    <array>
+        <string>applinks:bnc.lt</string>
+    </array>
+</dict>
+</plist>
+```
 
 ## Demo App
 
@@ -45,7 +68,7 @@ This repo includes a testbed app, that demonstrates all the features of the plug
 
 **All methods are promisified**, therefore you can easily get its success and error callback by chaining `.then()` method.
 
-Example
+*Example*
 ```js
 Branch.initSession().then(function (res) {
   // Success Callback
@@ -56,7 +79,24 @@ Branch.initSession().then(function (res) {
 });
 ```
 
-### initSession()
+1. Branch Session
+  + [initSession](#initSession)
+  + [getLatestReferringParams](#getLatestReferringParams)
+  + [getFirstReferringParams](#getFirstReferringParams)
+  + [setIdentity](#setIdentity)
+  + [logout](#logout)
+  + [userCompletedAction](#userCompletedAction)
+2. Branch Universal Object
+  + [createBranchUniversalObject](#createBranchUniversalObject)
+  + [registerView](#registerView)
+  + [generateShortUrl](#generateShortUrl)
+  + [showShareSheet](#showShareSheet)
+3. Referral System Rewarding
+  + [loadRewards](#loadRewards)
+  + [redeemRewards](#redeemRewards)
+  + [creditHistory](#creditHistory)
+
+### <a id="initSession"></a>initSession()
 
 Initializes the branch instance. `setDebug()` should be called first before calling this method.
 
@@ -65,7 +105,7 @@ Initializes the branch instance. `setDebug()` should be called first before call
 Branch.initSession();
 ```
 
-### setDebug(isEnable)
+### <a id="setDebug"></a>setDebug(isEnable)
 
 Setting the SDK debug flag will generate a new device ID each time the app is installed instead of possibly using the same device id.
 This is useful when testing.
@@ -79,7 +119,7 @@ This is useful when testing.
 Branch.setDebug(true);
 ```
 
-### getFirstReferringParams()
+### <a id="getFirstReferringParams"></a>getFirstReferringParams()
 
 Retrieves the install session parameters.
 
@@ -88,7 +128,7 @@ Retrieves the install session parameters.
 Branch.getFirstReferringParams();
 ```
 
-### getLatestReferringParams()
+### <a id="getLatestReferringParams"></a>getLatestReferringParams()
 
 Retrieves the session (install or open) parameters.
 
@@ -97,7 +137,7 @@ Retrieves the session (install or open) parameters.
 Branch.getLatestReferringParams();
 ```
 
-### setIdentity(object)
+### <a id="setIdentity"></a>setIdentity(object)
 
 Sets the identity of a user and returns the data. To use this function,
 pass a unique string that identifies the user - this could be an email address, UUID, Facebook ID, etc.
@@ -111,7 +151,7 @@ pass a unique string that identifies the user - this could be an email address, 
 Branch.setIdentity("new_identity");
 ```
 
-### logout()
+### <a id="logout"></a>logout()
 
 Logs out the current session, replaces session IDs and identity IDs.
 
@@ -120,7 +160,7 @@ Logs out the current session, replaces session IDs and identity IDs.
 Branch.logout();
 ```
 
-### userCompletedAction(action[, metaData])
+### <a id="userCompletedAction"></a>userCompletedAction(action[, metaData])
 
 Registers custom events.
 
@@ -145,7 +185,7 @@ We abstracted as many as we could into the concept of a Branch Universal Object.
 This is the object that is associated with the thing you want to share (content or user).
 You can set all the metadata associated with the object and then call action methods on it to get a link or index in Spotlight.
 
-### createBranchUniversalObject(object)
+### <a id="createBranchUniversalObject"></a>createBranchUniversalObject(object)
 
 Create an unverisal Branch object.
 
@@ -183,7 +223,7 @@ Branch.createBranchUniversalObject({
 });
 ```
 
-### registerView()
+### <a id="registerView"></a>registerView()
 
 If you want to track how many times a user views a particular piece of content, you can call this method in `viewDidLoad` or `viewDidAppear`
 to tell Branch that this content was viewed.
@@ -193,7 +233,7 @@ to tell Branch that this content was viewed.
 branchObj.registerView();
 ```
 
-### generateShortUrl(options, controlParameters)
+### <a id="generateShortUrl"></a>generateShortUrl(options, controlParameters)
 
 Once you've created your `Branch Universal Object`, which is the reference to the content you're interested in, you can then get a link back to it with the mechanism described below.
 
@@ -240,7 +280,7 @@ branchObj.generateShortUrl({
 });
 ```
 
-### showShareSheet(options, controlParameters)
+### <a id="showShareSheet"></a>showShareSheet(options, controlParameters)
 
 UIActivityView is the standard way of allowing users to share content from your app.
 Once you've created your `Branch Universal Object`, which is the reference to the content you're interested in, you can then automatically share it _without having to create a link_ using the mechanism below.
@@ -316,7 +356,7 @@ To implement some event callback such as `onShareDialogClose` or `onShareDialogI
 
 ## Referral System Rewarding
 
-### loadRewards()
+### <a id="loadRewards"></a>loadRewards()
 
 Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
 
@@ -325,7 +365,7 @@ Reward balances change randomly on the backend when certain actions are taken (d
 Branch.loadRewards();
 ```
 
-### redeemRewards(value)
+### <a id="redeemRewards"></a>redeemRewards(value)
 
 Redeems a reward with the given amount/value.
 
@@ -338,7 +378,7 @@ Redeems a reward with the given amount/value.
 Branch.redeemRewards(100);
 ```
 
-### creditHistory()
+### <a id="creditHistory"></a>creditHistory()
 
 This call will retrieve the entire history of credits and redemptions from the individual user. To use this call, implement like so:
 
