@@ -6,23 +6,36 @@
 
 This Cordova plugin allows you to call Branch.IO API Endpoints, this shares almost the same code base as the Branch Web SDK.
 
+## Register your Branch.IO app
+
+You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
+
 ## Installation
 
 There are multiple ways to add the plugin in to your app.
 
 Thru Cordova
 
-```
-cordova plugin install io.branch.sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable APP_NAME=your-app-name
+```sh
+cordova plugin install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable APP_NAME=your-app-name
 ```
 
 Thru Phonegap
 
-```
-phonegap plugin add io.branch.sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable APP_NAME=your-app-name
+```sh
+phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable APP_NAME=your-app-name
 ```
 
-## Testbed App
+Thru NPM
+```sh
+npm install branch-cordova-sdk
+```
+
+## Additional App Permissions
+
+Some
+
+## Demo App
 
 This repo includes a testbed app, that demonstrates all the features of the plugin. Please refer to the `README` inside the `testbed` folder.
 
@@ -30,7 +43,18 @@ This repo includes a testbed app, that demonstrates all the features of the plug
 
 ## Plugin Methods
 
-All plugin methods are promisified, therefore you can easily get its callback by chaining `.then(successCallback(), errorCallback())` method.
+**All methods are promisified**, therefore you can easily get its success and error callback by chaining `.then()` method.
+
+Example
+```js
+Branch.initSession().then(function (res) {
+  // Success Callback
+  console.log(res);
+}, function (err) {
+  // Error Callback
+  console.error(err);
+});
+```
 
 ### initSession()
 
@@ -38,13 +62,7 @@ Initializes the branch instance. `setDebug()` should be called first before call
 
 ##### Usage
 ```js
-Branch.initSession().then(function (res) {
-    // Success callback
-    console.log(res);
-}, function (err) {
-    // Error callback
-    console.error(err);
-});
+Branch.initSession();
 ```
 
 ### setDebug(isEnable)
@@ -67,13 +85,7 @@ Retrieves the install session parameters.
 
 ##### Usage
 ```js
-Branch.getFirstReferringParams().then(function (res) {
-    // Success Callback
-    console.log(res);
-}, function (err) {
-    // Error Callback
-    console.error(err);
-});
+Branch.getFirstReferringParams();
 ```
 
 ### getLatestReferringParams()
@@ -82,13 +94,7 @@ Retrieves the session (install or open) parameters.
 
 ##### Usage
 ```js
-Branch.getLatestReferringParams().then(function (res) {
-    // Success Callback
-    console.log(res);
-}, function (err) {
-    // Error Callback
-    console.error(err);
-});
+Branch.getLatestReferringParams();
 ```
 
 ### setIdentity(object)
@@ -160,6 +166,8 @@ Create an unverisal Branch object.
 
 ##### Usage
 ```js
+var branchObj = null;
+
 Branch.createBranchUniversalObject({
     canonicalIdentifier: 'identifier',
     title: 'Just another title',
@@ -168,7 +176,7 @@ Branch.createBranchUniversalObject({
     contentIndexingMode: 'public'
 }).then(function (branchInstance) {
     // Success Callback
-    var branchObj = branchInstance;
+    branchObj = branchInstance;
 }, function (err) {
     // Error Callback
     console.error(err);
@@ -223,9 +231,9 @@ branchObj.generateShortUrl({
   "stage" : "sample-stage"
 }, {
   "$desktop_url" : "http://desktop-url.com",
-}).then(function (res) {
+}).then(function (generatedUrl) {
     // Success Callback
-    console.log(res);
+    console.log(generatedUrl);
 }, function (err) {
     // Error Callback
     console.error(err);
@@ -236,6 +244,10 @@ branchObj.generateShortUrl({
 
 UIActivityView is the standard way of allowing users to share content from your app.
 Once you've created your `Branch Universal Object`, which is the reference to the content you're interested in, you can then automatically share it _without having to create a link_ using the mechanism below.
+
+**Sample Android Share Sheet**
+
+![Android Share Sheet](https://dev.branch.io/img/ingredients/sdk_links/android_share_sheet.png)
 
 **Sample UIActivityView Share Sheet**
 
@@ -278,17 +290,11 @@ branchUniversalObject.showShareSheet({
   "duration" : 1,
 }, {
   "$desktop_url" : "http://desktop-url.com",
-}).then(function (res) {
-    // Success Callback
-    console.log(res);
-}, function (err) {
-    // Error Callback
-    console.error(err);
 });
 ```
 
-##### Callback
-To implement the callback, you must add listeners to the following events:
+##### Event Callback
+To implement some event callback such as `onShareDialogClose` or `onShareDialogInitialize`, you must add listeners to the following events:
 
 `bio:shareLinkDialogLaunched`
 - The event fires when the share sheet is presented.
@@ -316,13 +322,7 @@ Reward balances change randomly on the backend when certain actions are taken (d
 
 ##### Usage
 ```js
-Branch.loadRewards().then(function (res) {
-    // Success Callback
-    console.log(res);
-}, function (err) {
-    // Error Callback
-    console.error(err);
-});
+Branch.loadRewards();
 ```
 
 ### redeemRewards(value)
@@ -344,13 +344,13 @@ This call will retrieve the entire history of credits and redemptions from the i
 
 ##### Usage
 ```js
-Branch.creditHistory().then(function (res) {
-    // Success Callback
-    console.log(res);
+Branch.creditHistory().then(function (history) {
+  // Success Callback
+  console.log(history);
 }, function (err) {
-    // Error callback
-    console.error(err);
-})
+  // Error Callback
+  console.error(err);
+});
 ```
 
 The response will return an array that has been parsed from the following JSON:
