@@ -46,6 +46,7 @@ var app = {
         }
 
         SetDebug(true);
+        InitSession();
 
     }
 };
@@ -56,27 +57,19 @@ function SetDebug(isEnabled)
 {
     console.log('Trigger SetDebug()');
 
-    Branch.setDebug(isEnabled).then(function (res) {
-        console.log(res);
-        alert('Success: ' + JSON.stringify(res));
-        InitSession();
-    }).catch(function (err) {
-        console.error('Set debug fail: ' + err);
-        alert('Set debug fail: ' + err);
-    });
+    Branch.setDebug(isEnabled);
+
+    alert('Debug mode enabled');
 }
 
 function InitSession()
 {
     console.log('Trigger InitSession()');
 
-    Branch.initSession().then(function (res) {
-        console.log("Initialized Successfully:" + JSON.stringify(res));
-        alert('Success: ' + JSON.stringify(res));
-    }).catch(function (err) {
-        console.error('Error: ' + err);
-        alert('Error: ' + JSON.stringify(err));
-    });
+    Branch.initSession();
+    
+    alert('Initialized Success');
+
 }
 
 function CustomAction()
@@ -85,13 +78,7 @@ function CustomAction()
 
     var action = document.getElementById('custom-action').value;
 
-    Branch.userCompletedAction(action).then(function (res) {
-        console.log(res);
-        alert('Success: ' + JSON.stringify(res));
-    }).catch(function (err) {
-        console.error(err);
-        alert('Error: ' + JSON.stringify(err));
-    });
+    Branch.userCompletedAction(action);
 }
 
 function GetLatestReferringParams()
@@ -139,13 +126,9 @@ function Logout()
 {
     console.log('Trigger Logout()');
 
-    Branch.logout().then(function (res) {
-        console.log(res);
-        alert('Success: ' + JSON.stringify(res));
-    }).catch(function (err) {
-        console.error(err);
-        alert('Error: ' + JSON.stringify(err));
-    });
+    Branch.logout();
+
+    alert('Logout');
 }
 
 var branchUniversalObj = null;
@@ -181,14 +164,9 @@ function RegisterView()
 {
     console.log('Trigger RegisterView()');
 
-    Branch.registerView().then(function (res) {
-        console.log(res);
-        alert('Success: ' + JSON.stringify(res));
-    }).catch(function (err) {
-        console.error(err);
-        alert('Error: ' + JSON.stringify(err));
-    });
+    Branch.registerView();
 
+    alert('Success');
 }
 
 function GenerateShortUrl()
@@ -244,13 +222,7 @@ function ShowShareSheet()
         $windows_phone_url: 'win-phone'
     };
 
-    Branch.showShareSheet(properties, controlParams).then(function (res) {
-        console.log(res);
-        alert('Success: ' + JSON.stringify(res));
-    }).catch(function (err) {
-        console.error(err);
-        alert('Error: ' + JSON.stringify(err));
-    });
+    Branch.showShareSheet(properties, controlParams);
 }
 
 function ListOnSpotlight()

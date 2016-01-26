@@ -123,8 +123,8 @@ public class BranchSDK extends CordovaPlugin
                 } else if (action.equals("redeemRewards")) {
                     this.redeemRewards(args.getInt(0));
                     return true;
-                } else if (action.equals("creditHistory")) {
-                    this.creditHistory();
+                } else if (action.equals("getCreditHistory")) {
+                    this.getCreditHistory();
                     return true;
                 } else if (action.equals("createBranchUniversalObject")) {
                     this.createBranchUniversalObject(args.getJSONObject(0));
@@ -587,7 +587,7 @@ public class BranchSDK extends CordovaPlugin
      * <p>Gets the credit history of the specified bucket and triggers a callback to handle the
      * response.</p>
      */
-    private void creditHistory()
+    private void getCreditHistory()
     {
 
         Log.d(LCAT, "start creditHistory()");
@@ -717,7 +717,7 @@ public class BranchSDK extends CordovaPlugin
                     return;
                 }
 
-                Log.d(LCAT, result.toString());
+                Log.d(LCAT, response.toString());
                 callbackContext.success(response);
 
             } else {
@@ -733,7 +733,7 @@ public class BranchSDK extends CordovaPlugin
                     return;
                 }
 
-                Log.d(LCAT, result.toString());
+                Log.d(LCAT, response.toString());
                 callbackContext.error(response);
 
             }
@@ -786,7 +786,7 @@ public class BranchSDK extends CordovaPlugin
                 }
             }
 
-            Log.d(LCAT, result.toString());
+            Log.d(LCAT, response.toString());
 
         }
 
