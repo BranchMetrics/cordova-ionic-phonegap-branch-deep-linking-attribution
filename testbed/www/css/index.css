@@ -44,3 +44,7 @@ div > * {
   color: rgb(0, 255, 0); }
 .error {
   color: rgb(255, 0, 0); }
+
+.android .spotlight-btn {
+   display: none;
+}
