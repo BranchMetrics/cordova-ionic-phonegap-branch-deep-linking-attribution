@@ -47,7 +47,6 @@ public class BranchSDK extends CordovaPlugin
     {
 
         Log.d(LCAT, "start onNewIntent()");
-        Log.d(LCAT, intent.getData().toString());
 
     }
 

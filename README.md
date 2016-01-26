@@ -333,25 +333,6 @@ branchUniversalObject.showShareSheet({
 });
 ```
 
-##### Event Callback
-To implement some event callback such as `onShareDialogClose` or `onShareDialogInitialize`, you must add listeners to the following events:
-
-`bio:shareLinkDialogLaunched`
-- The event fires when the share sheet is presented.
-
-`bio:shareLinkDialogDismissed`
-- The event fires when the share sheet is dismissed.
-
-`bio:shareLinkResponse`
-- The event returns a dictionary of the response data.
-
-`bio:shareChannelSelected`
-- The event fires a channel is selected.
-
-**Note:** Callbacks in iOS are ignored. There is no need to implement them as the events are handled by `UIActivityViewController`.
-
-**Note:** Avoid passing `alias` in iOS. Adding an `alias` key in the `options` parameter will return a Non-Universal link which will not work in iOS 9.2.
-
 -------
 
 ## Referral System Rewarding
