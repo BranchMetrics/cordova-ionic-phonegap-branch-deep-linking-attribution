@@ -176,7 +176,6 @@ public class BranchSDK extends CordovaPlugin
         Log.d(LCAT, "start logout()");
 
         this.instance.logout();
-        this.callbackContext.success("Success");
 
     }
 
@@ -440,7 +439,6 @@ public class BranchSDK extends CordovaPlugin
         Log.d(LCAT, "start registerView()");
 
         this.branchObj.registerView();
-        this.callbackContext.success("Success");
 
     }
 
@@ -529,10 +527,8 @@ public class BranchSDK extends CordovaPlugin
         Branch inst = Branch.getAutoInstance(act.getApplicationContext());
 
         if (isEnable) {
-            inst.setDebug();
+            instance.setDebug();
         }
-
-        this.callbackContext.success("Success");
 
     }
 
@@ -565,7 +561,6 @@ public class BranchSDK extends CordovaPlugin
         Log.d(LCAT, "start userCompletedAction()");
 
         this.instance.userCompletedAction(action);
-        this.callbackContext.success("Success");
 
     }
 
@@ -635,7 +630,7 @@ public class BranchSDK extends CordovaPlugin
                     return;
                 }
 
-                callbackContext.success(result);
+                Log.d(LCAT, result.toString());
 
             } else {
                 String errorMessage = error.getMessage();
@@ -649,7 +644,8 @@ public class BranchSDK extends CordovaPlugin
 
                 Log.d(LCAT, errorMessage);
 
-                callbackContext.error(result);
+                Log.d(LCAT, result.toString());
+
             }
 
         }
@@ -677,6 +673,7 @@ public class BranchSDK extends CordovaPlugin
                     e.printStackTrace();
                 }
 
+                Log.d(LCAT, result.toString());
                 callbackContext.success(result);
 
             } else {
@@ -692,6 +689,7 @@ public class BranchSDK extends CordovaPlugin
                     return;
                 }
 
+                Log.d(LCAT, result.toString());
                 callbackContext.error(result);
 
             }
@@ -719,7 +717,9 @@ public class BranchSDK extends CordovaPlugin
                     return;
                 }
 
+                Log.d(LCAT, result.toString());
                 callbackContext.success(response);
+
             } else {
 
                 String errorMessage = error.getMessage();
@@ -733,7 +733,9 @@ public class BranchSDK extends CordovaPlugin
                     return;
                 }
 
+                Log.d(LCAT, result.toString());
                 callbackContext.error(response);
+
             }
 
         }
@@ -745,15 +747,11 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onShareLinkDialogLaunched() {
             Log.d(LCAT, "inside onShareLinkDialogLaunched");
-
-            callbackContext.success("Success");
         }
 
         @Override
         public void onShareLinkDialogDismissed() {
             Log.d(LCAT, "inside onShareLinkDialogDismissed");
-
-            callbackContext.success("Success");
         }
 
         @Override
@@ -788,7 +786,7 @@ public class BranchSDK extends CordovaPlugin
                 }
             }
 
-            callbackContext.success(response);
+            Log.d(LCAT, result.toString());
 
         }
 
@@ -807,7 +805,7 @@ public class BranchSDK extends CordovaPlugin
                 return;
             }
 
-            callbackContext.success(response);
+            Log.d(LCAT, response.toString());
 
         }
     }
