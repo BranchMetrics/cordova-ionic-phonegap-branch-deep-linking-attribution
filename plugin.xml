@@ -58,11 +58,8 @@ SOFTWARE.
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <data android:scheme="$APP_NAME" android:host="open" />
+                <data android:scheme="https" android:host="bnc.lt" />
+                <!-- <data android:scheme="$APP_NAME" android:host="*" /> -->
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

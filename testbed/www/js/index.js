@@ -79,6 +79,8 @@ function CustomAction()
     var action = document.getElementById('custom-action').value;
 
     Branch.userCompletedAction(action);
+
+    alert('Success');
 }
 
 function GetLatestReferringParams()
@@ -193,7 +195,7 @@ function GenerateShortUrl()
 
     Branch.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
-        alert('Success: ' + JSON.stringify(res));
+        window.open(res.generatedLink);
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));

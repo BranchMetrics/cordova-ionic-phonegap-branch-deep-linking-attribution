@@ -1,6 +1,7 @@
 package io.branch;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
@@ -38,6 +39,17 @@ public class BranchSDK extends CordovaPlugin
     private CallbackContext callbackContext;
     private Activity activity;
     private Branch instance = null;
+
+    /**
+     * Called when the activity receives a new intent.
+     */
+    public void onNewIntent(Intent intent)
+    {
+
+        Log.d(LCAT, "start onNewIntent()");
+        Log.d(LCAT, intent.getData().toString());
+
+    }
 
     /**
      * Called when the activity will start interacting with the user.
