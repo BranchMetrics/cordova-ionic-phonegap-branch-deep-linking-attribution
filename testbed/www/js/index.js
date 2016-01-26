@@ -181,7 +181,7 @@ function RegisterView()
 {
     console.log('Trigger RegisterView()');
 
-    branchUniversalObj.registerView().then(function (res) {
+    Branch.registerView().then(function (res) {
         console.log(res);
         alert('Success: ' + JSON.stringify(res));
     }).catch(function (err) {
@@ -213,7 +213,7 @@ function GenerateShortUrl()
         $windows_phone_url: 'win-phone'
     };
 
-    branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
+    Branch.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
         alert('Success: ' + JSON.stringify(res));
     }).catch(function (err) {
@@ -244,7 +244,7 @@ function ShowShareSheet()
         $windows_phone_url: 'win-phone'
     };
 
-    branchUniversalObj.showShareSheet(properties, controlParams).then(function (res) {
+    Branch.showShareSheet(properties, controlParams).then(function (res) {
         console.log(res);
         alert('Success: ' + JSON.stringify(res));
     }).catch(function (err) {
@@ -256,7 +256,7 @@ function ShowShareSheet()
 function ListOnSpotlight()
 {
     console.log('Trigger ListOnSpotlight()');
-    branchUniversalObj.listOnSpotlight().then(function (res) {
+    Branch.listOnSpotlight().then(function (res) {
         console.log(res);
         alert('Success: ' + JSON.stringify(res));
     }).catch(function (err) {

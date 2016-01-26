@@ -332,7 +332,7 @@ public class BranchSDK extends CordovaPlugin
             }
         }
 
-        this.callbackContext.success(this.branchObj.convertToJson());
+        this.callbackContext.success("Success");
 
     }
 
