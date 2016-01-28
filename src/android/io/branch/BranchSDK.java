@@ -232,12 +232,11 @@ public class BranchSDK extends CordovaPlugin
      * @return A {@link JSONObject} containing the latest referring parameters as
      * configured locally.
      */
-    private void getLatestReferringParams() throws JSONException
+    private void getLatestReferringParams()
     {
 
         Log.d(LCAT, "start getLatestReferringParams()");
 
-        JSONObject result = new JSONObject();
         JSONObject sessionParams = this.instance.getLatestReferringParams();
 
         if (sessionParams == null) {
@@ -247,9 +246,7 @@ public class BranchSDK extends CordovaPlugin
             Log.d(LCAT, sessionParams.toString());
         }
 
-        result.put("data", sessionParams);
-
-        this.callbackContext.success(result);
+        this.callbackContext.success(sessionParams);
 
     }
 
@@ -260,12 +257,11 @@ public class BranchSDK extends CordovaPlugin
      * on a fresh install (not upgrade or reinstall). This will change on setIdentity (if the
      * user already exists from a previous device) and logout.</p>
      */
-    private void getFirstReferringParams() throws JSONException
+    private void getFirstReferringParams()
     {
 
         Log.d(LCAT, "start getFirstReferringParams()");
 
-        JSONObject result = new JSONObject();
         JSONObject installParams = this.instance.getFirstReferringParams();
 
         if (installParams == null) {
@@ -275,9 +271,7 @@ public class BranchSDK extends CordovaPlugin
             Log.d(LCAT, installParams.toString());
         }
 
-        result.put("data", installParams);
-
-        this.callbackContext.success(result);
+        this.callbackContext.success(installParams);
 
     }
 
@@ -656,20 +650,13 @@ public class BranchSDK extends CordovaPlugin
 
             Log.d(LCAT, "LoadRewardsListener onStateChanged()");
 
-            JSONObject result = new JSONObject();
-
             if (error == null) {
 
                 int credits = instance.getCredits();
 
-                try {
-                    result.put("credits", credits);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Log.d(LCAT, "LoadRewards success");
 
-                Log.d(LCAT, result.toString());
-                callbackContext.success(result);
+                callbackContext.success(credits);
 
             } else {
 
@@ -829,14 +816,7 @@ public class BranchSDK extends CordovaPlugin
 
                 }
 
-                try {
-                    response.put("data", data);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                callbackContext.success(response);
+                callbackContext.success(data);
 
             } else {
 
@@ -846,14 +826,7 @@ public class BranchSDK extends CordovaPlugin
 
                 Log.d(LCAT, errorMessage);
 
-                try {
-                    response.put("error", errorMessage);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                callbackContext.error(response);
+                callbackContext.error(errorMessage);
 
             }
         }
