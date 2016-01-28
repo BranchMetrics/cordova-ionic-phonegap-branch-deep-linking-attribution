@@ -181,7 +181,7 @@ function GenerateShortUrl()
 
     var properties = {
         feature: 'test',
-        alias: document.getElementById('url').value,
+        alias: document.getElementById('alias').value,
         channel: 'test',
         stage: 'test',
         duration: 10000
@@ -199,7 +199,7 @@ function GenerateShortUrl()
 
     Branch.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
-        alert(res.generatedLink);
+        document.getElementById('generated-url').value = res.generatedLink;
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
@@ -212,7 +212,7 @@ function ShowShareSheet()
 
     var properties = {
         feature: 'test',
-        alias: document.getElementById('url').value,
+        alias: document.getElementById('alias').value,
         channel: 'test',
         stage: 'test',
         duration: 10000

@@ -37,52 +37,49 @@
     </head>
     <body>
         <div>
-            <button onclick="Logout()">Logout</button>
-        </div>
-        <div>
             <button onclick="GetLatestReferringParams()">Get Latest Referring Params</button>
             <button onclick="GetFirstReferringParams()">Get First Referring Params</button>
-        </div>
-        <div>
-            <fieldset>
-                <legend>Identity</legend>
-                <div>
-                    <input type="text" id="identity" name="identity">
-                    <button onclick="SetIdentity()">Set Identity</button>
-                </div>
-                <div>
-                    <input type="text" id="custom-action" name="custom-action">
-                    <button onclick="CustomAction()">Custom Action</button>
-                </div>
-            </fieldset>
-        </div>
-        <div>
-            <div>
-                <input type="text" id="custom-action" name="custom-action" placeholder="Enter a custom action">
-                <button onclick="CustomAction()">Custom Action</button>
-            </div>
-        </div>
-        <div>
-            <button onclick="LoadRewards()">Load Rewards</button>
-            <button onclick="RedeemRewards()">Redeem Reward</button>
-            <button onclick="CreditHistory()">Credit History</button>
         </div>
         <div>
             <fieldset>
                 <legend>Branch Universal Object</legend>
                 <div>
                     <button onclick="CreateBranchUniversalObject()">Init Branch Universal Object</button>
-                    <button onclick="RegisterView()">Register View</button>
-                </div>
-                <div>
-                    <input id="url" name="url" type="text">
-                    <button onclick="GenerateShortUrl()">Generate URL</button>
+                    <button class="spotlight-btn" onclick="ListOnSpotlight()">List On Spotlight</button>
                 </div>
                 <div>
                     <button onclick="ShowShareSheet()">Share Sheet</button>
-                    <button class="spotlight-btn" onclick="ListOnSpotlight()">List On Spotlight</button>
+                    <button onclick="RegisterView()">Register View</button>
+                </div>
+                <div>
+                    <input id="alias" name="alias" type="text" placeholder="Enter an alias">
+                    <button onclick="GenerateShortUrl()">Generate URL</button>
+                </div>
+                <div>
+                    <input type="text" class="padding-vertical" id="generated-url" placeholder="Generated URL Goes here" readonly>
                 </div>
             </fieldset>
+        </div>
+        <div>
+            <input type="text" id="custom-action" name="custom-action" placeholder="Enter a custom action">
+            <button onclick="CustomAction()">Custom Action</button>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Identity</legend>
+                <div>
+                    <input type="text" id="identity" name="identity" placeholder="Enter a new Identity">
+                    <button onclick="SetIdentity()">Set Identity</button>
+                </div>
+                <div>
+                    <button onclick="Logout()">Logout</button>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <button onclick="LoadRewards()">Load Rewards</button>
+            <button onclick="RedeemRewards()">Redeem Reward</button>
+            <button onclick="CreditHistory()">Credit History</button>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>

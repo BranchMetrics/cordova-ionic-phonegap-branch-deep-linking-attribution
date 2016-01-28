@@ -44,6 +44,8 @@ div > * {
   color: rgb(0, 255, 0); }
 .error {
   color: rgb(255, 0, 0); }
+.padding-vertical {
+  padding: 15px 0; }
 
 .android .spotlight-btn {
    display: none;
