@@ -1,4 +1,4 @@
-#branch-cordova-sdk
+#Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/README.md
 
 > Branch Metrics Cordova SDK
 
@@ -25,6 +25,8 @@ Thru Phonegap
 ```sh
 phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable APP_NAME=your-app-name
 ```
+
+**Note:** APP_NAME will serve as your URL scheme as well
 
 Thru NPM
 ```sh
@@ -66,7 +68,7 @@ This repo includes a testbed app, that demonstrates all the features of the plug
 
 ## Plugin Methods
 
-**All methods are promisified**, therefore you can easily get its success and error callback by chaining `.then()` method.
+**Some methods are promisified**, therefore you can easily get its success and error callback by chaining `.then()` method.
 
 *Example*
 ```js
@@ -91,6 +93,7 @@ Branch.initSession().then(function (res) {
   + [registerView](#registerView)
   + [generateShortUrl](#generateShortUrl)
   + [showShareSheet](#showShareSheet)
+  + [showShareSheet](#listOnSpotlight) **iOS only**
 3. Referral System Rewarding
   + [loadRewards](#loadRewards)
   + [redeemRewards](#redeemRewards)
@@ -102,7 +105,13 @@ Initializes the branch instance. `setDebug()` should be called first before call
 
 ##### Usage
 ```js
-Branch.initSession();
+Branch.initSession().then(function (res) {
+  // Success Callback
+  console.log(res);
+}, function (err) {
+  // Error Callback
+  console.error(err);
+});
 ```
 
 ### <a id="setDebug"></a>setDebug(isEnable)
@@ -125,7 +134,13 @@ Retrieves the install session parameters.
 
 ##### Usage
 ```js
-Branch.getFirstReferringParams();
+Branch.getFirstReferringParams().then(function (res) {
+  // Success Callback
+  console.log(res);
+}).catch(function (err) {
+  // Error Callback
+  console.error(err);
+});
 ```
 
 ### <a id="getLatestReferringParams"></a>getLatestReferringParams()
@@ -134,7 +149,13 @@ Retrieves the session (install or open) parameters.
 
 ##### Usage
 ```js
-Branch.getLatestReferringParams();
+Branch.getLatestReferringParams().then(function (res) {
+  // Success Callback
+  console.log(res);
+}).catch(function (err) {
+  // Error Callback
+  console.error(err);
+});
 ```
 
 ### <a id="setIdentity"></a>setIdentity(object)
@@ -148,7 +169,13 @@ pass a unique string that identifies the user - this could be an email address, 
 
 ##### Usage
 ```js
-Branch.setIdentity("new_identity");
+Branch.setIdentity("new_identity").then(function (res) {
+  // Success Callback
+  console.log(res);
+}).catch(function (err) {
+  // Error Callback
+  console.error(err);
+});
 ```
 
 ### <a id="logout"></a>logout()
@@ -187,7 +214,7 @@ You can set all the metadata associated with the object and then call action met
 
 ### <a id="createBranchUniversalObject"></a>createBranchUniversalObject(object)
 
-Create an unverisal Branch object.
+Initializes the universal Branch object.
 
 **Parameters**
 
@@ -206,20 +233,18 @@ Create an unverisal Branch object.
 
 ##### Usage
 ```js
-var branchObj = null;
-
 Branch.createBranchUniversalObject({
-    canonicalIdentifier: 'identifier',
-    title: 'Just another title',
-    contentDescription: 'Just another description',
-    contentImageUrl: '/img.jpg',
-    contentIndexingMode: 'public'
-}).then(function (branchInstance) {
-    // Success Callback
-    branchObj = branchInstance;
+  canonicalIdentifier: 'identifier',
+  title: 'Just another title',
+  contentDescription: 'Just another description',
+  contentImageUrl: '/img.jpg',
+  contentIndexingMode: 'public'
+}).then(function (res) {
+  // Success Callback
+  console.error(res);
 }, function (err) {
-    // Error Callback
-    console.error(err);
+  // Error Callback
+  console.error(err);
 });
 ```
 
@@ -230,7 +255,7 @@ to tell Branch that this content was viewed.
 
 ##### Usage
 ```js
-branchObj.registerView();
+Branch.registerView();
 ```
 
 ### <a id="generateShortUrl"></a>generateShortUrl(options, controlParameters)
@@ -264,7 +289,7 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 
 ##### Usage
 ```js
-branchObj.generateShortUrl({
+Branch.generateShortUrl({
   "feature" : "sample-feature",
   "alias" : "sample-alias",
   "channel" : "sample-channel",
@@ -322,7 +347,7 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will
 
 ##### Usage
 ```js
-branchUniversalObject.showShareSheet({
+Branch.showShareSheet({
   "feature" : "sample-feature",
   "alias" : "sample-alias",
   "channel" : "sample-channel",
@@ -330,6 +355,21 @@ branchUniversalObject.showShareSheet({
   "duration" : 1,
 }, {
   "$desktop_url" : "http://desktop-url.com",
+});
+```
+
+### <a id="listOnSpotlight"></a>listOnSpotlight()
+
+**Note: iOS only.** Used for Spotlight listing
+
+##### Usage
+```js
+Branch.listOnSpotlight().then(function (res) {
+  // Success Callback
+  console.log(res);
+}).catch(function (err) {
+  // Error Callback
+  console.error(err);
 });
 ```
 
@@ -343,7 +383,13 @@ Reward balances change randomly on the backend when certain actions are taken (d
 
 ##### Usage
 ```js
-Branch.loadRewards();
+Branch.loadRewards().then(function (rewards) {
+  // Success Callback
+  console.log(rewards);
+}).catch(function (err) {
+  // Error Callback
+  console.error(err);
+});
 ```
 
 ### <a id="redeemRewards"></a>redeemRewards(value)
@@ -356,7 +402,13 @@ Redeems a reward with the given amount/value.
 
 ##### Usage
 ```js
-Branch.redeemRewards(100);
+Branch.redeemRewards(100).then(function (res) {
+  // Success Callback
+  console.log(res);
+}).catch(function (err) {
+  // Error Callback
+  console.error(err);
+});
 ```
 
 ### <a id="creditHistory"></a>creditHistory()
