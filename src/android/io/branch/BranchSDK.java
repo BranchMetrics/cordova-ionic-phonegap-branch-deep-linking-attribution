@@ -173,6 +173,7 @@ public class BranchSDK extends CordovaPlugin
         this.activity = this.cordova.getActivity();
         this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
         this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
+        this.callbackContext.success("Success");
 
     }
 

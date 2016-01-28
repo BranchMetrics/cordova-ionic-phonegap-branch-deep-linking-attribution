@@ -66,9 +66,13 @@ function InitSession()
 {
     console.log('Trigger InitSession()');
 
-    Branch.initSession();
-    
-    alert('Initialized Success');
+    Branch.initSession().then(function (res) {
+        console.log(res);
+        alert('Initialize: ' + res);
+    }, function (err) {
+        console.error(err);
+        alert(err);
+    });
 
 }
 
@@ -195,7 +199,7 @@ function GenerateShortUrl()
 
     Branch.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
-        window.open(res.generatedLink);
+        alert(res.generatedLink);
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
