@@ -204,8 +204,7 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start redeemRewards()");
 
-        this.instance.redeemRewards(value);
-        this.callbackContext.success("Success");
+        this.instance.redeemRewards(value, new LoadRewardsListener());
 
     }
 
@@ -621,8 +620,6 @@ public class BranchSDK extends CordovaPlugin
 
             Log.d(LCAT, "SessionListener onInitFinished()");
 
-            JSONObject result = new JSONObject();
-
             if (error == null) {
 
                 // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
@@ -635,28 +632,14 @@ public class BranchSDK extends CordovaPlugin
                     Log.d(LCAT, referringParams.toString());
                 }
 
-                try {
-                    result.put("data", referringParams);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                Log.d(LCAT, result.toString());
+                callbackContext.success(referringParams);
 
             } else {
                 String errorMessage = error.getMessage();
 
-                try {
-                    result.put("error", errorMessage);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
                 Log.d(LCAT, errorMessage);
 
-                Log.d(LCAT, result.toString());
+                callbackContext.error(errorMessage);
 
             }
 
@@ -694,15 +677,7 @@ public class BranchSDK extends CordovaPlugin
 
                 Log.d(LCAT, errorMessage);
 
-                try {
-                    result.put("error", errorMessage);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                Log.d(LCAT, result.toString());
-                callbackContext.error(result);
+                callbackContext.error(errorMessage);
 
             }
 
