@@ -199,7 +199,7 @@ function GenerateShortUrl()
 
     Branch.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
-        document.getElementById('generated-url').value = res.generatedLink;
+        document.getElementById('generated-url').value = res.url;
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
