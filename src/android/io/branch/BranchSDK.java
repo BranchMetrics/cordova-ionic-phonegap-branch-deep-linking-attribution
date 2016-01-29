@@ -170,8 +170,6 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start initSession()");
 
-        this.activity = this.cordova.getActivity();
-        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
         this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
         this.callbackContext.success("Success");
 
@@ -528,11 +526,11 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start setDebug()");
 
-        Activity act = this.cordova.getActivity();
-        Branch inst = Branch.getAutoInstance(act.getApplicationContext());
+        this.activity = this.cordova.getActivity();
+        this.instance = Branch.getInstance(this.activity.getApplicationContext());
 
         if (isEnable) {
-            instance.setDebug();
+            this.instance.setDebug();
         }
 
     }
@@ -685,7 +683,7 @@ public class BranchSDK extends CordovaPlugin
                 Log.d(LCAT, "link to share: " + url);
 
                 try {
-                    response.put("generatedLink", url);
+                    response.put("url", url);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return;
