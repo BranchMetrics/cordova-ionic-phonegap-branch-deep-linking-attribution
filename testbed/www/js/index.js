@@ -166,6 +166,12 @@ function CreateBranchUniversalObject()
 
 }
 
+function OpenLink()
+{
+    var url = document.getElementById('generated-url').value;
+    window.open(url);
+}
+
 function RegisterView()
 {
     console.log('Trigger RegisterView()');
