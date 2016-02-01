@@ -68,7 +68,7 @@ function InitSession()
 
     Branch.initSession().then(function (res) {
         console.log(res);
-        alert('Initialize: ' + res);
+        alert('Initialize: ' + JSON.stringify(res));
     }, function (err) {
         console.error(err);
         alert(err);
@@ -164,12 +164,6 @@ function CreateBranchUniversalObject()
             alert('Error: ' + JSON.stringify(err));
         });
 
-}
-
-function OpenLink()
-{
-    var url = document.getElementById('generated-url').value;
-    window.open(url);
 }
 
 function RegisterView()
