@@ -33,13 +33,15 @@ div, fieldset {
   display: -webkit-flex;
   display: flex;
   justify-content: space-around;
+  -webkit-flex-direction: row;
   flex-direction: row;
   margin: 10px 0; }
 fieldset > div > *,
 div > * {
   margin: 0 5px;
   width: 10vw;
-  flex-grow: 1;}
+  -webkit-flex-grow: 1;
+  flex-grow: 1; }
 .success {
   color: rgb(0, 255, 0); }
 .error {
