@@ -45,9 +45,8 @@ public class BranchSDK extends CordovaPlugin
      */
     public void onNewIntent(Intent intent)
     {
-
         Log.d(LCAT, "start onNewIntent()");
-
+        this.setDebug(true);
     }
 
     /**
@@ -56,14 +55,9 @@ public class BranchSDK extends CordovaPlugin
      * @param multitasking A {@link boolean} flag indicating if multitasking is turned on for app
      */
     @Override
-    public void onResume(boolean multitasking)
-    {
+    public void onResume(boolean multitasking) {
 
         Log.d(LCAT, "SDK On Resume");
-
-        if (this.instance != null) {
-            initSession();
-        }
 
     }
 
@@ -171,7 +165,7 @@ public class BranchSDK extends CordovaPlugin
         Log.d(LCAT, "start initSession()");
 
         this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
-        this.callbackContext.success("Success");
+
 
     }
 
@@ -527,7 +521,7 @@ public class BranchSDK extends CordovaPlugin
         Log.d(LCAT, "start setDebug()");
 
         this.activity = this.cordova.getActivity();
-        this.instance = Branch.getInstance(this.activity.getApplicationContext());
+        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
 
         if (isEnable) {
             this.instance.setDebug();
