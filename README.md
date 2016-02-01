@@ -17,13 +17,13 @@ There are multiple ways to add the plugin in to your app.
 Thru Cordova
 
 ```sh
-cordova plugin install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable APP_NAME=your-app-name
+cordova plugin install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable ENCODED_ID=your-live-app-encoded-id
 ```
 
 Thru Phonegap
 
 ```sh
-phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable APP_NAME=your-app-name
+phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable ENCODED_ID=your-live-app-encoded-id
 ```
 
 **Note:** APP_NAME will serve as your URL scheme as well
