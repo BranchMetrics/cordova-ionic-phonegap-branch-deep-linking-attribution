@@ -5,24 +5,18 @@ import android.content.Intent;
 import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.Override;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
-import io.branch.referral.BranchShortLinkBuilder;
-import io.branch.referral.Defines;
 import io.branch.referral.SharingHelper;
 import io.branch.referral.util.ShareSheetStyle;
 
@@ -38,7 +32,18 @@ public class BranchSDK extends CordovaPlugin
     private BranchUniversalObject branchObj;
     private CallbackContext callbackContext;
     private Activity activity;
-    private Branch instance = null;
+    private Branch instance;
+
+    /**
+     * Class Constructor
+     */
+    public BranchSDK()
+    {
+        this.activity = null;
+        this.instance = null;
+        this.branchObj = null;
+        this.callbackContext = null;
+    }
 
     /**
      * Called when the activity receives a new intent.
@@ -46,7 +51,11 @@ public class BranchSDK extends CordovaPlugin
     public void onNewIntent(Intent intent)
     {
         Log.d(LCAT, "start onNewIntent()");
-        this.setDebug(true);
+
+        if (this.activity != null) {
+            this.setDebug(true);
+            this.initSession();
+        }
     }
 
     /**
@@ -91,7 +100,9 @@ public class BranchSDK extends CordovaPlugin
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
     {
 
-        this.callbackContext = callbackContext;
+        if (this.callbackContext == null) {
+            this.callbackContext = callbackContext;
+        }
 
         if (action.equals("setDebug")) {
             if (args.length() == 1) {
