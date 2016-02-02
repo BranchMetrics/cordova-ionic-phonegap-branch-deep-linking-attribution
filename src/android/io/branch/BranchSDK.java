@@ -99,10 +99,7 @@ public class BranchSDK extends CordovaPlugin
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
     {
-
-        if (this.callbackContext == null) {
-            this.callbackContext = callbackContext;
-        }
+        this.callbackContext = callbackContext;
 
         if (action.equals("setDebug")) {
             if (args.length() == 1) {
