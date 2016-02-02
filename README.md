@@ -103,7 +103,7 @@ Branch.initSession().then(function (res) {
   + [registerView](#registerView)
   + [generateShortUrl](#generateShortUrl)
   + [showShareSheet](#showShareSheet)
-  + [showShareSheet](#listOnSpotlight) **iOS only**
+  + [listOnSpotlight](#listOnSpotlight) **iOS only**
 3. Referral System Rewarding
   + [loadRewards](#loadRewards)
   + [redeemRewards](#redeemRewards)
