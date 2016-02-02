@@ -1,27 +1,34 @@
 {
-    "version": "1.0.0",
-    "name": "branch-cordova-sdk",
-    "description": "Branch Metrics Cordova SDK",
-    "main": "www/branch.js",
-    "homepage": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git"
-    },
-    "bugs": {
-        "url": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues"
-    },
-    "keywords": [
-        "ecosystem:cordova",
-        "ecosystem:phonegap",
-        "ecosystem:ionic",
-        "cordova-ios",
-        "cordova-android",
-        "branch.io.sdk"
-    ],
-    "platforms": [
-        "android",
-        "ios"
-    ],
-    "license": "MIT"
+  "version": "1.0.0",
+  "name": "branch-cordova-sdk",
+  "description": "Branch Metrics Cordova SDK",
+  "main": "www/branch.js",
+  "homepage": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "ecosystem:phonegap",
+    "ecosystem:ionic",
+    "cordova-ios",
+    "cordova-android",
+    "branch.io.sdk"
+  ],
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "mkpath": "^1.0.0",
+    "node-version-compare": "^1.0.1",
+    "plist": "^1.2.0",
+    "rimraf": "^2.5.1",
+    "xml2js": "^0.4.16"
+  }
 }

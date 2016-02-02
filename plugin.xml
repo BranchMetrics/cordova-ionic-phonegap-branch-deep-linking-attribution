@@ -79,16 +79,19 @@ SOFTWARE.
             <dict>
                 <key>live</key>
                 <string>$BRANCH_LIVE_KEY</string>
-                <key>CFBundleURLTypes</key>
-                <array>
-                    <dict>
-                        <key>CFBundleURLSchemes</key>
-                        <array>
-                        <string>$APP_NAME</string>
-                        </array>
-                    </dict>
-                </array>
             </dict>
+        </config-file>
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleURLName</key>
+                    <string>io.branch.sdk</string>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>$APP_NAME</string>
+                    </array>
+                </dict>
+            </array>
         </config-file>
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />

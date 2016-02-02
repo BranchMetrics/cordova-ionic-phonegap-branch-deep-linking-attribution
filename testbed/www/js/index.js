@@ -53,6 +53,12 @@ var app = {
 
 app.initialize();
 
+function DeepLinkHandler(data)
+{
+    alert('Initialize: ' + data.data);
+
+}
+
 function SetDebug(isEnabled)
 {
     console.log('Trigger SetDebug()');
@@ -66,14 +72,17 @@ function InitSession()
 {
     console.log('Trigger InitSession()');
 
-    Branch.initSession().then(function (res) {
-        console.log(res);
-        alert('Initialize: ' + JSON.stringify(res));
-    }, function (err) {
-        console.error(err);
-        alert(err);
-    });
-
+    if (navigator.userAgent.indexOf('iPhone') >= 0) {
+        Branch.initSession();
+    } else if (navigator.userAgent.indexOf('Android') >= 0) {
+        Branch.initSession().then(function (res) {
+            console.log(res);
+            alert('Initialize: ' + JSON.stringify(res));
+        }, function (err) {
+            console.error(err);
+            alert(err);
+        });
+    }
 }
 
 function CustomAction()
@@ -199,7 +208,12 @@ function GenerateShortUrl()
 
     Branch.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
-        document.getElementById('generated-url').value = res.url;
+        if (navigator.userAgent.indexOf('iPhone') >= 0) {
+            var result = JSON.parse(res);
+            document.getElementById('generated-url').value = result.generatedLink;
+        } else if (navigator.userAgent.indexOf('Android') >= 0) {
+            document.getElementById('generated-url').value = res.url;
+        }
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));

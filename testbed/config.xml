@@ -24,4 +24,9 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+    <universal-links>
+        <ios-team-id value="4XE8MVRXHY" />
+        <host name="bnc.lt">
+        </host>
+    </universal-links>
 </widget>

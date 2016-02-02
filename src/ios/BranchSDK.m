@@ -74,31 +74,31 @@
     [branch initSessionAndRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
         NSLog(@"inside initSessionAndRegisterDeepLinkHandler block");
         CDVPluginResult* pluginResult = nil;
+        NSString *resultString;
         if (!error) {
             if (params != nil && [params count] > 0) {
                 NSError *err;
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params
-                                                                   options:0
+                                                                     options:0
                                                                      error:&err];
                 if (!jsonData) {
                     NSLog(@"Parsing Error: %@", [err localizedDescription]);
-                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[err localizedDescription]];
+                    resultString = [NSString stringWithFormat:@"Parsing Error: %@", [err localizedDescription]];
                 } else {
                     NSLog(@"Success");
-                    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+                    resultString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
                 }
             } else {
                 NSLog(@"No data found");
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Empty data"];
+                resultString = @"No data found";
             }
         }
         else {
             NSLog(@"Init Error: %@", [error localizedDescription]);
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+            resultString = [NSString stringWithFormat:@"Init Error: %@", [error localizedDescription]];
         }
         NSLog(@"returning data to js interface..");
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler({data:'%@'})", resultString]];
     }];
 }
 
@@ -454,7 +454,7 @@
         CDVPluginResult* pluginResult = nil;
         if (!error) {
             NSError *err;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"url":url}
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"generatedLink":url}
                                                                options:0
                                                                  error:&err];
             if (!jsonData) {
@@ -477,7 +477,7 @@
 - (void)showShareSheet:(CDVInvokedUrlCommand*)command
 {
     NSLog(@"start showShareSheet");
-    NSString *shareText = nil;
+    NSString *shareText = @"Share Link";
 
     if ([command.arguments count] >= 3) {
         shareText = [command.arguments objectAtIndex:2];
@@ -501,24 +501,12 @@
         [linkProperties addControlParam:key withValue:[arg1 objectForKey:key]];
     }
 
-    UIActivityItemProvider *itemProvider = [self.branchUniversalObj getBranchActivityItemWithLinkProperties:linkProperties];
-
-    NSMutableArray *items = [NSMutableArray arrayWithObject:itemProvider];
-    if (shareText) {
-        [items addObject:shareText];
-    }
-    UIActivityViewController *shareViewController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
-
-    if (linkProperties.controlParams[@"$email_subject"]) {
-        @try {
-            [shareViewController setValue:linkProperties.controlParams[@"$email_subject"] forKey:@"subject"];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"Error: Unable to setValue 'emailSubject' forKey 'subject' on UIActivityViewController.");
-        }
-    }
-
-    [self.viewController presentViewController:shareViewController animated:YES completion:nil];
+    [self.branchUniversalObj showShareSheetWithLinkProperties:linkProperties
+                                                andShareText:shareText
+                                                fromViewController:self.viewController
+                                                andCallback:^{
+        NSLog(@"finished presenting shareSheet ");
+    }];
 }
 
 - (void)listOnSpotlight:(CDVInvokedUrlCommand*)command {

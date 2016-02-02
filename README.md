@@ -26,7 +26,7 @@ Thru Phonegap
 phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable ENCODED_ID=your-live-app-encoded-id
 ```
 
-**Note:** APP_NAME will serve as your URL scheme as well
+**Note:** `APP_NAME` will serve as your URL scheme as well
 
 Thru NPM
 ```sh
@@ -44,21 +44,30 @@ as this was already done for you automatically on installing the plugin.
 In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Universal Links if you want Branch-generated links to work in your iOS app. To do this:
 
 1. enable `Associated Domains` capability on the Apple Developer portal when you create your app's bundle identifier.
-2. In https://dashboard.branch.io/#/settings/link, tick the `Enable Universal Links` checkbox and provide the Bundle Identifier and Apple Team ID in the appropriate boxes.
-3. Finally, create a new file named `Entitlements.plist` in the same directory as your Titanium app's `tiapp.xml` with the `associated-domains` key like below. You may add more entitlement keys if you have any.
+2. In your [Dashboard Link Settings](https://dashboard.branch.io/#/settings/link), tick the `Enable Universal Links` checkbox and provide the Bundle Identifier and Apple Team ID in the appropriate boxes.
+3. Finally, add `associated-domains` to your entitlements file. Since cordova doesn't have a way to a create entitlements and associate it to your generated project, we
+will generate the said file with the help of [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin), a third plarty plugin.
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>com.apple.developer.associated-domains</key>
-    <array>
-        <string>applinks:bnc.lt</string>
-    </array>
-</dict>
-</plist>
+**Note:** The purpose of the said plugin is to generate an entitlements file and associate it to your generated project. No other implementations from the plugin are need as
+this guide will cover what only needs to be implemented.
+
+To start, go to your project root and install the plugin:
+```sh
+cordova plugin add cordova-universal-links-plugin
 ```
+
+After the installation, add the following entry to your application's `config.xml`:
+```xml
+<universal-links>
+    <ios-team-id value=your_ios_team_id />
+    <host name="bnc.lt">
+    </host>
+</universal-links>
+```
+
+You can get your iOS Team ID from the Apple Developer Portal.
+
+Once done, you have successfully enabled universal links for iOS.
 
 ## Demo App
 
@@ -82,6 +91,7 @@ Branch.initSession().then(function (res) {
 ```
 
 1. Branch Session
+  + [setDebug](#setDebug)
   + [initSession](#initSession)
   + [getLatestReferringParams](#getLatestReferringParams)
   + [getFirstReferringParams](#getFirstReferringParams)
@@ -99,20 +109,6 @@ Branch.initSession().then(function (res) {
   + [redeemRewards](#redeemRewards)
   + [creditHistory](#creditHistory)
 
-### <a id="initSession"></a>initSession()
-
-Initializes the branch instance. `setDebug()` should be called first before calling this method.
-
-##### Usage
-```js
-Branch.initSession().then(function (res) {
-  // Success Callback
-  console.log(res);
-}, function (err) {
-  // Error Callback
-  console.error(err);
-});
-```
 
 ### <a id="setDebug"></a>setDebug(isEnable)
 
@@ -126,6 +122,38 @@ This is useful when testing.
 ##### Usage
 ```js
 Branch.setDebug(true);
+```
+
+### <a id="initSession"></a>initSession()
+
+Initializes the branch instance.
+**Note:** `setDebug()` should be called first before calling this method.
+
+##### Usage
+In `Android`, the implementation goes like this:
+```js
+Branch.initSession().then(function (res) {
+  // Success Callback
+  console.log(res);
+}, function (err) {
+  // Error Callback
+  console.error(err);
+});
+```
+
+In `iOS` however, the implementation requires another method called `DeepLinkHandler()` because
+the Objective-C plugin uses a block-completion method which includes `deep linking handling`.
+To implement for iOS, first call the method:
+```js
+Branch.initSession();
+```
+then add the method `DeepLinkHandler()` which will act as our callback for the response:
+```js
+function DeepLinkHandler(data)
+{
+    alert('Data from initSession: ' + data.data);
+
+}
 ```
 
 ### <a id="getFirstReferringParams"></a>getFirstReferringParams()
@@ -296,9 +324,9 @@ Branch.generateShortUrl({
   "stage" : "sample-stage"
 }, {
   "$desktop_url" : "http://desktop-url.com",
-}).then(function (generatedUrl) {
+}).then(function (res) {
     // Success Callback
-    console.log(generatedUrl);
+    console.log(res.generatedUrl);
 }, function (err) {
     // Error Callback
     console.error(err);
