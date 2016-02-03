@@ -39,6 +39,7 @@ SOFTWARE.
     </js-module>
 
     <preference name="BRANCH_LIVE_KEY" />
+    <preference name="APP_NAME" />
 
     <engines>
         <engine name="cordova" version=">=3.0.0" />
