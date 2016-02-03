@@ -40,6 +40,7 @@ SOFTWARE.
 
     <preference name="BRANCH_LIVE_KEY" />
     <preference name="APP_NAME" />
+    <preference name="ENCODED_ID" />
 
     <engines>
         <engine name="cordova" version=">=3.0.0" />
@@ -61,7 +62,7 @@ SOFTWARE.
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="bnc.lt" />
+                <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/$ENCODED_ID" />
             </intent-filter>
         </config-file>
         <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
