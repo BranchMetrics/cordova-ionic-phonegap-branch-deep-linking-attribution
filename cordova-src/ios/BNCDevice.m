@@ -73,7 +73,10 @@ static NSString *universal_link_url = nil;
     if (updateState) {
         [post setObject:updateState forKeyedSubscript:@"update"];
     }
-    if (link_click_identifier) [post setObject:link_click_identifier forKey:@"link_identifier"];
+    if (link_click_identifier) {
+        [post setObject:link_click_identifier forKey:@"link_identifier"];
+        link_click_identifier = nil;
+    }
     [post setObject:[NSNumber numberWithBool:[BNCDevice adTrackingSafe]] forKey:@"ad_tracking_enabled"];
     if (isReferrable < 0) {
         [post setObject:[NSNumber numberWithInteger:(updateState == nil)?1:0] forKey:@"is_referrable"];
@@ -82,6 +85,7 @@ static NSString *universal_link_url = nil;
     }
     if (universal_link_url) {
         [post setObject:universal_link_url forKey:@"universal_link_url"];
+        universal_link_url = nil;
     }
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:post];
@@ -106,9 +110,13 @@ static NSString *universal_link_url = nil;
     } else {
         [post setObject:[NSNumber numberWithInt:isReferrable] forKey:@"is_referrable"];
     }
-    if (link_click_identifier) [post setObject:link_click_identifier forKey:@"link_identifier"];
+    if (link_click_identifier) {
+        [post setObject:link_click_identifier forKey:@"link_identifier"];
+        link_click_identifier = nil;
+    }
     if (universal_link_url) {
         [post setObject:universal_link_url forKey:@"universal_link_url"];
+        universal_link_url = nil;
     }
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:post];
