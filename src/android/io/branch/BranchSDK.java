@@ -172,6 +172,7 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start initSession()");
 
+        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
         this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
 
 
@@ -529,10 +530,12 @@ public class BranchSDK extends CordovaPlugin
         Log.d(LCAT, "start setDebug()");
 
         this.activity = this.cordova.getActivity();
-        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
+
+
+        Branch debugInstance = Branch.getAutoInstance(this.activity.getApplicationContext());
 
         if (isEnable) {
-            this.instance.setDebug();
+            debugInstance.setDebug();
         }
 
     }

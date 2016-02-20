@@ -58,7 +58,7 @@ SOFTWARE.
             <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_LIVE_KEY" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
