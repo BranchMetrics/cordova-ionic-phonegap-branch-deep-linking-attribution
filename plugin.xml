@@ -39,7 +39,7 @@ SOFTWARE.
     </js-module>
 
     <preference name="BRANCH_LIVE_KEY" />
-    <preference name="APP_NAME" />
+    <preference name="URI_SCHEME" />
     <preference name="ENCODED_ID" />
 
     <engines>
@@ -89,7 +89,7 @@ SOFTWARE.
                     <string>io.branch.sdk</string>
                     <key>CFBundleURLSchemes</key>
                     <array>
-                        <string>$APP_NAME</string>
+                        <string>$URI_SCHEME</string>
                     </array>
                 </dict>
             </array>
