@@ -17,16 +17,18 @@ There are multiple ways to add the plugin in to your app.
 Thru Cordova
 
 ```sh
-cordova plugin install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-name --variable ENCODED_ID=your-encoded-id
+cordova plugin install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
 Thru Phonegap
 
 ```sh
-phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-name --variable ENCODED_ID=your-encoded-id
+phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
-**Note:** `URI_SCHEME` will serve as your URL scheme as well
+**Note:**
+* `URI_SCHEME` will serve as your URL scheme as well
+* You only need to know `ENCODED_ID` which you can obtain from the Branch dash board once you enable App Linking support for your application.
 
 Thru NPM
 ```sh
@@ -261,15 +263,19 @@ Initializes the universal Branch object.
 
 ##### Usage
 ```js
+
+var branchUniversalObj = null;
+
 Branch.createBranchUniversalObject({
   canonicalIdentifier: 'identifier',
   title: 'Just another title',
   contentDescription: 'Just another description',
   contentImageUrl: '/img.jpg',
   contentIndexingMode: 'public'
-}).then(function (res) {
+}).then(function (newBranchUniversalObj) {
   // Success Callback
-  console.error(res);
+  branchUniversalObj = newBranchUniversalObj;
+  console.log(newBranchUniversalObj);
 }, function (err) {
   // Error Callback
   console.error(err);
@@ -283,7 +289,7 @@ to tell Branch that this content was viewed.
 
 ##### Usage
 ```js
-Branch.registerView();
+branchUniversalObj.registerView();
 ```
 
 ### <a id="generateShortUrl"></a>generateShortUrl(options, controlParameters)
@@ -317,7 +323,7 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 
 ##### Usage
 ```js
-Branch.generateShortUrl({
+branchUniversalObj.generateShortUrl({
   "feature" : "sample-feature",
   "alias" : "sample-alias",
   "channel" : "sample-channel",
@@ -375,7 +381,7 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will
 
 ##### Usage
 ```js
-Branch.showShareSheet({
+branchUniversalObj.showShareSheet({
   "feature" : "sample-feature",
   "alias" : "sample-alias",
   "channel" : "sample-channel",
@@ -392,7 +398,7 @@ Branch.showShareSheet({
 
 ##### Usage
 ```js
-Branch.listOnSpotlight().then(function (res) {
+branchUniversalObj.listOnSpotlight().then(function (res) {
   // Success Callback
   console.log(res);
 }).catch(function (err) {
