@@ -179,7 +179,7 @@ function RegisterView()
 {
     console.log('Trigger RegisterView()');
 
-    Branch.registerView();
+    branchUniversalObj.registerView();
 
     alert('Success');
 }
@@ -206,7 +206,7 @@ function GenerateShortUrl()
         $windows_phone_url: 'win-phone'
     };
 
-    Branch.generateShortUrl(properties, controlParams).then(function (res) {
+    branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
         if (navigator.userAgent.indexOf('iPhone') >= 0) {
             var result = JSON.parse(res);
@@ -242,13 +242,13 @@ function ShowShareSheet()
         $windows_phone_url: 'win-phone'
     };
 
-    Branch.showShareSheet(properties, controlParams);
+    branchUniversalObj.showShareSheet(properties, controlParams);
 }
 
 function ListOnSpotlight()
 {
     console.log('Trigger ListOnSpotlight()');
-    Branch.listOnSpotlight().then(function (res) {
+    branchUniversalObj.listOnSpotlight().then(function (res) {
         console.log(res);
         alert('Success: ' + JSON.stringify(res));
     }).catch(function (err) {
