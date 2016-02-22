@@ -27,12 +27,13 @@ phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-ke
 ```
 
 **Note:**
-* `URI_SCHEME` will serve as your URL scheme as well
-* You only need to know `ENCODED_ID` which you can obtain from the Branch dash board once you enable App Linking support for your application.
+* `BRANCH_LIVE_KEY` - Your Branch.io live API key.
+* `URI_SCHEME` - It could be your app name or the URI set in your Branch dashboard.
+* `ENCODED_ID` - You only need to know  which you can obtain from the Branch dashboard once you enable App Linking support for your application.
 
 Thru NPM
 ```sh
-npm install branch-cordova-sdk
+npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
 ## Additional App Permissions
