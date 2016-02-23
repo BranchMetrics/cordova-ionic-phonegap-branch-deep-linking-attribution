@@ -55,8 +55,7 @@ app.initialize();
 
 function DeepLinkHandler(data)
 {
-    alert('Initialize: ' + data.data);
-
+    alert('Initialize: ' + JSON.stringify(data));
 }
 
 function SetDebug(isEnabled)
@@ -72,17 +71,7 @@ function InitSession()
 {
     console.log('Trigger InitSession()');
 
-    if (navigator.userAgent.indexOf('iPhone') >= 0) {
-        Branch.initSession();
-    } else if (navigator.userAgent.indexOf('Android') >= 0) {
-        Branch.initSession().then(function (res) {
-            console.log(res);
-            alert('Initialize: ' + JSON.stringify(res));
-        }, function (err) {
-            console.error(err);
-            alert(err);
-        });
-    }
+    Branch.initSession();
 }
 
 function CustomAction()
