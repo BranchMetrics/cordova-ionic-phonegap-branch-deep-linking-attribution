@@ -629,6 +629,9 @@ public class BranchSDK extends CordovaPlugin
                     Log.d(LCAT, referringParams.toString());
                 }
 
+                String out = String.format("DeepLinkHandler(%s)", referringParams.toString());
+
+                webView.sendJavascript(out);
                 callbackContext.success(referringParams);
 
             } else {
@@ -636,6 +639,9 @@ public class BranchSDK extends CordovaPlugin
 
                 Log.d(LCAT, errorMessage);
 
+                String out = String.format("DeepLinkHandler(%s)", referringParams.toString());
+
+                webView.sendJavascript(out);
                 callbackContext.error(errorMessage);
 
             }
