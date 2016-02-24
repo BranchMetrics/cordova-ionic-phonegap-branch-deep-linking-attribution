@@ -29,7 +29,7 @@ phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-ke
 **Note:**
 * `BRANCH_LIVE_KEY` - Your Branch.io live API key.
 * `URI_SCHEME` - It could be your app name or the URI set in your Branch dashboard.
-* `ENCODED_ID` - You only need to know  which you can obtain from the Branch dashboard once you enable App Linking support for your application.
+* `ENCODED_ID` - You only need to know  which you can obtain from the Branch dashboard once you enable App Linking support for your application. Please see [this](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking) section of the Android readme.
 
 Thru NPM
 ```sh
@@ -84,7 +84,7 @@ This repo includes a testbed app, that demonstrates all the features of the plug
 
 *Example*
 ```js
-Branch.initSession().then(function (res) {
+Branch.getFirstReferringParams().then(function (res) {
   // Success Callback
   console.log(res);
 }, function (err) {
@@ -133,20 +133,10 @@ Initializes the branch instance.
 **Note:** `setDebug()` should be called first before calling this method.
 
 ##### Usage
-In `Android`, the implementation goes like this:
-```js
-Branch.initSession().then(function (res) {
-  // Success Callback
-  console.log(res);
-}, function (err) {
-  // Error Callback
-  console.error(err);
-});
-```
+The `initSession()` method automatically also sets an internal deep link hander whose data
+can be accesed by implementing the **required** `DeepLinkHandler()` method.
 
-In `iOS` however, the implementation requires another method called `DeepLinkHandler()` because
-the Objective-C plugin uses a block-completion method which includes `deep linking handling`.
-To implement for iOS, first call the method:
+To implement, first call the method:
 ```js
 Branch.initSession();
 ```
@@ -264,7 +254,6 @@ Initializes the universal Branch object.
 
 ##### Usage
 ```js
-
 var branchUniversalObj = null;
 
 Branch.createBranchUniversalObject({
