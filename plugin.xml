@@ -40,7 +40,7 @@ SOFTWARE.
 
     <preference name="BRANCH_LIVE_KEY" />
     <preference name="URI_SCHEME" />
-    <preference name="ENCODED_ID" />
+    <preference name="ENCODED_ID" default=" " />
 
     <engines>
         <engine name="cordova" version=">=3.0.0" />
