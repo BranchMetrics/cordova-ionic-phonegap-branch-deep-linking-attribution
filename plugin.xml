@@ -98,5 +98,4 @@ SOFTWARE.
         <source-file src="src/ios/BranchSDK.m" />
         <framework src="src/ios/dependencies/Branch.framework" custom="true" />
     </platform>
-
 </plugin>

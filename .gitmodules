@@ -1,0 +1,3 @@
+[submodule "Web-SDK"]
+	path = Web-SDK
+	url = git@github.com:BranchMetrics/Smart-App-Banner-Deep-Linking-Web-SDK.git
