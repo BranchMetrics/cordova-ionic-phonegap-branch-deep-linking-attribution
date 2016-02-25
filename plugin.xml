@@ -8,7 +8,17 @@
 		<clobbers target="branch" />
 		<clobbers target="Branch" />
 	</js-module>
+	<preference name="API_KEY_LIVE" />
+	<preference name="API_KEY_TEST" />
 	<platform name="ios">
+		<config-file target="*-Info.plist" parent="branch_key">
+			<dict>
+				<key>live</key>
+				<string>$API_KEY_LIVE</string>
+				<key>test</key>
+				<string>$API_KEY_TEST</string>
+			</dict>
+    </config-file>
 		<config-file target="config.xml" parent="/*">
 			<feature name="BranchDevice">
 				<param name="ios-package" value="BNCDevice" />
@@ -21,6 +31,10 @@
 		<source-file src="cordova-src/ios/BNCDevice.m" />
 	</platform>
 	<platform name="android">
+		<config-file target="AndroidManifest.xml" parent="/manifest/application/">
+				<meta-data android:name="io.branch.sdk.BranchKey" android:value="$API_KEY_LIVE" />
+				<meta-data android:name="io.branch.sdk.BranchKey.test" android:value="$API_KEY_TEST" />
+		</config-file>
 		<config-file target="config.xml" parent="/*">
 			<feature name="BranchDevice">
 				<param name="android-package" value="io.branch.BranchDevice"/>
