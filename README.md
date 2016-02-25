@@ -22,18 +22,44 @@ _____
 The plugin can be added in a number of ways. You can grab that latest version on the master Branch by using this call.
 
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable API_KEY_LIVE=value --variable API_KEY_TEST=value
 ```
-
-If you want to use NPM to manage your packages, the Branch Cordova SDK is also an NPM module.
-
+or Install latest version from npm
 ```sh
-npm install branch-cordova-sdk
+cordova plugin add branch-cordova-sdk --variable API_KEY_LIVE=value --variable API_KEY_TEST=value
 ```
-
 _____
 
-## Configure your app for deep linking
+### Register a URI Scheme
+Install Custom URL scheme Plugin by [Eddy Verbruggen](https://github.com/EddyVerbruggen/Custom-URL-scheme)
+
+```sh
+cordova plugin add cordova-plugin-customurlscheme --variable URL_SCHEME=mycoolapp
+```
+_____
+
+### iOS: Enable Universal Links
+Install Cordova Universal Links Plugin by [nordnet](https://github.com/nordnet/cordova-universal-links-plugin)
+
+```sh
+cordova plugin add cordova-universal-links-plugin
+```
+
+Add `bnc.lt` and your other hosts into `config.xml`:
+
+ ```xml
+ <universal-links>
+   <host name="bnc.lt" />
+   <host name="yourdomain.com" />
+ </universal-links>
+ ```
+
+ For test purpose you can leave only `bnc.lt` in there. But if you specifying your hosts - you need to [white label](https://dev.branch.io/recipes/branch_universal_links/#white-label-domains) them.
+
+
+ _____
+
+## Manually configure your app for deep linking
 
 ### Android: Register a URI Scheme and add your Branch key
 
