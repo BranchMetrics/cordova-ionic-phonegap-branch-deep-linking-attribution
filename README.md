@@ -314,11 +314,12 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 ##### Usage
 ```js
 branchUniversalObj.generateShortUrl({
+  // put your link properties here
   "feature" : "sample-feature",
-  "alias" : "sample-alias",
   "channel" : "sample-channel",
   "stage" : "sample-stage"
 }, {
+  // put your control parameters here
   "$desktop_url" : "http://desktop-url.com",
 }).then(function (res) {
     // Success Callback
@@ -372,12 +373,13 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will
 ##### Usage
 ```js
 branchUniversalObj.showShareSheet({
+  // put your link properties here
   "feature" : "sample-feature",
-  "alias" : "sample-alias",
   "channel" : "sample-channel",
   "stage" : "sample-stage",
   "duration" : 1,
 }, {
+  // put your control parameters here
   "$desktop_url" : "http://desktop-url.com",
 });
 ```
