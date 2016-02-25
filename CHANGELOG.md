@@ -2,7 +2,7 @@
 All notable changes to the Branch Web SDK will be documented here.
 The Branch Web SDK adheres to [Semantic Versioning](http://semver.org/).
 
-## [VERSION] - unreleased
+## [v2.0.0] - 2016-02-26
 
 ## [v1.8.0] - 2015-12-21
 - Support added for iOS9 Universal Links
