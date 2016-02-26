@@ -4,6 +4,10 @@ The Branch Web SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v2.0.0] - 2016-02-26
 
+We've completely revamped this module from a native implementation, which was terribly out of date with the Branch service to a thin wrapper around our core Android/iOS SDKs. Additionally, we've improved the interface from callbacks to promises in most circumstances.
+
+Please report issues you observe to support@branch.io immediately.
+
 ## [v1.8.0] - 2015-12-21
 - Support added for iOS9 Universal Links
 - Support added for Android App Links
