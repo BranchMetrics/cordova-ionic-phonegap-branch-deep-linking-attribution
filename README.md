@@ -1,42 +1,62 @@
-# Cordova/Ionic/Phonegap Branch SDK
+# Branch Metrics Cordova/Ionic/Phonegap SDK Reference
 
-> Branch Metrics Cordova SDK
+This is a repository of our open source Cordova | Phonegap | Ionic SDK, and the information presented here serves as a reference manual for the SDK. This SDK is a See the table of contents below for a complete list of the content featured in this document.
 
-## What is this?
+## Get the Demo App
 
-This Cordova plugin allows you to call Branch.IO API Endpoints, this shares almost the same code base as the Branch Web SDK.
+There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/testbed).
 
-## Register your Branch.IO app
-
-You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
+## Additional Resources
+- [Integration guide](https://dev.branch.io/recipes/add_the_sdk/cordova/) *Start Here*
+- [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
+- [Testing](https://dev.branch.io/recipes/testing_your_integration/cordova/)
+- [Support portal, FAQ](http://support.branch.io)
 
 ## Installation
 
-There are multiple ways to add the plugin in to your app.
+**The compiled iOS SDK footprint is 180kb**
+**The compiled Android SDK footprint is 187kb**
 
-Thru Cordova
-
-```sh
-cordova plugin install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
-```
-
-Thru Phonegap
-
-```sh
-phonegap plugin add branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
-```
+### Install through: 
 
 **Note:**
-* `BRANCH_LIVE_KEY` - Your Branch.io live API key.
-* `URI_SCHEME` - It could be your app name or the URI set in your Branch dashboard.
-* `ENCODED_ID` - You only need to know  which you can obtain from the Branch dashboard once you enable App Linking support for your application. Please see [this](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking) section of the Android readme.
+* `BRANCH_LIVE_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
+* `URI_SCHEME` - It could be your app name or the URI set in your Branch dashboard. As a reminder, the URI scheme is what you use to open your app from a browser, i.e. `yourapp://`.
+* [optional] `ENCODED_ID` - This is for supporting App Links (6.0+) on Android. You can obtain the encodied id from the Branch dashboard. Just append `--variable ENCODED_ID=your-encoded-id` to the plugin install command below. For more info about App Links, please see [this](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking) section of the Android readme.
 
-Thru NPM
+#### Cordova
+
+```sh
+cordova plugin install https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
+```
+example:
+```sh
+cordova plugin install https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable URI_SCHEME=branchsters
+```
+
+#### Phonegap
+
+```sh
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
+```
+
+example:
+```sh
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable URI_SCHEME=branchsters
+```
+
+#### NPM
+
 ```sh
 npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
-## Additional App Permissions
+example:
+```sh
+npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable URI_SCHEME=branchsters
+```
+
+### Additional App Permissions
 
 To be able to use some of the deep linking capabilities of the app, some manifest files are needed to be configured.
 Please note that you don't have to do anything anymore for setting up the `Register a URI Scheme and add your Branch key`
@@ -68,13 +88,7 @@ After the installation, add the following entry to your application's `config.xm
 </universal-links>
 ```
 
-You can get your iOS Team ID from the Apple Developer Portal.
-
-Once done, you have successfully enabled universal links for iOS.
-
-## Demo App
-
-This repo includes a testbed app, that demonstrates all the features of the plugin. Please refer to the `README` inside the `testbed` folder.
+You can get your iOS Team ID from the Apple Developer Portal. Once done, you have successfully enabled universal links for iOS.
 
 ---------------
 
