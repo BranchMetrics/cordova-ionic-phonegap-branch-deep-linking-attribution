@@ -2,6 +2,10 @@
 
 This is a repository of our open source Cordova | Phonegap | Ionic SDK, and the information presented here serves as a reference manual for the SDK. This SDK is a See the table of contents below for a complete list of the content featured in this document.
 
+## IMPORTANT: Upgrading to V 2.0
+
+On 2/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. If you don't have time to do so, just use a reference to version 1.8, which we're storing in [locked branch called 'v1.8.0-locked'](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/tree/v1.8.0-locked).
+
 ## Get the Demo App
 
 There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/testbed).
@@ -17,7 +21,7 @@ There's a full demo app embedded in this repository. It should serve as an examp
 **The compiled iOS SDK footprint is 180kb**
 **The compiled Android SDK footprint is 187kb**
 
-### Install through: 
+### Command link install 
 
 **Install parameters:**
 * `BRANCH_LIVE_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
@@ -47,6 +51,8 @@ phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Defe
 
 #### NPM
 
+**Note** NPM is still running the old repository for module v 1.8. Please see [the documentation here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/tree/v1.8.0-locked).
+
 ```sh
 npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
@@ -71,15 +77,16 @@ In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Univ
 3. Finally, add `associated-domains` to your entitlements file. Since cordova doesn't have a way to a create entitlements and associate it to your generated project, we
 will generate the said file with the help of [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin), a third plarty plugin.
 
-**Note:** The purpose of the said plugin is to generate an entitlements file and associate it to your generated project. No other implementations from the plugin are need as
-this guide will cover what only needs to be implemented.
+**Note:** The purpose of the said plugin is to generate an entitlements file and associate it to your generated project. No other implementations from the plugin are need as this guide will cover what only needs to be implemented.
 
 To start, go to your project root and install the plugin:
+
 ```sh
 cordova plugin add cordova-universal-links-plugin
 ```
 
 After the installation, add the following entry to your application's `config.xml`:
+
 ```xml
 <universal-links>
     <ios-team-id value=your_ios_team_id />
@@ -147,19 +154,26 @@ Initializes the branch instance.
 **Note:** `setDebug()` should be called first before calling this method.
 
 ##### Usage
-The `initSession()` method automatically also sets an internal deep link hander whose data
-can be accesed by implementing the **required** `DeepLinkHandler()` method.
+The `initSession()` method automatically also sets an internal deep link hander whose data can be accesed by implementing the **required** `DeepLinkHandler()` method. To implement, first call the method `initSession`:
 
-To implement, first call the method:
 ```js
-Branch.initSession();
+onDeviceReady: function() {
+    Branch.initSession();
+},
+onResume: function() {
+    Branch.initSession();
+},
+initialize: function() {
+    document.addEventListener('resume', onResume, false);
+    document.addEventListener('deviceready', onDeviceReady, false);
+},
 ```
-then add the method `DeepLinkHandler()` which will act as our callback for the response:
-```js
-function DeepLinkHandler(data)
-{
-    alert('Data from initSession: ' + data.data);
 
+Then add the method `DeepLinkHandler()` which will act as our callback when the session beings. The deep link data will be included here:
+
+```js
+function DeepLinkHandler(data) {
+    alert('Data from initSession: ' + data.data);
 }
 ```
 
