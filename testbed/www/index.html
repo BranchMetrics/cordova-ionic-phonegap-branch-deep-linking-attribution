@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>Branch.IO SDK TestBed</title>
+    </head>
+    <body>
+        <div>
+            <button onclick="GetLatestReferringParams()">Get Latest Referring Params</button>
+            <button onclick="GetFirstReferringParams()">Get First Referring Params</button>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Branch Universal Object</legend>
+                <div>
+                    <button onclick="CreateBranchUniversalObject()">Init Branch Universal Object</button>
+                    <button class="spotlight-btn" onclick="ListOnSpotlight()">List On Spotlight</button>
+                </div>
+                <div>
+                    <button onclick="ShowShareSheet()">Share Sheet</button>
+                    <button onclick="RegisterView()">Register View</button>
+                </div>
+                <div>
+                    <input id="alias" name="alias" type="text" placeholder="Enter an alias">
+                    <button onclick="GenerateShortUrl()">Generate URL</button>
+                </div>
+                <div>
+                    <input type="text" class="padding-vertical" id="generated-url" placeholder="Generated URL Goes here" readonly>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <input type="text" id="custom-action" name="custom-action" placeholder="Enter a custom action">
+            <button onclick="CustomAction()">Custom Action</button>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Identity</legend>
+                <div>
+                    <input type="text" id="identity" name="identity" placeholder="Enter a new Identity">
+                    <button onclick="SetIdentity()">Set Identity</button>
+                </div>
+                <div>
+                    <button onclick="Logout()">Logout</button>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <button onclick="LoadRewards()">Load Rewards</button>
+            <button onclick="RedeemRewards()">Redeem Reward</button>
+            <button onclick="CreditHistory()">Credit History</button>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>

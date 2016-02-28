@@ -1,27 +1,38 @@
 {
+  "version": "2.0.0",
   "name": "branch-cordova-sdk",
-  "version": "1.8.0",
   "description": "Branch Metrics Cordova SDK",
-  "main": "dist/web/build.min.js",
-  "scripts": {
-    "test": "grunt test"
-  },
+  "main": "www/branch.js",
+  "homepage": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK",
   "repository": {
     "type": "git",
     "url": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git"
   },
-  "author": "Dmitri Gaskin <dmitrig01@gmail.com>",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues"
   },
-  "homepage": "https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK",
+  "keywords": [
+    "ecosystem:cordova",
+    "ecosystem:phonegap",
+    "ecosystem:ionic",
+    "cordova-ios",
+    "cordova-android",
+    "branch",
+    "linking",
+    "deep linking",
+    "universal links",
+    "deferred deep linking"
+  ],
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "license": "MIT",
   "devDependencies": {
-    "jsdoc": "3.2.2",
-    "jsdox": "0.4.9"
-  },
-  "dependencies": {
-    "request": "^2.55.0"
-  },
-  "build": "1.8.0"
+    "mkpath": "^1.0.0",
+    "node-version-compare": "^1.0.1",
+    "plist": "^1.2.0",
+    "rimraf": "^2.5.1",
+    "xml2js": "^0.4.16"
+  }
 }
