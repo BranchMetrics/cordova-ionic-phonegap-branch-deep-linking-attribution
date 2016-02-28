@@ -134,7 +134,11 @@ public class BranchSDK extends CordovaPlugin
                     this.loadRewards();
                     return true;
                 } else if (action.equals("redeemRewards")) {
-                    this.redeemRewards(args.getInt(0));
+                    if (args.length() == 1) {
+                        this.redeemRewards(args.getInt(0));
+                    } else if (args.length() == 2) {
+                        this.redeemRewards(args.getInt(0), args.getString(1));
+                    }
                     return true;
                 } else if (action.equals("getCreditHistory")) {
                     this.getCreditHistory();
@@ -200,12 +204,29 @@ public class BranchSDK extends CordovaPlugin
      * @param count A {@link Integer} specifying the number of credits to attempt to redeem from
      *              the bucket.
      */
-    private void redeemRewards(int value)
+    private void redeemRewards(final int value)
     {
 
         Log.d(LCAT, "start redeemRewards()");
 
         this.instance.redeemRewards(value, new LoadRewardsListener());
+
+    }
+
+    /**
+     * <p>Redeems the specified number of credits from the "default" bucket, if there are sufficient
+     * credits within it. If the number to redeem exceeds the number available in the bucket, all of
+     * the available credits will be redeemed instead.</p>
+     *
+     * @param count A {@link Integer} specifying the number of credits to attempt to redeem from
+     *              the bucket.
+     */
+    private void redeemRewards(int value, String bucket)
+    {
+
+        Log.d(LCAT, "start redeemRewards()");
+
+        this.instance.redeemRewards(bucket, value, new LoadRewardsListener());
 
     }
 

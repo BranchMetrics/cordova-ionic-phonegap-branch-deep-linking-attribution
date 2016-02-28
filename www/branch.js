@@ -294,13 +294,20 @@ Branch.prototype.loadRewards = function () {
 /**
  * Redeem rewards to your account.
  *
- * @param (Int) value - The amount to redeem
+ * @param (Int) value - The amount to redeem.
+ * @param (String) bucket - The value containing the name of the referral bucket to attempt to redeem credits from. [OPTIONAL]
  *
  * @return (Promise)
  */
-Branch.prototype.redeemRewards = function (value) {
+Branch.prototype.redeemRewards = function (value, bucket) {
 
-    return execute('redeemRewards', [value]);
+    var params = [value];
+
+    if (bucket) {
+        params.push(bucket);
+    }
+
+    return execute('redeemRewards', params);
 
 };
 
