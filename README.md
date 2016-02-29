@@ -422,11 +422,14 @@ Redeems a reward with the given amount/value.
 
 **Parameters**
 
-**value**: `int` - Amount to be redeemed.
+|    KEY   |   TYPE   |          MEANING
+| -------- | -------- |------------------------
+| value  | `int` | Amount to be redeemed.
+| bucket    | `int` | Bucket where the amount will be redeemed. _optional_
 
 ##### Usage
 ```js
-Branch.redeemRewards(100).then(function (res) {
+Branch.redeemRewards(100, "default").then(function (res) {
   // Success Callback
   console.log(res);
 }).catch(function (err) {
