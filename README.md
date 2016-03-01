@@ -412,6 +412,54 @@ branchUniversalObj.showShareSheet({
 });
 ```
 
+##### Share Sheet Callbacks (Android ONLY)
+
+To implement the callback, you must add listeners to the following events:
+
+###### onShareSheetLaunched
+
+The event fires when the share sheet is presented.
+
+```js
+branchUniversalObj.onShareSheetLaunched(function () {
+  console.log('Share sheet launched');
+});
+```
+
+###### onShareSheetDismissed
+
+The event fires when the share sheet is dismissed.
+
+```js
+branchUniversalObj.onShareSheetDismissed(function () {
+  console.log('Share sheet dimissed');
+});
+```
+
+###### onLinkShareResponse
+
+The event returns a dictionary of the response data.
+
+```js
+branchUniversalObj.onLinkShareResponse(function (res) {
+  console.log('Share link response: ' + JSON.stringify(res));
+});
+```
+
+###### onChannelSelected
+
+The event fires when a channel is selected.
+
+```js
+branchUniversalObj.onChannelSelected(function (res) {
+  console.log('Channel selected: ' + JSON.stringify(res));
+});
+```
+
+**Note:** Callbacks in iOS are ignored. There is no need to implement them as the events are handled by `UIActivityViewController`.
+
+**Note:** Avoid passing `alias` in iOS. Adding an `alias` key in the `options` parameter will return a Non-Universal link which will not work in iOS 9.2.
+
 ### <a id="listOnSpotlight"></a>listOnSpotlight()
 
 **Note: iOS only.** Used for Spotlight listing
@@ -452,11 +500,14 @@ Redeems a reward with the given amount/value.
 
 **Parameters**
 
-**value**: `int` - Amount to be redeemed.
+|    KEY   |   TYPE   |          MEANING
+| -------- | -------- |------------------------
+| value  | `int` | Amount to be redeemed.
+| bucket    | `int` | Bucket where the amount will be redeemed. _optional_
 
 ##### Usage
 ```js
-Branch.redeemRewards(100).then(function (res) {
+Branch.redeemRewards(100, "default").then(function (res) {
   // Success Callback
   console.log(res);
 }).catch(function (err) {
