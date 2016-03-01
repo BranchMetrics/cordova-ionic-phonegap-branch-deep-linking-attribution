@@ -382,6 +382,50 @@ branchUniversalObj.showShareSheet({
 });
 ```
 
+##### Share Sheet Callbacks
+
+To implement the callback, you must add listeners to the following events:
+
+###### onShareSheetLaunched
+
+The event fires when the share sheet is presented.
+
+```js
+branchUniversalObj.onShareSheetLaunched(function () {
+  console.log('Share sheet launched');
+});
+```
+
+###### onShareSheetDismissed
+
+The event fires when the share sheet is dismissed.
+
+```js
+branchUniversalObj.onShareSheetDismissed(function () {
+  console.log('Share sheet dimissed');
+});
+```
+
+###### onLinkShareResponse
+
+The event returns a dictionary of the response data.
+
+```js
+branchUniversalObj.onLinkShareResponse(function (res) {
+  console.log('Share link response: ' + JSON.stringify(res));
+});
+```
+
+###### onChannelSelected
+
+The event fires when a channel is selected.
+
+```js
+branchUniversalObj.onChannelSelected(function (res) {
+  console.log('Channel selected: ' + JSON.stringify(res));
+});
+```
+
 ### <a id="listOnSpotlight"></a>listOnSpotlight()
 
 **Note: iOS only.** Used for Spotlight listing

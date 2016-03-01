@@ -31,6 +31,10 @@ public class BranchSDK extends CordovaPlugin
     // Private Method Properties
     private BranchUniversalObject branchObj;
     private CallbackContext callbackContext;
+    private CallbackContext onShareLinkDialogLaunched;
+    private CallbackContext onShareLinkDialogDismissed;
+    private CallbackContext onLinkShareResponse;
+    private CallbackContext onChannelSelected;
     private Activity activity;
     private Branch instance;
 
@@ -43,6 +47,10 @@ public class BranchSDK extends CordovaPlugin
         this.instance = null;
         this.branchObj = null;
         this.callbackContext = null;
+        this.onShareLinkDialogLaunched = null;
+        this.onShareLinkDialogDismissed = null;
+        this.onLinkShareResponse = null;
+        this.onChannelSelected = null;
     }
 
     /**
@@ -154,6 +162,18 @@ public class BranchSDK extends CordovaPlugin
                     return true;
                 } else if (action.equals("showShareSheet")) {
                     this.showShareSheet(args.getJSONObject(0), args.getJSONObject(1));
+                    return true;
+                } else if (action.equals("onShareLinkDialogLaunched")) {
+                    this.onShareLinkDialogLaunched = callbackContext;
+                    return true;
+                } else if (action.equals("onShareLinkDialogDismissed")) {
+                    this.onShareLinkDialogDismissed = callbackContext;
+                    return true;
+                } else if (action.equals("onLinkShareResponse")) {
+                    this.onLinkShareResponse = callbackContext;
+                    return true;
+                } else if (action.equals("onChannelSelected")) {
+                    this.onChannelSelected = callbackContext;
                     return true;
                 }
             }
@@ -751,11 +771,29 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onShareLinkDialogLaunched() {
             Log.d(LCAT, "inside onShareLinkDialogLaunched");
+
+            if (onShareLinkDialogLaunched != null) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK);
+
+                result.setKeepCallback(true);
+
+                onShareLinkDialogLaunched.sendPluginResult(result);
+            }
+
         }
 
         @Override
         public void onShareLinkDialogDismissed() {
             Log.d(LCAT, "inside onShareLinkDialogDismissed");
+
+            if (onShareLinkDialogDismissed != null) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK);
+
+                result.setKeepCallback(true);
+
+                onShareLinkDialogDismissed.sendPluginResult(result);
+            }
+
         }
 
         @Override
@@ -792,6 +830,14 @@ public class BranchSDK extends CordovaPlugin
 
             Log.d(LCAT, response.toString());
 
+            if (onLinkShareResponse != null) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, response);
+
+                result.setKeepCallback(true);
+
+                onLinkShareResponse.sendPluginResult(result);
+            }
+
         }
 
         @Override
@@ -810,6 +856,14 @@ public class BranchSDK extends CordovaPlugin
             }
 
             Log.d(LCAT, response.toString());
+
+            if (onChannelSelected != null) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, response);
+
+                result.setKeepCallback(true);
+
+                onChannelSelected.sendPluginResult(result);
+            }
 
         }
     }

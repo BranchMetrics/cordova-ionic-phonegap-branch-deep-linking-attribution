@@ -11,16 +11,14 @@ var _API_CLASS = 'BranchSDK'; // SDK Class
 /**
  * Execute SDK method using cordova.exec()
  *
- * @param  (String) method - The class method to execute
- * @param  (Array) params  - Method parameter(s) to pass
+ * @param  (String) method - The class method to execute.
+ * @param  (Array) params  - Method parameter(s) to pass.
  *
  * @return (Promise)
  */
 function execute(method, params) {
 
     params = ( ! params) ? [] : params;
-
-    var self = this;
 
     return new Promise(function (resolve, reject) {
         exec(function (res) {
@@ -29,6 +27,22 @@ function execute(method, params) {
             reject(err);
         }, _API_CLASS, method, params);
     });
+
+}
+
+/**
+ * Set listener callback for SDK method.
+ *
+ * @param  (String) method      - The class method to execute.
+ * @param  (Function) callback  - The method listener callback.
+ *
+ * @return (Promise)
+ */
+function executeCallback(method, callback) {
+
+    exec(callback, function (err) {
+        console.error(err);
+    }, _API_CLASS, method, []);
 
 }
 
@@ -261,6 +275,50 @@ Branch.prototype.createBranchUniversalObject = function (options) {
             res.showShareSheet = function (options, controlParameters) {
 
                 return execute('showShareSheet', [options, controlParameters]);
+
+            };
+
+            /**
+             * Set on share sheet launched listener callback.
+             *
+             * @param (Function) callback
+             */
+            res.onShareSheetLaunched = function (callback) {
+
+                executeCallback('onShareLinkDialogLaunched', callback);
+
+            };
+            
+            /**
+             * Set on share sheet dismissed listener callback.
+             *
+             * @param (Function) callback
+             */
+            res.onShareSheetDismissed = function (callback) {
+
+                executeCallback('onShareLinkDialogDismissed', callback);
+
+            };
+            
+            /**
+             * Set on link share listener callback.
+             *
+             * @param (Function) callback
+             */
+            res.onLinkShareResponse = function (callback) {
+
+                executeCallback('onLinkShareResponse', callback);
+
+            };
+
+            /**
+             * Set on channel select listener callback.
+             *
+             * @param (Function) callback
+             */
+            res.onChannelSelected = function (callback) {
+
+                executeCallback('onChannelSelected', callback);
 
             };
 
