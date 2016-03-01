@@ -280,34 +280,68 @@
 - (void)redeemRewards:(CDVInvokedUrlCommand*)command
 {
     NSLog(@"start redeemRewards");
+
     NSInteger amount = ((NSNumber *)[command.arguments objectAtIndex:0]).integerValue;
     Branch *branch = [self getInstance];
 
-    [branch redeemRewards:amount callback:^(BOOL changed, NSError *error) {
-        NSLog(@"inside redeemRewards block");
-        CDVPluginResult* pluginResult = nil;
-        if (!error) {
-            NSNumber *changedValue = [NSNumber numberWithBool:changed];
-            NSError *err;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"changed":changedValue}
-                                                               options:0
-                                                                 error:&err];
-            if (!jsonData) {
-                NSLog(@"Parsing Error: %@", [err localizedDescription]);
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[err localizedDescription]];
-            } else {
-                NSLog(@"Success");
-                NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+    if ([command.arguments count] == 2) {
+
+        NSString *bucket = [command.arguments objectAtIndex:1];
+
+        [branch redeemRewards:(NSInteger)amount forBucket:(NSString *)bucket callback:^(BOOL changed, NSError *error) {
+            NSLog(@"inside redeemRewards:forBucket block");
+            CDVPluginResult* pluginResult = nil;
+            if (!error) {
+                NSNumber *changedValue = [NSNumber numberWithBool:changed];
+                NSError *err;
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"changed":changedValue}
+                                                                   options:0
+                                                                     error:&err];
+                if (!jsonData) {
+                    NSLog(@"Parsing Error: %@", [err localizedDescription]);
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[err localizedDescription]];
+                } else {
+                    NSLog(@"Success");
+                    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+                }
             }
-        }
-        else {
-            NSLog(@"Redeem Rewards Error: %@", [error localizedDescription]);
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
-        }
-        NSLog(@"returning data to js interface..");
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    }];
+            else {
+                NSLog(@"Redeem Rewards Error: %@", [error localizedDescription]);
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+            }
+            NSLog(@"returning data to js interface..");
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        }];
+    } else {
+        [branch redeemRewards:amount callback:^(BOOL changed, NSError *error) {
+            NSLog(@"inside redeemRewards block");
+            CDVPluginResult* pluginResult = nil;
+            if (!error) {
+                NSNumber *changedValue = [NSNumber numberWithBool:changed];
+                NSError *err;
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"changed":changedValue}
+                                                                   options:0
+                                                                     error:&err];
+                if (!jsonData) {
+                    NSLog(@"Parsing Error: %@", [err localizedDescription]);
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[err localizedDescription]];
+                } else {
+                    NSLog(@"Success");
+                    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+                }
+            }
+            else {
+                NSLog(@"Redeem Rewards Error: %@", [error localizedDescription]);
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+            }
+            NSLog(@"returning data to js interface..");
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        }];
+    }
+
+
 }
 
 - (void)getCreditHistory:(CDVInvokedUrlCommand*)command
