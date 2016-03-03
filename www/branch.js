@@ -50,7 +50,7 @@ function executeCallback(method, callback) {
  * @class Branch
  */
 var Branch = function () {
-    this.debugMode = null;
+    this.debugMode = false;
 };
 
 /**
@@ -59,15 +59,7 @@ var Branch = function () {
  * @return (Promise)
  */
 Branch.prototype.initSession = function () {
-
-    if (this.debugMode !== null) {
-        return execute('initSession');
-    } else {
-        return new Promise (function (resolve, reject) {
-            reject('Please set debug mode first.');
-        });
-    }
-
+    return execute('initSession');
 };
 
 /**
@@ -182,7 +174,7 @@ Branch.prototype.userCompletedAction = function (action, metaData) {
  *    --------------------------------------------------------------
  */
 Branch.prototype.createBranchUniversalObject = function (options) {
-    
+
     return new Promise(function (resolve, reject) {
         execute('createBranchUniversalObject', [options]).then(function () {
 
@@ -202,7 +194,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
 
             /**
              * Generates a short url.
-             * 
+             *
              * @param (Object) options
              * @param (Object) controlParameters
              *
@@ -218,7 +210,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    |   stage   |   String   |    The link stage     |
              *    |  duration |    Int     |   The link duration   |
              *    --------------------------------------------------
-             *    
+             *
              * controlParameters:
              *    -------------------------------------------------------
              *    |         KEY        |    TYPE    |    DESCRIPTION    |
@@ -244,7 +236,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @param (Object) options
              * @param (Object) controlParameters
-             * 
+             *
              * @return (Promise)
              *
              * options:
@@ -257,7 +249,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    |   stage   |   String   |    The link stage     |
              *    |  duration |    Int     |   The link duration   |
              *    --------------------------------------------------
-             *    
+             *
              * controlParameters:
              *    -------------------------------------------------------
              *    |         KEY        |    TYPE    |    DESCRIPTION    |
@@ -288,7 +280,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
                 executeCallback('onShareLinkDialogLaunched', callback);
 
             };
-            
+
             /**
              * Set on share sheet dismissed listener callback.
              *
@@ -299,7 +291,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
                 executeCallback('onShareLinkDialogDismissed', callback);
 
             };
-            
+
             /**
              * Set on link share listener callback.
              *
