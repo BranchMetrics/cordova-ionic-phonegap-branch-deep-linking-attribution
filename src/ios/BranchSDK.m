@@ -98,7 +98,7 @@
             resultString = [NSString stringWithFormat:@"Init Error: %@", [error localizedDescription]];
         }
         NSLog(@"returning data to js interface..");
-        [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler({data:'%@'})", resultString]];
+        [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler('%@')", resultString]];
     }];
 }
 
