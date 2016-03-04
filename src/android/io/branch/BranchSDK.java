@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -373,9 +374,9 @@ public class BranchSDK extends CordovaPlugin
             Iterator<?> keys = contentMetaData.keys();
 
             while (keys.hasNext()) {
-                Log.d(LCAT, contentMetaData.getString(key));
                 String key = (String) keys.next();
                 String value = contentMetaData.optString(key);
+                Log.d(LCAT, contentMetaData.getString(key));
                 this.branchObj.addContentMetadata(key, value);
             }
         }
