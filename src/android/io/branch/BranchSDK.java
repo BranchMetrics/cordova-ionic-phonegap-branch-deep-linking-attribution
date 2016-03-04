@@ -375,8 +375,8 @@ public class BranchSDK extends CordovaPlugin
 
             while (keys.hasNext()) {
                 String key = (String) keys.next();
-                Log.d(LCAT, contentMetaData.getString(key));
                 String value = contentMetaData.optString(key);
+                Log.d(LCAT, contentMetaData.getString(key));
                 this.branchObj.addContentMetadata(key, value);
             }
         }
