@@ -5,9 +5,9 @@
 //  Copyright © 2016 Branch Metrics. All rights reserved.
 //
 
-#import <Branch/Branch.h>
-#import <Branch/BranchLinkProperties.h>
-#import <Branch/BranchUniversalObject.h>
+#import "Branch.h"
+#import "BranchLinkProperties.h"
+#import "BranchUniversalObject.h"
 #import <Cordova/CDV.h>
 
 @interface BranchSDK : CDVPlugin
