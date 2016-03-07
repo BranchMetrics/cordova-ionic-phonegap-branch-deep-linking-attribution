@@ -71,9 +71,8 @@
     NSLog(@"start initSession");
     Branch *branch = [self getInstance];
 
-    [branch initSessionAndRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
+    [branch initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
         NSLog(@"inside initSessionAndRegisterDeepLinkHandler block");
-        CDVPluginResult* pluginResult = nil;
         NSString *resultString;
         if (!error) {
             if (params != nil && [params count] > 0) {
@@ -538,8 +537,8 @@
     [self.branchUniversalObj showShareSheetWithLinkProperties:linkProperties
                                                 andShareText:shareText
                                                 fromViewController:self.viewController
-                                                andCallback:^{
-        NSLog(@"finished presenting shareSheet ");
+                                                completion:^(NSString *activityType, BOOL completed) {
+        NSLog(@"showShareSheet is finished with activityType - %@", activityType);
     }];
 }
 
