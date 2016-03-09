@@ -7,10 +7,16 @@
     <description>
         Testbed application for Branch.IO Cordova.
     </description>
+    
     <content src="index.html" />
+    
+    <!-- Replace <content> with this, if you want to run the unit-test -->
+    <!-- <content src="cdvtests/index.html" /> -->
+
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <preference name="AndroidLaunchMode" value="singleTask" />
     <access origin="*" />
+    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -26,7 +32,6 @@
     </platform>
     <universal-links>
         <ios-team-id value="4XE8MVRXHY" />
-        <host name="bnc.lt">
-        </host>
+        <host name="bnc.lt"></host>
     </universal-links>
 </widget>
