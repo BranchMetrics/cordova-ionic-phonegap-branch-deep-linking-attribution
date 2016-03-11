@@ -39,9 +39,13 @@ SOFTWARE.
     </js-module>
 
     <preference name="BRANCH_LIVE_KEY" />
+    <preference name="BRANCH_TEST_KEY" />
     <preference name="URI_SCHEME" />
-    <preference name="ENCODED_ID" default=" " />
 
+    <!-- Hooks -->
+    <hook src="hooks/afterPrepareHook.js" type="after_prepare" />
+    <hook src="hooks/beforePluginInstallHook.js" type="before_plugin_install" />
+    
     <engines>
         <engine name="cordova" version=">=3.0.0" />
     </engines>
@@ -56,17 +60,19 @@ SOFTWARE.
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_LIVE_KEY" />
+            <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="$BRANCH_TEST_KEY" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
-            <intent-filter android:autoVerify="true">
+            <!-- Non AppLink example -->
+            <intent-filter>
+                <data android:scheme="$URI_SCHEME" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/$ENCODED_ID" />
             </intent-filter>
         </config-file>
         <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-        <lib-file src="src/android/dependencies/Branch-1.10.3.jar" />
+        <framework src="io.branch.sdk.android:library:1.+" />
     </platform>
 
     <!-- ios -->
@@ -80,6 +86,8 @@ SOFTWARE.
             <dict>
                 <key>live</key>
                 <string>$BRANCH_LIVE_KEY</string>
+                <key>test</key>
+                <string>$BRANCH_TEST_KEY</string>
             </dict>
         </config-file>
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
@@ -94,81 +102,8 @@ SOFTWARE.
                 </dict>
             </array>
         </config-file>
-        <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCConfig.h" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCContentDiscoveryManager.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCContentDiscoveryManager.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCEncodingUtils.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCEncodingUtils.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCError.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCError.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCLinkCache.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCLinkCache.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCLinkData.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCLinkData.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCPreferenceHelper.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCPreferenceHelper.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCServerInterface.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCServerInterface.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCServerRequestQueue.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCServerRequestQueue.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCServerResponse.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCServerResponse.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCStrongMatchHelper.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCStrongMatchHelper.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Branch-SDK-Prefix.pch" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Branch.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Branch.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BranchActivityItemProvider.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BranchActivityItemProvider.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BranchConstants.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BranchConstants.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BranchCSSearchableItemAttributeSet.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BranchCSSearchableItemAttributeSet.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BranchDeepLinkingController.h" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BranchLinkProperties.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BranchLinkProperties.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BranchUniversalObject.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/BranchUniversalObject.m" />
-
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchApplyPromoCodeRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchApplyPromoCodeRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCloseRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCloseRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCreditHistoryRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCreditHistoryRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchGetPromoCodeRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchGetPromoCodeRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchInstallRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchInstallRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLoadActionsRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLoadActionsRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLoadRewardsRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLoadRewardsRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLogoutRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLogoutRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchOpenRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchOpenRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchRedeemRewardsRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchRedeemRewardsRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchRegisterViewRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchRegisterViewRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchSetIdentityRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchSetIdentityRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchShortUrlRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchShortUrlRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchShortUrlSyncRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchShortUrlSyncRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchSpotlightUrlRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchSpotlightUrlRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.m" />
+        <source-file src="src/ios/AppDelegate+BranchSdk.m" />
+        <framework custom="true" src="src/ios/dependencies/Branch.framework" />
     </platform>
 </plugin>
