@@ -25,28 +25,29 @@ There's a full demo app embedded in this repository. It should serve as an examp
 
 **Install parameters:**
 * `BRANCH_LIVE_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
+* `BRANCH_TEST_KEY` - Your Branch test API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
 * `URI_SCHEME` - It could be your app name or the URI set in your Branch dashboard. As a reminder, the URI scheme is what you use to open your app from a browser, i.e. `yourapp://`.
-* [optional] `ENCODED_ID` - This is for supporting App Links (6.0+) on Android. You can obtain the encodied id from the Branch dashboard. Just append `--variable ENCODED_ID=your-encoded-id` to the plugin install command below. For more info about App Links, please see [this](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking) section of the Android readme.
+* [optional] `ENCODED_ID` - This is for supporting App Links (6.0+) on Android. You can obtain the encodied id from the Branch dashboard. For more info about App Links, please see [this](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking) section of the Android readme.
 
 #### Cordova
 
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=<your-branch-key> --variable BRANCH_TEST_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
 ```
 example:
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable URI_SCHEME=branchsters
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable BRANCH_LIVE_KEY=key_test_hdcBLUy1xZ1JD0tKg7qrLcgirFmPPVJc --variable URI_SCHEME=branchsters
 ```
 
 #### Phonegap
 
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
 example:
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable URI_SCHEME=branchsters
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable BRANCH_LIVE_KEY=key_test_hdcBLUy1xZ1JD0tKg7qrLcgirFmPPVJc --variable URI_SCHEME=branchsters
 ```
 
 #### NPM
@@ -54,12 +55,12 @@ phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Defe
 **Note** NPM is still running the old repository for module v 1.8. Please see [the documentation here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/tree/v1.8.0-locked).
 
 ```sh
-npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
+npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme
 ```
 
 example:
 ```sh
-npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable URI_SCHEME=branchsters
+npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable BRANCH_LIVE_KEY=key_test_hdcBLUy1xZ1JD0tKg7qrLcgirFmPPVJc --variable URI_SCHEME=branchsters
 ```
 
 ### Additional App Permissions
@@ -74,23 +75,17 @@ In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Univ
 
 1. enable `Associated Domains` capability on the Apple Developer portal when you create your app's bundle identifier.
 2. In your [Dashboard Link Settings](https://dashboard.branch.io/#/settings/link), tick the `Enable Universal Links` checkbox and provide the Bundle Identifier and Apple Team ID in the appropriate boxes.
-3. Finally, add `associated-domains` to your entitlements file. Since cordova doesn't have a way to a create entitlements and associate it to your generated project, we
-will generate the said file with the help of [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin), a third plarty plugin.
+`
 
-**Note:** The purpose of the said plugin is to generate an entitlements file and associate it to your generated project. No other implementations from the plugin are need as this guide will cover what only needs to be implemented.
-
-To start, go to your project root and install the plugin:
-
-```sh
-cordova plugin add cordova-universal-links-plugin
-```
-
-After the installation, add the following entry to your application's `config.xml`:
+Add the following entry to your application's `config.xml`:
 
 ```xml
 <universal-links>
-    <ios-team-id value=your_ios_team_id />
-    <host name="bnc.lt">
+    <ios-team-id value="your_ios_team_id" />
+    <host name="bnc.lt" scheme="https">
+        <path prefix="your_encoded_id"/>
+        <!--optional test ENV encoded id-->
+        <path prefix="/your_encoded_id"/> 
     </host>
 </universal-links>
 ```
