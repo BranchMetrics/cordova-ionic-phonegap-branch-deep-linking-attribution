@@ -21,7 +21,7 @@ There's a full demo app embedded in this repository. It should serve as an examp
 **The compiled iOS SDK footprint is 180kb**
 **The compiled Android SDK footprint is 187kb**
 
-### Command link install 
+### Command link install
 
 **Install parameters:**
 * `BRANCH_LIVE_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
@@ -36,7 +36,7 @@ cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Defer
 ```
 example:
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable BRANCH_LIVE_KEY=key_test_hdcBLUy1xZ1JD0tKg7qrLcgirFmPPVJc --variable URI_SCHEME=branchsters
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
 ```
 
 #### Phonegap
@@ -47,7 +47,7 @@ phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Defe
 
 example:
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable BRANCH_LIVE_KEY=key_test_hdcBLUy1xZ1JD0tKg7qrLcgirFmPPVJc --variable URI_SCHEME=branchsters
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
 ```
 
 #### NPM
@@ -60,7 +60,7 @@ npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --vari
 
 example:
 ```sh
-npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=key_live_gchnKkd3l3m9YBPP2d73jmfejkcgVjgM --variable BRANCH_LIVE_KEY=key_test_hdcBLUy1xZ1JD0tKg7qrLcgirFmPPVJc --variable URI_SCHEME=branchsters
+npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
 ```
 
 ### Additional App Permissions
@@ -85,7 +85,7 @@ Add the following entry to your application's `config.xml`:
     <host name="bnc.lt" scheme="https">
         <path prefix="your_encoded_id"/>
         <!--optional test ENV encoded id-->
-        <path prefix="/your_encoded_id"/> 
+        <path prefix="/your_encoded_id"/>
     </host>
 </universal-links>
 ```

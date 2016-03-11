@@ -4,3 +4,4 @@ testbed/plugins
 testbed/hooks
 node_modules
 testbed/ul_web_hooks/
+.installed
