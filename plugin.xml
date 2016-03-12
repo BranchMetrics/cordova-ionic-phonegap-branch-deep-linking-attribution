@@ -38,8 +38,7 @@ SOFTWARE.
         <clobbers target="Branch" />
     </js-module>
 
-    <preference name="BRANCH_LIVE_KEY" />
-    <preference name="BRANCH_TEST_KEY" />
+    <preference name="BRANCH_KEY" />
     <preference name="URI_SCHEME" />
 
     <!-- Hooks -->
@@ -59,8 +58,7 @@ SOFTWARE.
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_LIVE_KEY" />
-            <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="$BRANCH_TEST_KEY" />
+            <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_KEY" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
             <!-- Non AppLink example -->
@@ -83,12 +81,7 @@ SOFTWARE.
             </feature>
         </config-file>
         <config-file target="*-Info.plist" parent="branch_key">
-            <dict>
-                <key>live</key>
-                <string>$BRANCH_LIVE_KEY</string>
-                <key>test</key>
-                <string>$BRANCH_TEST_KEY</string>
-            </dict>
+                <string>$BRANCH_KEY</string>
         </config-file>
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
             <array>

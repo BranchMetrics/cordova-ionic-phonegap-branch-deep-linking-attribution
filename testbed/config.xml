@@ -30,10 +30,9 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <universal-links>
+    <branch-config>
         <ios-team-id value="4XE8MVRXHY" />
-        <host name="bnc.lt" scheme="https">
-            <path prefix="/X9Ug"/>
-        </host>
-    </universal-links>
+        <android-prefix value="/X9Ug" />
+        <host name="bnc.lt" scheme="https" />
+    </branch-config>
 </widget>
