@@ -25,7 +25,7 @@ SOFTWARE.
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="io.branch.sdk"
-        version="2.0.2">
+        version="2.0.3">
 
     <name>branch-cordova-sdk</name>
     <description>Branch SDK Plugin</description>
@@ -39,8 +39,12 @@ SOFTWARE.
     </js-module>
 
     <preference name="BRANCH_LIVE_KEY" />
+    <preference name="BRANCH_TEST_KEY" />
     <preference name="URI_SCHEME" />
-    <preference name="ENCODED_ID" default=" " />
+
+    <!-- Hooks -->
+    <hook src="hooks/afterPrepareHook.js" type="after_prepare" />
+    <hook src="hooks/beforePluginInstallHook.js" type="before_plugin_install" />
 
     <engines>
         <engine name="cordova" version=">=3.0.0" />
@@ -56,17 +60,19 @@ SOFTWARE.
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_LIVE_KEY" />
+            <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="$BRANCH_TEST_KEY" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
-            <intent-filter android:autoVerify="true">
+            <!-- Non AppLink example -->
+            <intent-filter>
+                <data android:scheme="$URI_SCHEME" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/$ENCODED_ID" />
             </intent-filter>
         </config-file>
         <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-        <lib-file src="src/android/dependencies/Branch-1.10.3.jar" />
+        <framework src="io.branch.sdk.android:library:1.+" />
     </platform>
 
     <!-- ios -->
@@ -80,6 +86,8 @@ SOFTWARE.
             <dict>
                 <key>live</key>
                 <string>$BRANCH_LIVE_KEY</string>
+                <key>test</key>
+                <string>$BRANCH_TEST_KEY</string>
             </dict>
         </config-file>
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
@@ -96,7 +104,11 @@ SOFTWARE.
         </config-file>
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/BNCConfig.h" />
+        <source-file src="src/ios/AppDelegate+BranchSdk.m" />
+        <!-- COMMENT if building for NPM -->
+        <framework custom="true" src="src/ios/dependencies/Branch.framework" />
+        <!-- UNCOMMENT if building for NPM -->
+        <!-- <header-file src="src/ios/dependencies/Branch-SDK/BNCConfig.h" />
         <header-file src="src/ios/dependencies/Branch-SDK/BNCContentDiscoveryManager.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/BNCContentDiscoveryManager.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/BNCEncodingUtils.h" />
@@ -169,6 +181,6 @@ SOFTWARE.
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.m" />
+        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.m" /> -->
     </platform>
 </plugin>

@@ -94,7 +94,14 @@
         }
         else {
             NSLog(@"Init Error: %@", [error localizedDescription]);
-            resultString = [NSString stringWithFormat:@"Init Error: %@", [error localizedDescription]];
+            
+            // We create a JSON string result, because we're getting an error if we directly return a string result.
+            NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:[error localizedDescription],@"error", nil];
+            NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict
+                                                                options:NSJSONWritingPrettyPrinted
+                                                                  error:&error];
+            
+            resultString = [[NSString alloc] initWithData:errorJSON encoding:NSUTF8StringEncoding];
         }
         NSLog(@"returning data to js interface..");
         [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];

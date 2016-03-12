@@ -32,6 +32,8 @@
     </platform>
     <universal-links>
         <ios-team-id value="4XE8MVRXHY" />
-        <host name="bnc.lt"></host>
+        <host name="bnc.lt" scheme="https">
+            <path prefix="/X9Ug"/>
+        </host>
     </universal-links>
 </widget>
