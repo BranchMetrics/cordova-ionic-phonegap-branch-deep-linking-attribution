@@ -81,9 +81,9 @@ Add the following entry to your application's `config.xml`:
 <universal-links>
     <ios-team-id value="your_ios_team_id" />
     <host name="bnc.lt" scheme="https">
-        <path prefix="your_encoded_id"/>
+        <path prefix="/your_encoded_id" />
         <!--optional test ENV encoded id-->
-        <path prefix="your_encoded_id"/>
+        <path prefix="/your_encoded_id" />
     </host>
 </universal-links>
 ```
