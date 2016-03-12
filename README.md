@@ -52,8 +52,6 @@ phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Defe
 
 #### NPM
 
-**Note** NPM is still running the old repository for module v 1.8. Please see [the documentation here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/tree/v1.8.0-locked).
-
 ```sh
 npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme
 ```
@@ -83,9 +81,9 @@ Add the following entry to your application's `config.xml`:
 <universal-links>
     <ios-team-id value="your_ios_team_id" />
     <host name="bnc.lt" scheme="https">
-        <path prefix="your_encoded_id"/>
+        <path prefix="/your_encoded_id" />
         <!--optional test ENV encoded id-->
-        <path prefix="/your_encoded_id"/>
+        <path prefix="/your_encoded_id" />
     </host>
 </universal-links>
 ```
