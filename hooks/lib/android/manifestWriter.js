@@ -144,7 +144,8 @@ Class injects plugin preferences into AndroidManifest.xml file.
    * @return {Boolean} true - if data tag for Universal Links; otherwise - false
    */
   function isDataTagForUniversalLinks(data) {
-    if (data == null) {
+    // can have only 1 data tag in the intent-filter
+    if (data == null || data.length != 1) {
       return false;
     }
 
@@ -184,25 +185,7 @@ Class injects plugin preferences into AndroidManifest.xml file.
 
     // generate intent-filters
     pluginPreferences.hosts.forEach(function(host) {
-      var dataElements = [];
-      host.paths.forEach(function(path) {
-        var dataElement = {
-          '$': {
-            'android:host': host.name,
-            'android:scheme': host.scheme,
-          }
-        }
-        if (path.prefix) {
-          dataElement['$']['android:pathPrefix'] = path.prefix
-        }
-        if (path.url) {
-          dataElement['$']['android:path'] = path.url
-        }
-        dataElements.push(dataElement);
-      });
-      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, dataElements));
-
-
+      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, pluginPreferences.androidPrefix));
     });
 
     // add Universal Links intent-filters to the launch activity
@@ -270,9 +253,9 @@ Class injects plugin preferences into AndroidManifest.xml file.
    * @param {String} pathName - host path
    * @return {Object} intent-filter as a JSON object
    */
-  function createIntentFilter(host, scheme, data) {
+  function createIntentFilter(host, scheme, pathPrefix) {
     var intentFilter = {
-      '$': {
+      '$' : {
         'android:autoVerify': 'true'
       },
       'action': [{
@@ -289,7 +272,13 @@ Class injects plugin preferences into AndroidManifest.xml file.
           'android:name': 'android.intent.category.BROWSABLE'
         }
       }],
-      'data': data
+      'data': [{
+        '$': {
+          'android:host': host,
+          'android:scheme': scheme,
+          'android:pathPrefix': pathPrefix
+        }
+      }]
     };
 
     return intentFilter;

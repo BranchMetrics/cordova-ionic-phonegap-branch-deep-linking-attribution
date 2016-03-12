@@ -1,5 +1,5 @@
 /*
-Parser for config.xml file. Read plugin-specific preferences (from <universal-links> tag) as JSON object.
+Parser for config.xml file. Read plugin-specific preferences (from <branch-config> tag) as JSON object.
 */
 (function() {
 
@@ -29,10 +29,10 @@ Parser for config.xml file. Read plugin-specific preferences (from <universal-li
       return null;
     }
 
-    // look for data from the <universal-links> tag
-    var ulXmlPreferences = configXml.widget['universal-links'];
+    // look for data from the <branch-config> tag
+    var ulXmlPreferences = configXml.widget['branch-config'];
     if (ulXmlPreferences == null || ulXmlPreferences.length == 0) {
-      console.warn('<universal-links> tag is not set in the config.xml. Universal Links plugin is not going to work.');
+      console.warn('<branch-config> tag is not set in the config.xml. Universal Links plugin is not going to work.');
       return null;
     }
 
@@ -44,9 +44,13 @@ Parser for config.xml file. Read plugin-specific preferences (from <universal-li
     // read ios team ID
     var iosTeamId = getTeamIdPreference(xmlPreferences);
 
+    // read Android prefix
+    var androidPrefix = getAndroidPrefixPreference(xmlPreferences);
+
     return {
       'hosts': hosts,
-      'iosTeamId': iosTeamId
+      'iosTeamId': iosTeamId,
+      'androidPrefix' : androidPrefix
     };
   }
 
@@ -57,6 +61,14 @@ Parser for config.xml file. Read plugin-specific preferences (from <universal-li
   function getTeamIdPreference(xmlPreferences) {
     if (xmlPreferences.hasOwnProperty('ios-team-id')) {
       return xmlPreferences['ios-team-id'][0]['$']['value'];
+    }
+
+    return null;
+  }
+
+  function getAndroidPrefixPreference(xmlPreferences) {
+    if (xmlPreferences.hasOwnProperty('android-prefix')) {
+      return xmlPreferences['android-prefix'][0]['$']['value'];
     }
 
     return null;
@@ -96,8 +108,7 @@ Parser for config.xml file. Read plugin-specific preferences (from <universal-li
   function constructHostEntry(xmlElement) {
     var host = {
         scheme: DEFAULT_SCHEME,
-        name: '',
-        paths: []
+        name: ''
       },
       hostProperties = xmlElement['$'];
 
@@ -113,33 +124,7 @@ Parser for config.xml file. Read plugin-specific preferences (from <universal-li
       host.scheme = hostProperties.scheme;
     }
 
-    // construct paths list, defined for the given host
-    host.paths = constructPaths(xmlElement);
     return host;
-  }
-
-  /**
-   * Construct list of path objects from the xml data.
-   *
-   * @param {Object} xmlElement - xml data to process
-   * @return {Array} list of path entries, each on is a JSON object
-   */
-  function constructPaths(xmlElement) {
-    if (xmlElement['path'] == null) {
-      return [''];
-    }
-
-    var paths = [];
-    xmlElement.path.some(function(pathElement) {
-      var path = {};
-       path['prefix'] = pathElement['$']['prefix'];
-       path['url'] = pathElement['$']['url'];
-
-      paths.push(path);
-
-    });
-
-    return paths;
   }
 
   // endregion

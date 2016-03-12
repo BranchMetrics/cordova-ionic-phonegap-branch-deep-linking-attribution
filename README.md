@@ -78,14 +78,11 @@ In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Univ
 Add the following entry to your application's `config.xml`:
 
 ```xml
-<universal-links>
+<branch-config>
     <ios-team-id value="your_ios_team_id" />
-    <host name="bnc.lt" scheme="https">
-        <path prefix="/your_encoded_id" />
-        <!--optional test ENV encoded id-->
-        <path prefix="/your_encoded_id" />
-    </host>
-</universal-links>
+    <android-prefix value="/X9Ug" />
+    <host name="bnc.lt" scheme="https" />
+</branch-config>
 ```
 
 You can get your iOS Team ID from the Apple Developer Portal. Once done, you have successfully enabled universal links for iOS.
