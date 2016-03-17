@@ -24,7 +24,7 @@ There's a full demo app embedded in this repository. It should serve as an examp
 ### Command link install
 
 **Install parameters:**
-* `BRANCH_LIVE_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
+* `BRANCH_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
 * `BRANCH_TEST_KEY` - Your Branch test API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
 * `URI_SCHEME` - It could be your app name or the URI set in your Branch dashboard. As a reminder, the URI scheme is what you use to open your app from a browser, i.e. `yourapp://`.
 * [optional] `ENCODED_ID` - This is for supporting App Links (6.0+) on Android. You can obtain the encodied id from the Branch dashboard. For more info about App Links, please see [this](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking) section of the Android readme.
@@ -32,33 +32,33 @@ There's a full demo app embedded in this repository. It should serve as an examp
 #### Cordova
 
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=<your-branch-key> --variable BRANCH_TEST_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=<your-branch-key> --variable BRANCH_TEST_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
 ```
 example:
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
 ```
 
 #### Phonegap
 
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
 example:
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_LIVE_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
 ```
 
 #### NPM
 
 ```sh
-npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme
+npm install branch-cordova-sdk --variable BRANCH_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme
 ```
 
 example:
 ```sh
-npm install branch-cordova-sdk --variable BRANCH_LIVE_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
+npm install branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
 ```
 
 ### Additional App Permissions
