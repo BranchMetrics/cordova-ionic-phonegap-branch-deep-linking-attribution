@@ -20,16 +20,17 @@
 // Respond to URI scheme links
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     // pass the url to the handle deep link call
-    [[Branch getInstance] handleDeepLink:url];
-    
-    // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
+    if (![[Branch getInstance] handleDeepLink:url]) {
+        // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLNotification object:url]];
+    }
     return YES;
 }
 
 // Respond to Universal Links
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
     BOOL handledByBranch = [[Branch getInstance] continueUserActivity:userActivity];
-    
+
     return handledByBranch;
 }
 
