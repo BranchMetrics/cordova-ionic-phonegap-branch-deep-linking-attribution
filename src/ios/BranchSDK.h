@@ -6,8 +6,8 @@
 //
 
 #import <Branch/Branch.h>
-#import "Branch/BranchLinkProperties.h"
-#import "Branch/BranchUniversalObject.h"
+#import <Branch/BranchLinkProperties.h>
+#import <Branch/BranchUniversalObject.h>
 #import <Cordova/CDV.h>
 
 @interface BranchSDK : CDVPlugin
