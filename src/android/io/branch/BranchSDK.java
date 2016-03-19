@@ -177,6 +177,8 @@ public class BranchSDK extends CordovaPlugin
                     this.onChannelSelected = callbackContext;
                     return true;
                 }
+            } else {
+                callbackContext.error("Branch instance not set. Please execute initSession() first.");
             }
         }
 
@@ -242,8 +244,7 @@ public class BranchSDK extends CordovaPlugin
      * @param count A {@link Integer} specifying the number of credits to attempt to redeem from
      *              the bucket.
      */
-    private void redeemRewards(int value, String bucket)
-    {
+    private void redeemRewards(int value, String bucket) {
 
         Log.d(LCAT, "start redeemRewards()");
 
