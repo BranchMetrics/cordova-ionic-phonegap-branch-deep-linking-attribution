@@ -180,7 +180,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
 
             var obj = {
                 message: res.message,
-                instanceIdx: res.instance
+                instanceId: res.branchUniversalObjectId
             };
 
             // Attach object functions
@@ -191,7 +191,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             obj.registerView = function () {
 
-                return execute('registerView', [obj.instanceIdx]);
+                return execute('registerView', [obj.instanceId]);
 
             };
 
@@ -230,7 +230,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             obj.generateShortUrl = function (options, controlParameters) {
 
-                return execute('generateShortUrl', [obj.instanceIdx, options, controlParameters]);
+                return execute('generateShortUrl', [obj.instanceId, options, controlParameters]);
 
             };
 
@@ -269,7 +269,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             obj.showShareSheet = function (options, controlParameters) {
 
-                return execute('showShareSheet', [obj.instanceIdx, options, controlParameters]);
+                return execute('showShareSheet', [obj.instanceId, options, controlParameters]);
 
             };
 

@@ -124,9 +124,13 @@ public class BranchSDK extends CordovaPlugin
                     this.setIdentity(args.getString(0));
                     return true;
                 } else if (action.equals("userCompletedAction")) {
+                    if (args.length() < 1 && args.length() > 2) {
+                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        return false;
+                    }
                     if (args.length() == 2) {
                         this.userCompletedAction (args.getString(0), args.getJSONObject(1));
-                    } else {
+                    } else if (args.length() == 1) {
                         this.userCompletedAction(args.getString(0));
                     }
                     return true;
@@ -143,6 +147,10 @@ public class BranchSDK extends CordovaPlugin
                     this.loadRewards();
                     return true;
                 } else if (action.equals("redeemRewards")) {
+                    if (args.length() < 1 && args.length() > 2) {
+                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        return false;
+                    }
                     if (args.length() == 1) {
                         this.redeemRewards(args.getInt(0));
                     } else if (args.length() == 2) {
@@ -155,13 +163,19 @@ public class BranchSDK extends CordovaPlugin
                 } else if (action.equals("createBranchUniversalObject")) {
                     if (args.length() == 1) {
                         this.createBranchUniversalObject(args.getJSONObject(0));
+                        return true;
+                    } else {
+                        callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
+                        return false;
                     }
-                    return true;
                 } else if (action.equals(("generateShortUrl"))) {
                     if (args.length() == 3) {
                         this.generateShortUrl(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2));
+                        return true;
+                    } else {
+                        callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
+                        return false;
                     }
-                    return true;
                 } else if (action.equals("registerView")) {
                     if (args.length() == 1) {
                         this.registerView(args.getInt(0));
@@ -170,8 +184,11 @@ public class BranchSDK extends CordovaPlugin
                 } else if (action.equals("showShareSheet")) {
                     if (args.length() == 3) {
                         this.showShareSheet(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2));
+                        return true;
+                    } else {
+                        callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
+                        return false;
                     }
-                    return true;
                 } else if (action.equals("onShareLinkDialogLaunched")) {
                     this.onShareLinkDialogLaunched = callbackContext;
                     return true;
@@ -395,7 +412,7 @@ public class BranchSDK extends CordovaPlugin
         JSONObject response = new JSONObject();
 
         response.put("message", "Success");
-        response.put("instance", this.branchObjects.size() - 1);
+        response.put("branchUniversalObjectId", this.branchObjects.size() - 1);
 
         this.callbackContext.success(response);
 
