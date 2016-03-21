@@ -25,53 +25,52 @@ There's a full demo app embedded in this repository. It should serve as an examp
 
 **Install parameters:**
 * `BRANCH_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
-* `BRANCH_TEST_KEY` - Your Branch test API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
 * `URI_SCHEME` - It could be your app name or the URI set in your Branch dashboard. As a reminder, the URI scheme is what you use to open your app from a browser, i.e. `yourapp://`.
-* [optional] `ENCODED_ID` - This is for supporting App Links (6.0+) on Android. You can obtain the encodied id from the Branch dashboard. For more info about App Links, please see [this](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking) section of the Android readme.
+* [optional] `ENCODED_ID` - This is for supporting App Links (6.0+) on Android. You can obtain the encoded id from the Branch dashboard. For more info about App Links, please see [this](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking) section of the Android readme.
 
 #### Cordova
 
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=<your-branch-key> --variable BRANCH_TEST_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
 ```
 example:
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 #### Phonegap
 
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=your-branch-key --variable --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
 example:
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 #### NPM
 
 ```sh
-npm install branch-cordova-sdk --variable BRANCH_KEY=your-branch-key --variable BRANCH_TEST_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme
+npm install branch-cordova-sdk --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme
 ```
 
 example:
 ```sh
-npm install branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable BRANCH_TEST_KEY=key_test_oicIH5u2yxW9w3i6UZdfCiokyrixWpBJ --variable URI_SCHEME=branchsters
+npm install branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 ### Additional App Permissions
 
-To be able to use some of the deep linking capabilities of the app, some manifest files are needed to be configured.
-Please note that you don't have to do anything anymore for setting up the `Register a URI Scheme and add your Branch key`
-as this was already done for you automatically on installing the plugin.
+To be able to use all of the deep linking capabilities of the Branch SDK, some manifest files are needed to be configured.
+
+If you are enabling both iOS Universal Links and Android App Links, these keys in the following sections should be combined into a single parent item without duplicates.
 
 #### iOS: Enable Universal Links
 
 In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Universal Links if you want Branch-generated links to work in your iOS app. To do this:
 
-1. enable `Associated Domains` capability on the Apple Developer portal when you create your app's bundle identifier.
+1. Enable `Associated Domains` capability on the Apple Developer portal when you create your app's bundle identifier.
 2. In your [Dashboard Link Settings](https://dashboard.branch.io/#/settings/link), tick the `Enable Universal Links` checkbox and provide the Bundle Identifier and Apple Team ID in the appropriate boxes.
 `
 
@@ -80,12 +79,28 @@ Add the following entry to your application's `config.xml`:
 ```xml
 <branch-config>
     <ios-team-id value="your_ios_team_id" />
-    <android-prefix value="/X9Ug" />
     <host name="bnc.lt" scheme="https" />
 </branch-config>
 ```
 
 You can get your iOS Team ID from the Apple Developer Portal. Once done, you have successfully enabled universal links for iOS.
+
+If you use a custom domain or subdomain for your Branch links, you should also add a key for `<host name="mycustomdomainorsubdomain" scheme="https" />`.
+
+#### Android: Enable App Links
+
+Add the following entry to your application's `config.xml`:
+
+```xml
+<branch-config>
+    <android-prefix value="READ_FROM_DASHBOARD" />
+    <host name="bnc.lt" scheme="https" />
+</branch-config>
+```
+
+`READ_FROM_DASHBOARD` is the four-character value in front of all your links. You can find it underneath the field labeled SHA256 Cert Fingerprints on the dashboard. It will look something like this: `/WSuf` (the initial `/` character should be included).
+
+If you use a custom domain or subdomain for your Branch links, you should also add a key for `<host name="mycustomdomainorsubdomain" scheme="https" />`.
 
 ---------------
 
