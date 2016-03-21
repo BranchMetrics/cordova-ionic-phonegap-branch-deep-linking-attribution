@@ -176,10 +176,11 @@ Branch.prototype.userCompletedAction = function (action, metaData) {
 Branch.prototype.createBranchUniversalObject = function (options) {
 
     return new Promise(function (resolve, reject) {
-        execute('createBranchUniversalObject', [options]).then(function () {
+        execute('createBranchUniversalObject', [options]).then(function (res) {
 
-            var res = {
-                message: 'success'
+            var obj = {
+                message: res.message,
+                instanceIdx: res.instance
             };
 
             // Attach object functions
@@ -188,8 +189,10 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @return (Promise)
              */
-            res.registerView = function () {
-                return execute('registerView');
+            obj.registerView = function () {
+
+                return execute('registerView', [obj.instanceIdx]);
+
             };
 
             /**
@@ -225,9 +228,9 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    | $windows_phone_url |   String   |  Kindle Fire URL  |
              *    -------------------------------------------------------
              */
-            res.generateShortUrl = function (options, controlParameters) {
+            obj.generateShortUrl = function (options, controlParameters) {
 
-                return execute('generateShortUrl', [options, controlParameters]);
+                return execute('generateShortUrl', [obj.instanceIdx, options, controlParameters]);
 
             };
 
@@ -264,9 +267,9 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    | $windows_phone_url |   String   |  Kindle Fire URL  |
              *    -------------------------------------------------------
              */
-            res.showShareSheet = function (options, controlParameters) {
+            obj.showShareSheet = function (options, controlParameters) {
 
-                return execute('showShareSheet', [options, controlParameters]);
+                return execute('showShareSheet', [obj.instanceIdx, options, controlParameters]);
 
             };
 
@@ -275,7 +278,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @param (Function) callback
              */
-            res.onShareSheetLaunched = function (callback) {
+            obj.onShareSheetLaunched = function (callback) {
 
                 executeCallback('onShareLinkDialogLaunched', callback);
 
@@ -286,7 +289,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @param (Function) callback
              */
-            res.onShareSheetDismissed = function (callback) {
+            obj.onShareSheetDismissed = function (callback) {
 
                 executeCallback('onShareLinkDialogDismissed', callback);
 
@@ -297,7 +300,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @param (Function) callback
              */
-            res.onLinkShareResponse = function (callback) {
+            obj.onLinkShareResponse = function (callback) {
 
                 executeCallback('onLinkShareResponse', callback);
 
@@ -308,7 +311,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @param (Function) callback
              */
-            res.onChannelSelected = function (callback) {
+            obj.onChannelSelected = function (callback) {
 
                 executeCallback('onChannelSelected', callback);
 
@@ -317,11 +320,11 @@ Branch.prototype.createBranchUniversalObject = function (options) {
             /**
              * List item on Spotlight (iOS Only).
              */
-            res.listOnSpotlight = function () {
+            obj.listOnSpotlight = function () {
                 return execute('listOnSpotlight');
             };
 
-            resolve(res);
+            resolve(obj);
 
         }, function (err) {
             reject(err);

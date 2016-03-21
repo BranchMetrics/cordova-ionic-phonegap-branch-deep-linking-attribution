@@ -30,7 +30,7 @@ public class BranchSDK extends CordovaPlugin
     private static final String LCAT = "CordovaBranchSDK";
 
     // Private Method Properties
-    private BranchUniversalObject branchObj;
+    private ArrayList<BranchUniversalObject> branchObjects;
     private CallbackContext callbackContext;
     private CallbackContext onShareLinkDialogLaunched;
     private CallbackContext onShareLinkDialogDismissed;
@@ -46,12 +46,12 @@ public class BranchSDK extends CordovaPlugin
     {
         this.activity = null;
         this.instance = null;
-        this.branchObj = null;
         this.callbackContext = null;
         this.onShareLinkDialogLaunched = null;
         this.onShareLinkDialogDismissed = null;
         this.onLinkShareResponse = null;
         this.onChannelSelected = null;
+        this.branchObjects = new ArrayList<BranchUniversalObject>();
     }
 
     /**
@@ -153,16 +153,24 @@ public class BranchSDK extends CordovaPlugin
                     this.getCreditHistory();
                     return true;
                 } else if (action.equals("createBranchUniversalObject")) {
-                    this.createBranchUniversalObject(args.getJSONObject(0));
+                    if (args.length() == 1) {
+                        this.createBranchUniversalObject(args.getJSONObject(0));
+                    }
                     return true;
                 } else if (action.equals(("generateShortUrl"))) {
-                    this.generateShortUrl(args.getJSONObject(0), args.getJSONObject(1));
+                    if (args.length() == 3) {
+                        this.generateShortUrl(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2));
+                    }
                     return true;
                 } else if (action.equals("registerView")) {
-                    this.registerView();
+                    if (args.length() == 1) {
+                        this.registerView(args.getInt(0));
+                    }
                     return true;
                 } else if (action.equals("showShareSheet")) {
-                    this.showShareSheet(args.getJSONObject(0), args.getJSONObject(1));
+                    if (args.length() == 3) {
+                        this.showShareSheet(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2));
+                    }
                     return true;
                 } else if (action.equals("onShareLinkDialogLaunched")) {
                     this.onShareLinkDialogLaunched = callbackContext;
@@ -333,25 +341,25 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start createBranchUniversalObject()");
 
-        this.branchObj = new BranchUniversalObject();
+        BranchUniversalObject branchObj = new BranchUniversalObject();
 
         // Set object properties
         // Facebook Properties
         if (options.has("canonicalIdentifier")) {
             Log.d(LCAT, "set canonical identifier");
-            this.branchObj.setCanonicalIdentifier(options.getString("canonicalIdentifier"));
+            branchObj.setCanonicalIdentifier(options.getString("canonicalIdentifier"));
         }
         if (options.has("title")) {
             Log.d(LCAT, "set title");
-            this.branchObj.setTitle(options.getString("title"));
+            branchObj.setTitle(options.getString("title"));
         }
         if (options.has("contentDescription")) {
             Log.d(LCAT, "set content description");
-            this.branchObj.setContentDescription(options.getString("contentDescription"));
+            branchObj.setContentDescription(options.getString("contentDescription"));
         }
         if (options.has("contentImageUrl")) {
             Log.d(LCAT, "set content image url");
-            this.branchObj.setContentImageUrl(options.getString("contentImageUrl"));
+            branchObj.setContentImageUrl(options.getString("contentImageUrl"));
         }
 
         // Set content visibility
@@ -360,10 +368,10 @@ public class BranchSDK extends CordovaPlugin
 
             if (options.getString("contentIndexingMode").equals("private")) {
                 Log.d(LCAT, "set private");
-                this.branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
+                branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
             } else {
                 Log.d(LCAT, "set public");
-                this.branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC);
+                branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC);
             }
         }
 
@@ -378,21 +386,29 @@ public class BranchSDK extends CordovaPlugin
                 String key = (String) keys.next();
                 String value = contentMetaData.optString(key);
                 Log.d(LCAT, contentMetaData.getString(key));
-                this.branchObj.addContentMetadata(key, value);
+                branchObj.addContentMetadata(key, value);
             }
         }
 
-        this.callbackContext.success("Success");
+        this.branchObjects.add(branchObj);
+
+        JSONObject response = new JSONObject();
+
+        response.put("message", "Success");
+        response.put("instance", this.branchObjects.size() - 1);
+
+        this.callbackContext.success(response);
 
     }
 
     /**
      * Display a popup of the share sheet.
      *
+     * @param instanceIdx The instance index from branchObjects array
      * @param options A {@link JSONObject} value to set URL options.
      * @param controlParams A {@link JSONObject} value to set the URL control parameters.
      */
-    private void showShareSheet(JSONObject options, JSONObject controlParams) throws JSONException
+    private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams) throws JSONException
     {
 
         Log.d(LCAT, "start showShareSheet()");
@@ -405,7 +421,9 @@ public class BranchSDK extends CordovaPlugin
 
         BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
 
-        this.branchObj.showShareSheet(this.activity, linkProperties, shareSheetStyle, new ShowShareSheetListener());
+        BranchUniversalObject branchObj = (BranchUniversalObject)this.branchObjects.get(instanceIdx);
+
+        branchObj.showShareSheet(this.activity, linkProperties, shareSheetStyle, new ShowShareSheetListener());
 
     }
 
@@ -483,23 +501,28 @@ public class BranchSDK extends CordovaPlugin
 
     /**
      * Mark the content referred by this object as viewed. This increment the view count of the contents referred by this object.
+     *
+     * @param instanceIdx The instance index from branchObjects array
      */
-    private void registerView()
+    private void registerView(int instanceIdx)
     {
 
         Log.d(LCAT, "start registerView()");
 
-        this.branchObj.registerView();
+        BranchUniversalObject branchObj = (BranchUniversalObject)this.branchObjects.get(instanceIdx);
+
+        branchObj.registerView();
 
     }
 
     /**
      * Generate a URL.
      *
+     * @param instanceIdx The instance index from branchObjects array
      * @param options A {@link JSONObject} value to set URL options.
      * @param controlParams A {@link JSONObject} value to set the URL control parameters.
      */
-    private void generateShortUrl(JSONObject options, JSONObject controlParams) throws JSONException
+    private void generateShortUrl(int instanceIdx, JSONObject options, JSONObject controlParams) throws JSONException
     {
 
         Log.d(LCAT, "start generateShortUrl()");
@@ -559,7 +582,9 @@ public class BranchSDK extends CordovaPlugin
             linkProperties.addControlParameter("$windows_phone_url", controlParams.getString("$windows_phone_url"));
         }
 
-        this.branchObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener());
+        BranchUniversalObject branchObj = (BranchUniversalObject)this.branchObjects.get(instanceIdx);
+
+        branchObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener());
 
     }
 
