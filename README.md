@@ -41,7 +41,7 @@ cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Defer
 #### Phonegap
 
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=your-branch-key --variable --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
+phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
 example:
@@ -62,7 +62,7 @@ npm install branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU
 
 ### Additional App Permissions
 
-To be able to use all of the deep linking capabilities of the Branch SDK, some manifest files are needed to be configured.
+To be able to use all of the deep linking capabilities of the Branch SDK, some manifest files need to be configured.
 
 If you are enabling both iOS Universal Links and Android App Links, these keys in the following sections should be combined into a single parent item without duplicates.
 
