@@ -178,7 +178,7 @@ public class BranchSDK extends CordovaPlugin
                     }
                 } else if (action.equals("registerView")) {
                     if (args.length() == 1) {
-                        this.registerView(args.getInt(0));
+                        this.registerView(args.getInt(0), callbackContext);
                     }
                     return true;
                 } else if (action.equals("showShareSheet")) {
@@ -521,14 +521,14 @@ public class BranchSDK extends CordovaPlugin
      *
      * @param instanceIdx The instance index from branchObjects array
      */
-    private void registerView(int instanceIdx)
+    private void registerView(int instanceIdx, CallbackContext callbackContext)
     {
 
         Log.d(LCAT, "start registerView()");
 
         BranchUniversalObject branchObj = (BranchUniversalObject)this.branchObjects.get(instanceIdx);
 
-        branchObj.registerView();
+        branchObj.registerView(new RegisterViewStatusListener(callbackContext));
 
     }
 
