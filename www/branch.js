@@ -35,14 +35,17 @@ function execute(method, params) {
  *
  * @param  (String) method      - The class method to execute.
  * @param  (Function) callback  - The method listener callback.
+ * @param  (Array) params       - The method listener parameters.
  *
  * @return (Promise)
  */
-function executeCallback(method, callback) {
+function executeCallback(method, callback, params) {
+
+    params = ( ! params) ? [] : params;
 
     exec(callback, function (err) {
         console.error(err);
-    }, _API_CLASS, method, []);
+    }, _API_CLASS, method, params);
 
 }
 
@@ -239,6 +242,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @param (Object) options
              * @param (Object) controlParameters
+             * @param (Object) callbacks
              *
              * @return (Promise)
              *
@@ -266,57 +270,43 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    |  $blackberry_url   |   String   |   Blackberry URL  |
              *    | $windows_phone_url |   String   |  Kindle Fire URL  |
              *    -------------------------------------------------------
+             *
+             * callbacks: 
+             *    -----------------------------------------------------------------------------------------------
+             *    |             KEY            |     TYPE     |                    DESCRIPTION                  |
+             *    -----------------------------------------------------------------------------------------------
+             *    |    onShareSheetDismissed   |   Function   |  Callback listener for `onShareSheetDismissed`  |
+             *    |    onShareSheetDismissed   |   Function   |  Callback listener for `onShareSheetLaunched`   |
+             *    |     onLinkShareResponse    |   Function   |  Callback listener for `onLinkShareResponse`    |
+             *    |      onChannelSelected     |   Function   |  Callback listener for `onChannelSelected`      |
+             *    -----------------------------------------------------------------------------------------------
              */
-            obj.showShareSheet = function (options, controlParameters) {
+            obj.showShareSheet = function (options, controlParameters, callbacks) {
+
+                // If no callback set, we'll default it to an empty function
+                if ( ! callbacks.onShareSheetDismissed) {
+                    callbacks.onShareSheetDismissed = function () {};
+                }
+                if ( ! callbacks.onShareSheetLaunched) {
+                    callbacks.onShareSheetLaunched = function () {};
+                }
+                if ( ! callbacks.onLinkShareResponse) {
+                    callbacks.onLinkShareResponse = function () {};
+                }
+                if ( ! callbacks.onChannelSelected) {
+                    callbacks.onChannelSelected = function () {};
+                }
+
+                // Set listener callbacks
+                executeCallback('onShareLinkDialogDismissed', callbacks.onShareSheetDismissed, [obj.instanceId]);
+                executeCallback('onShareLinkDialogLaunched', callbacks.onShareSheetLaunched, [obj.instanceId]);
+                executeCallback('onLinkShareResponse', callbacks.onLinkShareResponse, [obj.instanceId]);
+                executeCallback('onChannelSelected', callbacks.onChannelSelected, [obj.instanceId]);
 
                 return execute('showShareSheet', [obj.instanceId, options, controlParameters]);
 
             };
-
-            /**
-             * Set on share sheet launched listener callback.
-             *
-             * @param (Function) callback
-             */
-            obj.onShareSheetLaunched = function (callback) {
-
-                executeCallback('onShareLinkDialogLaunched', callback);
-
-            };
-
-            /**
-             * Set on share sheet dismissed listener callback.
-             *
-             * @param (Function) callback
-             */
-            obj.onShareSheetDismissed = function (callback) {
-
-                executeCallback('onShareLinkDialogDismissed', callback);
-
-            };
-
-            /**
-             * Set on link share listener callback.
-             *
-             * @param (Function) callback
-             */
-            obj.onLinkShareResponse = function (callback) {
-
-                executeCallback('onLinkShareResponse', callback);
-
-            };
-
-            /**
-             * Set on channel select listener callback.
-             *
-             * @param (Function) callback
-             */
-            obj.onChannelSelected = function (callback) {
-
-                executeCallback('onChannelSelected', callback);
-
-            };
-
+            
             /**
              * List item on Spotlight (iOS Only).
              */
