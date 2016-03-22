@@ -393,6 +393,15 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will
 | $blackberry_url    | `string` | The URL for Blackberry
 | $windows_phone_url | `string` | The URL for Windows phone
 
+**callbacks**: `object` - Callback methods for share sheet
+
+|          KEY          |    TYPE    |      MEANING
+| --------------------- | ---------- | --------------------
+| onShareSheetDismissed | `function` | Callback listener for `onShareSheetDismissed`
+| onShareSheetDismissed | `function` | Callback listener for `onShareSheetLaunched`
+| onLinkShareResponse   | `function` | Callback listener for `onLinkShareResponse`
+| onChannelSelected     | `function` | Callback listener for `onChannelSelected`
+
 ##### Usage
 ```js
 branchUniversalObj.showShareSheet({
@@ -404,50 +413,19 @@ branchUniversalObj.showShareSheet({
 }, {
   // put your control parameters here
   "$desktop_url" : "http://desktop-url.com",
-});
-```
-
-##### Share Sheet Callbacks (Android ONLY)
-
-To implement the callback, you must add listeners to the following events:
-
-###### onShareSheetLaunched
-
-The event fires when the share sheet is presented.
-
-```js
-branchUniversalObj.onShareSheetLaunched(function () {
-  console.log('Share sheet launched');
-});
-```
-
-###### onShareSheetDismissed
-
-The event fires when the share sheet is dismissed.
-
-```js
-branchUniversalObj.onShareSheetDismissed(function () {
-  console.log('Share sheet dimissed');
-});
-```
-
-###### onLinkShareResponse
-
-The event returns a dictionary of the response data.
-
-```js
-branchUniversalObj.onLinkShareResponse(function (res) {
-  console.log('Share link response: ' + JSON.stringify(res));
-});
-```
-
-###### onChannelSelected
-
-The event fires when a channel is selected.
-
-```js
-branchUniversalObj.onChannelSelected(function (res) {
-  console.log('Channel selected: ' + JSON.stringify(res));
+}, {
+  onShareSheetLaunched: function() {
+      console.log('Share sheet launched');
+  },
+  onShareSheetDismissed: function() {
+      console.log('Share sheet dimissed');
+  },
+  onLinkShareResponse: function(res) {
+      console.log('Share link response: ' + JSON.stringify(res));
+  },
+  onChannelSelected: function(res) {
+      console.log('Channel selected: ' + JSON.stringify(res));
+  }
 });
 ```
 
