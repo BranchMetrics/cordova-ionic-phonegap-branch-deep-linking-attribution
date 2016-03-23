@@ -53,7 +53,9 @@ function executeCallback(method, callback, params) {
  * @class Branch
  */
 var Branch = function () {
+    
     this.debugMode = false;
+
 };
 
 /**
@@ -62,7 +64,9 @@ var Branch = function () {
  * @return (Promise)
  */
 Branch.prototype.initSession = function () {
+    
     return execute('initSession');
+
 };
 
 /**
