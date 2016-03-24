@@ -246,7 +246,6 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @param (Object) options
              * @param (Object) controlParameters
-             * @param (Object) callbacks
              *
              * @return (Promise)
              *
@@ -274,41 +273,50 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    |  $blackberry_url   |   String   |   Blackberry URL  |
              *    | $windows_phone_url |   String   |  Kindle Fire URL  |
              *    -------------------------------------------------------
-             *
-             * callbacks: 
-             *    -----------------------------------------------------------------------------------------------
-             *    |             KEY            |     TYPE     |                    DESCRIPTION                  |
-             *    -----------------------------------------------------------------------------------------------
-             *    |    onShareSheetDismissed   |   Function   |  Callback listener for `onShareSheetDismissed`  |
-             *    |    onShareSheetDismissed   |   Function   |  Callback listener for `onShareSheetLaunched`   |
-             *    |     onLinkShareResponse    |   Function   |  Callback listener for `onLinkShareResponse`    |
-             *    |      onChannelSelected     |   Function   |  Callback listener for `onChannelSelected`      |
-             *    -----------------------------------------------------------------------------------------------
              */
-            obj.showShareSheet = function (options, controlParameters, callbacks) {
-
-                // If no callback set, we'll default it to an empty function
-                if ( ! callbacks.onShareSheetDismissed) {
-                    callbacks.onShareSheetDismissed = function () {};
-                }
-                if ( ! callbacks.onShareSheetLaunched) {
-                    callbacks.onShareSheetLaunched = function () {};
-                }
-                if ( ! callbacks.onLinkShareResponse) {
-                    callbacks.onLinkShareResponse = function () {};
-                }
-                if ( ! callbacks.onChannelSelected) {
-                    callbacks.onChannelSelected = function () {};
-                }
-
-                // Set listener callbacks
-                executeCallback('onShareLinkDialogDismissed', callbacks.onShareSheetDismissed, [obj.instanceId]);
-                executeCallback('onShareLinkDialogLaunched', callbacks.onShareSheetLaunched, [obj.instanceId]);
-                executeCallback('onLinkShareResponse', callbacks.onLinkShareResponse, [obj.instanceId]);
-                executeCallback('onChannelSelected', callbacks.onChannelSelected, [obj.instanceId]);
+            obj.showShareSheet = function (options, controlParameters) {
 
                 return execute('showShareSheet', [obj.instanceId, options, controlParameters]);
 
+            };
+
+            /**        
+             * Set on share sheet launched listener callback.     
+             *        
+             * @param (Function) callback     
+             */
+            obj.onShareSheetLaunched = function (callback) {      
+      
+                executeCallback('onShareLinkDialogLaunched', callback, [obj.instanceId]);
+      
+            };
+
+            obj.onShareSheetDismissed = function (callback) {
+                
+                executeCallback('onShareLinkDialogDismissed', callback, [obj.instanceId]);
+
+            }
+
+            /**        
+             * Set on link share listener callback.       
+             *        
+             * @param (Function) callback     
+             */
+            obj.onLinkShareResponse = function (callback) {       
+      
+                executeCallback('onLinkShareResponse', callback, [obj.instanceId]);
+      
+            };
+      
+            /**       
+             * Set on channel select listener callback.       
+             *        
+             * @param (Function) callback     
+             */
+            obj.onChannelSelected = function (callback) {     
+      
+                executeCallback('onChannelSelected', callback, [obj.instanceId]);
+      
             };
             
             /**

@@ -30,7 +30,7 @@ public class BranchSDK extends CordovaPlugin
     private static final String LCAT = "CordovaBranchSDK";
 
     // Private Method Properties
-    private ArrayList<BranchUniversalWrapper> branchObjectWrappers;
+    private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;
     private Activity activity;
     private Branch instance;
 
@@ -41,7 +41,7 @@ public class BranchSDK extends CordovaPlugin
     {
         this.activity = null;
         this.instance = null;
-        this.branchObjectWrappers = new ArrayList<BranchUniversalWrapper>();
+        this.branchObjectWrappers = new ArrayList<BranchUniversalObjectWrapper>();
     }
 
     /**
@@ -196,28 +196,28 @@ public class BranchSDK extends CordovaPlugin
                     }
                 } else if (action.equals("onShareLinkDialogLaunched")) {
 
-                    BranchUniversalWrapper branchObjWrapper = (BranchUniversalWrapper)branchObjectWrappers.get(args.getInt(0));
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
                                            branchObjWrapper.onShareLinkDialogLaunched = callbackContext;
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
                 } else if (action.equals("onShareLinkDialogDismissed")) {
 
-                    BranchUniversalWrapper branchObjWrapper = (BranchUniversalWrapper)branchObjectWrappers.get(args.getInt(0));
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
                                            branchObjWrapper.onShareLinkDialogDismissed = callbackContext;
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
                 } else if (action.equals("onLinkShareResponse")) {
 
-                    BranchUniversalWrapper branchObjWrapper = (BranchUniversalWrapper)branchObjectWrappers.get(args.getInt(0));
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
                                            branchObjWrapper.onLinkShareResponse = callbackContext;
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
                 } else if (action.equals("onChannelSelected")) {
 
-                    BranchUniversalWrapper branchObjWrapper = (BranchUniversalWrapper)branchObjectWrappers.get(args.getInt(0));
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
                                            branchObjWrapper.onChannelSelected = callbackContext;
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
@@ -444,7 +444,7 @@ public class BranchSDK extends CordovaPlugin
             }
         }
 
-        BranchUniversalWrapper branchObjWrapper = new BranchUniversalWrapper(branchObj);
+        BranchUniversalObjectWrapper branchObjWrapper = new BranchUniversalObjectWrapper(branchObj);
 
         this.branchObjectWrappers.add(branchObjWrapper);
         JSONObject response = new JSONObject();
@@ -475,7 +475,7 @@ public class BranchSDK extends CordovaPlugin
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL);
 
-        BranchUniversalWrapper branchObjWrapper = (BranchUniversalWrapper)this.branchObjectWrappers.get(instanceIdx);
+        BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)this.branchObjectWrappers.get(instanceIdx);
         BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
         BranchUniversalObject branchObj = branchObjWrapper.branchUniversalObj;
 
@@ -566,7 +566,7 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start registerView()");
 
-        BranchUniversalWrapper branchUniversalWrapper = (BranchUniversalWrapper)this.branchObjectWrappers.get(instanceIdx);
+        BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper)this.branchObjectWrappers.get(instanceIdx);
 
         branchUniversalWrapper.branchUniversalObj.registerView(new RegisterViewStatusListener(callbackContext));
 
@@ -639,7 +639,7 @@ public class BranchSDK extends CordovaPlugin
             linkProperties.addControlParameter("$windows_phone_url", controlParams.getString("$windows_phone_url"));
         }
 
-        BranchUniversalWrapper branchUniversalWrapper = (BranchUniversalWrapper) this.branchObjectWrappers.get(instanceIdx);
+        BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
 
         branchUniversalWrapper.branchUniversalObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener(callbackContext));
 
@@ -738,9 +738,9 @@ public class BranchSDK extends CordovaPlugin
     /**
      * @access protected
      *
-     * @class BranchUniversalWrapper
+     * @class BranchUniversalObjectWrapper
      */
-    protected class BranchUniversalWrapper
+    protected class BranchUniversalObjectWrapper
     {
 
         public BranchUniversalObject branchUniversalObj;
@@ -754,7 +754,7 @@ public class BranchSDK extends CordovaPlugin
          *
          * @param BranchUniversalObject branchUniversalObj
          */
-        public BranchUniversalWrapper(BranchUniversalObject branchUniversalObj) {
+        public BranchUniversalObjectWrapper(BranchUniversalObject branchUniversalObj) {
             this.branchUniversalObj = branchUniversalObj;
             this.onShareLinkDialogDismissed = null;
             this.onShareLinkDialogLaunched = null;
@@ -1026,6 +1026,10 @@ public class BranchSDK extends CordovaPlugin
         public void onShareLinkDialogLaunched() {
             Log.d(LCAT, "inside onShareLinkDialogLaunched");
 
+            if (_onShareLinkDialogLaunched == null) {
+                return;
+            }
+
             PluginResult result = new PluginResult(PluginResult.Status.OK);
 
             result.setKeepCallback(true);
@@ -1037,6 +1041,10 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onShareLinkDialogDismissed() {
             Log.d(LCAT, "inside onShareLinkDialogDismissed");
+
+            if (_onShareLinkDialogDismissed == null) {
+                return;
+            }
 
             PluginResult result = new PluginResult(PluginResult.Status.OK);
 
@@ -1050,6 +1058,10 @@ public class BranchSDK extends CordovaPlugin
         public void onLinkShareResponse(String sharedLink, String sharedChannel, BranchError error) {
 
             Log.d(LCAT, "inside onLinkCreate");
+
+            if (_onLinkShareResponse == null) {
+                return;
+            }
 
             JSONObject response = new JSONObject();
 
@@ -1093,6 +1105,10 @@ public class BranchSDK extends CordovaPlugin
 
             Log.d(LCAT, "inside onChannelSelected");
             Log.d(LCAT, "channelName: " + channelName);
+
+            if (_onChannelSelected == null) {
+                return;
+            }
 
             JSONObject response = new JSONObject();
 
