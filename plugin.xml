@@ -70,7 +70,8 @@ SOFTWARE.
             </intent-filter>
         </config-file>
         <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-        <framework src="io.branch.sdk.android:library:1.+" custom="true" type="gradleReference" />
+        <framework src="io.branch.sdk.android:library:1.+" custom="true" />
+        <framework src="com.android.support:appcompat-v7:21+" />
     </platform>
 
     <!-- ios -->
