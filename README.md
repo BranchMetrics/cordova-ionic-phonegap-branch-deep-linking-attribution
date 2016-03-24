@@ -21,7 +21,7 @@ There's a full demo app embedded in this repository. It should serve as an examp
 **The compiled iOS SDK footprint is 180kb**
 **The compiled Android SDK footprint is 187kb**
 
-### Command link install
+### Command line install
 
 **Install parameters:**
 * `BRANCH_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
