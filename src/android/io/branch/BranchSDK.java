@@ -50,9 +50,11 @@ public class BranchSDK extends CordovaPlugin
     public void onNewIntent(Intent intent)
     {
         Log.d(LCAT, "start onNewIntent()");
+        
+        this.activity = this.cordova.getActivity();
+        this.activity.setIntent(intent);
 
         if (this.activity != null) {
-            this.setDebug(true);
             this.initSession(null);
         }
     }
@@ -343,14 +345,14 @@ public class BranchSDK extends CordovaPlugin
 
         JSONObject sessionParams = this.instance.getLatestReferringParams();
 
-        if (sessionParams == null) {
+        if (sessionParams == null || sessionParams.length() == 0) {
             Log.d(LCAT, "return is null");
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ false));
         } else {
             Log.d(LCAT, "return is not null");
             Log.d(LCAT, sessionParams.toString());
+            callbackContext.success(sessionParams);
         }
-
-        callbackContext.success(sessionParams);
 
     }
 
@@ -370,14 +372,14 @@ public class BranchSDK extends CordovaPlugin
 
         JSONObject installParams = this.instance.getFirstReferringParams();
 
-        if (installParams == null) {
+        if (installParams == null || installParams.length() == 0) {
             Log.d(LCAT, "return is null");
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ false));
         } else {
             Log.d(LCAT, "return is not null");
             Log.d(LCAT, installParams.toString());
+            callbackContext.success(installParams);
         }
-
-        callbackContext.success(installParams);
 
     }
 

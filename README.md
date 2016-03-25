@@ -24,7 +24,7 @@ There's a full demo app embedded in this repository. It should serve as an examp
 
 **Latest libraries for [Android](http://developer.android.com/sdk/index.html) and/or iOS SDKs must be installed.**
 
-### Command link install
+### Command line install
 
 **Install parameters:**
 * `BRANCH_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
@@ -439,29 +439,29 @@ branchUniversalObj.onShareSheetLaunched(function () {
 ```
 
 ###### onShareSheetDismissed   
-    
+
 The event fires when the share sheet is dismissed.    
-    
+
 ```js   
 branchUniversalObj.onShareSheetDismissed(function () {    
   console.log('Share sheet dimissed');    
 });   
 ```   
-    
+
 ###### onLinkShareResponse    
-    
+
 The event returns a dictionary of the response data.    
-    
+
 ```js   
 branchUniversalObj.onLinkShareResponse(function (res) {   
   console.log('Share link response: ' + JSON.stringify(res));   
 });   
 ```   
-    
+
 ###### onChannelSelected    
-    
+
 The event fires when a channel is selected.   
-    
+
 ```js   
 branchUniversalObj.onChannelSelected(function (res) {   
   console.log('Channel selected: ' + JSON.stringify(res));    
