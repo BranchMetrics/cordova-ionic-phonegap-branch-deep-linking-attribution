@@ -59,7 +59,8 @@ public class BranchSDK extends CordovaPlugin
     {
         Log.d(LCAT, "start onNewIntent()");
         
-        this.setIntent(intent);
+        this.activity = this.cordova.getActivity();
+        this.activity.setIntent(intent);
 
         if (this.activity != null) {
             this.initSession(null);
