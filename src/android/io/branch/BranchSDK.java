@@ -111,7 +111,7 @@ public class BranchSDK extends CordovaPlugin
 
         if (action.equals("setDebug")) {
             if (args.length() == 1) {
-                this.setDebug(args.getBoolean(0));
+                this.setDebug(args.getBoolean(0), callbackContext);
             }
             return true;
         } else if (action.equals("initSession")) {
@@ -577,8 +577,9 @@ public class BranchSDK extends CordovaPlugin
      * <p>If you want to flag debug, call this <b>before</b> initUserSession</p>
      *
      * @param isEnable A {@link Boolean} value to enable/disable debugging mode for the app.
+     * @param callbackContext   A callback to execute at the end of this method
      */
-    private void setDebug(boolean isEnable)
+    private void setDebug(boolean isEnable, CallbackContext callbackContext)
     {
 
         Log.d(LCAT, "start setDebug()");
@@ -591,6 +592,7 @@ public class BranchSDK extends CordovaPlugin
             debugInstance.setDebug();
         }
 
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ isEnable));
     }
 
     /**

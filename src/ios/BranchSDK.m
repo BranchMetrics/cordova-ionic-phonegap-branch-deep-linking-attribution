@@ -122,7 +122,15 @@
 - (void)setDebug:(CDVInvokedUrlCommand*)command
 {
     NSLog(@"start setDebug");
-    [[Branch getInstance] setDebug];
+    CDVPluginResult* pluginResult;
+    bool enableDebug = [[command.arguments objectAtIndex:0] boolValue] == YES;
+    if (enableDebug) {
+        [[Branch getInstance] setDebug];
+    }
+    
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enableDebug];
+    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void)getAutoInstance:(CDVInvokedUrlCommand*)command
