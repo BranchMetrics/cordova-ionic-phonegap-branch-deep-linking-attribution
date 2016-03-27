@@ -71,7 +71,7 @@ Branch.prototype.initSession = function () {
 
 /**
  * Set debug mode.
- * NOTE: Init session must be called first before using this method
+ * NOTE: This must be called before initSession
  *
  * @param (Boolean) isEnabled. Default = false
  *
