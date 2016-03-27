@@ -35,14 +35,17 @@ function execute(method, params) {
  *
  * @param  (String) method      - The class method to execute.
  * @param  (Function) callback  - The method listener callback.
+ * @param  (Array) params       - The method listener parameters.
  *
  * @return (Promise)
  */
-function executeCallback(method, callback) {
+function executeCallback(method, callback, params) {
+
+    params = ( ! params) ? [] : params;
 
     exec(callback, function (err) {
         console.error(err);
-    }, _API_CLASS, method, []);
+    }, _API_CLASS, method, params);
 
 }
 
@@ -50,7 +53,9 @@ function executeCallback(method, callback) {
  * @class Branch
  */
 var Branch = function () {
+    
     this.debugMode = false;
+
 };
 
 /**
@@ -59,7 +64,9 @@ var Branch = function () {
  * @return (Promise)
  */
 Branch.prototype.initSession = function () {
+    
     return execute('initSession');
+
 };
 
 /**
@@ -176,10 +183,11 @@ Branch.prototype.userCompletedAction = function (action, metaData) {
 Branch.prototype.createBranchUniversalObject = function (options) {
 
     return new Promise(function (resolve, reject) {
-        execute('createBranchUniversalObject', [options]).then(function () {
+        execute('createBranchUniversalObject', [options]).then(function (res) {
 
-            var res = {
-                message: 'success'
+            var obj = {
+                message: res.message,
+                instanceId: res.branchUniversalObjectId
             };
 
             // Attach object functions
@@ -188,8 +196,10 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @return (Promise)
              */
-            res.registerView = function () {
-                return execute('registerView');
+            obj.registerView = function () {
+
+                return execute('registerView', [obj.instanceId]);
+
             };
 
             /**
@@ -225,9 +235,9 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    | $windows_phone_url |   String   |  Kindle Fire URL  |
              *    -------------------------------------------------------
              */
-            res.generateShortUrl = function (options, controlParameters) {
+            obj.generateShortUrl = function (options, controlParameters) {
 
-                return execute('generateShortUrl', [options, controlParameters]);
+                return execute('generateShortUrl', [obj.instanceId, options, controlParameters]);
 
             };
 
@@ -264,64 +274,59 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    | $windows_phone_url |   String   |  Kindle Fire URL  |
              *    -------------------------------------------------------
              */
-            res.showShareSheet = function (options, controlParameters) {
+            obj.showShareSheet = function (options, controlParameters) {
 
-                return execute('showShareSheet', [options, controlParameters]);
+                return execute('showShareSheet', [obj.instanceId, options, controlParameters]);
 
             };
 
-            /**
-             * Set on share sheet launched listener callback.
-             *
-             * @param (Function) callback
+            /**        
+             * Set on share sheet launched listener callback.     
+             *        
+             * @param (Function) callback     
              */
-            res.onShareSheetLaunched = function (callback) {
-
-                executeCallback('onShareLinkDialogLaunched', callback);
-
+            obj.onShareSheetLaunched = function (callback) {      
+      
+                executeCallback('onShareLinkDialogLaunched', callback, [obj.instanceId]);
+      
             };
 
-            /**
-             * Set on share sheet dismissed listener callback.
-             *
-             * @param (Function) callback
+            obj.onShareSheetDismissed = function (callback) {
+                
+                executeCallback('onShareLinkDialogDismissed', callback, [obj.instanceId]);
+
+            }
+
+            /**        
+             * Set on link share listener callback.       
+             *        
+             * @param (Function) callback     
              */
-            res.onShareSheetDismissed = function (callback) {
-
-                executeCallback('onShareLinkDialogDismissed', callback);
-
+            obj.onLinkShareResponse = function (callback) {       
+      
+                executeCallback('onLinkShareResponse', callback, [obj.instanceId]);
+      
             };
-
-            /**
-             * Set on link share listener callback.
-             *
-             * @param (Function) callback
+      
+            /**       
+             * Set on channel select listener callback.       
+             *        
+             * @param (Function) callback     
              */
-            res.onLinkShareResponse = function (callback) {
-
-                executeCallback('onLinkShareResponse', callback);
-
+            obj.onChannelSelected = function (callback) {     
+      
+                executeCallback('onChannelSelected', callback, [obj.instanceId]);
+      
             };
-
-            /**
-             * Set on channel select listener callback.
-             *
-             * @param (Function) callback
-             */
-            res.onChannelSelected = function (callback) {
-
-                executeCallback('onChannelSelected', callback);
-
-            };
-
+            
             /**
              * List item on Spotlight (iOS Only).
              */
-            res.listOnSpotlight = function () {
+            obj.listOnSpotlight = function () {
                 return execute('listOnSpotlight');
             };
 
-            resolve(res);
+            resolve(obj);
 
         }, function (err) {
             reject(err);

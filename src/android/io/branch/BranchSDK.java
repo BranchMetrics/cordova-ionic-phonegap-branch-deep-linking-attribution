@@ -30,11 +30,7 @@ public class BranchSDK extends CordovaPlugin
     private static final String LCAT = "CordovaBranchSDK";
 
     // Private Method Properties
-    private BranchUniversalObject branchObj;
-    private CallbackContext onShareLinkDialogLaunched;
-    private CallbackContext onShareLinkDialogDismissed;
-    private CallbackContext onLinkShareResponse;
-    private CallbackContext onChannelSelected;
+    private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;
     private Activity activity;
     private Branch instance;
 
@@ -45,11 +41,7 @@ public class BranchSDK extends CordovaPlugin
     {
         this.activity = null;
         this.instance = null;
-        this.branchObj = null;
-        this.onShareLinkDialogLaunched = null;
-        this.onShareLinkDialogDismissed = null;
-        this.onLinkShareResponse = null;
-        this.onChannelSelected = null;
+        this.branchObjectWrappers = new ArrayList<BranchUniversalObjectWrapper>();
     }
 
     /**
@@ -121,13 +113,19 @@ public class BranchSDK extends CordovaPlugin
             if (this.instance != null) {
                 if (action.equals("setIdentity")) {
                     this.setIdentity(args.getString(0), callbackContext);
+
                     return true;
                 } else if (action.equals("userCompletedAction")) {
+                    if (args.length() < 1 && args.length() > 2) {
+                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        return false;
+                    }
                     if (args.length() == 2) {
                         this.userCompletedAction(args.getString(0), args.getJSONObject(1), callbackContext);
-                    } else {
+                    } else if (args.length() == 1) {
                         this.userCompletedAction(args.getString(0), callbackContext);
                     }
+
                     return true;
                 } else if (action.equals("getFirstReferringParams")) {
                     this.getFirstReferringParams(callbackContext);
@@ -142,40 +140,96 @@ public class BranchSDK extends CordovaPlugin
                     this.loadRewards(callbackContext);
                     return true;
                 } else if (action.equals("redeemRewards")) {
+                    if (args.length() < 1 && args.length() > 2) {
+                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+
+                        return false;
+                    }
                     if (args.length() == 1) {
                         this.redeemRewards(args.getInt(0), callbackContext);
                     } else if (args.length() == 2) {
                         this.redeemRewards(args.getInt(0), args.getString(1), callbackContext);
                     }
+
                     return true;
                 } else if (action.equals("getCreditHistory")) {
                     this.getCreditHistory(callbackContext);
+
                     return true;
                 } else if (action.equals("createBranchUniversalObject")) {
-                    this.createBranchUniversalObject(args.getJSONObject(0), callbackContext);
-                    return true;
+                    if (args.length() == 1) {
+                        this.createBranchUniversalObject(args.getJSONObject(0), callbackContext);
+
+                        return true;
+                    } else {
+                        callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
+
+                        return false;
+                    }
                 } else if (action.equals(("generateShortUrl"))) {
-                    this.generateShortUrl(args.getJSONObject(0), args.getJSONObject(1), callbackContext);
-                    return true;
+                    if (args.length() == 3) {
+                        this.generateShortUrl(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2), callbackContext);
+
+                        return true;
+                    } else {
+                        callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
+
+                        return false;
+                    }
                 } else if (action.equals("registerView")) {
-                    this.registerView(callbackContext);
-                    return true;
+                    if (args.length() == 1) {
+                        this.registerView(args.getInt(0), callbackContext);
+
+                        return true;
+                    } else {
+                        callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
+
+                        return false;
+                    }
                 } else if (action.equals("showShareSheet")) {
-                    this.showShareSheet(args.getJSONObject(0), args.getJSONObject(1));
-                    return true;
+                    if (args.length() == 3) {
+                        this.showShareSheet(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2));
+
+                        return true;
+                    } else {
+                        callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
+
+                        return false;
+                    }
                 } else if (action.equals("onShareLinkDialogLaunched")) {
-                    this.onShareLinkDialogLaunched = callbackContext;
-                    return true;
+
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
+                                           branchObjWrapper.onShareLinkDialogLaunched = callbackContext;
+
+                    branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
+
                 } else if (action.equals("onShareLinkDialogDismissed")) {
-                    this.onShareLinkDialogDismissed = callbackContext;
-                    return true;
+
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
+                                           branchObjWrapper.onShareLinkDialogDismissed = callbackContext;
+
+                    branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
+
                 } else if (action.equals("onLinkShareResponse")) {
-                    this.onLinkShareResponse = callbackContext;
-                    return true;
+
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
+                                           branchObjWrapper.onLinkShareResponse = callbackContext;
+
+                    branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
+
                 } else if (action.equals("onChannelSelected")) {
-                    this.onChannelSelected = callbackContext;
-                    return true;
+
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
+                                           branchObjWrapper.onChannelSelected = callbackContext;
+
+                    branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
+
                 }
+
+                return true;
+
+            } else {
+                callbackContext.error("Branch instance not set. Please execute initSession() first.");
             }
         }
 
@@ -343,25 +397,25 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start createBranchUniversalObject()");
 
-        this.branchObj = new BranchUniversalObject();
+        BranchUniversalObject branchObj = new BranchUniversalObject();
 
         // Set object properties
         // Facebook Properties
         if (options.has("canonicalIdentifier")) {
             Log.d(LCAT, "set canonical identifier");
-            this.branchObj.setCanonicalIdentifier(options.getString("canonicalIdentifier"));
+            branchObj.setCanonicalIdentifier(options.getString("canonicalIdentifier"));
         }
         if (options.has("title")) {
             Log.d(LCAT, "set title");
-            this.branchObj.setTitle(options.getString("title"));
+            branchObj.setTitle(options.getString("title"));
         }
         if (options.has("contentDescription")) {
             Log.d(LCAT, "set content description");
-            this.branchObj.setContentDescription(options.getString("contentDescription"));
+            branchObj.setContentDescription(options.getString("contentDescription"));
         }
         if (options.has("contentImageUrl")) {
             Log.d(LCAT, "set content image url");
-            this.branchObj.setContentImageUrl(options.getString("contentImageUrl"));
+            branchObj.setContentImageUrl(options.getString("contentImageUrl"));
         }
 
         // Set content visibility
@@ -370,10 +424,10 @@ public class BranchSDK extends CordovaPlugin
 
             if (options.getString("contentIndexingMode").equals("private")) {
                 Log.d(LCAT, "set private");
-                this.branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
+                branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
             } else {
                 Log.d(LCAT, "set public");
-                this.branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC);
+                branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC);
             }
         }
 
@@ -388,20 +442,31 @@ public class BranchSDK extends CordovaPlugin
                 String key = (String) keys.next();
                 String value = contentMetaData.optString(key);
                 Log.d(LCAT, contentMetaData.getString(key));
-                this.branchObj.addContentMetadata(key, value);
+                branchObj.addContentMetadata(key, value);
             }
         }
 
-        callbackContext.success("Success");
+        BranchUniversalObjectWrapper branchObjWrapper = new BranchUniversalObjectWrapper(branchObj);
+
+        this.branchObjectWrappers.add(branchObjWrapper);
+        JSONObject response = new JSONObject();
+                   response.put("message", "Success");
+                   response.put("branchUniversalObjectId", this.branchObjectWrappers.size() - 1);
+
+        Log.d(LCAT, String.format("Branch wrapper size: %d", this.branchObjectWrappers.size()));
+
+        callbackContext.success(response);
+
     }
 
     /**
      * Display a popup of the share sheet.
      *
+     * @param instanceIdx The instance index from branchObjects array
      * @param options A {@link JSONObject} value to set URL options.
      * @param controlParams A {@link JSONObject} value to set the URL control parameters.
      */
-    private void showShareSheet(JSONObject options, JSONObject controlParams) throws JSONException
+    private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams) throws JSONException
     {
 
         Log.d(LCAT, "start showShareSheet()");
@@ -412,9 +477,12 @@ public class BranchSDK extends CordovaPlugin
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL);
 
+        BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)this.branchObjectWrappers.get(instanceIdx);
         BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
+        BranchUniversalObject branchObj = branchObjWrapper.branchUniversalObj;
 
-        this.branchObj.showShareSheet(this.activity, linkProperties, shareSheetStyle, new ShowShareSheetListener());
+        branchObj.showShareSheet(this.activity, linkProperties, shareSheetStyle,
+                                new ShowShareSheetListener(branchObjWrapper.onShareLinkDialogLaunched, branchObjWrapper.onShareLinkDialogDismissed, branchObjWrapper.onLinkShareResponse, branchObjWrapper.onChannelSelected));
 
     }
 
@@ -492,23 +560,28 @@ public class BranchSDK extends CordovaPlugin
 
     /**
      * Mark the content referred by this object as viewed. This increment the view count of the contents referred by this object.
+     *
+     * @param instanceIdx The instance index from branchObjects array
      */
-    private void registerView(CallbackContext callbackContext)
+    private void registerView(int instanceIdx, CallbackContext callbackContext)
     {
 
         Log.d(LCAT, "start registerView()");
 
-        this.branchObj.registerView(new RegisterViewStatusListener(callbackContext));
+        BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper)this.branchObjectWrappers.get(instanceIdx);
+
+        branchUniversalWrapper.branchUniversalObj.registerView(new RegisterViewStatusListener(callbackContext));
 
     }
 
     /**
      * Generate a URL.
      *
+     * @param instanceIdx The instance index from branchObjects array
      * @param options A {@link JSONObject} value to set URL options.
      * @param controlParams A {@link JSONObject} value to set the URL control parameters.
      */
-    private void generateShortUrl(JSONObject options, JSONObject controlParams, CallbackContext callbackContext) throws JSONException
+    private void generateShortUrl(int instanceIdx, JSONObject options, JSONObject controlParams, CallbackContext callbackContext) throws JSONException
     {
 
         Log.d(LCAT, "start generateShortUrl()");
@@ -568,7 +641,9 @@ public class BranchSDK extends CordovaPlugin
             linkProperties.addControlParameter("$windows_phone_url", controlParams.getString("$windows_phone_url"));
         }
 
-        this.branchObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener(callbackContext));
+        BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
+
+        branchUniversalWrapper.branchUniversalObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener(callbackContext));
 
     }
 
@@ -659,6 +734,35 @@ public class BranchSDK extends CordovaPlugin
         Log.d(LCAT, "start creditHistory()");
 
         this.instance.getCreditHistory(new CreditHistoryListener(callbackContext));
+
+    }
+
+    /**
+     * @access protected
+     *
+     * @class BranchUniversalObjectWrapper
+     */
+    protected class BranchUniversalObjectWrapper
+    {
+
+        public BranchUniversalObject branchUniversalObj;
+        public CallbackContext onShareLinkDialogDismissed;
+        public CallbackContext onShareLinkDialogLaunched;
+        public CallbackContext onLinkShareResponse;
+        public CallbackContext onChannelSelected;
+
+        /**
+         * @constructor
+         *
+         * @param BranchUniversalObject branchUniversalObj
+         */
+        public BranchUniversalObjectWrapper(BranchUniversalObject branchUniversalObj) {
+            this.branchUniversalObj = branchUniversalObj;
+            this.onShareLinkDialogDismissed = null;
+            this.onShareLinkDialogLaunched = null;
+            this.onLinkShareResponse = null;
+            this.onChannelSelected = null;
+        }
 
     }
 
@@ -847,7 +951,9 @@ public class BranchSDK extends CordovaPlugin
 
         // Constructor that takes in a required callbackContext object
         public GenerateShortUrlListener(CallbackContext callbackContext) {
+
             this._callbackContext = callbackContext;
+
         }
 
         @Override
@@ -895,17 +1001,42 @@ public class BranchSDK extends CordovaPlugin
 
     protected class ShowShareSheetListener implements Branch.BranchLinkShareListener
     {
+
+        private CallbackContext _onShareLinkDialogLaunched;
+        private CallbackContext _onShareLinkDialogDismissed;
+        private CallbackContext _onLinkShareResponse;
+        private CallbackContext _onChannelSelected;
+
+        /**
+         * @constructor
+         *
+         * @param CallbackContext onShareLinkDialogLaunched
+         * @param CallbackContext onShareLinkDialogDismissed
+         * @param CallbackContext onLinkShareResponse
+         * @param CallbackContext onChannelSelected
+         * */
+        public ShowShareSheetListener(CallbackContext onShareLinkDialogLaunched, CallbackContext onShareLinkDialogDismissed, CallbackContext onLinkShareResponse, CallbackContext onChannelSelected) {
+
+            this._onShareLinkDialogDismissed = onShareLinkDialogDismissed;
+            this._onShareLinkDialogLaunched = onShareLinkDialogLaunched;
+            this._onLinkShareResponse = onLinkShareResponse;
+            this._onChannelSelected = onChannelSelected;
+
+        }
+
         @Override
         public void onShareLinkDialogLaunched() {
             Log.d(LCAT, "inside onShareLinkDialogLaunched");
 
-            if (onShareLinkDialogLaunched != null) {
-                PluginResult result = new PluginResult(PluginResult.Status.OK);
-
-                result.setKeepCallback(true);
-
-                onShareLinkDialogLaunched.sendPluginResult(result);
+            if (_onShareLinkDialogLaunched == null) {
+                return;
             }
+
+            PluginResult result = new PluginResult(PluginResult.Status.OK);
+
+            result.setKeepCallback(true);
+
+            this._onShareLinkDialogLaunched.sendPluginResult(result);
 
         }
 
@@ -913,13 +1044,15 @@ public class BranchSDK extends CordovaPlugin
         public void onShareLinkDialogDismissed() {
             Log.d(LCAT, "inside onShareLinkDialogDismissed");
 
-            if (onShareLinkDialogDismissed != null) {
-                PluginResult result = new PluginResult(PluginResult.Status.OK);
-
-                result.setKeepCallback(true);
-
-                onShareLinkDialogDismissed.sendPluginResult(result);
+            if (_onShareLinkDialogDismissed == null) {
+                return;
             }
+
+            PluginResult result = new PluginResult(PluginResult.Status.OK);
+
+            result.setKeepCallback(true);
+
+            this._onShareLinkDialogDismissed.sendPluginResult(result);
 
         }
 
@@ -927,6 +1060,10 @@ public class BranchSDK extends CordovaPlugin
         public void onLinkShareResponse(String sharedLink, String sharedChannel, BranchError error) {
 
             Log.d(LCAT, "inside onLinkCreate");
+
+            if (_onLinkShareResponse == null) {
+                return;
+            }
 
             JSONObject response = new JSONObject();
 
@@ -957,13 +1094,11 @@ public class BranchSDK extends CordovaPlugin
 
             Log.d(LCAT, response.toString());
 
-            if (onLinkShareResponse != null) {
-                PluginResult result = new PluginResult(PluginResult.Status.OK, response);
+            PluginResult result = new PluginResult(PluginResult.Status.OK, response);
 
-                result.setKeepCallback(true);
+            result.setKeepCallback(true);
 
-                onLinkShareResponse.sendPluginResult(result);
-            }
+            this._onLinkShareResponse.sendPluginResult(result);
 
         }
 
@@ -972,6 +1107,10 @@ public class BranchSDK extends CordovaPlugin
 
             Log.d(LCAT, "inside onChannelSelected");
             Log.d(LCAT, "channelName: " + channelName);
+
+            if (_onChannelSelected == null) {
+                return;
+            }
 
             JSONObject response = new JSONObject();
 
@@ -984,13 +1123,11 @@ public class BranchSDK extends CordovaPlugin
 
             Log.d(LCAT, response.toString());
 
-            if (onChannelSelected != null) {
-                PluginResult result = new PluginResult(PluginResult.Status.OK, response);
+            PluginResult result = new PluginResult(PluginResult.Status.OK, response);
 
-                result.setKeepCallback(true);
+            result.setKeepCallback(true);
 
-                onChannelSelected.sendPluginResult(result);
-            }
+            this._onChannelSelected.sendPluginResult(result);
 
         }
     }

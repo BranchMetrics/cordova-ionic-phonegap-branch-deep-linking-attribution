@@ -19,7 +19,10 @@ There's a full demo app embedded in this repository. It should serve as an examp
 ## Installation
 
 **The compiled iOS SDK footprint is 180kb**
+
 **The compiled Android SDK footprint is 187kb**
+
+**Latest libraries for [Android](http://developer.android.com/sdk/index.html) and/or iOS SDKs must be installed.**
 
 ### Command line install
 
@@ -137,6 +140,8 @@ Branch.getFirstReferringParams().then(function (res) {
   + [loadRewards](#loadRewards)
   + [redeemRewards](#redeemRewards)
   + [creditHistory](#creditHistory)
+4. FAQ
+  + [Android Build FAQ](#android-build-faq)
 
 
 ### <a id="setDebug"></a>setDebug(isEnable)
@@ -419,6 +424,8 @@ branchUniversalObj.showShareSheet({
 
 ##### Share Sheet Callbacks (Android ONLY)
 
+**NOTE: Share sheet callbacks must be declared first before executing `showShareSheet` or else it won't be able to catch the `event's first trigger`.**
+
 To implement the callback, you must add listeners to the following events:
 
 ###### onShareSheetLaunched
@@ -431,35 +438,34 @@ branchUniversalObj.onShareSheetLaunched(function () {
 });
 ```
 
-###### onShareSheetDismissed
+###### onShareSheetDismissed   
 
-The event fires when the share sheet is dismissed.
+The event fires when the share sheet is dismissed.    
 
-```js
-branchUniversalObj.onShareSheetDismissed(function () {
-  console.log('Share sheet dimissed');
+```js   
+branchUniversalObj.onShareSheetDismissed(function () {    
+  console.log('Share sheet dimissed');    
+});   
+```   
+
+###### onLinkShareResponse    
+
+The event returns a dictionary of the response data.    
+
+```js   
+branchUniversalObj.onLinkShareResponse(function (res) {   
+  console.log('Share link response: ' + JSON.stringify(res));   
+});   
+```   
+
+###### onChannelSelected    
+
+The event fires when a channel is selected.   
+
+```js   
+branchUniversalObj.onChannelSelected(function (res) {   
+  console.log('Channel selected: ' + JSON.stringify(res));    
 });
-```
-
-###### onLinkShareResponse
-
-The event returns a dictionary of the response data.
-
-```js
-branchUniversalObj.onLinkShareResponse(function (res) {
-  console.log('Share link response: ' + JSON.stringify(res));
-});
-```
-
-###### onChannelSelected
-
-The event fires when a channel is selected.
-
-```js
-branchUniversalObj.onChannelSelected(function (res) {
-  console.log('Channel selected: ' + JSON.stringify(res));
-});
-```
 
 **Note:** Callbacks in iOS are ignored. There is no need to implement them as the events are handled by `UIActivityViewController`.
 
@@ -539,6 +545,16 @@ Branch.creditHistory().then(function (history) {
 The response will return an array that has been parsed from the following JSON:
 
 ```js
+
+## <a id="android-build-faq"></a>Android Build FAQ
+
+1. Gradle build cannot find `io.branch.sdk.android:library:1.+` dependency:
+
+Go to your `build.gradle` file and find **dependencies** and add the following inside:
+
+```
+compile "io.branch.sdk.android:library:1.+"
+```
 
 ## Bugs / Help / Support
 

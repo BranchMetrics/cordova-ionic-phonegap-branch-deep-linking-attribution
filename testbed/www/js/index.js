@@ -231,22 +231,24 @@ function ShowShareSheet()
         $windows_phone_url: 'win-phone'
     };
 
+    console.log(branchUniversalObj);
+
+    // Set listeners       
+    branchUniversalObj.onShareSheetLaunched(function () {     
+        console.log('Share sheet launched');      
+    });
+    branchUniversalObj.onShareSheetDismissed(function () {        
+      console.log('Share sheet dimissed');        
+    });
+    branchUniversalObj.onLinkShareResponse(function (res) {       
+      console.log('Share link response: ' + JSON.stringify(res));     
+    });
+    branchUniversalObj.onChannelSelected(function (res) {     
+      console.log('Channel selected: ' + JSON.stringify(res));        
+    });
+
     branchUniversalObj.showShareSheet(properties, controlParams);
 
-    // Set listeners
-    branchUniversalObj.onShareSheetLaunched(function () {
-        console.log('Share sheet launched');
-    });
-    branchUniversalObj.onShareSheetDismissed(function () {
-      console.log('Share sheet dimissed');
-    });
-    branchUniversalObj.onLinkShareResponse(function (res) {
-      console.log('Share link response: ' + JSON.stringify(res));
-    });
-    branchUniversalObj.onChannelSelected(function (res) {
-      console.log('Channel selected: ' + JSON.stringify(res));
-    });
-    
 }
 
 function ListOnSpotlight()
