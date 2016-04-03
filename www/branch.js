@@ -5,7 +5,9 @@
  *     All methods are promisified, therefore you can call .then(successCallback, errorCallback) for any of the method
  *     called for executing success or error callbacks.
  */
+
 var exec = require('cordova/exec');
+var deviceVendor = window.clientInformation.vendor;
 var _API_CLASS = 'BranchSDK'; // SDK Class
 
 /**
@@ -286,14 +288,18 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              * @param (Function) callback     
              */
             obj.onShareSheetLaunched = function (callback) {      
-      
-                executeCallback('onShareLinkDialogLaunched', callback, [obj.instanceId]);
+
+                if (deviceVendor.indexOf('Apple') < 0) {
+                    executeCallback('onShareLinkDialogLaunched', callback, [obj.instanceId]);
+                }
       
             };
 
             obj.onShareSheetDismissed = function (callback) {
                 
-                executeCallback('onShareLinkDialogDismissed', callback, [obj.instanceId]);
+                if (deviceVendor.indexOf('Apple') < 0) {
+                    executeCallback('onShareLinkDialogDismissed', callback, [obj.instanceId]);
+                }
 
             }
 
@@ -304,7 +310,9 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             obj.onLinkShareResponse = function (callback) {       
       
-                executeCallback('onLinkShareResponse', callback, [obj.instanceId]);
+                if (deviceVendor.indexOf('Apple') < 0) {
+                    executeCallback('onLinkShareResponse', callback, [obj.instanceId]);
+                }
       
             };
       
@@ -314,8 +322,10 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              * @param (Function) callback     
              */
             obj.onChannelSelected = function (callback) {     
-      
-                executeCallback('onChannelSelected', callback, [obj.instanceId]);
+
+                if (deviceVendor.indexOf('Apple') < 0) {
+                    executeCallback('onChannelSelected', callback, [obj.instanceId]);
+                }
       
             };
             

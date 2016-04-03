@@ -462,8 +462,8 @@
 - (void)generateShortUrl:(CDVInvokedUrlCommand*)command
 {
     NSLog(@"start generateShortUrl");
-    NSDictionary *arg1 = [command.arguments objectAtIndex:0];
-    NSDictionary *arg2 = [command.arguments objectAtIndex:1];
+    NSDictionary *arg1 = [command.arguments objectAtIndex:1];
+    NSDictionary *arg2 = [command.arguments objectAtIndex:2];
 
     BranchLinkProperties *props = [[BranchLinkProperties alloc] init];
 
@@ -508,12 +508,12 @@
     NSLog(@"start showShareSheet");
     NSString *shareText = @"Share Link";
 
-    if ([command.arguments count] >= 3) {
-        shareText = [command.arguments objectAtIndex:2];
+    if ([command.arguments count] >= 4) {
+        shareText = [command.arguments objectAtIndex:3];
     }
 
-    NSDictionary *arg1 = [command.arguments objectAtIndex:0];
-    NSDictionary *arg2 = [command.arguments objectAtIndex:1];
+    NSDictionary *arg1 = [command.arguments objectAtIndex:1];
+    NSDictionary *arg2 = [command.arguments objectAtIndex:2];
 
     BranchLinkProperties *linkProperties = [[BranchLinkProperties alloc] init];
 
