@@ -466,6 +466,7 @@ The event fires when a channel is selected.
 branchUniversalObj.onChannelSelected(function (res) {   
   console.log('Channel selected: ' + JSON.stringify(res));    
 });
+```
 
 **Note:** Callbacks in iOS are ignored. There is no need to implement them as the events are handled by `UIActivityViewController`.
 
