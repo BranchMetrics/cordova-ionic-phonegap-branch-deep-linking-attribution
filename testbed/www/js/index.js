@@ -57,6 +57,8 @@ function DeepLinkHandler(data)
 {
     if (data) {
         alert('Initialize: ' + JSON.stringify(data));
+    } else {
+        alert('No data found');
     }
 }
 
@@ -79,7 +81,7 @@ function InitSession()
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
-    });;
+    });
 }
 
 function CustomAction()

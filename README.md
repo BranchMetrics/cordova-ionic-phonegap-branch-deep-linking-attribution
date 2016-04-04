@@ -109,7 +109,7 @@ If you use a custom domain or subdomain for your Branch links, you should also a
 
 ## Plugin Methods
 
-**Some methods are promisified**, therefore you can easily get its success and error callback by chaining `.then()` method.
+**Most methods are promisified**, therefore you can easily get its success and error callback by chaining `.then()` method.
 
 *Example*
 ```js
@@ -168,13 +168,15 @@ The `initSession()` method automatically also sets an internal deep link hander 
 
 ```js
 onDeviceReady: function() {
-    Branch.initSession();
-},
-onResume: function() {
-    Branch.initSession();
+    Branch.initSession().then(function (res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });;;
 },
 initialize: function() {
-    document.addEventListener('resume', onResume, false);
     document.addEventListener('deviceready', onDeviceReady, false);
 },
 ```
@@ -183,7 +185,11 @@ Then add the method `DeepLinkHandler()` which will act as our callback when the 
 
 ```js
 function DeepLinkHandler(data) {
-    alert('Data from initSession: ' + data.data);
+    if (data) {
+        alert('Data from deep link: ' + JSON.stringify(data));
+    } else {
+        alert('No data found');
+    }
 }
 ```
 
@@ -243,7 +249,11 @@ Logs out the current session, replaces session IDs and identity IDs.
 
 ##### Usage
 ```js
-Branch.logout();
+Branch.logout().then(function (res) {
+    console.log(res);
+}).catch(function (err) {
+    console.error(err);
+});
 ```
 
 ### <a id="userCompletedAction"></a>userCompletedAction(action[, metaData])
@@ -258,9 +268,17 @@ Registers custom events.
 
 ##### Usage
 ```js
-Branch.userCompletedAction('complete_purchase');
+Branch.userCompletedAction('complete_purchase').then(function (res) {
+    console.log(res);
+}).catch(function (err) {
+    console.error(err);
+});
 
-Branch.userCompletedAction('registered', { user: 'Test' });
+Branch.userCompletedAction('registered', { user: 'Test' }).then(function (res) {
+    console.log(res);
+}).catch(function (err) {
+    console.error(err);
+});
 ```
 ------
 
@@ -438,33 +456,33 @@ branchUniversalObj.onShareSheetLaunched(function () {
 });
 ```
 
-###### onShareSheetDismissed   
+###### onShareSheetDismissed
 
-The event fires when the share sheet is dismissed.    
+The event fires when the share sheet is dismissed.
 
-```js   
-branchUniversalObj.onShareSheetDismissed(function () {    
-  console.log('Share sheet dimissed');    
-});   
-```   
+```js
+branchUniversalObj.onShareSheetDismissed(function () {
+  console.log('Share sheet dimissed');
+});
+```
 
-###### onLinkShareResponse    
+###### onLinkShareResponse
 
-The event returns a dictionary of the response data.    
+The event returns a dictionary of the response data.
 
-```js   
-branchUniversalObj.onLinkShareResponse(function (res) {   
-  console.log('Share link response: ' + JSON.stringify(res));   
-});   
-```   
+```js
+branchUniversalObj.onLinkShareResponse(function (res) {
+  console.log('Share link response: ' + JSON.stringify(res));
+});
+```
 
-###### onChannelSelected    
+###### onChannelSelected
 
-The event fires when a channel is selected.   
+The event fires when a channel is selected.
 
-```js   
-branchUniversalObj.onChannelSelected(function (res) {   
-  console.log('Channel selected: ' + JSON.stringify(res));    
+```js
+branchUniversalObj.onChannelSelected(function (res) {
+  console.log('Channel selected: ' + JSON.stringify(res));
 });
 ```
 
