@@ -41,9 +41,6 @@
 
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;
-//- (void)initWithCanonicalIdentifier:(CDVInvokedUrlCommand*)command;
-//- (void)initWithTitle:(CDVInvokedUrlCommand*)command;
-//- (void)addMetadata:(CDVInvokedUrlCommand*)command;
 - (void)registerView:(CDVInvokedUrlCommand*)command;
 - (void)generateShortUrl:(CDVInvokedUrlCommand*)command;
 - (void)showShareSheet:(CDVInvokedUrlCommand*)command;

@@ -79,23 +79,45 @@
 
     [branch initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
         NSLog(@"inside initSessionAndRegisterDeepLinkHandler block");
-        NSString *resultString;
+        BOOL isFromUniversalLink = NO;
+        NSString *resultString = nil;
         CDVPluginResult *pluginResult = nil;
+        
+        // NOTE: For Universal Links. Using clicked_branch_link key as condition at the moment to identify if block is run due to Universal Links.
+        isFromUniversalLink = [[params objectForKey:@"+clicked_branch_link"] boolValue];
+        
         if (!error) {
             if (params != nil && [params count] > 0) {
                 NSLog(@"Success");
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+                if (isFromUniversalLink) {
+                    NSError *err;
+                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"params":params}
+                                                                       options:0
+                                                                         error:&err];
+                    if (!jsonData) {
+                        NSLog(@"Parsing Error: %@", [err localizedDescription]);
+                        NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:[err localizedDescription], @"error", nil];
+                        NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict
+                                                                            options:NSJSONWritingPrettyPrinted
+                                                                              error:&err];
+                        
+                        resultString = [[NSString alloc] initWithData:errorJSON encoding:NSUTF8StringEncoding];
+                    } else {
+                        NSLog(@"Success");
+                        resultString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    }
+                }
             } else {
                 NSLog(@"No data found");
-                resultString = @"No data found";
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:resultString];
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:FALSE];
             }
         }
         else {
             NSLog(@"Init Error: %@", [error localizedDescription]);
             
             // We create a JSON string result, because we're getting an error if we directly return a string result.
-            NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:[error localizedDescription],@"error", nil];
+            NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:[error localizedDescription], @"error", nil];
             NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict
                                                                 options:NSJSONWritingPrettyPrinted
                                                                   error:&error];
@@ -104,13 +126,18 @@
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:resultString];
         }
         NSLog(@"returning data to js interface..");
-        if (command != nil) {
-            NSLog(@"Sending to JS: %@", [params description]);
-            [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
+        
+        if (isFromUniversalLink) {
+            NSLog(@"Sending to DeepLinkHandler: %@", resultString);
+            [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
         } else {
-            NSLog(@"Command is nil");
+            if (command != nil) {
+                NSLog(@"Sending to JS: %@", [params description]);
+                [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
+            } else {
+                NSLog(@"Command is nil");
+            }
         }
-        [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
     }];
 }
 
@@ -146,7 +173,7 @@
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:sessionParams];
     } else {
         NSLog(@"No data found");
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"No data found"];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:FALSE];
     }
     NSLog(@"returning data to js interface..");
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -165,7 +192,7 @@
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:installParams];
     } else {
         NSLog(@"No data found");
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"No data found"];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:FALSE];
     }
     NSLog(@"returning data to js interface..");
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -184,7 +211,7 @@
         }
         else {
             NSLog(@"No data found");
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Empty data"];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
         }
         NSLog(@"returning data to js interface..");
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -241,7 +268,6 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
     self.branchUniversalObjArray = nil;
-    self.branchUniversalObjArray = [[NSMutableArray alloc] init];
 }
 
 #pragma mark - Branch Referral Reward System
@@ -307,8 +333,6 @@
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }];
     }
-
-
 }
 
 - (void)getCreditHistory:(CDVInvokedUrlCommand*)command
@@ -351,11 +375,11 @@
         }
         else if ([key isEqualToString:@"contentIndexingMode"]) {
             NSString *indexingMode = [properties valueForKey:key];
+            // Default contentIndexMode is always public
             if ([indexingMode isEqualToString:@"private"]) {
                 branchUniversalObj.contentIndexMode = ContentIndexModePrivate;
-
             }
-            else if ([indexingMode isEqualToString:@"public"]){
+            else {
                 branchUniversalObj.contentIndexMode = ContentIndexModePublic;
             }
         }
@@ -370,7 +394,9 @@
 
     NSLog(@"init BUO - %@", branchUniversalObj);
     [self.branchUniversalObjArray addObject:branchUniversalObj];
-    NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:@"createBranchUniversalObject Success", @"message", [NSNumber numberWithInteger:([self.branchUniversalObjArray count] - 1)], @"branchUniversalObjectId", nil];
+    NSNumber *branchUniversalObjectId = [[NSNumber alloc] initWithInteger:([self.branchUniversalObjArray count] - 1)];
+    NSString *message = @"createBranchUniversalObject Success";
+    NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:message, @"message", branchUniversalObjectId, @"branchUniversalObjectId", nil];
     
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
     NSLog(@"returning data to js interface..");
