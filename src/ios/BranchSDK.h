@@ -21,7 +21,7 @@
 @property (copy) NSDictionary *metadata;
 @property (copy) NSDate *expirationDate;
 
-@property (strong, nonatomic) BranchUniversalObject *branchUniversalObj;
+@property (strong, nonatomic) NSMutableArray *branchUniversalObjArray;
 
 // BranchSDK Basic Methods
 - (void)initSession:(CDVInvokedUrlCommand*)command;
@@ -41,9 +41,9 @@
 
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;
-- (void)initWithCanonicalIdentifier:(CDVInvokedUrlCommand*)command;
-- (void)initWithTitle:(CDVInvokedUrlCommand*)command;
-- (void)addMetadata:(CDVInvokedUrlCommand*)command;
+//- (void)initWithCanonicalIdentifier:(CDVInvokedUrlCommand*)command;
+//- (void)initWithTitle:(CDVInvokedUrlCommand*)command;
+//- (void)addMetadata:(CDVInvokedUrlCommand*)command;
 - (void)registerView:(CDVInvokedUrlCommand*)command;
 - (void)generateShortUrl:(CDVInvokedUrlCommand*)command;
 - (void)showShareSheet:(CDVInvokedUrlCommand*)command;

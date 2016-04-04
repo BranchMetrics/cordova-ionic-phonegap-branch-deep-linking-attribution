@@ -55,7 +55,9 @@ app.initialize();
 
 function DeepLinkHandler(data)
 {
-    alert('Initialize: ' + JSON.stringify(data));
+    if (data) {
+        alert('Initialize: ' + JSON.stringify(data));
+    }
 }
 
 function SetDebug(isEnabled)
@@ -71,7 +73,13 @@ function InitSession()
 {
     console.log('Trigger InitSession()');
 
-    Branch.initSession();
+    Branch.initSession().then(function (res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });;
 }
 
 function CustomAction()
@@ -80,9 +88,13 @@ function CustomAction()
 
     var action = document.getElementById('custom-action').value;
 
-    Branch.userCompletedAction(action);
-
-    alert('Success');
+    Branch.userCompletedAction(action).then(function (res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
 function GetLatestReferringParams()
@@ -91,7 +103,7 @@ function GetLatestReferringParams()
 
     Branch.getLatestReferringParams().then(function (res) {
         console.log(res);
-        alert('Success: ' + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
@@ -103,7 +115,7 @@ function GetFirstReferringParams()
     console.log('Trigger GetFirstReferringParams()');
 
     Branch.getFirstReferringParams().then(function (res) {
-        alert('Success: ' + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
         console.log(res);
     }).catch(function (err) {
         alert('Error: ' + JSON.stringify(err));
@@ -119,7 +131,7 @@ function SetIdentity()
 
     Branch.setIdentity(newIdentity).then(function (res) {
         console.log(res);
-        alert('Success: ' + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
@@ -130,9 +142,13 @@ function Logout()
 {
     console.log('Trigger Logout()');
 
-    Branch.logout();
-
-    alert('Logout');
+    Branch.logout().then(function (res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
 var branchUniversalObj = null;
@@ -154,7 +170,7 @@ function CreateBranchUniversalObject()
     Branch.createBranchUniversalObject(properties)
         .then(function (res) {
             console.log(res);
-            alert('Success: ' + JSON.stringify(res));
+            alert('Response: ' + JSON.stringify(res));
             branchUniversalObj = res;
         })
         .catch(function (err) {
@@ -168,9 +184,13 @@ function RegisterView()
 {
     console.log('Trigger RegisterView()');
 
-    branchUniversalObj.registerView();
-
-    alert('Success');
+    branchUniversalObj.registerView().then(function (res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function (err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });;
 }
 
 function GenerateShortUrl()
@@ -197,12 +217,7 @@ function GenerateShortUrl()
 
     branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
-        if (navigator.userAgent.indexOf('iPhone') >= 0) {
-            var result = JSON.parse(res);
-            document.getElementById('generated-url').value = result.generatedLink;
-        } else if (navigator.userAgent.indexOf('Android') >= 0) {
-            document.getElementById('generated-url').value = res.url;
-        }
+        document.getElementById('generated-url').value = res.url;
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
@@ -233,18 +248,18 @@ function ShowShareSheet()
 
     console.log(branchUniversalObj);
 
-    // Set listeners       
-    branchUniversalObj.onShareSheetLaunched(function () {     
-        console.log('Share sheet launched');      
+    // Set listeners
+    branchUniversalObj.onShareSheetLaunched(function () {
+        console.log('Share sheet launched');
     });
-    branchUniversalObj.onShareSheetDismissed(function () {        
-      console.log('Share sheet dimissed');        
+    branchUniversalObj.onShareSheetDismissed(function () {
+      console.log('Share sheet dimissed');
     });
-    branchUniversalObj.onLinkShareResponse(function (res) {       
-      console.log('Share link response: ' + JSON.stringify(res));     
+    branchUniversalObj.onLinkShareResponse(function (res) {
+      console.log('Share link response: ' + JSON.stringify(res));
     });
-    branchUniversalObj.onChannelSelected(function (res) {     
-      console.log('Channel selected: ' + JSON.stringify(res));        
+    branchUniversalObj.onChannelSelected(function (res) {
+      console.log('Channel selected: ' + JSON.stringify(res));
     });
 
     branchUniversalObj.showShareSheet(properties, controlParams);
@@ -256,7 +271,7 @@ function ListOnSpotlight()
     console.log('Trigger ListOnSpotlight()');
     branchUniversalObj.listOnSpotlight().then(function (res) {
         console.log(res);
-        alert('Success: ' + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
@@ -268,7 +283,7 @@ function LoadRewards()
     console.log('Trigger LoadRewards()');
     Branch.loadRewards().then(function (res) {
         console.log(res);
-        alert('Success: ' + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
@@ -282,7 +297,7 @@ function RedeemRewards()
 
     Branch.redeemRewards(reward).then(function (res) {
         console.log(res);
-        alert('Success: ' + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
@@ -294,7 +309,7 @@ function CreditHistory()
     console.log('Trigger CreditHistory()');
     Branch.creditHistory().then(function (res) {
         console.log(res);
-        alert('Success: ' + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));

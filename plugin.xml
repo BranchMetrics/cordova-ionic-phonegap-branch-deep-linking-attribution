@@ -97,6 +97,8 @@ SOFTWARE.
         </config-file>
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
+        <header-file src="src/ios/BranchUniversalObjectWrapper.h" />
+        <source-file src="src/ios/BranchUniversalObjectWrapper.m" />
         <source-file src="src/ios/AppDelegate+BranchSdk.m" />
         <!-- COMMENT if building for NPM -->
         <framework custom="true" src="src/ios/dependencies/Branch.framework" />
