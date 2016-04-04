@@ -802,9 +802,8 @@ public class BranchSDK extends CordovaPlugin
                 String out = String.format("DeepLinkHandler(%s)", referringParams.toString());
 
                 webView.sendJavascript(out);
-                if (this._callbackContext != null) {
-                    this._callbackContext.success(referringParams);
-                }
+                
+                this._callbackContext.success(referringParams);
 
             } else {
                 String errorMessage = error.getMessage();
@@ -814,9 +813,9 @@ public class BranchSDK extends CordovaPlugin
                 String out = String.format("DeepLinkHandler(%s)", referringParams.toString());
 
                 webView.sendJavascript(out);
-                if (this._callbackContext != null) {
-                    this._callbackContext.error(errorMessage);
-                }
+                
+                this._callbackContext.error(errorMessage);
+
             }
 
         }
