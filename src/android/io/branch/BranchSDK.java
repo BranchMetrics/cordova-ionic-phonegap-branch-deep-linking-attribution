@@ -787,6 +787,10 @@ public class BranchSDK extends CordovaPlugin
 
             Log.d(LCAT, "SessionListener onInitFinished()");
 
+            String out = String.format("DeepLinkHandler(%s)", referringParams.toString());
+
+            webView.sendJavascript(out);
+
             if (error == null) {
 
                 // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
@@ -798,25 +802,15 @@ public class BranchSDK extends CordovaPlugin
                     Log.d(LCAT, "return is not null");
                     Log.d(LCAT, referringParams.toString());
                 }
-
-                String out = String.format("DeepLinkHandler(%s)", referringParams.toString());
-
-                webView.sendJavascript(out);
-                if (this._callbackContext != null) {
-                    this._callbackContext.success(referringParams);
-                }
+                    
+                this._callbackContext.success(referringParams);
 
             } else {
                 String errorMessage = error.getMessage();
 
                 Log.d(LCAT, errorMessage);
 
-                String out = String.format("DeepLinkHandler(%s)", referringParams.toString());
-
-                webView.sendJavascript(out);
-                if (this._callbackContext != null) {
-                    this._callbackContext.error(errorMessage);
-                }
+                this._callbackContext.error(errorMessage);
             }
 
         }
