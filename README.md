@@ -69,6 +69,25 @@ To be able to use all of the deep linking capabilities of the Branch SDK, some m
 
 If you are enabling both iOS Universal Links and Android App Links, these keys in the following sections should be combined into a single parent item without duplicates.
 
+#### Android: Resolving issue with multiple support-lib v4
+
+Branch.IO doesn't depends on `android-support-v4` file. But in any case you will be integrating other Cordova plugins along with Branch.IO, here are possible ways to fix the issue:
+
+* Adding `multiDexEnabled true` inside defaultConfig tag in `build.gradle`
+```
+defaultConfig {
+    multiDexEnabled true
+}
+```
+* Removing the `android-support-v4.jar` in Android `libs` directory.
+* Executing `./gradlew clean` in the Android directory
+* Excluding `android-support-v4` file for compiling
+```
+compile ('com.google.android.gms:play-services:6.5.87') {
+    exclude module: 'support-v4'
+}
+```
+
 #### iOS: Enable Universal Links
 
 In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Universal Links if you want Branch-generated links to work in your iOS app. To do this:
