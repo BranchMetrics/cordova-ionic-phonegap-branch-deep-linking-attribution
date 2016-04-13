@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import <Branch/Branch.h>
-#import <Cordova/CDV.h>
 
 @interface AppDelegate (BranchSDK)
 
