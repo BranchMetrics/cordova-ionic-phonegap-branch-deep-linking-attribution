@@ -248,6 +248,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *
              * @param (Object) options
              * @param (Object) controlParameters
+             * @param (String) shareText [OPTIONAL]
              *
              * @return (Promise)
              *
@@ -276,9 +277,13 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    | $windows_phone_url |   String   |  Kindle Fire URL  |
              *    -------------------------------------------------------
              */
-            obj.showShareSheet = function (options, controlParameters) {
+            obj.showShareSheet = function (options, controlParameters, shareText) {
 
-                return execute('showShareSheet', [obj.instanceId, options, controlParameters]);
+                if ( ! shareText) {
+                    shareText = 'This stuff is awesome: ';
+                }
+
+                return execute('showShareSheet', [obj.instanceId, options, controlParameters, shareText]);
 
             };
 
@@ -333,7 +338,9 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              * List item on Spotlight (iOS Only).
              */
             obj.listOnSpotlight = function () {
+
                 return execute('listOnSpotlight');
+
             };
 
             resolve(obj);

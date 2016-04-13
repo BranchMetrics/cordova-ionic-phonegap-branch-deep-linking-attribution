@@ -264,7 +264,7 @@ function ShowShareSheet()
       console.log('Channel selected: ' + JSON.stringify(res));
     });
 
-    branchUniversalObj.showShareSheet(properties, controlParams);
+    branchUniversalObj.showShareSheet(properties, controlParams, 'Custom Text');
 
 }
 
