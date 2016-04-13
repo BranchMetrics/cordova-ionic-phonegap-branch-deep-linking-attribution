@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <Branch/Branch.h>
+#import <Cordova/CDV.h>
 
 @interface AppDelegate (BranchSDK)
 
@@ -23,6 +24,8 @@
     if (![[Branch getInstance] handleDeepLink:url]) {
         // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
         [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLNotification object:url]];
+        // send unhandled URL to notification
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"BSDKPostUnhandledURL" object:url]];
     }
     return YES;
 }
