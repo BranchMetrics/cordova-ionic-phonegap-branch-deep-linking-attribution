@@ -55,7 +55,7 @@ public class BranchSDK extends CordovaPlugin
         this.activity.setIntent(intent);
 
         if (this.activity != null) {
-            this.initSession();
+            this.initSession(null);
         }
     }
 
@@ -254,21 +254,13 @@ public class BranchSDK extends CordovaPlugin
         this.activity = this.cordova.getActivity();
 
         this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-        this.instance.initSession(new SessionListener(callbackContext), activity.getIntent().getData(), activity);
 
-    }
+        if (callbackContext == null) {
+            this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);            
+        } else {
+            this.instance.initSession(new SessionListener(callbackContext), activity.getIntent().getData(), activity);
+        }
 
-    /**
-     * <p>Initialises a session with the Branch API, without a callback or {@link Activity}.</p>
-     */
-    private void initSession()
-    {
-        Log.d(LCAT, "start initSession()");
-
-        this.activity = this.cordova.getActivity();
-
-        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-        this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);
 
     }
 
