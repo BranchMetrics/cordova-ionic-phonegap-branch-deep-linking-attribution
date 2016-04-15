@@ -352,7 +352,7 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
 }
 
 - (NSString *)sessionParams {
-    if (_sessionParams) {
+    if (!_sessionParams) {
         _sessionParams = [self readStringFromDefaults:BRANCH_PREFS_KEY_SESSION_PARAMS];
     }
     
