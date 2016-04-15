@@ -100,102 +100,79 @@ public class BranchSDK extends CordovaPlugin
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
     {
+        
+        Runnable r = new RunnableThread(action, args, callbackContext);
 
         if (action.equals("setDebug")) {
             if (args.length() == 1) {
-                this.setDebug(args.getBoolean(0), callbackContext);
+                cordova.getThreadPool().execute(r);
             }
             return true;
         } else if (action.equals("initSession")) {
-            this.initSession(callbackContext);
+            cordova.getThreadPool().execute(r);
             return true;
         } else {
             if (this.instance != null) {
                 if (action.equals("setIdentity")) {
-                    this.setIdentity(args.getString(0), callbackContext);
-
+                    cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("userCompletedAction")) {
                     if (args.length() < 1 && args.length() > 2) {
                         callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
                         return false;
                     }
-                    if (args.length() == 2) {
-                        this.userCompletedAction(args.getString(0), args.getJSONObject(1), callbackContext);
-                    } else if (args.length() == 1) {
-                        this.userCompletedAction(args.getString(0), callbackContext);
-                    }
-
+                    cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("getFirstReferringParams")) {
-                    this.getFirstReferringParams(callbackContext);
+                    cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("getLatestReferringParams")) {
-                    this.getLatestReferringParams(callbackContext);
+                    cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("logout")) {
-                    this.logout(callbackContext);
+                    cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("loadRewards")) {
-                    this.loadRewards(callbackContext);
+                    cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("redeemRewards")) {
                     if (args.length() < 1 && args.length() > 2) {
                         callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
-
                         return false;
                     }
-                    if (args.length() == 1) {
-                        this.redeemRewards(args.getInt(0), callbackContext);
-                    } else if (args.length() == 2) {
-                        this.redeemRewards(args.getInt(0), args.getString(1), callbackContext);
-                    }
-
+                    cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("getCreditHistory")) {
-                    this.getCreditHistory(callbackContext);
-
+                    cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("createBranchUniversalObject")) {
-                    if (args.length() == 1) {
-                        this.createBranchUniversalObject(args.getJSONObject(0), callbackContext);
-
-                        return true;
-                    } else {
+                    if (args.length() != 1) {
                         callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
-
                         return false;
                     }
+                    cordova.getThreadPool().execute(r);
+                    return true;
                 } else if (action.equals(("generateShortUrl"))) {
-                    if (args.length() == 3) {
-                        this.generateShortUrl(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2), callbackContext);
-
-                        return true;
-                    } else {
+                    if (args.length() != 3) {
                         callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
-
                         return false;
                     }
+                    cordova.getThreadPool().execute(r);
+                    return true;
                 } else if (action.equals("registerView")) {
-                    if (args.length() == 1) {
-                        this.registerView(args.getInt(0), callbackContext);
-
-                        return true;
-                    } else {
+                    if (args.length() != 1) {
                         callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
-
                         return false;
                     }
+                    cordova.getThreadPool().execute(r);
+                    return true;
                 } else if (action.equals("showShareSheet")) {
-                    if (args.length() == 3) {
-                        this.showShareSheet(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2));
-
-                        return true;
-                    } else {
+                    if (args.length() != 3) {
                         callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
-
                         return false;
                     }
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
                 } else if (action.equals("onShareLinkDialogLaunched")) {
 
                     BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
@@ -1199,6 +1176,66 @@ public class BranchSDK extends CordovaPlugin
 
             }
         }
+    }
+
+    protected class RunnableThread implements Runnable {
+
+        private String action;
+        private JSONArray args;
+        private CallbackContext callbackContext;
+
+        public RunnableThread(String action, JSONArray args, CallbackContext callbackContext) {
+            this.callbackContext = callbackContext;
+            this.action = action;
+            this.args = args;
+        }
+
+        public void run() {
+            try {
+                if (this.action.equals("setDebug")) {
+                    setDebug(this.args.getBoolean(0), this.callbackContext);
+                } else if (this.action.equals("initSession")) {
+                    initSession(this.callbackContext);
+                } else {
+                    if (this.action.equals("setIdentity")) {
+                        setIdentity(this.args.getString(0), this.callbackContext);
+                    } else if (this.action.equals("userCompletedAction")) {
+                        if (this.args.length() == 2) {
+                            userCompletedAction(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
+                        } else if (this.args.length() == 1) {
+                            userCompletedAction(this.args.getString(0), this.callbackContext);
+                        }
+                    } else if (this.action.equals("getFirstReferringParams")) {
+                        getFirstReferringParams(this.callbackContext);
+                    } else if (this.action.equals("getLatestReferringParams")) {
+                        getLatestReferringParams(this.callbackContext);
+                    } else if (this.action.equals("logout")) {
+                        logout(this.callbackContext);
+                    } else if (this.action.equals("loadRewards")) {
+                        loadRewards(this.callbackContext);
+                    } else if (this.action.equals("redeemRewards")) {
+                        if (this.args.length() == 1) {
+                            redeemRewards(this.args.getInt(0), this.callbackContext);
+                        } else if (this.args.length() == 2) {
+                            redeemRewards(this.args.getInt(0), this.args.getString(1), this.callbackContext);
+                        }
+                    } else if (this.action.equals("getCreditHistory")) {
+                        getCreditHistory(this.callbackContext);
+                    } else if (this.action.equals("createBranchUniversalObject")) {
+                        createBranchUniversalObject(this.args.getJSONObject(0), this.callbackContext);
+                    } else if (this.action.equals(("generateShortUrl"))) {
+                        generateShortUrl(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), this.callbackContext);
+                    } else if (this.action.equals("registerView")) {
+                        registerView(this.args.getInt(0), this.callbackContext);
+                    } else if (this.action.equals("showShareSheet")) {
+                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 }
