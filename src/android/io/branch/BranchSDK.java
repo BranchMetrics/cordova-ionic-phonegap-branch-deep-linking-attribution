@@ -167,7 +167,11 @@ public class BranchSDK extends CordovaPlugin
                     cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("showShareSheet")) {
-                    if (args.length() != 3) {
+                    if (args.length() == 4) {
+                        this.showShareSheet(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2), args.getString(3));
+
+                        return true;
+                    } else {
                         callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
                         return false;
                     }
@@ -449,12 +453,12 @@ public class BranchSDK extends CordovaPlugin
      * @param options A {@link JSONObject} value to set URL options.
      * @param controlParams A {@link JSONObject} value to set the URL control parameters.
      */
-    private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams) throws JSONException
+    private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams, String shareText) throws JSONException
     {
 
         Log.d(LCAT, "start showShareSheet()");
 
-        ShareSheetStyle shareSheetStyle = new ShareSheetStyle(this.activity, "Check this out!", "This stuff is awesome: ")
+        ShareSheetStyle shareSheetStyle = new ShareSheetStyle(this.activity, "Check this out!", shareText)
                 .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), "Copy", "Added to clipboard")
                 .setMoreOptionStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_search), "Show More")
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
