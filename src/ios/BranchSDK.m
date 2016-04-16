@@ -13,6 +13,8 @@
 {
     NSLog(@"start pluginInitialize");
     self.branchUniversalObjArray = [[NSMutableArray alloc] init];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postUnhandledURL:) name:@"BSDKPostUnhandledURL" object:nil];
 }
 
 #pragma mark - Private APIs
@@ -82,10 +84,10 @@
         BOOL isFromUniversalLink = NO;
         NSString *resultString = nil;
         CDVPluginResult *pluginResult = nil;
-        
+
         // NOTE: For Universal Links. Using clicked_branch_link key as condition at the moment to identify if block is run due to Universal Links.
         isFromUniversalLink = [[params objectForKey:@"+clicked_branch_link"] boolValue];
-        
+
         if (!error) {
             if (params != nil && [params count] > 0) {
                 NSLog(@"Success");
@@ -101,7 +103,7 @@
                         NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict
                                                                             options:NSJSONWritingPrettyPrinted
                                                                               error:&err];
-                        
+
                         resultString = [[NSString alloc] initWithData:errorJSON encoding:NSUTF8StringEncoding];
                     } else {
                         NSLog(@"Success");
@@ -115,18 +117,18 @@
         }
         else {
             NSLog(@"Init Error: %@", [error localizedDescription]);
-            
+
             // We create a JSON string result, because we're getting an error if we directly return a string result.
             NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:[error localizedDescription], @"error", nil];
             NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict
                                                                 options:NSJSONWritingPrettyPrinted
                                                                   error:&error];
-            
+
             resultString = [[NSString alloc] initWithData:errorJSON encoding:NSUTF8StringEncoding];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:resultString];
         }
         NSLog(@"returning data to js interface..");
-        
+
         if (isFromUniversalLink) {
             NSLog(@"Sending to DeepLinkHandler: %@", resultString);
             [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
@@ -148,9 +150,9 @@
     if (enableDebug) {
         [[Branch getInstance] setDebug];
     }
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enableDebug];
-    
+
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -248,7 +250,7 @@
     else {
         [branch userCompletedAction:name];
     }
-    
+
     // TODO: need to resolve according to result of userCompletedAction, but no callback version of the method is exposed.
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"Success"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -397,7 +399,7 @@
     NSNumber *branchUniversalObjectId = [[NSNumber alloc] initWithInteger:([self.branchUniversalObjArray count] - 1)];
     NSString *message = @"createBranchUniversalObject Success";
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:message, @"message", branchUniversalObjectId, @"branchUniversalObjectId", nil];
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
     NSLog(@"returning data to js interface..");
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -407,9 +409,9 @@
 {
     NSLog(@"start registerView");
     int branchUniversalObjectId = [[command.arguments objectAtIndex:0] intValue];
-    
+
     BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
-    
+
     [branchUniversalObj registerViewWithCallback:^(NSDictionary *params, NSError *error) {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         NSLog(@"returning data to js interface..");
@@ -420,11 +422,11 @@
 - (void)generateShortUrl:(CDVInvokedUrlCommand*)command
 {
     NSLog(@"start generateShortUrl");
-    
+
     int branchUniversalObjectId = [[command.arguments objectAtIndex:0] intValue];
     NSDictionary *arg1 = [command.arguments objectAtIndex:1];
     NSDictionary *arg2 = [command.arguments objectAtIndex:2];
-    
+
     BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
 
     BranchLinkProperties *props = [[BranchLinkProperties alloc] init];
@@ -473,11 +475,11 @@
     if ([command.arguments count] >= 4) {
         shareText = [command.arguments objectAtIndex:3];
     }
-    
+
     int branchUniversalObjectId = [[command.arguments objectAtIndex:0] intValue];
     NSDictionary *arg1 = [command.arguments objectAtIndex:1];
     NSDictionary *arg2 = [command.arguments objectAtIndex:2];
-    
+
     BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
 
     BranchLinkProperties *linkProperties = [[BranchLinkProperties alloc] init];
@@ -530,6 +532,21 @@
         NSLog(@"returning data to js interface..");
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
+}
+
+#pragma mark - Private Methods
+- (void)postUnhandledURL:(NSNotification *)notification {
+    // We create a JSON string result, because we're unable to handle the url. We will include the url in the return string.
+    NSError *error;
+    NSString *urlString = [notification.object absoluteString];
+    NSDictionary *returnDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Unable to process URL", @"error", urlString, @"url", nil];
+    NSData* returnJSON = [NSJSONSerialization dataWithJSONObject:returnDict
+                                                         options:NSJSONWritingPrettyPrinted
+                                                           error:&error];
+
+    NSString *resultString = [[NSString alloc] initWithData:returnJSON encoding:NSUTF8StringEncoding];
+    NSLog(@"Sending to DeepLinkHandler: %@", resultString);
+    [self.commandDelegate evalJs:[NSString stringWithFormat:@"NonBranchLinkHandler(%@)", resultString]];
 }
 
 #pragma mark - URL Methods (not fully implemented YET!)

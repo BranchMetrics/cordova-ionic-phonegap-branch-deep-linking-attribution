@@ -126,6 +126,21 @@ If you use a custom domain or subdomain for your Branch links, you should also a
 
 ---------------
 
+## Non-Branch Links
+There are instances where non-branch links are detected by the plugin but not processed.
+You can retrieve the url by implementing the method `NonBranchLinkHandler()` which will act as our callback to return the non-branch url.
+
+To implement:
+
+```js
+function NonBranchLinkHandler(data) {
+    if (data) {
+        alert('Non-Branch Link Detected: ' + JSON.stringify(data));
+    }
+}
+```
+---------------
+
 ## Plugin Methods
 
 **Most methods are promisified**, therefore you can easily get its success and error callback by chaining `.then()` method.
