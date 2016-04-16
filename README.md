@@ -460,6 +460,8 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will
 | $blackberry_url    | `string` | The URL for Blackberry
 | $windows_phone_url | `string` | The URL for Windows phone
 
+**shareText**: `string` - Custom share text
+
 ##### Usage
 ```js
 branchUniversalObj.showShareSheet({
@@ -471,6 +473,8 @@ branchUniversalObj.showShareSheet({
 }, {
   // put your control parameters here
   "$desktop_url" : "http://desktop-url.com",
+}, {
+  'Custom share text: '
 });
 ```
 
