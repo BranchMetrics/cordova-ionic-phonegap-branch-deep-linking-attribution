@@ -38,7 +38,7 @@
         }
     }
 
-    return handledByBranch;
+    return YES;
 }
 
 @end
