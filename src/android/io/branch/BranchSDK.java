@@ -171,8 +171,6 @@ public class BranchSDK extends CordovaPlugin
                         callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
                         return false;
                     }
-                    cordova.getActivity().runOnUiThread(r);
-                    return true;
                 } else if (action.equals("onShareLinkDialogLaunched")) {
 
                     BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
