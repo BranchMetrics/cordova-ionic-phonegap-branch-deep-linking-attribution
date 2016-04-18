@@ -167,11 +167,7 @@ public class BranchSDK extends CordovaPlugin
                     cordova.getThreadPool().execute(r);
                     return true;
                 } else if (action.equals("showShareSheet")) {
-                    if (args.length() == 4) {
-                        this.showShareSheet(args.getInt(0), args.getJSONObject(1), args.getJSONObject(2), args.getString(3));
-
-                        return true;
-                    } else {
+                    if (args.length() < 3) {
                         callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
                         return false;
                     }
@@ -1232,7 +1228,7 @@ public class BranchSDK extends CordovaPlugin
                     } else if (this.action.equals("registerView")) {
                         registerView(this.args.getInt(0), this.callbackContext);
                     } else if (this.action.equals("showShareSheet")) {
-                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2));
+                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), this.args.getString(3));
                     }
                 }
             } catch (JSONException e) {
