@@ -1228,7 +1228,7 @@ public class BranchSDK extends CordovaPlugin
                     } else if (this.action.equals("registerView")) {
                         registerView(this.args.getInt(0), this.callbackContext);
                     } else if (this.action.equals("showShareSheet")) {
-                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), this.args.getString(3));
+                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), this.args.getString(3) != null ? this.args.getString(3) : "This stuff is awesome: ");
                     }
                 }
             } catch (JSONException e) {
