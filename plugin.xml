@@ -51,7 +51,7 @@ SOFTWARE.
     <hook src="hooks/beforePluginInstallHook.js" type="before_plugin_install" />
 
     <engines>
-        <engine name="cordova" version=">=3.0.0" />
+        <engine name="cordova" version=">=3.5.0" />
     </engines>
 
     <!-- android -->
