@@ -54,9 +54,10 @@ public class BranchSDK extends CordovaPlugin
         this.activity = this.cordova.getActivity();
         this.activity.setIntent(intent);
 
-        if (this.activity != null) {
-            this.initSession(null);
-        }
+        // HURDLR CHANGE (PV): we don't need to initSession because we'll do it ourselves in javascript
+        //        if (this.activity != null) {
+        //            this.initSession(null);
+        //        }
     }
 
     /**
@@ -288,7 +289,7 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start redeemRewards()");
 
-        this.instance.redeemRewards(value, new LoadRewardsListener(callbackContext));
+        this.instance.redeemRewards(value, new RedeemRewardsListener(callbackContext));
 
     }
 
@@ -307,7 +308,7 @@ public class BranchSDK extends CordovaPlugin
 
         Log.d(LCAT, "start redeemRewards()");
 
-        this.instance.redeemRewards(bucket, value, new LoadRewardsListener(callbackContext));
+        this.instance.redeemRewards(bucket, value, new RedeemRewardsListener(callbackContext));
 
     }
 
@@ -802,15 +803,19 @@ public class BranchSDK extends CordovaPlugin
                     Log.d(LCAT, "return is not null");
                     Log.d(LCAT, referringParams.toString());
                 }
-                    
-                this._callbackContext.success(referringParams);
+
+                if (this._callbackContext != null) {
+                    this._callbackContext.success(referringParams);
+                }
 
             } else {
                 String errorMessage = error.getMessage();
 
                 Log.d(LCAT, errorMessage);
 
-                this._callbackContext.error(errorMessage);
+                if (this._callbackContext != null) {
+                    this._callbackContext.error(errorMessage);
+                }
             }
 
         }
@@ -837,7 +842,7 @@ public class BranchSDK extends CordovaPlugin
         public void onLogoutFinished(boolean loggedOut, BranchError error) {
             if (error == null) {
                 Log.d(LCAT, "no error on logout");
-                this._callbackContext.success(Boolean.toString(loggedOut));
+                this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is logged out */ loggedOut));
             } else {
                 Log.d(LCAT, "error on logout");
                 this._callbackContext.error(error.getMessage());
@@ -861,7 +866,7 @@ public class BranchSDK extends CordovaPlugin
 
             if (error == null) {
 
-                this._callbackContext.success("Success");
+                this._callbackContext.success(referringParams);
 
             } else {
 
@@ -893,6 +898,9 @@ public class BranchSDK extends CordovaPlugin
             Log.d(LCAT, "RegisterViewStatusListener registerViewFinished()");
 
             if (error == null) {
+                // HURDLR: note that this is inconsistent with iOS, but we don't use it yet.
+                // Ideally, we'd do this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is logged out */ loggedOut));
+                // and return the same bool in iOS, though the iOS SDK doesn't return a bool at this time.
                 this._callbackContext.success(Boolean.toString(registered));
             } else {
 
@@ -902,6 +910,40 @@ public class BranchSDK extends CordovaPlugin
 
                 this._callbackContext.error(errorMessage);
             }
+        }
+    }
+
+    protected class RedeemRewardsListener implements Branch.BranchReferralStateChangedListener
+    {
+        private CallbackContext _callbackContext;
+
+        // Constructor that takes in a required callbackContext object
+        public RedeemRewardsListener(CallbackContext callbackContext) {
+            this._callbackContext = callbackContext;
+        }
+
+        // Listener that implements BranchReferralStateChangedListener for redeemRewards
+        @Override
+        public void onStateChanged(boolean changed, BranchError error) {
+
+            Log.d(LCAT, "RedeemRewardsListener onStateChanged()");
+
+            if (error == null) {
+
+                Log.d(LCAT, "RedeemRewards success");
+
+                this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is changed */ changed));
+
+            } else {
+
+                String errorMessage = error.getMessage();
+
+                Log.d(LCAT, errorMessage);
+
+                this._callbackContext.error(errorMessage);
+
+            }
+
         }
     }
 

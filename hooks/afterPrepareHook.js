@@ -61,7 +61,11 @@ function run(cordovaContext) {
  */
 function activateUniversalLinksInAndroid(cordovaContext, pluginPreferences) {
   // inject preferenes into AndroidManifest.xml
-  androidManifestWriter.writePreferences(cordovaContext, pluginPreferences);
+
+  // HURDLR CHANGE ---
+  // PV: we don't need this guy to write preferences for us (their hook doesn't exactly work)
+  // besides, we do it as part of our build process
+  // androidManifestWriter.writePreferences(cordovaContext, pluginPreferences);
 
 }
 

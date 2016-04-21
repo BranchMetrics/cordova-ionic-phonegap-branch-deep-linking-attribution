@@ -89,10 +89,9 @@
         if (!error) {
             if (params != nil && [params count] > 0) {
                 NSLog(@"Success");
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
                 if (isFromUniversalLink) {
                     NSError *err;
-                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"params":params}
+                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params
                                                                        options:0
                                                                          error:&err];
                     if (!jsonData) {
@@ -103,9 +102,11 @@
                                                                               error:&err];
                         
                         resultString = [[NSString alloc] initWithData:errorJSON encoding:NSUTF8StringEncoding];
+                        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:resultString];
                     } else {
                         NSLog(@"Success");
                         resultString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
                     }
                 }
             } else {
@@ -132,7 +133,6 @@
             [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
         } else {
             if (command != nil) {
-                NSLog(@"Sending to JS: %@", [params description]);
                 [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
             } else {
                 NSLog(@"Command is nil");
@@ -207,7 +207,8 @@
         NSLog(@"inside setIdentity block");
         CDVPluginResult* pluginResult = nil;
         if (!error) {
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+            // HURDLR CHANGE: I am having this plugin return a bool to be consistent with the setIdentity method and Java.
+	    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         }
         else {
             NSLog(@"No data found");
@@ -383,6 +384,15 @@
                 branchUniversalObj.contentIndexMode = ContentIndexModePublic;
             }
         }
+        else if ([key isEqualToString:@"canonicalIdentifier"]) {
+            branchUniversalObj.canonicalIdentifier = [properties valueForKey:key];
+        }
+        else if ([key isEqualToString:@"title"]) {
+            branchUniversalObj.title = [properties valueForKey:key];
+        }
+        else if ([key isEqualToString:@"contentDescription"]) {
+            branchUniversalObj.contentDescription = [properties valueForKey:key];
+        }
         else if ([key isEqualToString:@"contentImageUrl"]){
             NSString *imageUrl = [properties valueForKey:key];
             branchUniversalObj.imageUrl = imageUrl;
@@ -411,7 +421,17 @@
     BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
     
     [branchUniversalObj registerViewWithCallback:^(NSDictionary *params, NSError *error) {
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+	CDVPluginResult* pluginResult = nil;
+        if (!error) {
+            NSLog(@"RegisterView Success");
+            // HURDLR: note that this is inconsistent with Android, but we don't use it yet.
+            // Ideally, we'd return true here if it was a success (Android returns boolean registered to its listener).
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+        }
+        else {
+            NSLog(@"RegisterView Error: %@", [error localizedDescription]);
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+        }
         NSLog(@"returning data to js interface..");
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
@@ -439,7 +459,7 @@
     }
 
     for (id key in arg2) {
-        [props addControlParam:key withValue:[arg1 objectForKey:key]];
+        [props addControlParam:key withValue:[arg2 objectForKey:key]];
     }
 
     [branchUniversalObj getShortUrlWithLinkProperties:props andCallback:^(NSString *url, NSError *error) {
