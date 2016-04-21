@@ -538,7 +538,14 @@
 - (void)postUnhandledURL:(NSNotification *)notification {
     // We create a JSON string result, because we're unable to handle the url. We will include the url in the return string.
     NSError *error;
-    NSString *urlString = [notification.object absoluteString];
+    NSString *urlString;
+
+    if ([notification.object respondsToSelector:@selector(absoluteString:)]) {
+        urlString = [notification.object absoluteString];
+    } else {
+        urlString = notification.object;
+    }
+    
     NSDictionary *returnDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Unable to process URL", @"error", urlString, @"url", nil];
     NSData* returnJSON = [NSJSONSerialization dataWithJSONObject:returnDict
                                                          options:NSJSONWritingPrettyPrinted
