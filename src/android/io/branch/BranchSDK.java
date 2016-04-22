@@ -842,6 +842,7 @@ public class BranchSDK extends CordovaPlugin
         public void onLogoutFinished(boolean loggedOut, BranchError error) {
             if (error == null) {
                 Log.d(LCAT, "no error on logout");
+                this.branchObjectWrappers = new ArrayList<BranchUniversalObjectWrapper>();
                 this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is logged out */ loggedOut));
             } else {
                 Log.d(LCAT, "error on logout");
