@@ -52,17 +52,6 @@ example:
 phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
-#### NPM
-
-```sh
-npm install branch-cordova-sdk --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme
-```
-
-example:
-```sh
-npm install branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
-```
-
 ### Additional App Permissions
 
 To be able to use all of the deep linking capabilities of the Branch SDK, some manifest files need to be configured.
@@ -124,6 +113,21 @@ Add the following entry to your application's `config.xml`:
 
 If you use a custom domain or subdomain for your Branch links, you should also add a key for `<host name="mycustomdomainorsubdomain" scheme="https" />`.
 
+---------------
+
+## Non-Branch Links
+There are instances where non-branch links are detected by the plugin but not processed.
+You can retrieve the url by implementing the method `NonBranchLinkHandler()` which will act as our callback to return the non-branch url.
+
+To implement:
+
+```js
+function NonBranchLinkHandler(data) {
+    if (data) {
+        alert('Non-Branch Link Detected: ' + JSON.stringify(data));
+    }
+}
+```
 ---------------
 
 ## Plugin Methods
@@ -445,6 +449,8 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will
 | $blackberry_url    | `string` | The URL for Blackberry
 | $windows_phone_url | `string` | The URL for Windows phone
 
+**shareText**: `string` - Custom share text
+
 ##### Usage
 ```js
 branchUniversalObj.showShareSheet({
@@ -456,6 +462,8 @@ branchUniversalObj.showShareSheet({
 }, {
   // put your control parameters here
   "$desktop_url" : "http://desktop-url.com",
+}, {
+  'Custom share text: '
 });
 ```
 

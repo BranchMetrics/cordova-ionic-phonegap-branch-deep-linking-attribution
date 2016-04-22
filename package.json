@@ -1,5 +1,5 @@
 {
-  "version": "2.0.9",
+  "version": "2.0.11",
   "name": "branch-cordova-sdk",
   "description": "Branch Metrics Cordova SDK",
   "main": "www/branch.js",

@@ -13,6 +13,8 @@
 {
     NSLog(@"start pluginInitialize");
     self.branchUniversalObjArray = [[NSMutableArray alloc] init];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postUnhandledURL:) name:@"BSDKPostUnhandledURL" object:nil];
 }
 
 #pragma mark - Private APIs
@@ -130,11 +132,11 @@
             NSLog(@"Sending to DeepLinkHandler: %@", resultString);
             [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
         } else {
-            if (command != nil) {
-                [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
-            } else {
-                NSLog(@"Command is nil");
-            }
+            NSLog(@"Command is nil");
+        }
+        
+        if (command != nil) {
+            [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
         }
     }];
 }
@@ -548,6 +550,21 @@
         NSLog(@"returning data to js interface..");
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
+}
+
+#pragma mark - Private Methods
+- (void)postUnhandledURL:(NSNotification *)notification {
+    // We create a JSON string result, because we're unable to handle the url. We will include the url in the return string.
+    NSError *error;
+    NSString *urlString = [notification.object absoluteString];
+    NSDictionary *returnDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Unable to process URL", @"error", urlString, @"url", nil];
+    NSData* returnJSON = [NSJSONSerialization dataWithJSONObject:returnDict
+                                                         options:NSJSONWritingPrettyPrinted
+                                                           error:&error];
+
+    NSString *resultString = [[NSString alloc] initWithData:returnJSON encoding:NSUTF8StringEncoding];
+    NSLog(@"Sending to NonBranchLinkHandler: %@", resultString);
+    [self.commandDelegate evalJs:[NSString stringWithFormat:@"NonBranchLinkHandler(%@)", resultString]];
 }
 
 #pragma mark - URL Methods (not fully implemented YET!)

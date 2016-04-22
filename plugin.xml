@@ -25,7 +25,7 @@ SOFTWARE.
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="io.branch.sdk"
-        version="2.0.9">
+        version="2.0.11">
 
     <name>branch-cordova-sdk</name>
     <description>Branch SDK Plugin</description>
@@ -33,6 +33,11 @@ SOFTWARE.
     <keywords>cordova,branch</keywords>
     <repo>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git</repo>
     <issue>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues</issue>
+    
+    <dependency
+      id="es6-promise-plugin"
+      url="https://github.com/vstirbu/PromisesPlugin.git">
+    </dependency>
 
     <js-module src="www/branch.js" name="Branch">
         <clobbers target="Branch" />
@@ -46,7 +51,7 @@ SOFTWARE.
     <hook src="hooks/beforePluginInstallHook.js" type="before_plugin_install" />
 
     <engines>
-        <engine name="cordova" version=">=3.0.0" />
+        <engine name="cordova" version=">=3.5.0" />
     </engines>
 
     <!-- android -->

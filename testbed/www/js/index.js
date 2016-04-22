@@ -62,6 +62,20 @@ function DeepLinkHandler(data)
     }
 }
 
+function NonBranchLinkHandler(data)
+{
+    if (data) {
+        alert('Non-branch link found: ' + JSON.stringify(data));
+    }
+}
+
+function NonBranchLinkHandler(data)
+{
+    if (data) {
+        alert('Non-branch link found: ' + JSON.stringify(data));
+    }
+}
+
 function SetDebug(isEnabled)
 {
     console.log('Trigger SetDebug()');
@@ -264,7 +278,7 @@ function ShowShareSheet()
       console.log('Channel selected: ' + JSON.stringify(res));
     });
 
-    branchUniversalObj.showShareSheet(properties, controlParams);
+    branchUniversalObj.showShareSheet(properties, controlParams, 'Custom Text');
 
 }
 
