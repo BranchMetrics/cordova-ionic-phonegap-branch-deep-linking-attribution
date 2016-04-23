@@ -48,9 +48,7 @@ public class BranchSDK extends CordovaPlugin
      * Called when the activity receives a new intent.
      */
     public void onNewIntent(Intent intent)
-    {
-        Log.d(LCAT, "start onNewIntent()");
-        
+    {        
         this.activity = this.cordova.getActivity();
         this.activity.setIntent(intent);
 
@@ -67,8 +65,6 @@ public class BranchSDK extends CordovaPlugin
     @Override
     public void onResume(boolean multitasking) {
 
-        Log.d(LCAT, "SDK On Resume");
-
     }
 
     /**
@@ -78,10 +74,7 @@ public class BranchSDK extends CordovaPlugin
     public void onStop()
     {
 
-        Log.d(LCAT, "SDK On Stop");
-
         if (this.instance != null) {
-            Log.d(LCAT, "instance.closeSession()");
             this.instance.closeSession();
         }
 
@@ -226,19 +219,11 @@ public class BranchSDK extends CordovaPlugin
      */
     private void initSession(CallbackContext callbackContext)
     {
-        Log.d(LCAT, "start initSession()");
-
         this.activity = this.cordova.getActivity();
 
         this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
 
-        if (callbackContext == null) {
-            this.instance.initSession(new SessionListener(), activity.getIntent().getData(), activity);            
-        } else {
-            this.instance.initSession(new SessionListener(callbackContext), activity.getIntent().getData(), activity);
-        }
-
-
+        this.instance.initSession(new SessionListener(callbackContext), activity.getIntent().getData(), activity);
     }
 
     /**
@@ -250,8 +235,6 @@ public class BranchSDK extends CordovaPlugin
      */
     private void logout(CallbackContext callbackContext)
     {
-
-        Log.d(LCAT, "start logout()");
 
         this.instance.logout(new LogoutStatusListener(callbackContext));
 
@@ -269,9 +252,7 @@ public class BranchSDK extends CordovaPlugin
     private void redeemRewards(final int value, CallbackContext callbackContext)
     {
 
-        Log.d(LCAT, "start redeemRewards()");
-
-        this.instance.redeemRewards(value, new LoadRewardsListener(callbackContext));
+        this.instance.redeemRewards(value, new RedeemRewardsListener(callbackContext));
 
     }
 
@@ -288,9 +269,7 @@ public class BranchSDK extends CordovaPlugin
     private void redeemRewards(int value, String bucket, CallbackContext callbackContext)
     {
 
-        Log.d(LCAT, "start redeemRewards()");
-
-        this.instance.redeemRewards(bucket, value, new LoadRewardsListener(callbackContext));
+        this.instance.redeemRewards(bucket, value, new RedeemRewardsListener(callbackContext));
 
     }
 
@@ -304,7 +283,6 @@ public class BranchSDK extends CordovaPlugin
     private void loadRewards(CallbackContext callbackContext)
     {
 
-        Log.d(LCAT, "start loadRewards()");
         this.instance.loadRewards(new LoadRewardsListener(callbackContext));
 
     }
@@ -324,15 +302,11 @@ public class BranchSDK extends CordovaPlugin
     private void getLatestReferringParams(CallbackContext callbackContext)
     {
 
-        Log.d(LCAT, "start getLatestReferringParams()");
-
         JSONObject sessionParams = this.instance.getLatestReferringParams();
 
         if (sessionParams == null || sessionParams.length() == 0) {
-            Log.d(LCAT, "return is null");
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ false));
         } else {
-            Log.d(LCAT, "return is not null");
             Log.d(LCAT, sessionParams.toString());
             callbackContext.success(sessionParams);
         }
@@ -351,15 +325,11 @@ public class BranchSDK extends CordovaPlugin
     private void getFirstReferringParams(CallbackContext callbackContext)
     {
 
-        Log.d(LCAT, "start getFirstReferringParams()");
-
         JSONObject installParams = this.instance.getFirstReferringParams();
 
         if (installParams == null || installParams.length() == 0) {
-            Log.d(LCAT, "return is null");
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ false));
         } else {
-            Log.d(LCAT, "return is not null");
             Log.d(LCAT, installParams.toString());
             callbackContext.success(installParams);
         }
@@ -378,45 +348,36 @@ public class BranchSDK extends CordovaPlugin
     private void createBranchUniversalObject(JSONObject options, CallbackContext callbackContext) throws JSONException
     {
 
-        Log.d(LCAT, "start createBranchUniversalObject()");
 
         BranchUniversalObject branchObj = new BranchUniversalObject();
 
         // Set object properties
         // Facebook Properties
         if (options.has("canonicalIdentifier")) {
-            Log.d(LCAT, "set canonical identifier");
             branchObj.setCanonicalIdentifier(options.getString("canonicalIdentifier"));
         }
         if (options.has("title")) {
-            Log.d(LCAT, "set title");
             branchObj.setTitle(options.getString("title"));
         }
         if (options.has("contentDescription")) {
-            Log.d(LCAT, "set content description");
             branchObj.setContentDescription(options.getString("contentDescription"));
         }
         if (options.has("contentImageUrl")) {
-            Log.d(LCAT, "set content image url");
             branchObj.setContentImageUrl(options.getString("contentImageUrl"));
         }
 
         // Set content visibility
         if (options.has("contentIndexingMode")) {
-            Log.d(LCAT, "set content indexing mode");
 
             if (options.getString("contentIndexingMode").equals("private")) {
-                Log.d(LCAT, "set private");
                 branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
             } else {
-                Log.d(LCAT, "set public");
                 branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC);
             }
         }
 
         // Add custom keys/values to the deep link data
         if (options.has("contentMetadata")) {
-            Log.d(LCAT, "add content meta data");
 
             JSONObject contentMetaData = options.getJSONObject("contentMetadata");
             Iterator<?> keys = contentMetaData.keys();
@@ -436,8 +397,6 @@ public class BranchSDK extends CordovaPlugin
                    response.put("message", "Success");
                    response.put("branchUniversalObjectId", this.branchObjectWrappers.size() - 1);
 
-        Log.d(LCAT, String.format("Branch wrapper size: %d", this.branchObjectWrappers.size()));
-
         callbackContext.success(response);
 
     }
@@ -451,8 +410,6 @@ public class BranchSDK extends CordovaPlugin
      */
     private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams, String shareText) throws JSONException
     {
-
-        Log.d(LCAT, "start showShareSheet()");
 
         ShareSheetStyle shareSheetStyle = new ShareSheetStyle(this.activity, "Check this out!", shareText)
                 .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), "Copy", "Added to clipboard")
@@ -480,8 +437,6 @@ public class BranchSDK extends CordovaPlugin
     private BranchLinkProperties createLinkProperties(JSONObject options, JSONObject controlParams) throws JSONException
     {
 
-        Log.d(LCAT, "start createLinkProperties()");
-
         BranchLinkProperties linkProperties = new BranchLinkProperties();
 
         if (options.has("feature")) {
@@ -505,35 +460,27 @@ public class BranchSDK extends CordovaPlugin
         }
 
         if (controlParams.has("$fallback_url")) {
-            Log.d(LCAT, "addControlParameter $fallback_url");
             linkProperties.addControlParameter("$fallback_url", controlParams.getString("$fallback_url"));
         }
         if (controlParams.has("$desktop_url")) {
-            Log.d(LCAT, "addControlParameter $desktop_url");
             linkProperties.addControlParameter("$desktop_url", controlParams.getString("$desktop_url"));
         }
         if (controlParams.has("$android_url")) {
-            Log.d(LCAT, "addControlParameter $android_url");
             linkProperties.addControlParameter("$android_url", controlParams.getString("$android_url"));
         }
         if (controlParams.has("$ios_url")) {
-            Log.d(LCAT, "addControlParameter $ios_url");
             linkProperties.addControlParameter("$ios_url", controlParams.getString("$ios_url"));
         }
         if (controlParams.has("$ipad_url")) {
-            Log.d(LCAT, "addControlParameter $ipad_url");
             linkProperties.addControlParameter("$ipad_url", controlParams.getString("$ipad_url"));
         }
         if (controlParams.has("$fire_url")) {
-            Log.d(LCAT, "addControlParameter $fire_url");
             linkProperties.addControlParameter("$fire_url", controlParams.getString("$fire_url"));
         }
         if (controlParams.has("$blackberry_url")) {
-            Log.d(LCAT, "addControlParameter $blackberry_url");
             linkProperties.addControlParameter("$blackberry_url", controlParams.getString("$blackberry_url"));
         }
         if (controlParams.has("$windows_phone_url")) {
-            Log.d(LCAT, "addControlParameter $windows_phone_url");
             linkProperties.addControlParameter("$windows_phone_url", controlParams.getString("$windows_phone_url"));
         }
 
@@ -548,8 +495,6 @@ public class BranchSDK extends CordovaPlugin
      */
     private void registerView(int instanceIdx, CallbackContext callbackContext)
     {
-
-        Log.d(LCAT, "start registerView()");
 
         BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper)this.branchObjectWrappers.get(instanceIdx);
 
@@ -566,8 +511,6 @@ public class BranchSDK extends CordovaPlugin
      */
     private void generateShortUrl(int instanceIdx, JSONObject options, JSONObject controlParams, CallbackContext callbackContext) throws JSONException
     {
-
-        Log.d(LCAT, "start generateShortUrl()");
 
         BranchLinkProperties linkProperties = new BranchLinkProperties();
 
@@ -592,35 +535,27 @@ public class BranchSDK extends CordovaPlugin
         }
 
         if (controlParams.has("$fallback_url")) {
-            Log.d(LCAT, "addControlParameter $fallback_url");
             linkProperties.addControlParameter("$fallback_url", controlParams.getString("$fallback_url"));
         }
         if (controlParams.has("$desktop_url")) {
-            Log.d(LCAT, "addControlParameter $desktop_url");
             linkProperties.addControlParameter("$desktop_url", controlParams.getString("$desktop_url"));
         }
         if (controlParams.has("$android_url")) {
-            Log.d(LCAT, "addControlParameter $android_url");
             linkProperties.addControlParameter("$android_url", controlParams.getString("$android_url"));
         }
         if (controlParams.has("$ios_url")) {
-            Log.d(LCAT, "addControlParameter $ios_url");
             linkProperties.addControlParameter("$ios_url", controlParams.getString("$ios_url"));
         }
         if (controlParams.has("$ipad_url")) {
-            Log.d(LCAT, "addControlParameter $ipad_url");
             linkProperties.addControlParameter("$ipad_url", controlParams.getString("$ipad_url"));
         }
         if (controlParams.has("$fire_url")) {
-            Log.d(LCAT, "addControlParameter $fire_url");
             linkProperties.addControlParameter("$fire_url", controlParams.getString("$fire_url"));
         }
         if (controlParams.has("$blackberry_url")) {
-            Log.d(LCAT, "addControlParameter $blackberry_url");
             linkProperties.addControlParameter("$blackberry_url", controlParams.getString("$blackberry_url"));
         }
         if (controlParams.has("$windows_phone_url")) {
-            Log.d(LCAT, "addControlParameter $windows_phone_url");
             linkProperties.addControlParameter("$windows_phone_url", controlParams.getString("$windows_phone_url"));
         }
 
@@ -639,8 +574,6 @@ public class BranchSDK extends CordovaPlugin
      */
     private void setDebug(boolean isEnable, CallbackContext callbackContext)
     {
-
-        Log.d(LCAT, "start setDebug()");
 
         this.activity = this.cordova.getActivity();
 
@@ -663,8 +596,6 @@ public class BranchSDK extends CordovaPlugin
     private void setIdentity(String newIdentity, CallbackContext callbackContext)
     {
 
-        Log.d(LCAT, "start setIdentity()");
-
         this.instance.setIdentity(newIdentity, new SetIdentityListener(callbackContext));
 
     }
@@ -679,8 +610,6 @@ public class BranchSDK extends CordovaPlugin
      */
     private void userCompletedAction(String action, CallbackContext callbackContext)
     {
-
-        Log.d(LCAT, "start userCompletedAction()");
 
         this.instance.userCompletedAction(action);
         callbackContext.success("Success");
@@ -700,8 +629,6 @@ public class BranchSDK extends CordovaPlugin
     private void userCompletedAction(String action, JSONObject metaData, CallbackContext callbackContext)
     {
 
-        Log.d(LCAT, "start userCompletedAction()");
-
         this.instance.userCompletedAction(action, metaData);
         callbackContext.success("Success");
 
@@ -715,8 +642,6 @@ public class BranchSDK extends CordovaPlugin
      */
     private void getCreditHistory(CallbackContext callbackContext)
     {
-
-        Log.d(LCAT, "start creditHistory()");
 
         this.instance.getCreditHistory(new CreditHistoryListener(callbackContext));
 
@@ -763,49 +688,41 @@ public class BranchSDK extends CordovaPlugin
             this._callbackContext = callbackContext;
         }
 
-        public SessionListener() {
-            this._callbackContext = null;
-        }
-
         //Listener that implements BranchReferralInitListener for initSession
         @Override
         public void onInitFinished(JSONObject referringParams, BranchError error) {
 
-            Log.d(LCAT, "SessionListener onInitFinished()");
-
-            String out = "";
-
-            if (this._callbackContext == null) {
-                return;
-            }
+            String out;
 
             if (error == null) {
 
-                out = String.format("DeepLinkHandler(%s)", referringParams.toString());
-
                 // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
-                //  params will be empty if no data found.
-                if (referringParams == null) {
-                    Log.d(LCAT, "return is null");
-                    return;
-                } else {
-                    Log.d(LCAT, "return is not null");
-                    Log.d(LCAT, referringParams.toString());
+                // params will be empty if no data found.
+                if (referringParams != null) {
+
+                    out = String.format("DeepLinkHandler(%s)", referringParams.toString());
+
+                    webView.sendJavascript(out);
+
                 }
-                    
-                this._callbackContext.success(referringParams);
+                
+                if (this._callbackContext != null) {
+                    this._callbackContext.success(referringParams);
+                }
 
             } else {
                 String errorMessage = error.getMessage();
 
-                out = String.format("NonBranchLinkHandler(%s)", error.toString());
+                // out = String.format("NonBranchLinkHandler(%s)", error.toString());
 
-                Log.d(LCAT, errorMessage);
+                // webView.sendJavascript(out);
 
-                this._callbackContext.error(errorMessage);
+                if (this._callbackContext != null) {
+                    this._callbackContext.error(errorMessage);
+                }
             }
 
-            webView.sendJavascript(out);
+            
 
         }
 
@@ -830,10 +747,15 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onLogoutFinished(boolean loggedOut, BranchError error) {
             if (error == null) {
-                Log.d(LCAT, "no error on logout");
-                this._callbackContext.success(Boolean.toString(loggedOut));
+                
+                branchObjectWrappers = new ArrayList<BranchUniversalObjectWrapper>();
+                
+                this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is logged out */ loggedOut));
+            
             } else {
+
                 Log.d(LCAT, "error on logout");
+                
                 this._callbackContext.error(error.getMessage());
             }
         }
@@ -851,11 +773,9 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onInitFinished(JSONObject referringParams, BranchError error) {
 
-            Log.d(LCAT, "SessionListener onSetIdentityFinished()");
-
             if (error == null) {
 
-                this._callbackContext.success("Success");
+                this._callbackContext.success(referringParams);
 
             } else {
 
@@ -884,10 +804,8 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onRegisterViewFinished(boolean registered, BranchError error) {
 
-            Log.d(LCAT, "RegisterViewStatusListener registerViewFinished()");
-
             if (error == null) {
-                this._callbackContext.success(Boolean.toString(registered));
+                this._callbackContext.success("Success");
             } else {
 
                 String errorMessage = error.getMessage();
@@ -911,14 +829,9 @@ public class BranchSDK extends CordovaPlugin
         // Listener that implements BranchReferralStateChangedListener for loadRewards
         @Override
         public void onStateChanged(boolean changed, BranchError error) {
-
-            Log.d(LCAT, "LoadRewardsListener onStateChanged()");
-
             if (error == null) {
 
                 int credits = instance.getCredits();
-
-                Log.d(LCAT, "LoadRewards success");
 
                 this._callbackContext.success(credits);
 
@@ -932,6 +845,34 @@ public class BranchSDK extends CordovaPlugin
 
             }
 
+        }
+    }
+
+    protected class RedeemRewardsListener implements Branch.BranchReferralStateChangedListener
+    {
+        private CallbackContext _callbackContext;
+
+        // Constructor that takes in a required callbackContext object
+        public RedeemRewardsListener(CallbackContext callbackContext) {
+            this._callbackContext = callbackContext;
+        }
+
+        // Listener that implements BranchReferralStateChangedListener for redeemRewards
+        @Override
+        public void onStateChanged(boolean changed, BranchError error) {
+
+            if (error == null) {
+
+                this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is changed */ changed));
+            
+            } else {
+
+                String errorMessage = error.getMessage();
+
+                Log.d(LCAT, errorMessage);
+
+                this._callbackContext.error(errorMessage);
+            }
         }
     }
 
@@ -949,13 +890,9 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onLinkCreate(String url, BranchError error) {
 
-            Log.d(LCAT, "inside onLinkCreate");
-
             JSONObject response = new JSONObject();
 
             if (error == null) {
-
-                Log.d(LCAT, "link to share: " + url);
 
                 try {
                     response.put("url", url);
@@ -1016,7 +953,6 @@ public class BranchSDK extends CordovaPlugin
 
         @Override
         public void onShareLinkDialogLaunched() {
-            Log.d(LCAT, "inside onShareLinkDialogLaunched");
 
             if (_onShareLinkDialogLaunched == null) {
                 return;
@@ -1032,7 +968,6 @@ public class BranchSDK extends CordovaPlugin
 
         @Override
         public void onShareLinkDialogDismissed() {
-            Log.d(LCAT, "inside onShareLinkDialogDismissed");
 
             if (_onShareLinkDialogDismissed == null) {
                 return;
@@ -1048,8 +983,6 @@ public class BranchSDK extends CordovaPlugin
 
         @Override
         public void onLinkShareResponse(String sharedLink, String sharedChannel, BranchError error) {
-
-            Log.d(LCAT, "inside onLinkCreate");
 
             if (_onLinkShareResponse == null) {
                 return;
@@ -1095,9 +1028,6 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onChannelSelected(String channelName) {
 
-            Log.d(LCAT, "inside onChannelSelected");
-            Log.d(LCAT, "channelName: " + channelName);
-
             if (_onChannelSelected == null) {
                 return;
             }
@@ -1135,7 +1065,6 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onReceivingResponse(JSONArray list, BranchError error) {
 
-            Log.d(LCAT, "inside onReceivingResponse");
             ArrayList<String> errors = new ArrayList<String>();
 
             if (error == null) {
