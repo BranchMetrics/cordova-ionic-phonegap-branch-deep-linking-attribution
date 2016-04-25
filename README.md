@@ -12,7 +12,7 @@ There's a full demo app embedded in this repository. It should serve as an examp
 
 ## Additional Resources
 - [Integration guide](https://dev.branch.io/recipes/add_the_sdk/cordova/) *Start Here*
-- [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
+- [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/CHANGELOG.md)
 - [Testing](https://dev.branch.io/recipes/testing_your_integration/cordova/)
 - [Support portal, FAQ](http://support.branch.io)
 
@@ -204,7 +204,7 @@ initialize: function() {
 },
 ```
 
-Then add the method `DeepLinkHandler()` which will act as our callback when the session beings. The deep link data will be included here:
+Then add a global method `DeepLinkHandler()` which will act as our callback when the session beings. The deep link data will be included here:
 
 ```js
 function DeepLinkHandler(data) {
@@ -416,11 +416,11 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 
 **Sample Android Share Sheet**
 
-![Android Share Sheet](https://dev.branch.io/img/ingredients/sdk_links/android_share_sheet.png)
+![Android Share Sheet](https://dev.branch.io/img/pages/getting-started/branch-universal-object/android_share_sheet.png)
 
 **Sample UIActivityView Share Sheet**
 
-![UIActivityView Share Sheet](https://dev.branch.io/img/ingredients/sdk_links/ios_share_sheet.jpg)
+![UIActivityView Share Sheet](https://dev.branch.io/img/pages/getting-started/branch-universal-object/ios_share_sheet.png)
 
 The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will generate a Branch short URL and automatically tag it with the channel the user selects (Facebook, Twitter, etc.).
 
