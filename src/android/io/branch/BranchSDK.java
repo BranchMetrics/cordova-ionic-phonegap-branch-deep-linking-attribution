@@ -781,7 +781,7 @@ public class BranchSDK extends CordovaPlugin
 
             if (error == null) {
 
-                out = String.format("DeepLinkHandler(%s)", referringParams.toString());
+                out = String.format("DeepLinkHandler({params:%s})", referringParams.toString());
 
                 // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
                 //  params will be empty if no data found.
