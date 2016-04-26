@@ -204,7 +204,7 @@ initialize: function() {
 },
 ```
 
-Then add a global method `DeepLinkHandler()` which will act as our callback when the session beings. The deep link data will be included here:
+Then you should **EXPLICITLY** define a global method called `DeepLinkHandler()` which will act as our callback when the session beings. The deep link data will be included here:
 
 ```js
 function DeepLinkHandler(data) {
