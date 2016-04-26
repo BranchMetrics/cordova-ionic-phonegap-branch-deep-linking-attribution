@@ -501,14 +501,16 @@
     } else {
         urlString = notification.object;
     }
-    
-    NSDictionary *returnDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Unable to process URL", @"error", urlString, @"url", nil];
-    NSData* returnJSON = [NSJSONSerialization dataWithJSONObject:returnDict
-                                                         options:NSJSONWritingPrettyPrinted
-                                                           error:&error];
 
-    NSString *resultString = [[NSString alloc] initWithData:returnJSON encoding:NSUTF8StringEncoding];
-    [self.commandDelegate evalJs:[NSString stringWithFormat:@"NonBranchLinkHandler(%@)", resultString]];
+    if ([urlString isKindOfClass:[NSString class]]) {
+        NSDictionary *returnDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Unable to process URL", @"error", urlString, @"url", nil];
+        NSData* returnJSON = [NSJSONSerialization dataWithJSONObject:returnDict
+                                                             options:NSJSONWritingPrettyPrinted
+                                                               error:&error];
+
+        NSString *resultString = [[NSString alloc] initWithData:returnJSON encoding:NSUTF8StringEncoding]
+        [self.commandDelegate evalJs:[NSString stringWithFormat:@"NonBranchLinkHandler(%@)", resultString]];
+    }
 }
 
 #pragma mark - URL Methods (not fully implemented YET!)
