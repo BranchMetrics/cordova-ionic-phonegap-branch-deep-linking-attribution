@@ -415,9 +415,10 @@
             props.tags = [arg1 objectForKey:key];
         }
     }
-
-    for (id key in arg2) {
-        [props addControlParam:key withValue:[arg2 objectForKey:key]];
+    if (arg2) {
+        for (id key in arg2) {
+            [props addControlParam:key withValue:[arg2 objectForKey:key]];
+        }
     }
 
     [branchUniversalObj getShortUrlWithLinkProperties:props andCallback:^(NSString *url, NSError *error) {
@@ -466,8 +467,10 @@
         }
     }
 
-    for (id key in arg2) {
-        [linkProperties addControlParam:key withValue:[arg1 objectForKey:key]];
+    if (arg2) {
+        for (id key in arg2) {
+            [linkProperties addControlParam:key withValue:[arg2 objectForKey:key]];
+        }
     }
 
     [branchUniversalObj showShareSheetWithLinkProperties:linkProperties
