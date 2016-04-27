@@ -399,8 +399,20 @@
         if ([key isEqualToString:@"duration"]) {
             props.matchDuration = (NSUInteger)[((NSNumber *)[arg1 objectForKey:key]) integerValue];
         }
-        else {
-            [props setValue:[arg1 objectForKey:key] forKey:key];
+        else if ([key isEqualToString:@"feature"]) {
+            props.feature = [arg1 objectForKey:key];
+        }
+        else if ([key isEqualToString:@"stage"]) {
+            props.stage = [arg1 objectForKey:key];
+        }
+        else if ([key isEqualToString:@"alias"]) {
+            props.alias = [arg1 objectForKey:key];
+        }
+        else if ([key isEqualToString:@"channel"]) {
+            props.channel = [arg1 objectForKey:key];
+        }
+        else if ([key isEqualToString:@"tags"] && [[arg1 objectForKey:key] isKindOfClass:[NSArray class]]) {
+            props.tags = [arg1 objectForKey:key];
         }
     }
 
