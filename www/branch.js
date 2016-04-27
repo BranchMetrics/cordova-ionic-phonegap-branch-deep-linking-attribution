@@ -339,7 +339,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              */
             obj.listOnSpotlight = function () {
 
-                return execute('listOnSpotlight');
+                return execute('listOnSpotlight', [obj.instanceId]);
 
             };
 
