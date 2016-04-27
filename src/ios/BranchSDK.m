@@ -373,8 +373,8 @@
 
     BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
 
-    CDVPluginResult* pluginResult = nil;
     [branchUniversalObj registerViewWithCallback:^(NSDictionary *params, NSError *error) {
+        CDVPluginResult *pluginResult = nil;
         if (!error) {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         } else {
@@ -523,7 +523,7 @@
                                                              options:NSJSONWritingPrettyPrinted
                                                                error:&error];
 
-        NSString *resultString = [[NSString alloc] initWithData:returnJSON encoding:NSUTF8StringEncoding]
+        NSString *resultString = [[NSString alloc] initWithData:returnJSON encoding:NSUTF8StringEncoding];
         [self.commandDelegate evalJs:[NSString stringWithFormat:@"NonBranchLinkHandler(%@)", resultString]];
     }
 }
