@@ -462,9 +462,7 @@ branchUniversalObj.showShareSheet({
 }, {
   // put your control parameters here
   "$desktop_url" : "http://desktop-url.com",
-}, {
-  'Custom share text: '
-});
+}, 'Custom share text: ');
 ```
 
 ##### Share Sheet Callbacks (Android ONLY)
