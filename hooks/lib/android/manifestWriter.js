@@ -186,7 +186,7 @@ Class injects plugin preferences into AndroidManifest.xml file.
 
     // generate intent-filters
     pluginPreferences.hosts.forEach(function(host) {
-      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, pluginPreferences.androidPrefix, targetSdk === '23'));
+      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, pluginPreferences.androidPrefix, parseInt(targetSdk) >= 23));
     });
 
     // add Universal Links intent-filters to the launch activity
