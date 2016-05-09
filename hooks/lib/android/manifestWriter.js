@@ -170,6 +170,7 @@ Class injects plugin preferences into AndroidManifest.xml file.
    */
   function injectOptions(manifestData, pluginPreferences) {
     var changedManifest = manifestData,
+      targetSdk = changedManifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion'],
       activitiesList = changedManifest['manifest']['application'][0]['activity'],
       launchActivityIndex = getMainLaunchActivityIndex(activitiesList),
       ulIntentFilters = [],
@@ -185,7 +186,7 @@ Class injects plugin preferences into AndroidManifest.xml file.
 
     // generate intent-filters
     pluginPreferences.hosts.forEach(function(host) {
-      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, pluginPreferences.androidPrefix));
+      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, pluginPreferences.androidPrefix, parseInt(targetSdk) >= 23));
     });
 
     // add Universal Links intent-filters to the launch activity
@@ -253,7 +254,7 @@ Class injects plugin preferences into AndroidManifest.xml file.
    * @param {String} pathName - host path
    * @return {Object} intent-filter as a JSON object
    */
-  function createIntentFilter(host, scheme, pathPrefix) {
+  function createIntentFilter(host, scheme, pathPrefix, androidM) {
     var intentFilter = {
       '$' : {
         'android:autoVerify': 'true'
@@ -280,6 +281,10 @@ Class injects plugin preferences into AndroidManifest.xml file.
         }
       }]
     };
+
+    if (!androidM) {
+      delete intentFilter['$']['android:autoVerify'];
+    }
 
     return intentFilter;
   }
