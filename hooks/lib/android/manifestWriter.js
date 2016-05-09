@@ -170,7 +170,7 @@ Class injects plugin preferences into AndroidManifest.xml file.
    */
   function injectOptions(manifestData, pluginPreferences) {
     var changedManifest = manifestData,
-      targetSdk = changedManifest['manifest']['uses-sdk']['$']['android:targetSdkVersion'],
+      targetSdk = changedManifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion'],
       activitiesList = changedManifest['manifest']['application'][0]['activity'],
       launchActivityIndex = getMainLaunchActivityIndex(activitiesList),
       ulIntentFilters = [],
