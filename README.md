@@ -90,13 +90,25 @@ Add the following entry to your application's `config.xml`:
 ```xml
 <branch-config>
     <ios-team-id value="your_ios_team_id" />
-    <host name="bnc.lt" scheme="https" />
+    <host name="READ_FROM_DASHBOARD.app.link" scheme="https" />
+    <host name="READ_FROM_DASHBOARD-alternate.app.link" scheme="https" />
 </branch-config>
 ```
 
-You can get your iOS Team ID from the Apple Developer Portal. Once done, you have successfully enabled universal links for iOS.
+You can get your iOS Team ID from the Apple Developer Portal. Once done, you have successfully enabled universal links for iOS. `READ_FROM_DASHBOARD` is the four-character value in front of all your links. You can find it listed in the custom domain field at the bottom of the [Branch link settings](https://dashboard.branch.io/#/settings/link). It will look something like this: `/WSuf` (the initial `/` character should be included).
 
 If you use a custom domain or subdomain for your Branch links, you should also add a key for `<host name="mycustomdomainorsubdomain" scheme="https" />`.
+
+##### Support for legacy Branch links
+
+If your links are of the form `bnc.lt`, you must still use this domain in your config file.
+
+```xml
+<branch-config>
+    <ios-team-id value="your_ios_team_id" />
+    <host name="bnc.lt" scheme="https" />
+</branch-config>
+```
 
 #### Android: Enable App Links
 
@@ -105,13 +117,24 @@ Add the following entry to your application's `config.xml`:
 ```xml
 <branch-config>
     <android-prefix value="READ_FROM_DASHBOARD" />
-    <host name="bnc.lt" scheme="https" />
+    <host name="xxxx.app.link" scheme="https" />
 </branch-config>
 ```
 
 `READ_FROM_DASHBOARD` is the four-character value in front of all your links. You can find it underneath the field labeled SHA256 Cert Fingerprints on the dashboard. It will look something like this: `/WSuf` (the initial `/` character should be included).
 
 If you use a custom domain or subdomain for your Branch links, you should also add a key for `<host name="mycustomdomainorsubdomain" scheme="https" />`.
+
+##### Support for legacy Branch links
+
+If your links are of the form `bnc.lt`, you must still use this domain in your config file.
+
+```xml
+<branch-config>
+    <android-prefix value="READ_FROM_DASHBOARD" />
+    <host name="bnc.lt" scheme="https" />
+</branch-config>
+```
 
 ---------------
 
@@ -371,24 +394,24 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 
 |    KEY   |   TYPE   |          MEANING
 | -------- | -------- |------------------------
-| feature  | `string` | The feature of the link
-| alias    | `string` | The alias of the link
-| channel  | `string` | The channel of the link
-| stage    | `string` | The stage of the link
+| feature  | `string` | This is the feature of your app that the link might be associated with. eg: if you had built a referral program, you would label links with the feature `referral`
+| alias    | `string` | Specify a link alias in place of the standard encoded short URL (e.g., `[branchsubdomain]/youralias or yourdomain.co/youralias)`. Link aliases are unique, immutable objects that cannot be deleted. **Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight**
+| channel  | `string` | Use channel to tag the route that your link reaches users. For example, tag links with ‘Facebook’ or ‘LinkedIn’ to help track clicks and installs through those paths separately
+| stage    | `string` |   Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter
 | duration |  `int`   | duration of the link.
 
 **controlParameters**: `object` - Link properties needed to generate the URL.
 
 |        KEY         |   TYPE   |       MEANING
 | ------------------ | -------- | --------------------
-| $fallback_url      | `string` | The fallback URL
-| $desktop_url       | `string` | The URL for desktop
-| $android_url       | `string` | The URL for Android
-| $ios_url           | `string` | The URL for iPhone
-| $ipad_url          | `string` | The URL for iPad
-| $fire_url          | `string` | The URL for Kindle Fire
-| $blackberry_url    | `string` | The URL for Blackberry
-| $windows_phone_url | `string` | The URL for Windows phone
+| $fallback_url      | `string` | Change the redirect endpoint for all platforms - so you don’t have to enable it by platform
+| $desktop_url       | `string` | Change the redirect endpoint on desktops  
+| $android_url       | `string` | Change the redirect endpoint for Android
+| $ios_url           | `string` | Change the redirect endpoint for iOS
+| $ipad_url          | `string` | Change the redirect endpoint for iPads
+| $fire_url          | `string` | Change the redirect endpoint for Amazon Fire OS 
+| $blackberry_url    | `string` | Change the redirect endpoint for Blackberry OS
+| $windows_phone_url | `string` | Change the redirect endpoint for Windows OS
 
 ##### Usage
 ```js
@@ -430,24 +453,24 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will
 
 |    KEY   |   TYPE   |          MEANING
 | -------- | -------- |------------------------
-| feature  | `string` | The feature of the link
-| alias    | `string` | The alias of the link
-| channel  | `string` | The channel of the link
-| stage    | `string` | The stage of the link
+| feature  | `string` | This is the feature of your app that the link might be associated with. eg: if you had built a referral program, you would label links with the feature `referral`.
+| alias    | `string` | Specify a link alias in place of the standard encoded short URL (e.g., `[branchsubdomain]/youralias or yourdomain.co/youralias)`. Link aliases are unique, immutable objects that cannot be deleted. **Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight**
+| channel  | `string` | Use channel to tag the route that your link reaches users. For example, tag links with ‘Facebook’ or ‘LinkedIn’ to help track clicks and installs through those paths separately
+| stage    | `string` |   Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter
 | duration |  `int`   | duration of the link.
 
 **controlParameters**: `object` - Link properties needed to generate the URL.
 
 |        KEY         |   TYPE   |       MEANING
 | ------------------ | -------- | --------------------
-| $fallback_url      | `string` | The fallback URL
-| $desktop_url       | `string` | The URL for desktop
-| $android_url       | `string` | The URL for Android
-| $ios_url           | `string` | The URL for iPhone
-| $ipad_url          | `string` | The URL for iPad
-| $fire_url          | `string` | The URL for Kindle Fire
-| $blackberry_url    | `string` | The URL for Blackberry
-| $windows_phone_url | `string` | The URL for Windows phone
+| $fallback_url      | `string` | Change the redirect endpoint for all platforms - so you don’t have to enable it by platform
+| $desktop_url       | `string` | Change the redirect endpoint on desktops  
+| $android_url       | `string` | Change the redirect endpoint for Android
+| $ios_url           | `string` | Change the redirect endpoint for iOS
+| $ipad_url          | `string` | Change the redirect endpoint for iPads
+| $fire_url          | `string` | Change the redirect endpoint for Amazon Fire OS 
+| $blackberry_url    | `string` | Change the redirect endpoint for Blackberry OS
+| $windows_phone_url | `string` | Change the redirect endpoint for Windows OS
 
 **shareText**: `string` - Custom share text
 
