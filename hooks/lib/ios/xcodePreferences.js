@@ -63,10 +63,10 @@ Which is:
     for (config in configurations) {
       buildSettings = configurations[config].buildSettings;
       buildSettings['CODE_SIGN_ENTITLEMENTS'] = '"' + entitlementsFilePath + '"';
-
       // if deployment target is less then the required one - increase it
       if (buildSettings['IPHONEOS_DEPLOYMENT_TARGET']) {
-        if (compare(buildSettings['IPHONEOS_DEPLOYMENT_TARGET'], IOS_DEPLOYMENT_TARGET) == -1) {
+        var buildDeploymentTarget = buildSettings['IPHONEOS_DEPLOYMENT_TARGET'].toString();
+        if (compare(buildDeploymentTarget, IOS_DEPLOYMENT_TARGET) == -1) {
           buildSettings['IPHONEOS_DEPLOYMENT_TARGET'] = IOS_DEPLOYMENT_TARGET;
           deploymentTargetIsUpdated = true;
         }
