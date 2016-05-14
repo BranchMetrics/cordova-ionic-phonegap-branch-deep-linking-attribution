@@ -612,8 +612,58 @@ Branch.creditHistory().then(function (history) {
 The response will return an array that has been parsed from the following JSON:
 
 ```js
+[
+    {
+        "transaction": {
+                           "date": "2014-10-14T01:54:40.425Z",
+                           "id": "50388077461373184",
+                           "bucket": "default",
+                           "type": 0,
+                           "amount": 5
+                       },
+        "event" : {
+            "name": "event name",
+            "metadata": { your event metadata if present }
+        },
+        "referrer": "12345678",
+        "referree": null
+    },
+    {
+        "transaction": {
+                           "date": "2014-10-14T01:55:09.474Z",
+                           "id": "50388199301710081",
+                           "bucket": "default",
+                           "type": 2,
+                           "amount": -3
+                       },
+        "event" : {
+            "name": "event name",
+            "metadata": { your event metadata if present }
+        },
+        "referrer": null,
+        "referree": "12345678"
+    }
+]
+```
 
-## <a id="android-build-faq"></a>Android Build FAQ
+**referrer**
+
+The id of the referring user for this credit transaction. Returns null if no referrer is involved. Note this id is the user id in developer's own system that's previously passed to Branch's identify user API call.
+
+**referree**
+
+The id of the user who was referred for this credit transaction. Returns null if no referree is involved. Note this id is the user id in developer's own system that's previously passed to Branch's identify user API call.
+
+**type**
+
+This is the type of credit transaction
+1. 0 - A reward that was added automatically by the user completing an action or referral
+2. 1 - A reward that was added manually
+3. 2 - A redemption of credits that occurred through our API or SDKs
+4. 3 - This is a very unique case where we will subtract credits automatically when we detect fraud
+
+
+## Android Build FAQ
 
 1. Gradle build cannot find `io.branch.sdk.android:library:1.+` dependency:
 
