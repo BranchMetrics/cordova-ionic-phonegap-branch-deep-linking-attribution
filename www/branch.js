@@ -302,10 +302,8 @@ Branch.prototype.createBranchUniversalObject = function (options) {
 
             obj.onShareSheetDismissed = function (callback) {
 
-                if (deviceVendor.indexOf('Apple') < 0) {
-                    executeCallback('onShareLinkDialogDismissed', callback, [obj.instanceId]);
-                }
-
+                executeCallback('onShareLinkDialogDismissed', callback, [obj.instanceId]);
+                
             }
 
             /**

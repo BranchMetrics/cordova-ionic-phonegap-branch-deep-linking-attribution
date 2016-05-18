@@ -12,6 +12,7 @@
 - (void)pluginInitialize
 {
     self.branchUniversalObjArray = [[NSMutableArray alloc] init];
+    self.branchUniversalSharesheetCallbackArray = [[NSMutableArray alloc] init];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postUnhandledURL:) name:@"BSDKPostUnhandledURL" object:nil];
 }
@@ -359,6 +360,8 @@
     }
 
     [self.branchUniversalObjArray addObject:branchUniversalObj];
+    [self.branchUniversalSharesheetCallbackArray addObject:command.callbackId];
+
     NSNumber *branchUniversalObjectId = [[NSNumber alloc] initWithInteger:([self.branchUniversalObjArray count] - 1)];
     NSString *message = @"createBranchUniversalObject Success";
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:message, @"message", branchUniversalObjectId, @"branchUniversalObjectId", nil];
@@ -477,7 +480,17 @@
                                                 andShareText:shareText
                                                 fromViewController:self.viewController
                                                 completion:^(NSString *activityType, BOOL completed) {
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Share link dismissed."];
+        int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
+        [pluginResult setKeepCallbackAsBool:TRUE];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:[self.branchUniversalSharesheetCallbackArray objectAtIndex:listenerCallbackId]];
     }];
+}
+
+- (void)onShareLinkDialogDismissed:(CDVInvokedUrlCommand*)command
+{
+    int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
+    [self.branchUniversalSharesheetCallbackArray replaceObjectAtIndex:listenerCallbackId withObject:command.callbackId];
 }
 
 - (void)listOnSpotlight:(CDVInvokedUrlCommand*)command {

@@ -22,6 +22,7 @@
 @property (copy) NSDate *expirationDate;
 
 @property (strong, nonatomic) NSMutableArray *branchUniversalObjArray;
+@property (strong, nonatomic) NSMutableArray *branchUniversalSharesheetCallbackArray;
 
 // BranchSDK Basic Methods
 - (void)initSession:(CDVInvokedUrlCommand*)command;
@@ -44,6 +45,7 @@
 - (void)registerView:(CDVInvokedUrlCommand*)command;
 - (void)generateShortUrl:(CDVInvokedUrlCommand*)command;
 - (void)showShareSheet:(CDVInvokedUrlCommand*)command;
+- (void)onShareLinkDialogDismissed:(CDVInvokedUrlCommand*)command;
 - (void)listOnSpotlight:(CDVInvokedUrlCommand*)command;
 
 @end
