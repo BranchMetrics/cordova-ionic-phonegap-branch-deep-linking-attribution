@@ -504,7 +504,7 @@ branchUniversalObj.onShareSheetLaunched(function () {
 });
 ```
 
-###### onShareSheetDismissed (Android & iOS)
+###### onShareSheetDismissed
 
 The event fires when the share sheet is dismissed.
 
@@ -514,7 +514,7 @@ branchUniversalObj.onShareSheetDismissed(function () {
 });
 ```
 
-###### onLinkShareResponse (Android ONLY)
+###### onLinkShareResponse
 
 The event returns a dictionary of the response data.
 
