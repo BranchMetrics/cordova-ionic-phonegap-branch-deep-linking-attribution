@@ -9,7 +9,7 @@
 
 @interface BranchSDK()
 
-- (void)doShareLinkResponse:(int)callbackId activityType:(NSString*)response;
+- (void)doShareLinkResponse:(int)callbackId sendResponse:(NSDictionary*)response;
 
 @end
 
@@ -501,7 +501,13 @@
         int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
         
         if (completed) {
-            [self doShareLinkResponse:listenerCallbackId activityType:activityType];
+            NSLog(@"Share link complete");
+            [branchUniversalObj getShortUrlWithLinkProperties:linkProperties andCallback:^(NSString *url, NSError *error) {
+                if (!error) {
+                    NSDictionary *response = [[NSDictionary alloc] initWithObjectsAndKeys:url, @"sharedLink", activityType, @"sharedChannel", nil];
+                    [self doShareLinkResponse:listenerCallbackId sendResponse:response];
+                }
+            }];
         }
         
         CDVPluginResult *shareDialogDismissed = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -514,9 +520,8 @@
     }];
 }
 
-- (void)doShareLinkResponse:(int)callbackId activityType:(NSString*)response {
-    CDVPluginResult *linkShareResponse = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:response];
-
+- (void)doShareLinkResponse:(int)callbackId sendResponse:(NSDictionary*)response {
+    CDVPluginResult *linkShareResponse = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:response];
     NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:callbackId];
 
     [linkShareResponse setKeepCallbackAsBool:TRUE];
