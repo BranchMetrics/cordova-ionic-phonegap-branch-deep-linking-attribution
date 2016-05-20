@@ -44,6 +44,8 @@
 - (void)registerView:(CDVInvokedUrlCommand*)command;
 - (void)generateShortUrl:(CDVInvokedUrlCommand*)command;
 - (void)showShareSheet:(CDVInvokedUrlCommand*)command;
+- (void)onShareLinkDialogDismissed:(CDVInvokedUrlCommand*)command;
+- (void)onLinkShareResponse:(CDVInvokedUrlCommand*)command;
 - (void)listOnSpotlight:(CDVInvokedUrlCommand*)command;
 
 @end

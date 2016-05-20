@@ -269,7 +269,7 @@ function ShowShareSheet()
         console.log('Share sheet launched');
     });
     branchUniversalObj.onShareSheetDismissed(function () {
-      console.log('Share sheet dimissed');
+      console.log('Share sheet dismissed');
     });
     branchUniversalObj.onLinkShareResponse(function (res) {
       console.log('Share link response: ' + JSON.stringify(res));

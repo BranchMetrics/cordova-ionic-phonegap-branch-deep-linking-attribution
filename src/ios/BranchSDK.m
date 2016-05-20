@@ -7,6 +7,12 @@
 
 #import "BranchSDK.h"
 
+@interface BranchSDK()
+
+- (void)doShareLinkResponse:(int)callbackId sendResponse:(NSDictionary*)response;
+
+@end
+
 @implementation BranchSDK
 
 - (void)pluginInitialize
@@ -358,7 +364,18 @@
         }
     }
 
-    [self.branchUniversalObjArray addObject:branchUniversalObj];
+    // [self.branchUniversalObjArray addObject:branchUniversalObj];
+
+    // Instantiate callback ids
+    NSMutableDictionary *branchUniversalObjDict = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"branchUniversalObj": branchUniversalObj,
+        @"onShareSheetDismissed": command.callbackId,
+        @"onShareSheetLaunched": command.callbackId,
+        @"onLinkShareResponse": command.callbackId,
+        @"onChannelSelected": command.callbackId
+    }];
+    [self.branchUniversalObjArray addObject:branchUniversalObjDict];
+
     NSNumber *branchUniversalObjectId = [[NSNumber alloc] initWithInteger:([self.branchUniversalObjArray count] - 1)];
     NSString *message = @"createBranchUniversalObject Success";
     NSDictionary *params = [[NSDictionary alloc] initWithObjectsAndKeys:message, @"message", branchUniversalObjectId, @"branchUniversalObjectId", nil];
@@ -370,8 +387,9 @@
 - (void)registerView:(CDVInvokedUrlCommand*)command
 {
     int branchUniversalObjectId = [[command.arguments objectAtIndex:0] intValue];
-
-    BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+    
+    NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+    BranchUniversalObject *branchUniversalObj = [branchUniversalObjDict objectForKey:@"branchUniversalObj"];
 
     [branchUniversalObj registerViewWithCallback:^(NSDictionary *params, NSError *error) {
         CDVPluginResult *pluginResult = nil;
@@ -391,7 +409,8 @@
     NSDictionary *arg1 = [command.arguments objectAtIndex:1];
     NSDictionary *arg2 = [command.arguments objectAtIndex:2];
 
-    BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+    NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+    BranchUniversalObject *branchUniversalObj = [branchUniversalObjDict objectForKey:@"branchUniversalObj"];
 
     BranchLinkProperties *props = [[BranchLinkProperties alloc] init];
 
@@ -454,7 +473,8 @@
     NSDictionary *arg1 = [command.arguments objectAtIndex:1];
     NSDictionary *arg2 = [command.arguments objectAtIndex:2];
 
-    BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+    NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+    BranchUniversalObject *branchUniversalObj = [branchUniversalObjDict objectForKey:@"branchUniversalObj"];
 
     BranchLinkProperties *linkProperties = [[BranchLinkProperties alloc] init];
 
@@ -477,12 +497,64 @@
                                                 andShareText:shareText
                                                 fromViewController:self.viewController
                                                 completion:^(NSString *activityType, BOOL completed) {
+
+        int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
+        
+        if (completed) {
+            NSLog(@"Share link complete");
+            [branchUniversalObj getShortUrlWithLinkProperties:linkProperties andCallback:^(NSString *url, NSError *error) {
+                if (!error) {
+                    NSDictionary *response = [[NSDictionary alloc] initWithObjectsAndKeys:url, @"sharedLink", activityType, @"sharedChannel", nil];
+                    [self doShareLinkResponse:listenerCallbackId sendResponse:response];
+                }
+            }];
+        }
+        
+        CDVPluginResult *shareDialogDismissed = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+        NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:listenerCallbackId];
+
+        [shareDialogDismissed setKeepCallbackAsBool:TRUE];
+
+        [self.commandDelegate sendPluginResult:shareDialogDismissed callbackId:[branchUniversalObjDict objectForKey:@"onShareSheetDismissed"]];
     }];
+}
+
+- (void)doShareLinkResponse:(int)callbackId sendResponse:(NSDictionary*)response {
+    CDVPluginResult *linkShareResponse = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:response];
+    NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:callbackId];
+
+    [linkShareResponse setKeepCallbackAsBool:TRUE];
+
+    [self.commandDelegate sendPluginResult:linkShareResponse callbackId:[branchUniversalObjDict objectForKey:@"onLinkShareResponse"]];
+}
+
+- (void)onShareLinkDialogDismissed:(CDVInvokedUrlCommand*)command
+{
+    int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
+
+    NSMutableDictionary *newBranchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:listenerCallbackId];
+    [newBranchUniversalObjDict setObject:command.callbackId forKey:@"onShareSheetDismissed"];
+
+    [self.branchUniversalObjArray replaceObjectAtIndex:listenerCallbackId withObject:newBranchUniversalObjDict];
+}
+
+- (void)onLinkShareResponse:(CDVInvokedUrlCommand*)command
+{
+    int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
+
+    NSMutableDictionary *newBranchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:listenerCallbackId];
+    [newBranchUniversalObjDict setObject:command.callbackId forKey:@"onLinkShareResponse"];
+
+    [self.branchUniversalObjArray replaceObjectAtIndex:listenerCallbackId withObject:newBranchUniversalObjDict];
 }
 
 - (void)listOnSpotlight:(CDVInvokedUrlCommand*)command {
     int branchUniversalObjectId = [[command.arguments objectAtIndex:0] intValue];
-    BranchUniversalObject *branchUniversalObj = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+
+    NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+    BranchUniversalObject *branchUniversalObj = [branchUniversalObjDict objectForKey:@"branchUniversalObj"];
+
     [branchUniversalObj listOnSpotlightWithCallback:^(NSString *string, NSError *error) {
         CDVPluginResult* pluginResult = nil;
         if (!error) {

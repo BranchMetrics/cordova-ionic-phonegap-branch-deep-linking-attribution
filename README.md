@@ -488,13 +488,13 @@ branchUniversalObj.showShareSheet({
 }, 'Custom share text: ');
 ```
 
-##### Share Sheet Callbacks (Android ONLY)
+##### Share Sheet Callbacks
 
 **NOTE: Share sheet callbacks must be declared first before executing `showShareSheet` or else it won't be able to catch the `event's first trigger`.**
 
 To implement the callback, you must add listeners to the following events:
 
-###### onShareSheetLaunched
+###### onShareSheetLaunched (Android ONLY)
 
 The event fires when the share sheet is presented.
 
@@ -524,7 +524,7 @@ branchUniversalObj.onLinkShareResponse(function (res) {
 });
 ```
 
-###### onChannelSelected
+###### onChannelSelected (Android ONLY)
 
 The event fires when a channel is selected.
 
