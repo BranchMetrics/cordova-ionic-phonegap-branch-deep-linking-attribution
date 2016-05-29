@@ -713,7 +713,7 @@ public class BranchSDK extends CordovaPlugin
             } else {
                 String errorMessage = error.getMessage();
 
-                out = String.format("NonBranchLinkHandler(%s)", error.toString());
+                out = String.format("NonBranchLinkHandler(\"%s\")", error.toString());
                 webView.sendJavascript(out);
 
                 if (this._callbackContext != null) {
