@@ -390,4 +390,11 @@ Branch.prototype.creditHistory = function () {
 
 };
 
+/**
+ * NonBranchLinkHandler callback placeholder.
+ * 
+ * @param {String} response
+ */
+window.NonBranchLinkHandler = (typeof NonBranchLinkHandler === 'undefined') ? function (response) {} : NonBranchLinkHandler;
+
 module.exports = new Branch;

@@ -69,13 +69,6 @@ function NonBranchLinkHandler(data)
     }
 }
 
-function NonBranchLinkHandler(data)
-{
-    if (data) {
-        alert('Non-branch link found: ' + JSON.stringify(data));
-    }
-}
-
 function SetDebug(isEnabled)
 {
     console.log('Trigger SetDebug()');
