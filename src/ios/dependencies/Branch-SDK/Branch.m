@@ -38,6 +38,11 @@
 #import "BranchSpotlightUrlRequest.h"
 #import "BranchRegisterViewRequest.h"
 
+//Fabric
+#import "../Fabric/FABKitProtocol.h"
+#import "../Fabric/Fabric+FABKits.h"
+
+
 NSString * const BRANCH_FEATURE_TAG_SHARE = @"share";
 NSString * const BRANCH_FEATURE_TAG_REFERRAL = @"referral";
 NSString * const BRANCH_FEATURE_TAG_INVITE = @"invite";
@@ -56,7 +61,7 @@ NSString * const BRANCH_INIT_KEY_IS_FIRST_SESSION = @"+is_first_session";
 NSString * const BRANCH_INIT_KEY_CLICKED_BRANCH_LINK = @"+clicked_branch_link";
 NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 
-@interface Branch() <BranchDeepLinkingControllerCompletionDelegate>
+@interface Branch() <BranchDeepLinkingControllerCompletionDelegate, FABKit>
 
 
 @property (strong, nonatomic) BNCServerInterface *bServerInterface;
@@ -80,7 +85,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 @property (assign, nonatomic) BOOL useCookieBasedMatching;
 @property (strong, nonatomic) NSDictionary *deepLinkDebugParams;
 @property (assign, nonatomic) BOOL accountForFacebookSDK;
-
+@property (assign, nonatomic) id FBSDKAppLinkUtility;
 
 @end
 
@@ -101,7 +106,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
         // If no app key
         NSString *appKey = preferenceHelper.appKey;
         if (!appKey) {
-            NSLog(@"[Branch Warning] Please enter your branch_key in the plist!");
+            [preferenceHelper logWarning:@"Please enter your branch_key in the plist!"];
             return nil;
         }
         else {
@@ -123,12 +128,12 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
         // If no app key
         NSString *appKey = preferenceHelper.appKey;
         if (!appKey) {
-            NSLog(@"[Branch Warning] Please enter your branch_key in the plist!");
+            [preferenceHelper logWarning:@"Please enter your branch_key in the plist!"];
             return nil;
         }
         // If they did provide an app key, show them a warning. Shouldn't use app key with a test instance.
         else {
-            NSLog(@"[Branch Warning] You requested the test instance, but provided an app key. App Keys cannot be used for test instances. Additionally, usage of App Key is deprecated, please move toward using a Branch key");
+            [preferenceHelper logWarning:@"You requested the test instance, but provided an app key. App Keys cannot be used for test instances. Additionally, usage of App Key is deprecated, please move toward using a Branch key"];
             keyToUse = appKey;
         }
     }
@@ -259,6 +264,14 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     self.accountForFacebookSDK = YES;
 }
 
+- (void)suppressWarningLogs {
+    self.preferenceHelper.suppressWarningLogs = YES;
+}
+
+- (void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value {
+    [self.preferenceHelper setRequestMetadataKey:key value:value];
+}
+
 #pragma mark - InitSession Permutation methods
 
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options {
@@ -327,16 +340,20 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     
     if ([BNCSystemObserver getOSVersion].integerValue >= 8) {
         if (![options objectForKey:UIApplicationLaunchOptionsURLKey] && ![options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
-            [self initUserSessionAndCallCallback:YES];
+            // If Facebook SDK is present, call deferred app link check here
+            if (![self checkFacebookAppLinks]) {
+                [self initUserSessionAndCallCallback:YES];
+            }
         }
         else if ([options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
-            self.preferenceHelper.isContinuingUserActivity = YES;
             if (self.accountForFacebookSDK) {
                 id activity = [[options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey] objectForKey:@"UIApplicationLaunchOptionsUserActivityKey"];
                 if (activity && [activity isKindOfClass:[NSUserActivity class]]) {
                     [self continueUserActivity:activity];
+                    return;
                 }
             }
+            self.preferenceHelper.shouldWaitForInit = YES;
         }
     }
     else if (![options objectForKey:UIApplicationLaunchOptionsURLKey]) {
@@ -354,7 +371,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 
 - (BOOL)handleDeepLink:(NSURL *)url {
     BOOL handled = NO;
-    if (url) {
+    if (url && ![url isEqual:[NSNull null]]) {
         //always save the incoming url in the preferenceHelper in the externalIntentURI field
         self.preferenceHelper.externalIntentURI = [url absoluteString];
 
@@ -380,7 +397,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         self.preferenceHelper.universalLinkUrl = [userActivity.webpageURL absoluteString];
         [self initUserSessionAndCallCallback:YES];
-        self.preferenceHelper.isContinuingUserActivity = NO;
+        self.preferenceHelper.shouldWaitForInit = NO;
         
         id branchUniversalLinkDomains = [self.preferenceHelper getBranchUniversalLinkDomains];
         if ([branchUniversalLinkDomains isKindOfClass:[NSString class]] && [[userActivity.webpageURL absoluteString] containsString:branchUniversalLinkDomains]) {
@@ -394,7 +411,14 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
             }
         }
         
-        return [[userActivity.webpageURL absoluteString] containsString:@"bnc.lt"];
+        NSString *userActivityURL = [userActivity.webpageURL absoluteString];
+        NSArray *branchDomains = [NSArray arrayWithObjects:@"bnc.lt", @"app.link", @"test-app.link", nil];
+        for (NSString* domain in branchDomains) {
+            if ([userActivityURL containsString:domain])
+                return YES;
+        }
+        
+        return NO;
     }
     
     //check to see if a spotlight activity needs to be handled
@@ -410,7 +434,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
         }
     }
     [self initUserSessionAndCallCallback:YES];
-    self.preferenceHelper.isContinuingUserActivity = NO;
+    self.preferenceHelper.shouldWaitForInit = NO;
     
     return spotlightIdentifier != nil;
 }
@@ -446,6 +470,33 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     }
 }
 
+# pragma mark - Facebook App Link check
+
+- (void)registerFacebookDeepLinkingClass:(id)FBSDKAppLinkUtility {
+    self.FBSDKAppLinkUtility = FBSDKAppLinkUtility;
+}
+
+- (BOOL)checkFacebookAppLinks {
+    if (self.FBSDKAppLinkUtility) {
+        SEL fetchDeferredAppLink = NSSelectorFromString(@"fetchDeferredAppLink:");
+        
+        if ([self.FBSDKAppLinkUtility methodForSelector:fetchDeferredAppLink]) {
+            void (^__nullable completionBlock)(NSURL *appLink, NSError *error) = ^void(NSURL *__nullable appLink, NSError *__nullable error) {
+                self.preferenceHelper.shouldWaitForInit = NO;
+                [self handleDeepLink:appLink];
+            };
+        
+            self.preferenceHelper.checkedFacebookAppLinks = YES;
+            self.preferenceHelper.shouldWaitForInit = YES;
+        
+            ((void (*)(id, SEL, void (^ __nullable)(NSURL *__nullable appLink, NSError * __nullable error)))[self.FBSDKAppLinkUtility methodForSelector:fetchDeferredAppLink])(self.FBSDKAppLinkUtility, fetchDeferredAppLink, completionBlock);
+        
+            return YES;
+        }
+    }
+    
+    return NO;
+}
 
 #pragma mark - Deep Link Controller methods
 
@@ -532,17 +583,21 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 }
 
 - (void)userCompletedAction:(NSString *)action {
-    [self userCompletedAction:action withState:nil];
+    [self userCompletedAction:action withState:nil withDelegate:nil];
 }
 
 - (void)userCompletedAction:(NSString *)action withState:(NSDictionary *)state {
+    [self userCompletedAction:action withState:state withDelegate:nil];
+}
+
+- (void)userCompletedAction:(NSString *)action withState:(NSDictionary *)state withDelegate:(id)branchViewCallback {
     if (!action) {
         return;
     }
     
     [self initSessionIfNeededAndNotInProgress];
     
-    BranchUserCompletedActionRequest *req = [[BranchUserCompletedActionRequest alloc] initWithAction:action state:state];
+    BranchUserCompletedActionRequest *req = [[BranchUserCompletedActionRequest alloc] initWithAction:action state:state withBranchViewCallback:branchViewCallback];
     [self.requestQueue enqueue:req];
     [self processNextQueueItem];
 }
@@ -584,7 +639,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
             callback(false, [NSError errorWithDomain:BNCErrorDomain code:BNCRedeemCreditsError userInfo:@{ NSLocalizedDescriptionKey: @"Cannot redeem zero credits." }]);
         }
         else {
-            NSLog(@"[Branch Warning] Cannot redeem zero credits");
+            [self.preferenceHelper logWarning:@"Cannot redeem zero credits"];
         }
         return;
     }
@@ -595,7 +650,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
             callback(false, [NSError errorWithDomain:BNCErrorDomain code:BNCRedeemCreditsError userInfo:@{ NSLocalizedDescriptionKey: @"You're trying to redeem more credits than are available. Have you loaded rewards?" }]);
         }
         else {
-            NSLog(@"[Branch Warning] You're trying to redeem more credits than are available. Have you loaded rewards?");
+            [self.preferenceHelper logWarning:@"You're trying to redeem more credits than are available. Have you loaded rewards?"];
         }
         return;
     }
@@ -1034,7 +1089,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
         // If there was stored key and it isn't the same as the currently used (or doesn't exist), we need to clean up
         // Note: Link Click Identifier is not cleared because of the potential for that to mess up a deep link
         if (preferenceHelper.lastRunBranchKey && ![key isEqualToString:preferenceHelper.lastRunBranchKey]) {
-            NSLog(@"[Branch Warning] The Branch Key has changed, clearing relevant items");
+            [preferenceHelper logWarning:@"The Branch Key has changed, clearing relevant items"];
             
             preferenceHelper.appVersion = nil;
             preferenceHelper.deviceFingerprintID = nil;
@@ -1180,7 +1235,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 #pragma mark - Application State Change methods
 
 - (void)applicationDidBecomeActive {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity && ![self.requestQueue containsInstallOrOpen]) {
+    if (!self.isInitialized && !self.preferenceHelper.shouldWaitForInit && ![self.requestQueue containsInstallOrOpen]) {
         [self initUserSessionAndCallCallback:YES];
     }
 }
@@ -1296,7 +1351,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 #pragma mark - Session Initialization
 
 - (void)initSessionIfNeededAndNotInProgress {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity && ![self.requestQueue containsInstallOrOpen]) {
+    if (!self.isInitialized && !self.preferenceHelper.shouldWaitForInit && ![self.requestQueue containsInstallOrOpen]) {
         [self initUserSessionAndCallCallback:NO];
     }
 }
@@ -1321,11 +1376,11 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 
 - (void)initializeSession {
     if (!self.branchKey) {
-        NSLog(@"[Branch Warning] Please enter your branch_key in the plist!");
+        [self.preferenceHelper logWarning:@"Please enter your branch_key in the plist!"];
         return;
     }
     else if ([self.branchKey rangeOfString:@"key_test_"].location != NSNotFound) {
-        NSLog(@"[Branch Warning] You are using your test app's Branch Key. Remember to change it to live Branch Key for deployment.");
+        [self.preferenceHelper logWarning:@"You are using your test app's Branch Key. Remember to change it to live Branch Key for deployment."];
     }
     
     if (!self.preferenceHelper.identityID) {
@@ -1436,5 +1491,14 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     [self.deepLinkPresentingController dismissViewControllerAnimated:YES completion:NULL];
 }
 
+#pragma mark FABKit methods
+
++ (NSString *)bundleIdentifier {
+    return @"io.branch.sdk.ios";
+}
+
++ (NSString *)kitDisplayVersion {
+    return @"0.12.0";
+}
 
 @end

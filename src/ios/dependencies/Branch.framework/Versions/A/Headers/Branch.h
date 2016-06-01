@@ -382,8 +382,15 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  
  @param debugParams dictionary of keystrings/valuestrings that will be added to response 
  */
--(void) setDeepLinkDebugMode:(NSDictionary *)debugParams;
+-(void)setDeepLinkDebugMode:(NSDictionary *)debugParams;
 
+
+/**
+ Register your Facebook SDK's FBSDKAppLinkUtility class to be used by Branch for deferred deep linking from their platform
+ 
+ @param FBSDKAppLinkUtility - call [FBSDKAppLinkUtility class] after importing #import <FBSDKCoreKit/FBSDKCoreKit.h>
+ */
+- (void)registerFacebookDeepLinkingClass:(id)FBSDKAppLinkUtility;
 
 /**
  Specify the time to wait in seconds between retries in the case of a Branch server error
@@ -418,6 +425,16 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  YES/true when a Universal Link is clicked, you should enable this option.
  */
 - (void)accountForFacebookSDKPreventingAppLaunch;
+
+- (void)suppressWarningLogs;
+
+/**
+ Key-value pairs to be included in the metadata on every request.
+ 
+ @param key String to be included in request metadata
+ @param value Object to be included in request metadata
+ */
+- (void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value;
 
 #pragma mark - Session Item methods
 
@@ -626,6 +643,15 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param state The additional state items associated with the action.
  */
 - (void)userCompletedAction:(NSString *)action withState:(NSDictionary *)state;
+
+/**
+ Send a user action to the server with additional state items. Some examples actions could be things like `viewed_personal_welcome`, `purchased_an_item`, etc.
+ 
+ @param action The action string.
+ @param state The additional state items associated with the action.
+ @param branchViewCallback Callback for Branch view state
+ */
+- (void)userCompletedAction:(NSString *)action withState:(NSDictionary *)state withDelegate:(id)branchViewCallback;
 
 /**
  Gets the total number of times an action has taken place for users referred by the current user. Note, this does not include actions taken by this user, only referred users' actions.
