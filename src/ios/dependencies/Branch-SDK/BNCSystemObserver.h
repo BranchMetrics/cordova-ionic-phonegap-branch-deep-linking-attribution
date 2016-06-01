@@ -10,12 +10,12 @@
 
 @interface BNCSystemObserver : NSObject
 
-+ (NSString *)getUniqueHardwareId:(BOOL *)isReal andIsDebug:(BOOL)debug;
++ (NSString *)getUniqueHardwareId:(BOOL *)isReal isDebug:(BOOL)debug andType:(NSString **)type;
++ (NSString *)getVendorId;
 + (NSString *)getDefaultUriScheme;
 + (NSString *)getAppVersion;
 + (NSString *)getBundleID;
 + (NSString *)getTeamIdentifier;
-+ (NSString *)getCarrier;
 + (NSString *)getBrand;
 + (NSString *)getModel;
 + (NSString *)getOS;
@@ -24,7 +24,6 @@
 + (NSNumber *)getScreenHeight;
 + (NSNumber *)getUpdateState;
 + (void)setUpdateState;
-+ (NSString *)getDeviceName;
 + (BOOL)isSimulator;
 + (BOOL)adTrackingSafe;
 

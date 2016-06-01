@@ -16,7 +16,7 @@
 
 @implementation BNCSystemObserver
 
-+ (NSString *)getUniqueHardwareId:(BOOL *)isReal andIsDebug:(BOOL)debug {
++ (NSString *)getUniqueHardwareId:(BOOL *)isReal isDebug:(BOOL)debug andType:(NSString **)type {
     NSString *uid = nil;
     *isReal = YES;
 
@@ -27,18 +27,31 @@
         SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
         NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
         uid = [uuid UUIDString];
+        *type = @"idfa";
     }
 
     if (!uid && NSClassFromString(@"UIDevice") && !debug) {
         uid = [[UIDevice currentDevice].identifierForVendor UUIDString];
+        *type = @"vendor_id";
     }
 
     if (!uid) {
         uid = [[NSUUID UUID] UUIDString];
+        *type = @"random";
         *isReal = NO;
     }
 
     return uid;
+}
+
++ (NSString *)getVendorId {
+    NSString *vendorId = nil;
+    
+    if (NSClassFromString(@"UIDevice")) {
+        vendorId = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    }
+    
+    return vendorId;
 }
 
 + (BOOL)adTrackingSafe {
@@ -89,24 +102,6 @@
     return nil;
 }
 
-+ (NSString *)getCarrier {
-    NSString *carrierName = nil;
-
-    Class CTTelephonyNetworkInfoClass = NSClassFromString(@"CTTelephonyNetworkInfo");
-    if (CTTelephonyNetworkInfoClass) {
-        id networkInfo = [[CTTelephonyNetworkInfoClass alloc] init];
-        SEL subscriberCellularProviderSelector = NSSelectorFromString(@"subscriberCellularProvider");
-
-        id carrier = ((id (*)(id, SEL))[networkInfo methodForSelector:subscriberCellularProviderSelector])(networkInfo, subscriberCellularProviderSelector);
-        if (carrier) {
-            SEL carrierNameSelector = NSSelectorFromString(@"carrierName");
-            carrierName = ((NSString* (*)(id, SEL))[carrier methodForSelector:carrierNameSelector])(carrier, carrierNameSelector);
-        }
-    }
-    
-    return carrierName;
-}
-
 + (NSString *)getBrand {
     return @"Apple";
 }
@@ -128,16 +123,6 @@
         device = currentDevice.model;
     }
     return [device rangeOfString:@"Simulator"].location != NSNotFound;
-}
-
-+ (NSString *)getDeviceName {
-    if ([BNCSystemObserver isSimulator]) {
-        struct utsname name;
-        uname(&name);
-        return [NSString stringWithFormat:@"%@ %s", [[UIDevice currentDevice] name], name.nodename];
-    } else {
-        return [[UIDevice currentDevice] name];
-    }
 }
 
 + (NSNumber *)getUpdateState {

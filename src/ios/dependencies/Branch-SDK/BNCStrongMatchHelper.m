@@ -67,13 +67,23 @@ NSInteger const ABOUT_30_DAYS_TIME_IN_SECONDS = 60 * 60 * 24 * 30;
 }
 
 - (void)presentSafariVCWithBranchKey:(NSString *)branchKey {
-    NSMutableString *urlString = [[NSMutableString alloc] initWithFormat:@"%@/_strong_match?os=%@", BNC_LINK_URL, [BNCSystemObserver getOS]];
+    
+    NSString *appDomainLinkURL;
+    id ret = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"branch_app_domain"];
+    if (ret) {
+        if ([ret isKindOfClass:[NSString class]])
+            appDomainLinkURL = [NSString stringWithFormat:@"https://%@", ret];
+    } else {
+        appDomainLinkURL = BNC_LINK_URL;
+    }
+    NSMutableString *urlString = [[NSMutableString alloc] initWithFormat:@"%@/_strong_match?os=%@", appDomainLinkURL, [BNCSystemObserver getOS]];
     
     BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
     BOOL isRealHardwareId;
-    NSString *hardwareId = [BNCSystemObserver getUniqueHardwareId:&isRealHardwareId andIsDebug:preferenceHelper.isDebug];
+    NSString *hardwareIdType;
+    NSString *hardwareId = [BNCSystemObserver getUniqueHardwareId:&isRealHardwareId isDebug:preferenceHelper.isDebug andType:&hardwareIdType];
     if (!hardwareId || !isRealHardwareId) {
-        NSLog(@"[Branch Warning] Cannot use cookie-based matching while setDebug is enabled");
+        [preferenceHelper logWarning:@"Cannot use cookie-based matching while setDebug is enabled"];
         self.shouldDelayInstallRequest = NO;
         self.requestInProgress = NO;
         return;
@@ -102,9 +112,14 @@ NSInteger const ABOUT_30_DAYS_TIME_IN_SECONDS = 60 * 60 * 24 * 30;
     
     Class SFSafariViewControllerClass = NSClassFromString(@"SFSafariViewController");
     if (SFSafariViewControllerClass) {
-        UIViewController * safController = [[SFSafariViewControllerClass alloc] initWithURL:[NSURL URLWithString:urlString]];
+        NSURL *strongMatchUrl = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        if (!strongMatchUrl) {
+            self.requestInProgress = NO;
+            return;
+        }
         
-        self.secondWindow = [[UIWindow alloc] initWithFrame:[[[[UIApplication sharedApplication] delegate] window] bounds]];
+        UIViewController * safController = [[SFSafariViewControllerClass alloc] initWithURL:strongMatchUrl];
+        self.secondWindow = [[UIWindow alloc] initWithFrame:[[[[UIApplication sharedApplication] windows] firstObject] bounds]];
         UIViewController *windowRootController = [[UIViewController alloc] init];
         self.secondWindow.rootViewController = windowRootController;
         self.secondWindow.windowLevel = UIWindowLevelNormal - 1;
