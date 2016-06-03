@@ -25,7 +25,7 @@ SOFTWARE.
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="io.branch.sdk"
-        version="2.1.1">
+        version="2.1.2">
 
     <name>branch-cordova-sdk</name>
     <description>Branch SDK Plugin</description>
@@ -143,6 +143,10 @@ SOFTWARE.
         <source-file src="src/ios/dependencies/Branch-SDK/BranchLinkProperties.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/BranchUniversalObject.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/BranchUniversalObject.m" />
+        <header-file src="src/ios/dependencies/Branch-SDK/BranchView.h" />
+        <source-file src="src/ios/dependencies/Branch-SDK/BranchView.m" />
+        <header-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.h" />
+        <source-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.m" /> 
 
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.m" />
