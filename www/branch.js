@@ -163,7 +163,7 @@ Branch.prototype.userCompletedAction = function (action, metaData) {
 };
 
 /**
- * Create an unverisal Branch object
+ * Create an universal Branch object
  *
  * @params (Object) options
  *
