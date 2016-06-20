@@ -9,6 +9,8 @@
 
 @interface BranchSDK()
 
+@property (strong, nonatomic) NSString *deepLinkUrl;
+
 - (void)doShareLinkResponse:(int)callbackId sendResponse:(NSDictionary*)response;
 
 @end
@@ -51,6 +53,7 @@
 {
     NSString *arg = [command.arguments objectAtIndex:0];
     NSURL *url = [NSURL URLWithString:arg];
+    self.deepLinkUrl = [url absoluteString];
 
     Branch *branch = [self getInstance];
     return [NSNumber numberWithBool:[branch handleDeepLink:url]];
@@ -64,6 +67,10 @@
 
     NSUserActivity *userActivity = [[NSUserActivity alloc] initWithActivityType:activityType];
     [userActivity setUserInfo:userInfo];
+
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+        self.deepLinkUrl = [userActivity.webpageURL absoluteString];
+    }
 
     Branch *branch = [self getInstance];
 
@@ -124,6 +131,10 @@
 
         if (isFromBranchLink) {
             [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
+        }
+        else if (self.deepLinkUrl) {
+            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"BSDKPostUnhandledURL" object:self.deepLinkUrl]];
+            self.deepLinkUrl = nil;
         }
 
         if (command != nil) {
