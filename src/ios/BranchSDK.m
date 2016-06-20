@@ -601,7 +601,7 @@
     }
 
     if ([urlString isKindOfClass:[NSString class]]) {
-        NSDictionary *returnDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Unable to process URL", @"error", urlString, @"url", nil];
+        NSDictionary *returnDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Not a Branch link!", @"error", urlString, @"url", nil];
         NSData* returnJSON = [NSJSONSerialization dataWithJSONObject:returnDict
                                                              options:NSJSONWritingPrettyPrinted
                                                                error:&error];
