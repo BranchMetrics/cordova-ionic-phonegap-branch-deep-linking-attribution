@@ -4,15 +4,15 @@ This is a repository of our open source Cordova | Phonegap | Ionic SDK, and the 
 
 ## IMPORTANT: Upgrading to V 2.0
 
-On 2/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. If you don't have time to do so, just use a reference to version 1.8, which we're storing in [locked branch called 'v1.8.0-locked'](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/tree/v1.8.0-locked).
+On 2/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. If you don't have time to do so, just use a reference to version 1.8, which we're storing in [locked branch called 'v1.8.0-locked'](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/v1.8.0-locked).
 
 ## Get the Demo App
 
-There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/testbed).
+There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/testbed).
 
 ## Additional Resources
 - [Integration guide](https://dev.branch.io/recipes/add_the_sdk/cordova/) *Start Here*
-- [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/CHANGELOG.md)
+- [Changelog](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/CHANGELOG.md)
 - [Testing](https://dev.branch.io/recipes/testing_your_integration/cordova/)
 - [Support portal, FAQ](http://support.branch.io)
 
@@ -34,22 +34,22 @@ There's a full demo app embedded in this repository. It should serve as an examp
 #### Cordova
 
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
+cordova plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
 ```
 example:
 ```sh
-cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
+cordova plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 #### Phonegap
 
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
+phonegap plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
 ```
 
 example:
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
+phonegap plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 ### Additional App Permissions
