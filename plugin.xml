@@ -104,9 +104,9 @@ SOFTWARE.
         <source-file src="src/ios/BranchSDK.m" />
         <source-file src="src/ios/AppDelegate+BranchSdk.m" />
         <!-- COMMENT if building for NPM -->
-        <!-- <framework custom="true" src="src/ios/dependencies/Branch.framework" /> -->
+        <framework custom="true" src="src/ios/dependencies/Branch.framework" />
         <!-- UNCOMMENT if building for NPM -->
-        <header-file src="src/ios/dependencies/Fabric/ANSCompatibility.h" />
+        <!-- <header-file src="src/ios/dependencies/Fabric/ANSCompatibility.h" />
         <header-file src="src/ios/dependencies/Fabric/Answers.h" /> 
         <header-file src="src/ios/dependencies/Fabric/FABAttributes.h" /> 
         <header-file src="src/ios/dependencies/Fabric/FABKitProtocol.h" /> 
@@ -195,6 +195,6 @@ SOFTWARE.
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.m" />
+        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.m" /> -->
     </platform>
 </plugin>
