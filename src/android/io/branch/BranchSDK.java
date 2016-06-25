@@ -717,12 +717,12 @@ public class BranchSDK extends CordovaPlugin
                     this._callbackContext.success(referringParams);
                 }
 
-            } else if (this.deepLinkUrl != null) {
+            } else if (deepLinkUrl != null) {
                 JSONObject message = new JSONObject();
                 try {
                     params.put("error", "Not a Branch link!");
-                    params.put("url", this.deepLinkUrl);
-                    this.deepLinkUrl = null;
+                    params.put("url", deepLinkUrl);
+                    deepLinkUrl = null;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
