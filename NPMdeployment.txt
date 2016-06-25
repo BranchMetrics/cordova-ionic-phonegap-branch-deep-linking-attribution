@@ -1,0 +1,5 @@
+NPM deployment
+
+1. comment out iOS framework in plugin.xml
+2. change header file references of Cordova iOS libs from <Branch/Branch.h> to "Branch.h"
+3. remove "../Fabric" from all Fabric related imports

@@ -1,5 +1,5 @@
 {
-  "version": "2.1.2",
+  "version": "2.1.5",
   "name": "branch-cordova-sdk",
   "description": "Branch Metrics Cordova SDK",
   "main": "www/branch.js",
@@ -29,6 +29,13 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "mkpath": "^1.0.0",
+    "node-version-compare": "^1.0.1",
+    "plist": "^1.2.0",
+    "rimraf": "^2.5.2",
+    "xml2js": "^0.4.16"
+  },
+  "devDependencies": {
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
     "plist": "^1.2.0",
