@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import android.net.Uri;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -33,6 +34,7 @@ public class BranchSDK extends CordovaPlugin
     private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;
     private Activity activity;
     private Branch instance;
+    private String deepLinkUrl;
 
     /**
      * Class Constructor
@@ -221,9 +223,14 @@ public class BranchSDK extends CordovaPlugin
     {
         this.activity = this.cordova.getActivity();
 
+        Uri data = activity.getIntent().getData();
+        if (data != null && data.isHierarchical()) {
+            this.deepLinkUrl = data.toString();
+        }
+
         this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
 
-        this.instance.initSession(new SessionListener(callbackContext), activity.getIntent().getData(), activity);
+        this.instance.initSession(new SessionListener(callbackContext), data, activity);
     }
 
     /**
@@ -710,14 +717,21 @@ public class BranchSDK extends CordovaPlugin
                     this._callbackContext.success(referringParams);
                 }
 
-            } else {
-                String errorMessage = error.getMessage();
-
-                out = String.format("NonBranchLinkHandler(\"%s\")", error.toString());
+            } else if (deepLinkUrl != null) {
+                JSONObject message = new JSONObject();
+                try {
+                    message.put("error", "Not a Branch link!");
+                    message.put("url", deepLinkUrl);
+                    deepLinkUrl = null;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                
+                out = String.format("NonBranchLinkHandler(\"%s\")", message.toString());
                 webView.sendJavascript(out);
 
                 if (this._callbackContext != null) {
-                    this._callbackContext.error(errorMessage);
+                    this._callbackContext.error(message);
                 }
             }
 
