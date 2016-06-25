@@ -720,8 +720,8 @@ public class BranchSDK extends CordovaPlugin
             } else if (deepLinkUrl != null) {
                 JSONObject message = new JSONObject();
                 try {
-                    params.put("error", "Not a Branch link!");
-                    params.put("url", deepLinkUrl);
+                    message.put("error", "Not a Branch link!");
+                    message.put("url", deepLinkUrl);
                     deepLinkUrl = null;
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -731,7 +731,7 @@ public class BranchSDK extends CordovaPlugin
                 webView.sendJavascript(out);
 
                 if (this._callbackContext != null) {
-                    this._callbackContext.error(errorMessage);
+                    this._callbackContext.error(message);
                 }
             }
 
