@@ -701,34 +701,39 @@ public class BranchSDK extends CordovaPlugin
 
             String out;
 
-            if (error == null) {
+            if (error == null && referringParams != null) {
 
                 // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
                 // params will be empty if no data found.
-                if (referringParams != null) {
-
-                    out = String.format("DeepLinkHandler(%s)", referringParams.toString());
-
-                    webView.sendJavascript(out);
-
+                try {
+                    if (referringParams.has("+clicked_branch_link") && referringParams.getBoolean("+clicked_branch_link")) {
+                        out = String.format("DeepLinkHandler(%s)", referringParams.toString());
+                        webView.sendJavascript(out);
+                    } else if (deepLinkUrl != null) {
+                        JSONObject message = new JSONObject();
+                        
+                        message.put("error", "Not a Branch link!");
+                        message.put("url", deepLinkUrl);
+                        deepLinkUrl = null;
+                    
+                        out = String.format("NonBranchLinkHandler(\"%s\")", message.toString());
+                        webView.sendJavascript(out);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 
                 if (this._callbackContext != null) {
                     this._callbackContext.success(referringParams);
                 }
 
-            } else if (deepLinkUrl != null) {
+            } else {
                 JSONObject message = new JSONObject();
                 try {
-                    message.put("error", "Not a Branch link!");
-                    message.put("url", deepLinkUrl);
-                    deepLinkUrl = null;
+                    message.put("error", error.getMessage());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                
-                out = String.format("NonBranchLinkHandler(\"%s\")", message.toString());
-                webView.sendJavascript(out);
 
                 if (this._callbackContext != null) {
                     this._callbackContext.error(message);
