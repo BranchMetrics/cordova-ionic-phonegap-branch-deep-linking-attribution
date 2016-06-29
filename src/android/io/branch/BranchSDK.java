@@ -372,6 +372,9 @@ public class BranchSDK extends CordovaPlugin
         if (options.has("contentImageUrl")) {
             branchObj.setContentImageUrl(options.getString("contentImageUrl"));
         }
+        if (options.has("contentType")) {
+            branchObj.setContentType(options.getInt("contentType"));
+        }
 
         // Set content visibility
         if (options.has("contentIndexingMode")) {
