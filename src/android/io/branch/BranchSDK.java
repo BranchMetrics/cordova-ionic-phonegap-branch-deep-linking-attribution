@@ -444,18 +444,24 @@ public class BranchSDK extends CordovaPlugin
     private BranchLinkProperties createLinkProperties(JSONObject options, JSONObject controlParams) throws JSONException
     {
 
+        Log.d(LCAT, "Creating link properties");
+
         BranchLinkProperties linkProperties = new BranchLinkProperties();
 
         if (options.has("feature")) {
             linkProperties.setFeature(options.getString("feature"));
-        } else if (options.has("alias")) {
-            linkProperties.setFeature(options.getString("alias"));
-        } else if (options.has("channel")) {
-            linkProperties.setFeature(options.getString("channel"));
-        } else if (options.has("stage")) {
-            linkProperties.setFeature(options.getString("stage"));
-        } else if (options.has("duration")) {
-            linkProperties.setFeature(options.getString("duration"));
+        }
+        if (options.has("alias")) {
+            linkProperties.setAlias(options.getString("alias"));
+        }
+        if (options.has("channel")) {
+            linkProperties.setChannel(options.getString("channel"));
+        }
+        if (options.has("stage")) {
+            linkProperties.setStage(options.getString("stage"));
+        }
+        if (options.has("duration")) {
+            linkProperties.setDuration(options.getInt("duration"));
         }
 
         if (options.has("tags")) {
@@ -519,52 +525,7 @@ public class BranchSDK extends CordovaPlugin
     private void generateShortUrl(int instanceIdx, JSONObject options, JSONObject controlParams, CallbackContext callbackContext) throws JSONException
     {
 
-        BranchLinkProperties linkProperties = new BranchLinkProperties();
-
-        if (options.has("feature")) {
-            linkProperties.setFeature(options.getString("feature"));
-        } else if (options.has("alias")) {
-            linkProperties.setAlias(options.getString("alias"));
-        } else if (options.has("channel")) {
-            linkProperties.setChannel(options.getString("channel"));
-        } else if (options.has("stage")) {
-            linkProperties.setStage(options.getString("stage"));
-        } else if (options.has("duration")) {
-            linkProperties.setDuration(options.getInt("duration"));
-        }
-
-        if (options.has("tags")) {
-            ArrayList<String> tags = (ArrayList<String>) options.get("tags");
-
-            for (String tag : tags) {
-                linkProperties.addTag(tag);
-            }
-        }
-
-        if (controlParams.has("$fallback_url")) {
-            linkProperties.addControlParameter("$fallback_url", controlParams.getString("$fallback_url"));
-        }
-        if (controlParams.has("$desktop_url")) {
-            linkProperties.addControlParameter("$desktop_url", controlParams.getString("$desktop_url"));
-        }
-        if (controlParams.has("$android_url")) {
-            linkProperties.addControlParameter("$android_url", controlParams.getString("$android_url"));
-        }
-        if (controlParams.has("$ios_url")) {
-            linkProperties.addControlParameter("$ios_url", controlParams.getString("$ios_url"));
-        }
-        if (controlParams.has("$ipad_url")) {
-            linkProperties.addControlParameter("$ipad_url", controlParams.getString("$ipad_url"));
-        }
-        if (controlParams.has("$fire_url")) {
-            linkProperties.addControlParameter("$fire_url", controlParams.getString("$fire_url"));
-        }
-        if (controlParams.has("$blackberry_url")) {
-            linkProperties.addControlParameter("$blackberry_url", controlParams.getString("$blackberry_url"));
-        }
-        if (controlParams.has("$windows_phone_url")) {
-            linkProperties.addControlParameter("$windows_phone_url", controlParams.getString("$windows_phone_url"));
-        }
+        BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
 
         BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
 
