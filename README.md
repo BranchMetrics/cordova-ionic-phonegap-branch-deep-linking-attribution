@@ -363,6 +363,7 @@ Branch.createBranchUniversalObject({
   title: 'Just another title',
   contentDescription: 'Just another description',
   contentImageUrl: '/img.jpg',
+  contentType: 'text',
   contentIndexingMode: 'public'
 }).then(function (newBranchUniversalObj) {
   // Success Callback
