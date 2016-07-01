@@ -116,13 +116,9 @@ Add the following entry to your application's `config.xml`:
 
 ```xml
 <branch-config>
-    <android-prefix value="READ_FROM_DASHBOARD" />
     <host name="xxxx.app.link" scheme="https" />
 </branch-config>
 ```
-
-`READ_FROM_DASHBOARD` is the four-character value in front of all your links. You can find it underneath the field labeled SHA256 Cert Fingerprints on the dashboard. It will look something like this: `/WSuf` (the initial `/` character should be included).
-
 If you use a custom domain or subdomain for your Branch links, you should also add a key for `<host name="mycustomdomainorsubdomain" scheme="https" />`.
 
 ##### Support for legacy Branch links
@@ -135,6 +131,7 @@ If your links are of the form `bnc.lt`, you must still use this domain in your c
     <host name="bnc.lt" scheme="https" />
 </branch-config>
 ```
+`READ_FROM_DASHBOARD` is the four-character value in front of all your links. You can find it underneath the field labeled SHA256 Cert Fingerprints on the [dashboard](https://dashboard.branch.io/settings/link). It will look something like this: `/WSuf` (the initial `/` character should be included).
 
 ---------------
 
