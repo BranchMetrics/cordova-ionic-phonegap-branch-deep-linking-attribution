@@ -43,7 +43,7 @@ cordova plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branc
 #### Phonegap
 
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable ENCODED_ID=your-encoded-id
+phonegap plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable
 ```
 
 example:
