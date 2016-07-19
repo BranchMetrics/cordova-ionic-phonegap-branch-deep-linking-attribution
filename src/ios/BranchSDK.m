@@ -143,6 +143,11 @@
     }];
 }
 
+- (void)getMixpanelInstance:(CDVInvokedUrlCommand*)command
+{
+    [[Branch getInstance] setRequestMetadataKey:@"$mixpanel_distinct_id" value:[Mixpanel sharedInstance].distinctId];
+}
+
 - (void)setDebug:(CDVInvokedUrlCommand*)command
 {
     bool enableDebug = [[command.arguments objectAtIndex:0] boolValue] == YES;
