@@ -22,8 +22,6 @@ import io.branch.referral.BranchError;
 import io.branch.referral.SharingHelper;
 import io.branch.referral.util.ShareSheetStyle;
 
-import com.mixpanel.android.mpmetrics.MixpanelAPI; 
-
 public class BranchSDK extends CordovaPlugin
 {
 
@@ -585,11 +583,7 @@ public class BranchSDK extends CordovaPlugin
     private void getMixpanelInstance(String token, CallbackContext callbackContext)
     {
 
-        Log.d(LCAT, "Getting Mixpanel instance");
-
-        MixpanelAPI mp = MixpanelAPI.getInstance(this.activity.getApplicationContext(), token);
-
-        Branch.getInstance().setRequestMetadata("$mixpanel_distinct_id", mp.getDistinctId());
+        Branch.getInstance().setRequestMetadata("$mixpanel_distinct_id", token);
 
         callbackContext.success("Success");
 
