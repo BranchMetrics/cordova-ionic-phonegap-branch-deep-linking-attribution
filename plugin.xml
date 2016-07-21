@@ -75,6 +75,8 @@ SOFTWARE.
             </intent-filter>
         </config-file>
         <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
+        <framework src="com.mixpanel.android:mixpanel-android:4.+" type="gradleReference" />
+        <framework src="com.google.android.gms:play-services:3.1+" type="gradleReference" />
         <framework src="io.branch.sdk.android:library:1+" />
     </platform>
 
@@ -102,6 +104,8 @@ SOFTWARE.
         </config-file>
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
+        <header-file src="src/ios/dependencies/Branch-SDK/BranchView.h" />
+        <header-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.h" />
         <source-file src="src/ios/AppDelegate+BranchSdk.m" />
         <!-- COMMENT if building for NPM -->
         <framework custom="true" src="src/ios/dependencies/Branch.framework" />

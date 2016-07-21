@@ -22,6 +22,8 @@ import io.branch.referral.BranchError;
 import io.branch.referral.SharingHelper;
 import io.branch.referral.util.ShareSheetStyle;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI; 
+
 public class BranchSDK extends CordovaPlugin
 {
 
@@ -104,6 +106,9 @@ public class BranchSDK extends CordovaPlugin
             }
             return true;
         } else if (action.equals("initSession")) {
+            cordova.getThreadPool().execute(r);
+            return true;
+        }  else if (action.equals("getMixpanelInstance")) {
             cordova.getThreadPool().execute(r);
             return true;
         } else {
@@ -572,6 +577,25 @@ public class BranchSDK extends CordovaPlugin
     }
 
     /**
+     * <p>Allow Branch SDK to pass the user's Mixpanel distinct id to our servers. Branch will then pass that Distinct ID to Mixpanel when logging any event.</p>
+     *
+     * @param token A {@link String} value containing the unique identifier of the Mixpanel user.
+     * @param callbackContext   A callback to execute at the end of this method
+     */
+    private void getMixpanelInstance(String token, CallbackContext callbackContext)
+    {
+
+        Log.d(LCAT, "Getting Mixpanel instance");
+
+        MixpanelAPI mp = MixpanelAPI.getInstance(this.activity.getApplicationContext(), token);
+
+        Branch.getInstance().setRequestMetadata("$mixpanel_distinct_id", mp.getDistinctId());
+
+        callbackContext.success("Success");
+
+    }
+
+    /**
      * <p>A void call to indicate that the user has performed a specific action and for that to be
      * reported to the Branch API.</p>
      *
@@ -583,6 +607,7 @@ public class BranchSDK extends CordovaPlugin
     {
 
         this.instance.userCompletedAction(action);
+
         callbackContext.success("Success");
 
     }
@@ -601,6 +626,7 @@ public class BranchSDK extends CordovaPlugin
     {
 
         this.instance.userCompletedAction(action, metaData);
+
         callbackContext.success("Success");
 
     }
@@ -1111,6 +1137,8 @@ public class BranchSDK extends CordovaPlugin
                     setDebug(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("initSession")) {
                     initSession(this.callbackContext);
+                }  else if (this.action.equals("getMixpanelInstance")) {
+                    getMixpanelInstance(this.args.getString(0), this.callbackContext);
                 } else {
                     if (this.action.equals("setIdentity")) {
                         setIdentity(this.args.getString(0), this.callbackContext);
