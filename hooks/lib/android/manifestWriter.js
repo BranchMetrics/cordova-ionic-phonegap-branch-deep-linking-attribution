@@ -282,6 +282,10 @@ Class injects plugin preferences into AndroidManifest.xml file.
       }]
     };
 
+    if (!pathPrefix) {
+      delete intentFilter['data'][0]['$']['android:pathPrefix'];
+    }
+
     if (!androidM) {
       delete intentFilter['$']['android:autoVerify'];
     }

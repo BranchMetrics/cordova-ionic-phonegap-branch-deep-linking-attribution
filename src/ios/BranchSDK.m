@@ -5,7 +5,7 @@
 //  Copyright © 2016 Branch Metrics. All rights reserved.
 //
 
-#import "BranchSDK.h"
+#import <Branch/Branch.h>
 
 @interface BranchSDK()
 
@@ -633,15 +633,6 @@
 {
     id params = [command.arguments objectAtIndex:0];
     return [[self getInstance] getLongURLWithParams:params];
-}
-
-- (NSString *)getContentUrlWithParams:(CDVInvokedUrlCommand*)command
-{
-    NSDictionary *params = [command.arguments objectAtIndex:0];
-    NSString *channel = [command.arguments objectAtIndex:1];
-
-    Branch *branch = [self getInstance];
-    return [branch getContentUrlWithParams:params andChannel:channel];
 }
 
 - (void)getBranchActivityItemWithParams:(CDVInvokedUrlCommand*)command

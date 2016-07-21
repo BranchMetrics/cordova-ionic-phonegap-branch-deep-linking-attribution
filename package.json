@@ -1,5 +1,5 @@
 {
-  "version": "2.1.7",
+  "version": "2.1.10",
   "name": "branch-cordova-sdk",
   "description": "Branch Metrics Cordova SDK",
   "main": "www/branch.js",
@@ -19,8 +19,10 @@
     "cordova-android",
     "branch",
     "linking",
+    "deep links",
     "deep linking",
     "universal links",
+    "app links",
     "deferred deep linking"
   ],
   "platforms": [
