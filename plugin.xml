@@ -25,7 +25,7 @@ SOFTWARE.
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="io.branch.sdk"
-        version="2.1.7">
+        version="2.1.10">
 
     <name>branch-cordova-sdk</name>
     <description>Branch SDK Plugin</description>
@@ -162,18 +162,12 @@ SOFTWARE.
 
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchApplyPromoCodeRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchApplyPromoCodeRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCloseRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCloseRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCreditHistoryRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCreditHistoryRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchGetPromoCodeRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchGetPromoCodeRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchInstallRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchInstallRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLoadActionsRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLoadActionsRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLoadRewardsRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLoadRewardsRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchLogoutRequest.h" />
@@ -193,8 +187,6 @@ SOFTWARE.
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchSpotlightUrlRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchSpotlightUrlRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.m" />
-        <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.h" />
-        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchValidatePromoCodeRequest.m" /> -->
+        <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.m" /> -->
     </platform>
 </plugin>
