@@ -143,7 +143,7 @@
     }];
 }
 
-- (void)getMixpanelInstance:(CDVInvokedUrlCommand*)command
+- (void)setMixpanelToken:(CDVInvokedUrlCommand*)command
 {
 
     [[Branch getInstance] setRequestMetadataKey:@"$mixpanel_distinct_id" value:[command.arguments objectAtIndex:0]];

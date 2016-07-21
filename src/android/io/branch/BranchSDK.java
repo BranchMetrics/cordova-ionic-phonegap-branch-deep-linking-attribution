@@ -106,7 +106,7 @@ public class BranchSDK extends CordovaPlugin
         } else if (action.equals("initSession")) {
             cordova.getThreadPool().execute(r);
             return true;
-        }  else if (action.equals("getMixpanelInstance")) {
+        }  else if (action.equals("setMixpanelToken")) {
             cordova.getThreadPool().execute(r);
             return true;
         } else {
@@ -580,7 +580,7 @@ public class BranchSDK extends CordovaPlugin
      * @param token A {@link String} value containing the unique identifier of the Mixpanel user.
      * @param callbackContext   A callback to execute at the end of this method
      */
-    private void getMixpanelInstance(String token, CallbackContext callbackContext)
+    private void setMixpanelToken(String token, CallbackContext callbackContext)
     {
 
         Branch.getInstance().setRequestMetadata("$mixpanel_distinct_id", token);
@@ -1131,8 +1131,8 @@ public class BranchSDK extends CordovaPlugin
                     setDebug(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("initSession")) {
                     initSession(this.callbackContext);
-                }  else if (this.action.equals("getMixpanelInstance")) {
-                    getMixpanelInstance(this.args.getString(0), this.callbackContext);
+                }  else if (this.action.equals("setMixpanelToken")) {
+                    setMixpanelToken(this.args.getString(0), this.callbackContext);
                 } else {
                     if (this.action.equals("setIdentity")) {
                         setIdentity(this.args.getString(0), this.callbackContext);
