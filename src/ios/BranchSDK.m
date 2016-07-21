@@ -5,7 +5,7 @@
 //  Copyright © 2016 Branch Metrics. All rights reserved.
 //
 
-#import <Branch/Branch.h>
+#import "BranchSDK.h"
 
 @interface BranchSDK()
 
