@@ -1,3 +1,8 @@
+
+<!------------------------------------------------------------------------------------>
+<!--EDIT plugin.template.xml NOT plugin.xml. plugin.xml WILL BE OVERWRITTEN BY GULP -->
+<!------------------------------------------------------------------------------------>
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     The MIT License (MIT)
@@ -100,6 +105,7 @@ SOFTWARE.
                 </dict>
             </array>
         </config-file>
+        <header-file src="src/ios/BranchNPM.h" />
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
         <source-file src="src/ios/AppDelegate+BranchSdk.m" />
