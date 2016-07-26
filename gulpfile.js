@@ -1,9 +1,21 @@
 var gulp = require('gulp');
 var fs = require('fs');
 
+//setup for development use
+gulp.task('setupDev', function(){
+  getDevPluginXML();
+  setIosNpmOrDev('dev');
+})
+
+//setup for npm deployment
+gulp.task('setupNpm', function(){
+  genNpmPluginXML();
+  setIosNpmOrDev('npm');
+});
+
 //generate plugin.xml for use as a cordova plugin
 //here we explode the contents of the frameworks
-gulp.task('gen-npm-plugin-xml', function(){
+function genNpmPluginXML(){
   var xml = fs.readFileSync('plugin.template.xml', 'utf-8');
   
   var files = [];
@@ -17,18 +29,29 @@ gulp.task('gen-npm-plugin-xml', function(){
     + files.join(newLineIndent));
   
   fs.writeFileSync('plugin.xml', xml);
-});
+};
 
 //generate plugin.xml for local development
 //here we reference the frameworks instead of all the files directly
-gulp.task('gen-dev-plugin-xml', function(){
+function getDevPluginXML(){
   var xml = fs.readFileSync('plugin.template.xml', 'utf-8');
   
   xml = xml.replace('<!--[Branch Framework Reference]-->', 
     '<framework custom="true" src="src/ios/dependencies/Branch.framework" />');
 
   fs.writeFileSync('plugin.xml', xml);
-});
+};
+
+function setIosNpmOrDev(npmOrDev){
+  if(npmOrDev === 'npm'){
+    content = '#define BRANCH_NPM true';
+  }else if(npmOrDev === 'dev'){
+    content = '//empty';
+  }else{
+    throw new Error('expected deployed|local, not ' + deployedOrLocal);
+  }
+  fs.writeFileSync('src/ios/BranchNPM.h', content + '\n');
+}
 
 //emit array of cordova file references for all .h/.m files in path
 function emitFiles(path){
