@@ -593,8 +593,10 @@
     // We create a JSON string result, because we're unable to handle the url. We will include the url in the return string.
     NSError *error;
     NSString *urlString;
-
-    if ([notification.object respondsToSelector:@selector(absoluteString:)]) {
+    
+//    if ([notification.object respondsToSelector:@selector(absoluteString:)]) {
+    SEL selector = NSSelectorFromString(@"absoluteString:");
+    if ([notification.object respondsToSelector:selector]) {
         urlString = [notification.object absoluteString];
     } else {
         urlString = notification.object;
@@ -631,15 +633,6 @@
 {
     id params = [command.arguments objectAtIndex:0];
     return [[self getInstance] getLongURLWithParams:params];
-}
-
-- (NSString *)getContentUrlWithParams:(CDVInvokedUrlCommand*)command
-{
-    NSDictionary *params = [command.arguments objectAtIndex:0];
-    NSString *channel = [command.arguments objectAtIndex:1];
-
-    Branch *branch = [self getInstance];
-    return [branch getContentUrlWithParams:params andChannel:channel];
 }
 
 - (void)getBranchActivityItemWithParams:(CDVInvokedUrlCommand*)command
