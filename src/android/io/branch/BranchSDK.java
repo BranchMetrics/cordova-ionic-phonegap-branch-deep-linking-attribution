@@ -548,10 +548,12 @@ public class BranchSDK extends CordovaPlugin
 
         this.activity = this.cordova.getActivity();
 
-        Branch debugInstance = Branch.getAutoInstance(this.activity.getApplicationContext());
-
-        if (isEnable) {
-            debugInstance.setDebug();
+        // Handled Random Crash due to empty context
+        if (this.activity != null && this.activity.getApplicationContext() != null) {
+            Branch debugInstance = Branch.getAutoInstance(this.activity.getApplicationContext());
+            if (isEnable) {
+                debugInstance.setDebug();
+            }
         }
 
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ isEnable));
