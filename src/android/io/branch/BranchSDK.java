@@ -41,9 +41,23 @@ public class BranchSDK extends CordovaPlugin
      */
     public BranchSDK()
     {
+
         this.activity = null;
         this.instance = null;
         this.branchObjectWrappers = new ArrayList<BranchUniversalObjectWrapper>();
+
+    }
+
+    /**
+     * Called after plugin construction and fields have been initialized.
+     */
+    @Override
+    protected void pluginInitialize() {
+
+        this.activity = this.cordova.getActivity();
+        
+        Branch.getAutoInstance(this.activity.getApplicationContext());
+
     }
 
     /**
@@ -51,34 +65,8 @@ public class BranchSDK extends CordovaPlugin
      */
     public void onNewIntent(Intent intent)
     {        
-        this.activity = this.cordova.getActivity();
+
         this.activity.setIntent(intent);
-
-        if (this.activity != null) {
-            this.initSession(null);
-        }
-    }
-
-    /**
-     * Called when the activity will start interacting with the user.
-     *
-     * @param multitasking A {@link boolean} flag indicating if multitasking is turned on for app
-     */
-    @Override
-    public void onResume(boolean multitasking) {
-
-    }
-
-    /**
-     * Called when the activity is no longer visible to the user.
-     */
-    @Override
-    public void onStop()
-    {
-
-        if (this.instance != null) {
-            this.instance.closeSession();
-        }
 
     }
 
@@ -216,16 +204,18 @@ public class BranchSDK extends CordovaPlugin
      */
     private void initSession(CallbackContext callbackContext)
     {
+
         this.activity = this.cordova.getActivity();
 
         Uri data = activity.getIntent().getData();
+
         if (data != null && data.isHierarchical()) {
             this.deepLinkUrl = data.toString();
         }
 
-        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-
+        this.instance = Branch.getInstance(this.activity.getApplicationContext());
         this.instance.initSession(new SessionListener(callbackContext), data, activity);
+
     }
 
     /**
