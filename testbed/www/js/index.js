@@ -45,7 +45,6 @@ var app = {
             document.getElementsByTagName("html")[0].className = 'android';
         }
 
-        SetDebug(true);
         InitSession();
 
     }
@@ -67,15 +66,6 @@ function NonBranchLinkHandler(data)
     if (data) {
         alert('Non-branch link found: ' + JSON.stringify(data));
     }
-}
-
-function SetDebug(isEnabled)
-{
-    console.log('Trigger SetDebug()');
-
-    Branch.setDebug(isEnabled);
-
-    alert('Debug mode enabled');
 }
 
 function InitSession()

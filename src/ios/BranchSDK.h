@@ -25,7 +25,6 @@
 
 // BranchSDK Basic Methods
 - (void)initSession:(CDVInvokedUrlCommand*)command;
-- (void)setDebug:(CDVInvokedUrlCommand*)command;
 - (void)getAutoInstance:(CDVInvokedUrlCommand*)command;
 - (void)getLatestReferringParams:(CDVInvokedUrlCommand*)command;
 - (void)getFirstReferringParams:(CDVInvokedUrlCommand*)command;

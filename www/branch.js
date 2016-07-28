@@ -72,24 +72,6 @@ Branch.prototype.initSession = function () {
 };
 
 /**
- * Set debug mode.
- * NOTE: This must be called before initSession
- *
- * @param (Boolean) isEnabled. Default = false
- *
- * @return (Promise)
- */
-Branch.prototype.setDebug = function (isEnabled) {
-
-    isEnabled = (typeof isEnabled !== 'boolean') ? false : isEnabled;
-
-    this.debugMode = isEnabled;
-
-    return execute('setDebug', [isEnabled]);
-
-};
-
-/**
  * Retrieves the install session parameters.
  *
  * @return (Promise)
