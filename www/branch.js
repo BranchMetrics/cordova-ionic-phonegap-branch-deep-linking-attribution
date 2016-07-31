@@ -353,9 +353,13 @@ Branch.prototype.createBranchUniversalObject = function (options) {
  *
  * @return (Promise)
  */
-Branch.prototype.loadRewards = function () {
+Branch.prototype.loadRewards = function (bucket) {
 
-    return execute('loadRewards');
+    if ( ! bucket) {
+        bucket = '';
+    }
+
+    return execute('loadRewards', [bucket]);
 
 };
 

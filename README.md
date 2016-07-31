@@ -554,9 +554,13 @@ branchUniversalObj.listOnSpotlight().then(function (res) {
 
 ## Referral System Rewarding
 
-### <a id="loadRewards"></a>loadRewards()
+### <a id="loadRewards"></a>loadRewards([bucket])
 
 Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
+
+**Parameters**
+
+**bucket**: `String` _[Optional]_ - Load rewards of a specific bucket. If no value provided it will use the `default` bucket.
 
 ##### Usage
 ```js

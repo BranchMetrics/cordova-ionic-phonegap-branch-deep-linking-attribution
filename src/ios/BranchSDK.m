@@ -263,12 +263,24 @@
 - (void)loadRewards:(CDVInvokedUrlCommand*)command
 {
     Branch *branch = [self getInstance];
+    NSString *bucket = @"";
+
+    if ([command.arguments count] == 1) {
+        bucket = [command.arguments objectAtIndex:0];
+    }
 
     [branch loadRewardsWithCallback:^(BOOL changed, NSError *error) {
 
         CDVPluginResult* pluginResult = nil;
         if(!error) {
-            int credits = (int)[branch getCredits];
+            int credits = 0;
+
+            if ([bucket length]) {
+                credits = (int)[branch getCreditsForBucket:bucket];
+            } else {
+                credits = (int)[branch getCredits];
+            }
+
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:credits];
         }
         else {
