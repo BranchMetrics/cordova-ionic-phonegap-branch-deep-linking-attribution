@@ -286,11 +286,26 @@ public class BranchSDK extends CordovaPlugin
      * in the callback to update the credit totals in your UX.</p>
      *
      * @param callbackContext   A callback to execute at the end of this method
+     * @param bucket            Load reward of a specific bucket
+     */
+    private void loadRewards(String bucket, CallbackContext callbackContext)
+    {
+
+        this.instance.loadRewards(new LoadRewardsListener(bucket, callbackContext, this.instance));
+
+    }
+
+    /**
+     * <p>Retrieves rewards for the current session, with a callback to perform a predefined
+     * action following successful report of state change. You'll then need to call getCredits
+     * in the callback to update the credit totals in your UX.</p>
+     *
+     * @param callbackContext   A callback to execute at the end of this method
      */
     private void loadRewards(CallbackContext callbackContext)
     {
 
-        this.instance.loadRewards(new LoadRewardsListener(callbackContext));
+        this.instance.loadRewards(new LoadRewardsListener(callbackContext, this.instance));
 
     }
 
@@ -802,10 +817,19 @@ public class BranchSDK extends CordovaPlugin
     protected class LoadRewardsListener implements Branch.BranchReferralStateChangedListener
     {
         private CallbackContext _callbackContext;
+        private Branch _instance;
+        private String _bucket;
 
-        // Constructor that takes in a required callbackContext object
-        public LoadRewardsListener(CallbackContext callbackContext) {
+        public LoadRewardsListener(String bucket, CallbackContext callbackContext, Branch instance) {
             this._callbackContext = callbackContext;
+            this._instance = instance;
+            this._bucket = bucket;
+        }
+
+        public LoadRewardsListener(CallbackContext callbackContext, Branch instance) {
+            this._callbackContext = callbackContext;
+            this._instance = instance;
+            this._bucket = '';
         }
 
         // Listener that implements BranchReferralStateChangedListener for loadRewards
@@ -813,8 +837,14 @@ public class BranchSDK extends CordovaPlugin
         public void onStateChanged(boolean changed, BranchError error) {
             if (error == null) {
 
-                int credits = instance.getCredits();
-
+                int credits = 0;
+                
+                if (this._bucket && this._bucket.length()) {
+                    credits = this._instance.getCreditsForBucket(this._bucket);
+                } else {
+                    credits = this._instance.getCredits();
+                }
+                
                 this._callbackContext.success(credits);
 
             } else {
@@ -1127,7 +1157,11 @@ public class BranchSDK extends CordovaPlugin
                     } else if (this.action.equals("logout")) {
                         logout(this.callbackContext);
                     } else if (this.action.equals("loadRewards")) {
-                        loadRewards(this.callbackContext);
+                        if (this.args.length() == 1) {
+                            loadRewards(this.args.getString(0), this.callbackContext);
+                        } else {
+                            loadRewards(this.callbackContext);   
+                        }
                     } else if (this.action.equals("redeemRewards")) {
                         if (this.args.length() == 1) {
                             redeemRewards(this.args.getInt(0), this.callbackContext);
