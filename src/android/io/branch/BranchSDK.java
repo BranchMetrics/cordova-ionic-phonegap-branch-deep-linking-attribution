@@ -829,7 +829,7 @@ public class BranchSDK extends CordovaPlugin
         public LoadRewardsListener(CallbackContext callbackContext, Branch instance) {
             this._callbackContext = callbackContext;
             this._instance = instance;
-            this._bucket = '';
+            this._bucket = "";
         }
 
         // Listener that implements BranchReferralStateChangedListener for loadRewards
@@ -839,7 +839,7 @@ public class BranchSDK extends CordovaPlugin
 
                 int credits = 0;
                 
-                if (this._bucket && this._bucket.length()) {
+                if (this._bucket.length() > 0) {
                     credits = this._instance.getCreditsForBucket(this._bucket);
                 } else {
                     credits = this._instance.getCredits();
