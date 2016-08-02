@@ -4,13 +4,13 @@ var sourcemaps = require('gulp-sourcemaps');
 var babel = require('gulp-babel');
 
 //setup for development use
-gulp.task('setupDev', function(){
+gulp.task('setupDev', () => {
   getDevPluginXML();
   setIosNpmOrDev('dev');
 })
 
 //setup for npm deployment
-gulp.task('setupNpm', function(){
+gulp.task('setupNpm', () => {
   genNpmPluginXML();
   setIosNpmOrDev('npm');
 });
