@@ -5,26 +5,26 @@ var babel      = require('gulp-babel');
 var eslint     = require('gulp-eslint');
 var jscs       = require('gulp-jscs');
 
-gulp.task('build-npm', ['setupNpm', 'babel', 'lint']);
+gulp.task('build-npm', [ 'setupNpm', 'babel', 'lint' ]);
 
-//------------------------------------------------------------------------------
-//setup for development use
+// -----------------------------------------------------------------------------
+// setup for development use
 gulp.task('setupDev', () => {
   getDevPluginXML();
   setIosNpmOrDev('dev');
 })
 
-//setup for npm deployment
+// setup for npm deployment
 gulp.task('setupNpm', () => {
   genNpmPluginXML();
   setIosNpmOrDev('npm');
 });
 
-//generate plugin.xml for use as a cordova plugin
-//here we explode the contents of the frameworks
-function genNpmPluginXML(){
+// generate plugin.xml for use as a cordova plugin
+// here we explode the contents of the frameworks
+function genNpmPluginXML() {
   var xml = fs.readFileSync('plugin.template.xml', 'utf-8');
-  
+
   var files = [];
   var root = 'src/ios/dependencies/';
   files = files.concat(emitFiles(root + 'Fabric/'));
@@ -34,43 +34,46 @@ function genNpmPluginXML(){
   var newLineIndent = '\n        ';
   xml = xml.replace('<!--[Branch Framework Reference]-->', newLineIndent
     + files.join(newLineIndent));
-  
+
   fs.writeFileSync('plugin.xml', xml);
 };
 
-//generate plugin.xml for local development
-//here we reference the frameworks instead of all the files directly
-function getDevPluginXML(){
+// generate plugin.xml for local development
+// here we reference the frameworks instead of all the files directly
+function getDevPluginXML() {
   var xml = fs.readFileSync('plugin.template.xml', 'utf-8');
-  
-  xml = xml.replace('<!--[Branch Framework Reference]-->', 
+
+  xml = xml.replace('<!--[Branch Framework Reference]-->',
     '<framework custom="true" src="src/ios/dependencies/Branch.framework" />');
 
   fs.writeFileSync('plugin.xml', xml);
 };
 
-function setIosNpmOrDev(npmOrDev){
-  if(npmOrDev === 'npm'){
+function setIosNpmOrDev(npmOrDev) {
+  if (npmOrDev === 'npm') {
     content = '#define BRANCH_NPM true';
-  }else if(npmOrDev === 'dev'){
+  }
+else if (npmOrDev === 'dev') {
     content = '//empty';
-  }else{
+  }
+else {
     throw new Error('expected deployed|local, not ' + deployedOrLocal);
   }
   fs.writeFileSync('src/ios/BranchNPM.h', content + '\n');
 }
 
-//emit array of cordova file references for all .h/.m files in path
-function emitFiles(path){
+// emit array of cordova file references for all .h/.m files in path
+function emitFiles(path) {
   var ret = [];
-  for(filename of fs.readdirSync(path)){
+  for (filename of fs.readdirSync(path)) {
     var fileType = null;
-    if(filename.match(/\.m$/)){
+    if (filename.match(/\.m$/)) {
       fileType = 'source';
-    }else if(filename.match(/\.h$/) || filename.match(/\.pch$/)){
+    }
+else if (filename.match(/\.h$/) || filename.match(/\.pch$/)) {
       fileType = 'header';
     }
-    if(fileType){
+    if (fileType) {
       ret.push('<' + fileType + '-file src="' + path + filename + '" />');
     }
   }
@@ -78,12 +81,12 @@ function emitFiles(path){
   return ret;
 }
 
-//------------------------------------------------------------------------------
-//copy resources and compile es6 from corresponding directories
-babelTasks = []; //list of all babel tasks so we can build all of them
-function babelize(taskName, dir){
+// -----------------------------------------------------------------------------
+// copy resources and compile es6 from corresponding directories
+babelTasks = []; // list of all babel tasks so we can build all of them
+function babelize(taskName, dir) {
   babelTasks.push(taskName + '-babel');
-  if(!dir){
+  if (!dir) {
     dir = taskName;
   }
   var srcDir = dir + '.es6/';
@@ -92,12 +95,12 @@ function babelize(taskName, dir){
   gulp.task(taskName + '-copy', () => {
     return gulp.src(srcDir + '**/*.*').pipe(gulp.dest(destDir));
   });
-  gulp.task(taskName + '-babel', [taskName + '-copy'], () => {
+  gulp.task(taskName + '-babel', [ taskName + '-copy' ], () => {
     return gulp.src(srcPattern)
       .pipe(sourcemaps.init())
       .pipe(babel({
-        presets: ['es2015', 'stage-2'],
-        plugins: ['transform-runtime'] //needed for generators etc
+        presets: [ 'es2015', 'stage-2' ],
+        plugins: [ 'transform-runtime' ] // needed for generators etc
       }))
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(destDir));
@@ -110,31 +113,31 @@ babelize('tests');
 babelize('testbed', 'testbed/www/js');
 gulp.task('babel', babelTasks);
 
-//------------------------------------------------------------------------------
-//linting
+// -----------------------------------------------------------------------------
+// linting
 
-gulp.task('lint', ['eslint', 'jscs-lint']);
- 
+gulp.task('lint', [ 'eslint', 'jscs-lint' ]);
+
 var srcs = [
   '**/*.js',
   '!node_modules/**',
   '!testbed/platforms/ios/cordova/node_modules/**'
 ];
 
-gulp.task('lint', () => {
+gulp.task('eslint', () => {
   return gulp.src(srcs)
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
 });
 
-function jscsTask(fix){
-  var ret = gulp.src(srcs)
-    .pipe(jscs({fix: fix}))
+function jscsTask(fix) {
+  var ret = gulp.src('gulpfile.js')
+    .pipe(jscs({ fix: fix }))
     .pipe(jscs.reporter())
     .pipe(jscs.reporter('fail'));
 
-  if(fix){
+  if (fix) {
     ret.pipe(gulp.dest('.'));
   }
   return ret;
