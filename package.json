@@ -30,6 +30,9 @@
     "ios"
   ],
   "license": "MIT",
+  "scripts": {
+    "commit": "git-cz"
+  },
   "dependencies": {
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
@@ -38,11 +41,16 @@
     "xml2js": "^0.4.16"
   },
   "devDependencies": {
+    "commitizen": "^2.8.2",
+    "cz-conventional-changelog": "^1.1.6",
     "gulp": "^3.9.1",
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
     "plist": "^1.2.0",
     "rimraf": "^2.5.2",
     "xml2js": "^0.4.16"
+  },
+  "czConfig":  {
+    "path": "node_modules/cz-conventional-changelog"
   }
 }
