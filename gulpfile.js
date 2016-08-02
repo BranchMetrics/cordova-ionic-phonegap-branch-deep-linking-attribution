@@ -3,6 +3,9 @@ var fs = require('fs');
 var sourcemaps = require('gulp-sourcemaps');
 var babel = require('gulp-babel');
 
+gulp.task('build-npm', ['setupNpm', 'babel', 'lint']);
+
+//------------------------------------------------------------------------------
 //setup for development use
 gulp.task('setupDev', () => {
   getDevPluginXML();
@@ -14,8 +17,6 @@ gulp.task('setupNpm', () => {
   genNpmPluginXML();
   setIosNpmOrDev('npm');
 });
-
-gulp.task('build-npm', ['setupNpm', 'babel']);
 
 //generate plugin.xml for use as a cordova plugin
 //here we explode the contents of the frameworks
@@ -75,7 +76,8 @@ function emitFiles(path){
   return ret;
 }
 
-//copy resources and compile es6 from corresponding directory
+//------------------------------------------------------------------------------
+//copy resources and compile es6 from corresponding directories
 babelTasks = []; //list of all babel tasks so we can build all of them
 function babelize(taskName, dir){
   babelTasks.push(taskName + '-babel');
