@@ -12,8 +12,6 @@
   },
   "globals": {
     "module": true,
-    "require": false,
-    "mixpanel": false,
-    "File": false
+    "require": false
   }
 }
