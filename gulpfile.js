@@ -1,7 +1,9 @@
-var gulp = require('gulp');
-var fs = require('fs');
+var gulp       = require('gulp');
+var fs         = require('fs');
 var sourcemaps = require('gulp-sourcemaps');
-var babel = require('gulp-babel');
+var babel      = require('gulp-babel');
+var eslint     = require('gulp-eslint');
+var jscs       = require('gulp-jscs');
 
 gulp.task('build-npm', ['setupNpm', 'babel', 'lint']);
 
@@ -107,3 +109,36 @@ babelize('www');
 babelize('tests');
 babelize('testbed', 'testbed/www/js');
 gulp.task('babel', babelTasks);
+
+//------------------------------------------------------------------------------
+//linting
+
+gulp.task('lint', ['eslint', 'jscs-lint']);
+ 
+var srcs = [
+  '**/*.js',
+  '!node_modules/**',
+  '!testbed/platforms/ios/cordova/node_modules/**'
+];
+
+gulp.task('lint', () => {
+  return gulp.src(srcs)
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});
+
+function jscsTask(fix){
+  var ret = gulp.src(srcs)
+    .pipe(jscs({fix: fix}))
+    .pipe(jscs.reporter())
+    .pipe(jscs.reporter('fail'));
+
+  if(fix){
+    ret.pipe(gulp.dest('.'));
+  }
+  return ret;
+}
+
+gulp.task('jscs-fix', jscsTask.bind(null, true));
+gulp.task('jscs-lint', jscsTask.bind(null, false));
