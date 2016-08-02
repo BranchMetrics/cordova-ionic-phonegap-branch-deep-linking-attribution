@@ -15,6 +15,8 @@ gulp.task('setupNpm', () => {
   setIosNpmOrDev('npm');
 });
 
+gulp.task('build-npm', ['setupNpm', 'babel']);
+
 //generate plugin.xml for use as a cordova plugin
 //here we explode the contents of the frameworks
 function genNpmPluginXML(){
@@ -74,7 +76,9 @@ function emitFiles(path){
 }
 
 //copy resources and compile es6 from corresponding directory
+babelTasks = []; //list of all babel tasks so we can build all of them
 function babelize(taskName, dir){
+  babelTasks.push(taskName + '-babel');
   if(!dir){
     dir = taskName;
   }
@@ -89,7 +93,7 @@ function babelize(taskName, dir){
       .pipe(sourcemaps.init())
       .pipe(babel({
         presets: ['es2015', 'stage-2'],
-        plugins: ['transform-runtime']
+        plugins: ['transform-runtime'] //needed for generators etc
       }))
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(destDir));
@@ -100,3 +104,4 @@ babelize('hooks');
 babelize('www');
 babelize('tests');
 babelize('testbed', 'testbed/www/js');
+gulp.task('babel', babelTasks);
