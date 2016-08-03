@@ -4,7 +4,7 @@ This document outlines our development processes.
 
 ## Git Flow
 
-We use the [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model for this project. We recommend installing the [git flow tool](https://github.com/nvie/gitflow/wiki/Installation) and github's [commandline](https://hub.github.com/) and [desktop](https://desktop.github.com/) suites.
+We use the [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/) branching model for this project. We recommend installing the [git flow tool](https://github.com/nvie/gitflow/wiki/Installation) and github's [commandline](https://hub.github.com/) and [desktop](https://desktop.github.com/) suites. Note that it is not necessary to manually bump versions in package.json, semantic-version automatically computes that for us just before each release. Also note that we don't bother with release branches.
 
 Please issue github pull requests against develop instead of merging features directly in.
 
@@ -27,12 +27,4 @@ This project depends on [ios-branch-deep-linking](https://github.com/BranchMetri
 ```shell
 # <tag> is the name of the release. e,g, '0.12.5'
 $ src/ios/dependencies/update.sh <tag>
-```
-
-## Releasing
-
-This project is automatically released to NPM by TravisCI when changes are merged into master. Here's how that looks using git flow:
-
-```shell
-$ git flow release start
 ```
