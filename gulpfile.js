@@ -5,7 +5,7 @@ var babel      = require('gulp-babel');
 var eslint     = require('gulp-eslint');
 var jscs       = require('gulp-jscs');
 
-gulp.task('build-npm', [ 'setupNpm', 'babel', 'lint' ]);
+gulp.task('prerelease', [ 'setupNpm', 'babel', 'lint' ]);
 
 // -----------------------------------------------------------------------------
 // setup for development use
