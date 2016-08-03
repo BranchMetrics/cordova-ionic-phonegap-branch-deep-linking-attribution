@@ -54,11 +54,6 @@
     "gulp-eslint": "^3.0.1",
     "gulp-jscs": "^4.0.0",
     "gulp-sourcemaps": "^1.6.0",
-    "mkpath": "^1.0.0",
-    "node-version-compare": "^1.0.1",
-    "plist": "^1.2.0",
-    "rimraf": "^2.5.2",
-    "xml2js": "^0.4.16",
     "semantic-release": "^4.3.5"
   },
   "config": {
