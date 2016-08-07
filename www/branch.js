@@ -72,6 +72,20 @@ Branch.prototype.initSession = function () {
 };
 
 /**
+ * Get Mixpanel tolen/assisstance.
+ * NOTE: This must be called before initSession
+ *
+ * @param (String) token. Default = false
+ *
+ * @return (Promise)
+ */
+Branch.prototype.setMixpanelToken = function (token) {
+
+    return execute('setMixpanelToken', [token]);
+
+};
+
+/**
  * Set debug mode.
  * NOTE: This must be called before initSession
  *
