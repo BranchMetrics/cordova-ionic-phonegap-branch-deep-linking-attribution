@@ -134,9 +134,9 @@
         }
         else if (self.deepLinkUrl) {
             [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"BSDKPostUnhandledURL" object:self.deepLinkUrl]];
-            self.deepLinkUrl = nil;
         }
-
+        self.deepLinkUrl = nil;
+        
         if (command != nil) {
             [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
         }
