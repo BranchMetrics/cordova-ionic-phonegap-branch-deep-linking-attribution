@@ -17,9 +17,9 @@ android update sdk --no-ui
 
  1. Install node (`brew install node`) and cordova (`npm install -g cordova`) if you haven't already.
 
- 1. Run `open ~/Library/Android/sdk/tools/android` check off `android 6.0`, click `Install Packages`, and accept ALL licenses in the next screen before clicking install again to complete installation.
+ 1. Run `android` check off `android 6.0`, click `Install Packages`, and accept ALL licenses in the next screen before clicking install again to complete installation.
 
- 1. Run `~/Library/Android/sdk/tools/android avd` and create an image with name `nexus-intel` device `Galaxy Nexus (4.65"...` target `android 6.0 - API Level 23` CPU/ABI `Intel Atom (x86_64)` no skin size `200mb` and `Use Host GPU` checked off.
+ 1. Run `android avd` and create an image with name `nexus-intel` device `Galaxy Nexus (4.65"...` target `android 6.0 - API Level 23` CPU/ABI `Intel Atom (x86_64)` no skin size `200mb` and `Use Host GPU` checked off.
 
  1. Run `npm install` in the project root.
 
