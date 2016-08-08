@@ -213,7 +213,7 @@ public class BranchSDK extends CordovaPlugin
             this.deepLinkUrl = data.toString();
         }
 
-        this.instance = Branch.getInstance(this.activity.getApplicationContext());
+        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
         this.instance.initSession(new SessionListener(callbackContext), data, activity);
 
     }
