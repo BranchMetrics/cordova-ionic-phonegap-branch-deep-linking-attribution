@@ -106,6 +106,6 @@ SOFTWARE.
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
         <source-file src="src/ios/AppDelegate+BranchSdk.m" />
-        <framework custom="true" src="src/ios/dependencies/Branch.framework" />
+        <!--[Branch Framework Reference]-->
     </platform>
 </plugin>
