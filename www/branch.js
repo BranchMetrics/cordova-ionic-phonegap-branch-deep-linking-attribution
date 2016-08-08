@@ -79,9 +79,9 @@ Branch.prototype.initSession = function () {
  *
  * @return (Promise)
  */
-Branch.prototype.getMixpanelInstance = function (token) {
+Branch.prototype.setMixpanelToken = function (token) {
 
-    return execute('getMixpanelInstance', [token]);
+    return execute('setMixpanelToken', [token]);
 
 };
 

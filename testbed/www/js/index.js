@@ -82,7 +82,7 @@ function InitSession()
 {
     console.log('Trigger InitSession()');
 
-    Branch.getMixpanelInstance('<your-mixpanel-token>');
+    Branch.setMixpanelToken('<your-mixpanel-token-here>');
     Branch.initSession().then(function (res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));

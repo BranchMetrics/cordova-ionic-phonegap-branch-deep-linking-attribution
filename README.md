@@ -167,6 +167,7 @@ Branch.getFirstReferringParams().then(function (res) {
 1. Branch Session
   + [setDebug](#setDebug)
   + [initSession](#initSession)
+  + [setMixpanelToken](#setMixpanelToken)
   + [getLatestReferringParams](#getLatestReferringParams)
   + [getFirstReferringParams](#getFirstReferringParams)
   + [setIdentity](#setIdentity)
@@ -233,6 +234,17 @@ function DeepLinkHandler(data) {
         alert('No data found');
     }
 }
+```
+
+### <a id="setMixpanelToken"></a>setMixpanelToken()
+
+Allow Branch SDK to pass the user's Mixpanel distinct id to our servers. Branch will then pass that Distinct ID to Mixpanel when logging any event.
+**Note:** This should be initialized first before `initSession()` or else Mixpanel integration won't work.
+
+##### Usage
+
+```js
+Branch.setMixpanelToken('<your-mixpanel-token-here>');
 ```
 
 ### <a id="getFirstReferringParams"></a>getFirstReferringParams()
