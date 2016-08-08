@@ -16,7 +16,7 @@ The style of all js files in this project are strictly checked using [jscs](http
 
 ## Testing
 
-
+See [tests-harness/README.md](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/tests-harness/README.md) for details on how to run this project's test suite. Please run the test suite before merging any branches.
 
 ## Updating IOS dependencies
 
