@@ -27,12 +27,14 @@ android update sdk --no-ui
 
 ```sh
 cordova prepare
+cordova plugin add ../ --link --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=testbed
+cordova plugin add ../tests --link
 cordova compile
 ```
 
  1. Finally run the tests:
 
 ```
-cordova run ios --emulator
-cordova run android --emulator
+./android-test.sh
+./ios-test.sh
 ```
