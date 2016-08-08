@@ -132,7 +132,7 @@ gulp.task('eslint', () => {
 });
 
 function jscsTask(fix) {
-  var ret = gulp.src('gulpfile.js')
+  var ret = gulp.src(srcs)
     .pipe(jscs({ fix: fix }))
     .pipe(jscs.reporter())
     .pipe(jscs.reporter('fail'));
