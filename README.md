@@ -165,7 +165,6 @@ Branch.getFirstReferringParams().then(function (res) {
 ```
 
 1. Branch Session
-  + [setDebug](#setDebug)
   + [initSession](#initSession)
   + [setMixpanelToken](#setMixpanelToken)
   + [getLatestReferringParams](#getLatestReferringParams)
@@ -186,25 +185,9 @@ Branch.getFirstReferringParams().then(function (res) {
 4. FAQ
   + [Android Build FAQ](#android-build-faq)
 
-
-### <a id="setDebug"></a>setDebug(isEnable)
-
-Setting the SDK debug flag will generate a new device ID each time the app is installed instead of possibly using the same device id.
-This is useful when testing.
-
-**Parameters**
-
-**options**: `boolean` - Boolean flag if debug mode should be enabled or not.
-
-##### Usage
-```js
-Branch.setDebug(true);
-```
-
 ### <a id="initSession"></a>initSession()
 
 Initializes the branch instance.
-**Note:** `setDebug()` should be called first before calling this method.
 
 ##### Usage
 The `initSession()` method automatically also sets an internal deep link hander whose data can be accesed by implementing the **required** `DeepLinkHandler()` method. To implement, first call the method `initSession`:
