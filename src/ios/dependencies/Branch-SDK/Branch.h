@@ -357,6 +357,19 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  */
 -(void)setDeepLinkDebugMode:(NSDictionary *)debugParams;
 
+/**
+ Add a scheme to a whitelist of URI schemes that will be tracked by Branch. Default to all schemes.
+ 
+ @param the scheme to add to the whitelist, i.e. @"http", @"https" or @"myapp"
+ */
+-(void)addWhiteListedScheme:(NSString *)scheme;
+
+/**
+ Add an array of schemes to a whitelist of URI schemes that will be tracked by Branch. Default to all schemes.
+ 
+ @param the array of schemes to add to the whitelist, i.e. @[@"http", @"https", @"myapp"]
+ */
+-(void)setWhiteListedSchemes:(NSArray *)schemes;
 
 /**
  Register your Facebook SDK's FBSDKAppLinkUtility class to be used by Branch for deferred deep linking from their platform
@@ -394,8 +407,18 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
 - (void)disableCookieBasedMatching;
 
 /**
- If you're using a version of the Facebook SDK that prevents application:didFinishLaunchingWithOptions: from returning
- YES/true when a Universal Link is clicked, you should enable this option.
+ TL;DR: If you're using a version of the Facebook SDK that prevents application:didFinishLaunchingWithOptions: from
+ returning YES/true when a Universal Link is clicked, you should enable this option.
+
+ Long explanation: in application:didFinishLaunchingWithOptions: you should choose one of the following:
+
+ 1. Always `return YES;`, and do *not* invoke `[[Branch getInstance] accountForFacebookSDKPreventingAppLaunch];`
+ 2. Allow the Facebook SDK to determine whether `application:didFinishLaunchingWithOptions:` returns `YES` or `NO`,
+    and invoke `[[Branch getInstance] accountForFacebookSDKPreventingAppLaunch];`
+
+ The reason for this second option is that the Facebook SDK will return `NO` if a Universal Link opens the app
+ but that UL is not a Facebook UL. Some developers prefer not to modify
+ `application:didFinishLaunchingWithOptions:` to always return `YES` and should use this method instead.
  */
 - (void)accountForFacebookSDKPreventingAppLaunch;
 

@@ -35,8 +35,8 @@
 #import "BranchRegisterViewRequest.h"
 
 //Fabric
-#import "FABKitProtocol.h"
-#import "Fabric+FABKits.h"
+#import "../Fabric/FABKitProtocol.h"
+#import "../Fabric/Fabric+FABKits.h"
 
 NSString * const BRANCH_FEATURE_TAG_SHARE = @"share";
 NSString * const BRANCH_FEATURE_TAG_REFERRAL = @"referral";
@@ -80,6 +80,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 @property (strong, nonatomic) NSDictionary *deepLinkDebugParams;
 @property (assign, nonatomic) BOOL accountForFacebookSDK;
 @property (assign, nonatomic) id FBSDKAppLinkUtility;
+@property (strong, nonatomic) NSMutableArray *whiteListedSchemeList;
 
 @end
 
@@ -147,6 +148,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
         _processing_sema = dispatch_semaphore_create(1);
         _networkCount = 0;
         _deepLinkControllers = [[NSMutableDictionary alloc] init];
+        _whiteListedSchemeList = [[NSMutableArray alloc] init];
         _useCookieBasedMatching = YES;
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -320,12 +322,29 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     self.deepLinkDebugParams = debugParams;
 }
 
+-(void)setWhiteListedSchemes:(NSArray *)schemes {
+    self.whiteListedSchemeList = [schemes mutableCopy];
+}
+
+-(void)addWhiteListedScheme:(NSString *)scheme {
+    [self.whiteListedSchemeList addObject:scheme];
+}
 
 - (BOOL)handleDeepLink:(NSURL *)url {
     BOOL handled = NO;
     if (url && ![url isEqual:[NSNull null]]) {
-        //always save the incoming url in the preferenceHelper in the externalIntentURI field
-        self.preferenceHelper.externalIntentURI = [url absoluteString];
+        
+        // save the incoming url in the preferenceHelper in the externalIntentURI field
+        if ([self.whiteListedSchemeList count]) {
+            for (NSString *scheme in self.whiteListedSchemeList) {
+                if ([scheme isEqualToString:[url scheme]]) {
+                    self.preferenceHelper.externalIntentURI = [url absoluteString];
+                    break;
+                }
+            }
+        } else {
+            self.preferenceHelper.externalIntentURI = [url absoluteString];
+        }
 
         NSString *query = [url fragment];
         if (!query) {
@@ -1284,7 +1303,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 }
 
 + (NSString *)kitDisplayVersion {
-	return @"0.12.4";
+	return @"0.12.5";
 }
 
 @end
