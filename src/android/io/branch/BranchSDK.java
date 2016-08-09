@@ -1182,7 +1182,7 @@ public class BranchSDK extends CordovaPlugin
                         if (this.args.length() == 1) {
                             loadRewards(this.args.getString(0), this.callbackContext);
                         } else {
-                            loadRewards(this.callbackContext);   
+                            loadRewards(this.callbackContext);
                         }
                     } else if (this.action.equals("redeemRewards")) {
                         if (this.args.length() == 1) {
