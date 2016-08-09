@@ -5,9 +5,18 @@
 //  Copyright © 2016 Branch Metrics. All rights reserved.
 //
 
-#import <Branch/Branch.h>
-#import <Branch/BranchLinkProperties.h>
-#import <Branch/BranchUniversalObject.h>
+#import "BranchNPM.h"
+
+#ifdef BRANCH_NPM
+  #import "Branch.h"
+  #import "BranchLinkProperties.h"
+  #import "BranchUniversalObject.h"
+#else
+  #import <Branch/Branch.h>
+  #import <Branch/BranchLinkProperties.h>
+  #import <Branch/BranchUniversalObject.h>
+#endif
+
 #import <Cordova/CDV.h>
 
 @interface BranchSDK : CDVPlugin
@@ -25,6 +34,7 @@
 
 // BranchSDK Basic Methods
 - (void)initSession:(CDVInvokedUrlCommand*)command;
+- (void)setMixpanelToken:(CDVInvokedUrlCommand*)command;
 - (void)getAutoInstance:(CDVInvokedUrlCommand*)command;
 - (void)getLatestReferringParams:(CDVInvokedUrlCommand*)command;
 - (void)getFirstReferringParams:(CDVInvokedUrlCommand*)command;

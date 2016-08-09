@@ -72,6 +72,20 @@ Branch.prototype.initSession = function () {
 };
 
 /**
+ * Get Mixpanel tolen/assisstance.
+ * NOTE: This must be called before initSession
+ *
+ * @param (String) token. Default = false
+ *
+ * @return (Promise)
+ */
+Branch.prototype.setMixpanelToken = function (token) {
+
+    return execute('setMixpanelToken', [token]);
+
+};
+
+/**
  * Retrieves the install session parameters.
  *
  * @return (Promise)
@@ -335,9 +349,13 @@ Branch.prototype.createBranchUniversalObject = function (options) {
  *
  * @return (Promise)
  */
-Branch.prototype.loadRewards = function () {
+Branch.prototype.loadRewards = function (bucket) {
 
-    return execute('loadRewards');
+    if ( ! bucket) {
+        bucket = '';
+    }
+
+    return execute('loadRewards', [bucket]);
 
 };
 
