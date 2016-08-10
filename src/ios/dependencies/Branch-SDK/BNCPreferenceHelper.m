@@ -10,7 +10,7 @@
 #import "BNCEncodingUtils.h"
 #import "BNCConfig.h"
 #import "Branch.h"
-#import "../Fabric/Fabric+FABKits.h"
+#import "Fabric+FABKits.h"
 
 static const NSTimeInterval DEFAULT_TIMEOUT = 5.5;
 static const NSTimeInterval DEFAULT_RETRY_INTERVAL = 0;
