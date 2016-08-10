@@ -2,6 +2,10 @@
 
 This document outlines our development processes.
 
+## ES6
+
+Source code for all .js files in this project is written in es6 and then compiled via babel to es5. Unfortunately, for legacy reasons, the es5 needs to be stored in version control. As such, if you want to change a js file, edit the version in the corresponding .es6 directory, compile it with the `gulp babel` command, and then commit it as well as the resulting .js file.
+
 ## Pull Requests
 
 All changes to this project should be made in the form of pull requests against master. Use snake-case prefixed by 'feat/' or 'fix/' for features/fixes. Feel free to use any of the commit types listed [here](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#type) as well. Note that when pull requests are merged in they will be automatically released to npm by (Travis CI)[https://travis-ci.org/] and (semantic-release)[https://github.com/semantic-release/semantic-release] so make sure to fully test.
