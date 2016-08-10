@@ -121,7 +121,10 @@ gulp.task('lint', [ 'eslint', 'jscs-lint' ]);
 var srcs = [
   '**/*.js',
   '!node_modules/**',
-  '!testbed/platforms/ios/cordova/node_modules/**'
+  '!testbed/platforms/**',
+  '!testbed/plugins/**',
+  '!tests-harness/platforms/**',
+  '!tests-harness/plugins/**'
 ];
 
 gulp.task('eslint', () => {
