@@ -33,22 +33,22 @@ There's a full demo app embedded in this repository. It should serve as an examp
 #### Cordova
 
 ```sh
-cordova plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
+cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
 ```
 example:
 ```sh
-cordova plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
+cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 #### Phonegap
 
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable
+phonegap plugin add branch-cordova-sdk --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable
 ```
 
 example:
 ```sh
-phonegap plugin add https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
+phonegap plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 ### Additional App Permissions
