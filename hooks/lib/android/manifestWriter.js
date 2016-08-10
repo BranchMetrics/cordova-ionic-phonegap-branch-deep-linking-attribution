@@ -104,7 +104,7 @@ Class injects plugin preferences into AndroidManifest.xml file.
 
     var action = actions[0]['$']['android:name'];
 
-    return ('android.intent.action.VIEW' === action);
+    return action === 'android.intent.action.VIEW';
   }
 
   /**
@@ -126,11 +126,11 @@ Class injects plugin preferences into AndroidManifest.xml file.
     categories.forEach(function(category) {
       var categoryName = category['$']['android:name'];
       if (!isBrowsable) {
-        isBrowsable = 'android.intent.category.BROWSABLE' === categoryName;
+        isBrowsable = categoryName === 'android.intent.category.BROWSABLE';
       }
 
       if (!isDefault) {
-        isDefault = 'android.intent.category.DEFAULT' === categoryName;
+        isDefault = categoryName === 'android.intent.category.DEFAULT';
       }
     });
 
@@ -237,8 +237,8 @@ Class injects plugin preferences into AndroidManifest.xml file.
         return false;
       }
 
-      var isMainAction = ('android.intent.action.MAIN' === action[0]['$']['android:name']),
-        isLauncherCategory = ('android.intent.category.LAUNCHER' === category[0]['$']['android:name']);
+      var isMainAction = (action[0]['$']['android:name'] === 'android.intent.action.MAIN'),
+        isLauncherCategory = (category[0]['$']['android:name'] === 'android.intent.category.LAUNCHER');
 
       return isMainAction && isLauncherCategory;
     });
