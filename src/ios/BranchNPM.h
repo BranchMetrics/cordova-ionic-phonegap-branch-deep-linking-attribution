@@ -1,1 +1,1 @@
-//empty
+#define BRANCH_NPM true

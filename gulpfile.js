@@ -119,7 +119,11 @@ gulp.task('babel', babelTasks);
 gulp.task('lint', [ 'eslint', 'jscs-lint' ]);
 
 var srcs = [
-  '**/*.js',
+  'hooks.es6/**/*.js',
+  'www.es6/**/*.js',
+  'gulpfile.js',
+  'tests.es6/**/*.js',
+  'testbed/www/js.es6/**/*.js',
   '!node_modules/**',
   '!testbed/platforms/**',
   '!testbed/plugins/**',
