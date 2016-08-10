@@ -49,103 +49,135 @@ exports.defineAutoTests = function () {
 	});
 
 	describe('Branch.getLatestReferringParams()', function () {
-		beforeEach(function () {
-			window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-			window.Branch.setDebug(true);
-			window.Branch.initSession();
-		});
+		beforeEach(function (done) {
+			window.Branch.initSession().then(function () {
+				done();
+			});
+		}, 3000);
 		it('should return an object response', function (done) {
 			window.Branch.getLatestReferringParams().then(function (res) {
 				expect(typeof(res)).toBe('object');
 				done();
 			});
-		});
+		}, 10000);
 	});
 
 	describe('Branch.getFirstReferringParams()', function () {
-		beforeEach(function () {
-			window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-			window.Branch.setDebug(true);
-			window.Branch.initSession();
-		});
+		beforeEach(function (done) {
+			window.Branch.initSession().then(function () {
+				done();
+			});
+		}, 3000);
 		it('should return an object response', function (done) {
 			window.Branch.getFirstReferringParams().then(function (res) {
+				// We expect false since we won't open this from a branch link
+				expect(res).toBe(false);
+				done();
+			});
+		}, 10000);
+	});
+
+
+	describe('Branch.setIdentity()', function () {
+		beforeEach(function (done) {
+			window.Branch.initSession().then(function () {
+				done();
+			});
+		}, 3000);
+		it('should return "Success" response', function (done) {
+			window.Branch.setIdentity('new_identity').then(function (res) {
 				expect(typeof(res)).toBe('object');
 				done();
 			});
-		});
-	});
-
-	describe('Branch.setIdentity()', function () {
-		beforeEach(function () {
-			window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-			window.Branch.setDebug(true);
-			window.Branch.initSession();
-		});
-		it('should return "Success" response', function (done) {
-			window.Branch.setIdentity('new_identity').then(function (res) {
-				expect(res).toBe('Success');
-				done();
-			});
-		});
+		}, 10000);
 	});
 
 	describe('Branch.createBranchUniversalObject()', function () {
-		beforeEach(function () {
-			window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
-			window.Branch.setDebug(true);
-			window.Branch.initSession();
-		});
-		it('should return an object instance', function (done) {
-		    var properties = {
-		        canonicalIdentifier: 'testbed',
-		        title: 'testbed',
-		        contentDescription: 'Testbed Application',
-		        contentImageUrl: 'https://imgflip.com/s/meme/Derp.jpg',
-		        contentIndexingMode: 'public',
-		        contentMetadata: {}
-		    };
-			window.Branch.createBranchUniversalObject(properties).then(function (res) {
+		var branchUniversalObj;
+
+		beforeEach(function (done) {
+			window.Branch.initSession().then(function () {
+			    var properties = {
+			        canonicalIdentifier: 'testbed',
+			        title: 'testbed',
+			        contentDescription: 'Testbed Application',
+			        contentImageUrl: 'https://imgflip.com/s/meme/Derp.jpg',
+			        contentIndexingMode: 'public',
+			        contentMetadata: {}
+			    };
+				window.Branch.createBranchUniversalObject(properties).then(function (res) {
+					branchUniversalObj = res;
+					done();
+				});
+			});
+		}, 3000);
+		it('should execute register view', function (done) {
+			branchUniversalObj.registerView().then(function (res) {
 				expect(typeof(res)).toBe('object');
-				expect(res.message).toBe('success');
 				done();
 			});
-		});
+		}, 5000);
+		it('should execute generate short url', function (done) {
+		    var properties = {
+		        feature: 'test',
+		        alias: 'testbed',
+		        channel: 'test',
+		        stage: 'test',
+		        duration: 10000
+		    };
+		    var controlParams = {
+		        $fallback_url: 'www.another.com',
+		        $desktop_url: 'www.desktop.com',
+		        $android_url: 'test',
+		        $ios_url: 'ios',
+		        $ipad_url: 'ipad',
+		        $fire_url: 'fire',
+		        $blackberry_url: 'blackberry',
+		        $windows_phone_url: 'win-phone'
+		    };
+		    branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
+		        expect(typeof(res)).toBe('object');
+		        done();
+		    });
+		}, 5000);
 	});
 
 	describe('Branch.userCompletedAction()', function () {
-		beforeEach(function () {
-			window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-			window.Branch.setDebug(true);
-			window.Branch.initSession();
-		});
+		beforeEach(function (done) {
+			window.Branch.initSession().then(function () {
+				done();
+			});
+		}, 3000);
 		it('should successfully execute the method', function (done) {
 			window.Branch.userCompletedAction('login');
 			expect('Success').toBe('Success');
 			done();
-		});
+		}, 10000);
 	});
 
 	describe('Branch.loadRewards()', function () {
-		beforeEach(function () {
-			window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-			window.Branch.setDebug(true);
-			window.Branch.initSession();
-		});
-		it('should return an object response', function (done) {
-			window.Branch.loadRewards().then(function (res) {
-				expect(typeof(res)).toBe('object');
+		beforeEach(function (done) {
+			window.Branch.initSession().then(function () {
 				done();
 			});
-		});
+		}, 3000);
+		it('should return an object response', function (done) {
+			window.Branch.loadRewards().then(function (res) {
+				expect(typeof(res)).toBe('number');
+				done();
+			}, function (err) {
+				expect(typeof(err)).toBe('string');
+				done();
+			});
+		}, 10000);
 	});
 
 	describe('Branch.redeemRewards()', function () {
-		beforeEach(function () {
-			window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
-			window.Branch.setDebug(true);
-			window.Branch.initSession();
-		});
+		beforeEach(function (done) {
+			window.Branch.initSession().then(function () {
+				done();
+			});
+		}, 3000);
 		it('should return an object/string error response', function (done) {
 			window.Branch.redeemRewards(100).then(function (res) {
 				expect(typeof(res)).toBe('object');
@@ -154,21 +186,21 @@ exports.defineAutoTests = function () {
 				expect(typeof(err)).toBe('string');
 				done();
 			});
-		});
+		}, 10000);
 	});
 
 	describe('Branch.creditHistory()', function () {
-		beforeEach(function () {
-			window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
-			window.Branch.setDebug(true);
-			window.Branch.initSession();
-		});
-		it('should return the credit balance', function (done) {
-			window.Branch.creditHistory().then(function (res) {
-				expect(typeof(res)).toBe('number');
+		beforeEach(function (done) {
+			window.Branch.initSession().then(function () {
 				done();
 			});
-		});
+		}, 3000);
+		it('should return the credit balance', function (done) {
+			window.Branch.creditHistory().then(function (res) {
+				expect(typeof(res)).toBe('object');
+				done();
+			});
+		}, 10000);
 	});
 
 };
