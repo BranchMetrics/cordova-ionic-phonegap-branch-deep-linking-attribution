@@ -41,7 +41,8 @@ var app = {
 
         if (navigator.userAgent.indexOf('iPhone') >= 0) {
             document.getElementsByTagName("html")[0].className = 'ios';
-        } else if (navigator.userAgent.indexOf('Android') >= 0) {
+        }
+ else if (navigator.userAgent.indexOf('Android') >= 0) {
             document.getElementsByTagName("html")[0].className = 'android';
         }
 
@@ -52,100 +53,93 @@ var app = {
 
 app.initialize();
 
-function DeepLinkHandler(data)
-{
+function DeepLinkHandler(data) {
     if (data) {
         alert('Initialize: ' + JSON.stringify(data));
-    } else {
+    }
+ else {
         alert('No data found');
     }
 }
 
-function NonBranchLinkHandler(data)
-{
+function NonBranchLinkHandler(data) {
     if (data) {
         alert('Non-branch link found: ' + JSON.stringify(data));
     }
 }
 
-function InitSession()
-{
+function InitSession() {
     console.log('Trigger InitSession()');
 
     Branch.setMixpanelToken('<your-mixpanel-token-here>');
-    Branch.initSession().then(function (res) {
+    Branch.initSession().then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
 }
 
-function CustomAction()
-{
+function CustomAction() {
     console.log('Trigger CustomAction()');
 
     var action = document.getElementById('custom-action').value;
 
-    Branch.userCompletedAction(action).then(function (res) {
+    Branch.userCompletedAction(action).then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
 }
 
-function GetLatestReferringParams()
-{
+function GetLatestReferringParams() {
     console.log('Trigger GetLatestReferringParams()');
 
-    Branch.getLatestReferringParams().then(function (res) {
+    Branch.getLatestReferringParams().then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
 }
 
-function GetFirstReferringParams()
-{
+function GetFirstReferringParams() {
     console.log('Trigger GetFirstReferringParams()');
 
-    Branch.getFirstReferringParams().then(function (res) {
+    Branch.getFirstReferringParams().then(function(res) {
         alert('Response: ' + JSON.stringify(res));
         console.log(res);
-    }).catch(function (err) {
+    }).catch(function(err) {
         alert('Error: ' + JSON.stringify(err));
         console.error(err);
     });
 }
 
-function SetIdentity()
-{
+function SetIdentity() {
     console.log('Trigger SetIdentity()');
 
     var newIdentity = document.getElementById('identity').value;
 
-    Branch.setIdentity(newIdentity).then(function (res) {
+    Branch.setIdentity(newIdentity).then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
 }
 
-function Logout()
-{
+function Logout() {
     console.log('Trigger Logout()');
 
-    Branch.logout().then(function (res) {
+    Branch.logout().then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
@@ -153,8 +147,7 @@ function Logout()
 
 var branchUniversalObj = null;
 
-function CreateBranchUniversalObject()
-{
+function CreateBranchUniversalObject() {
 
     console.log('Trigger CreateBranchUniversalObject()');
 
@@ -168,33 +161,31 @@ function CreateBranchUniversalObject()
     };
 
     Branch.createBranchUniversalObject(properties)
-        .then(function (res) {
+        .then(function(res) {
             console.log(res);
             alert('Response: ' + JSON.stringify(res));
             branchUniversalObj = res;
         })
-        .catch(function (err) {
+        .catch(function(err) {
             console.error(err);
             alert('Error: ' + JSON.stringify(err));
         });
 
 }
 
-function RegisterView()
-{
+function RegisterView() {
     console.log('Trigger RegisterView()');
 
-    branchUniversalObj.registerView().then(function (res) {
+    branchUniversalObj.registerView().then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });;
 }
 
-function GenerateShortUrl()
-{
+function GenerateShortUrl() {
     console.log('Trigger GenerateShortUrl()');
 
     var properties = {
@@ -215,17 +206,16 @@ function GenerateShortUrl()
         $windows_phone_url: 'win-phone'
     };
 
-    branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
+    branchUniversalObj.generateShortUrl(properties, controlParams).then(function(res) {
         console.log(res);
         document.getElementById('generated-url').value = res.url;
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
 }
 
-function ShowShareSheet()
-{
+function ShowShareSheet() {
     console.log('Trigger ShowShareSheet()');
 
     var properties = {
@@ -249,16 +239,16 @@ function ShowShareSheet()
     console.log(branchUniversalObj);
 
     // Set listeners
-    branchUniversalObj.onShareSheetLaunched(function () {
+    branchUniversalObj.onShareSheetLaunched(function() {
         console.log('Share sheet launched');
     });
-    branchUniversalObj.onShareSheetDismissed(function () {
+    branchUniversalObj.onShareSheetDismissed(function() {
       console.log('Share sheet dismissed');
     });
-    branchUniversalObj.onLinkShareResponse(function (res) {
+    branchUniversalObj.onLinkShareResponse(function(res) {
       console.log('Share link response: ' + JSON.stringify(res));
     });
-    branchUniversalObj.onChannelSelected(function (res) {
+    branchUniversalObj.onChannelSelected(function(res) {
       console.log('Channel selected: ' + JSON.stringify(res));
     });
 
@@ -266,51 +256,47 @@ function ShowShareSheet()
 
 }
 
-function ListOnSpotlight()
-{
+function ListOnSpotlight() {
     console.log('Trigger ListOnSpotlight()');
-    branchUniversalObj.listOnSpotlight().then(function (res) {
+    branchUniversalObj.listOnSpotlight().then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
 }
 
-function LoadRewards()
-{
+function LoadRewards() {
     console.log('Trigger LoadRewards()');
-    Branch.loadRewards().then(function (res) {
+    Branch.loadRewards().then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
 }
 
-function RedeemRewards()
-{
+function RedeemRewards() {
     console.log('Trigger RedeemRewards()');
     var reward = 1000;
 
-    Branch.redeemRewards(reward).then(function (res) {
+    Branch.redeemRewards(reward).then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
 }
 
-function CreditHistory()
-{
+function CreditHistory() {
     console.log('Trigger CreditHistory()');
-    Branch.creditHistory().then(function (res) {
+    Branch.creditHistory().then(function(res) {
         console.log(res);
         alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
+    }).catch(function(err) {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });

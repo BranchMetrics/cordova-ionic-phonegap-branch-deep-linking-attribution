@@ -47,13 +47,11 @@ Helper class to read data from config.xml file.
       packageName;
 
     switch (platform) {
-      case ANDROID:
-        {
+      case ANDROID: {
           packageName = config.android_packageName();
           break;
         }
-      case IOS:
-        {
+      case IOS: {
           packageName = config.ios_CFBundleIdentifier();
           break;
         }

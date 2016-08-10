@@ -256,15 +256,15 @@ Class injects plugin preferences into AndroidManifest.xml file.
    */
   function createIntentFilter(host, scheme, pathPrefix, androidM) {
     var intentFilter = {
-      '$' : {
+      '$': {
         'android:autoVerify': 'true'
       },
-      'action': [{
+      'action': [ {
         '$': {
           'android:name': 'android.intent.action.VIEW'
         }
-      }],
-      'category': [{
+      } ],
+      'category': [ {
         '$': {
           'android:name': 'android.intent.category.DEFAULT'
         }
@@ -272,14 +272,14 @@ Class injects plugin preferences into AndroidManifest.xml file.
         '$': {
           'android:name': 'android.intent.category.BROWSABLE'
         }
-      }],
-      'data': [{
+      } ],
+      'data': [ {
         '$': {
           'android:host': host,
           'android:scheme': scheme,
           'android:pathPrefix': pathPrefix
         }
-      }]
+      } ]
     };
 
     if (!pathPrefix) {

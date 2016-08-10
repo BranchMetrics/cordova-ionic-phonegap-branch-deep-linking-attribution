@@ -50,7 +50,7 @@ Parser for config.xml file. Read plugin-specific preferences (from <branch-confi
     return {
       'hosts': hosts,
       'iosTeamId': iosTeamId,
-      'androidPrefix' : androidPrefix
+      'androidPrefix': androidPrefix
     };
   }
 

@@ -70,7 +70,8 @@ Which is:
           buildSettings['IPHONEOS_DEPLOYMENT_TARGET'] = IOS_DEPLOYMENT_TARGET;
           deploymentTargetIsUpdated = true;
         }
-      } else {
+      }
+ else {
         buildSettings['IPHONEOS_DEPLOYMENT_TARGET'] = IOS_DEPLOYMENT_TARGET;
         deploymentTargetIsUpdated = true;
       }
