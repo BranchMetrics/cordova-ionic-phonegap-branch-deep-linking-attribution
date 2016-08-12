@@ -1,11 +1,5 @@
 'use strict';
 
-var _promise = require('babel-runtime/core-js/promise');
-
-var _promise2 = _interopRequireDefault(_promise);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 /**
  * Branch.IO SDK
  * -------------
@@ -30,7 +24,7 @@ function execute(method, params) {
 
     params = !params ? [] : params;
 
-    return new _promise2.default(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         exec(function (res) {
             resolve(res);
         }, function (err) {
@@ -121,7 +115,7 @@ Branch.prototype.setIdentity = function (identity) {
     if (identity) {
         return execute('setIdentity', [identity]);
     } else {
-        return new _promise2.default(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             reject('Please set an identity');
         });
     }
@@ -178,7 +172,7 @@ Branch.prototype.userCompletedAction = function (action, metaData) {
  */
 Branch.prototype.createBranchUniversalObject = function (options) {
 
-    return new _promise2.default(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         execute('createBranchUniversalObject', [options]).then(function (res) {
 
             var obj = {

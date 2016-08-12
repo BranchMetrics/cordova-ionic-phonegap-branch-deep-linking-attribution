@@ -1,10 +1,6 @@
 'use strict';
 
-var _typeof2 = require('babel-runtime/helpers/typeof');
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 /**
  * Branch.IO Cordova Plugin Unit-Test
@@ -20,39 +16,39 @@ exports.defineAutoTests = function () {
 		});
 		it('should contain a method called getLatestReferringParams()', function () {
 			expect(window.Branch.getLatestReferringParams).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.getLatestReferringParams)).toBe('function');
+			expect(_typeof(window.Branch.getLatestReferringParams)).toBe('function');
 		});
 		it('should contain a method called getFirstReferringParams()', function () {
 			expect(window.Branch.getFirstReferringParams).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.getFirstReferringParams)).toBe('function');
+			expect(_typeof(window.Branch.getFirstReferringParams)).toBe('function');
 		});
 		it('should contain a method called setIdentity()', function () {
 			expect(window.Branch.setIdentity).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.setIdentity)).toBe('function');
+			expect(_typeof(window.Branch.setIdentity)).toBe('function');
 		});
 		it('should contain a method called logout()', function () {
 			expect(window.Branch.logout).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.logout)).toBe('function');
+			expect(_typeof(window.Branch.logout)).toBe('function');
 		});
 		it('should contain a method called createBranchUniversalObject()', function () {
 			expect(window.Branch.createBranchUniversalObject).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.createBranchUniversalObject)).toBe('function');
+			expect(_typeof(window.Branch.createBranchUniversalObject)).toBe('function');
 		});
 		it('should contain a method called userCompletedAction()', function () {
 			expect(window.Branch.userCompletedAction).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.userCompletedAction)).toBe('function');
+			expect(_typeof(window.Branch.userCompletedAction)).toBe('function');
 		});
 		it('should contain a method called loadRewards()', function () {
 			expect(window.Branch.loadRewards).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.loadRewards)).toBe('function');
+			expect(_typeof(window.Branch.loadRewards)).toBe('function');
 		});
 		it('should contain a method called redeemRewards()', function () {
 			expect(window.Branch.redeemRewards).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.redeemRewards)).toBe('function');
+			expect(_typeof(window.Branch.redeemRewards)).toBe('function');
 		});
 		it('should contain a method called creditHistory()', function () {
 			expect(window.Branch.creditHistory).toBeDefined();
-			expect((0, _typeof3.default)(window.Branch.creditHistory)).toBe('function');
+			expect(_typeof(window.Branch.creditHistory)).toBe('function');
 		});
 	});
 
@@ -64,7 +60,7 @@ exports.defineAutoTests = function () {
 		}, 3000);
 		it('should return an object response', function (done) {
 			window.Branch.getLatestReferringParams().then(function (res) {
-				expect(typeof res === 'undefined' ? 'undefined' : (0, _typeof3.default)(res)).toBe('object');
+				expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe('object');
 				done();
 			});
 		}, 10000);
@@ -93,7 +89,7 @@ exports.defineAutoTests = function () {
 		}, 3000);
 		it('should return "Success" response', function (done) {
 			window.Branch.setIdentity('new_identity').then(function (res) {
-				expect(typeof res === 'undefined' ? 'undefined' : (0, _typeof3.default)(res)).toBe('object');
+				expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe('object');
 				done();
 			});
 		}, 10000);
@@ -120,7 +116,7 @@ exports.defineAutoTests = function () {
 		}, 3000);
 		it('should execute register view', function (done) {
 			branchUniversalObj.registerView().then(function (res) {
-				expect(typeof res === 'undefined' ? 'undefined' : (0, _typeof3.default)(res)).toBe('object');
+				expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe('object');
 				done();
 			});
 		}, 5000);
@@ -143,7 +139,7 @@ exports.defineAutoTests = function () {
 				$windows_phone_url: 'win-phone'
 			};
 			branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
-				expect(typeof res === 'undefined' ? 'undefined' : (0, _typeof3.default)(res)).toBe('object');
+				expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe('object');
 				done();
 			});
 		}, 5000);
@@ -170,10 +166,10 @@ exports.defineAutoTests = function () {
 		}, 3000);
 		it('should return an object response', function (done) {
 			window.Branch.loadRewards().then(function (res) {
-				expect(typeof res === 'undefined' ? 'undefined' : (0, _typeof3.default)(res)).toBe('number');
+				expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe('number');
 				done();
 			}, function (err) {
-				expect(typeof err === 'undefined' ? 'undefined' : (0, _typeof3.default)(err)).toBe('string');
+				expect(typeof err === 'undefined' ? 'undefined' : _typeof(err)).toBe('string');
 				done();
 			});
 		}, 10000);
@@ -187,10 +183,10 @@ exports.defineAutoTests = function () {
 		}, 3000);
 		it('should return an object/string error response', function (done) {
 			window.Branch.redeemRewards(100).then(function (res) {
-				expect(typeof res === 'undefined' ? 'undefined' : (0, _typeof3.default)(res)).toBe('object');
+				expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe('object');
 				done();
 			}, function (err) {
-				expect(typeof err === 'undefined' ? 'undefined' : (0, _typeof3.default)(err)).toBe('string');
+				expect(typeof err === 'undefined' ? 'undefined' : _typeof(err)).toBe('string');
 				done();
 			});
 		}, 10000);
@@ -204,7 +200,7 @@ exports.defineAutoTests = function () {
 		}, 3000);
 		it('should return the credit balance', function (done) {
 			window.Branch.creditHistory().then(function (res) {
-				expect(typeof res === 'undefined' ? 'undefined' : (0, _typeof3.default)(res)).toBe('object');
+				expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe('object');
 				done();
 			});
 		}, 10000);

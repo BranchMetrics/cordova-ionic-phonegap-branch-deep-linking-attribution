@@ -1,11 +1,5 @@
 'use strict';
 
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 /*
 Script activates support for Universal Links in the application by setting proper preferences in the xcode project file.
 Which is:
@@ -190,7 +184,7 @@ Which is:
    * @return {Object} file object without comments
    */
   function nonComments(obj) {
-    var keys = (0, _keys2.default)(obj),
+    var keys = Object.keys(obj),
         newObj = {};
 
     for (var i = 0, len = keys.length; i < len; i++) {
