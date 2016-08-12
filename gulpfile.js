@@ -99,7 +99,7 @@ function babelize(taskName, dir) {
     return gulp.src(srcPattern)
       .pipe(sourcemaps.init())
       .pipe(babel({
-        presets: [ 'es2015', 'stage-2' ],
+        presets: [ 'es2015', 'stage-2' ]
       }))
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(destDir));
