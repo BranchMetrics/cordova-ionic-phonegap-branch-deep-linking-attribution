@@ -1,11 +1,3 @@
-'use strict';
-
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 /*
 Script activates support for Universal Links in the application by setting proper preferences in the xcode project file.
 Which is:
@@ -14,20 +6,19 @@ Which is:
 - path to .entitlements file added to Code Sign Entitlements preference
 */
 
-(function () {
+(function() {
 
   var path = require('path'),
-      compare = require('node-version-compare'),
-      ConfigXmlHelper = require('../configXmlHelper.js'),
-
-  // pbxFile = require('xcode/lib/pbxFile'),
-  IOS_DEPLOYMENT_TARGET = '8.0',
-      COMMENT_KEY = /_comment$/,
-      context;
+    compare = require('node-version-compare'),
+    ConfigXmlHelper = require('../configXmlHelper.js'),
+    // pbxFile = require('xcode/lib/pbxFile'),
+    IOS_DEPLOYMENT_TARGET = '8.0',
+    COMMENT_KEY = /_comment$/,
+    context;
 
   module.exports = {
     enableAssociativeDomainsCapability: enableAssociativeDomainsCapability
-  };
+  }
 
   // region Public API
 
@@ -64,10 +55,10 @@ Which is:
    */
   function activateAssociativeDomains(xcodeProject) {
     var configurations = nonComments(xcodeProject.pbxXCBuildConfigurationSection()),
-        entitlementsFilePath = pathToEntitlementsFile(),
-        config,
-        buildSettings,
-        deploymentTargetIsUpdated;
+      entitlementsFilePath = pathToEntitlementsFile(),
+      config,
+      buildSettings,
+      deploymentTargetIsUpdated;
 
     for (config in configurations) {
       buildSettings = configurations[config].buildSettings;
@@ -79,7 +70,8 @@ Which is:
           buildSettings['IPHONEOS_DEPLOYMENT_TARGET'] = IOS_DEPLOYMENT_TARGET;
           deploymentTargetIsUpdated = true;
         }
-      } else {
+      }
+ else {
         buildSettings['IPHONEOS_DEPLOYMENT_TARGET'] = IOS_DEPLOYMENT_TARGET;
         deploymentTargetIsUpdated = true;
       }
@@ -103,7 +95,7 @@ Which is:
    */
   function addPbxReference(xcodeProject) {
     var fileReferenceSection = nonComments(xcodeProject.pbxFileReferenceSection()),
-        entitlementsRelativeFilePath = pathToEntitlementsFile();
+      entitlementsRelativeFilePath = pathToEntitlementsFile();
 
     if (isPbxReferenceAlreadySet(fileReferenceSection, entitlementsRelativeFilePath)) {
       console.log('Entitlements file is in reference section.');
@@ -123,8 +115,8 @@ Which is:
    */
   function isPbxReferenceAlreadySet(fileReferenceSection, entitlementsRelativeFilePath) {
     var isAlreadyInReferencesSection = false,
-        uuid,
-        fileRefEntry;
+      uuid,
+      fileRefEntry;
 
     for (uuid in fileReferenceSection) {
       fileRefEntry = fileReferenceSection[uuid];
@@ -168,7 +160,8 @@ Which is:
    * @return {Object} projectFile - project file information
    */
   function loadProjectFile() {
-    var platform_ios, projectFile;
+    var platform_ios,
+      projectFile;
 
     try {
       // try pre-5.0 cordova structure
@@ -190,8 +183,8 @@ Which is:
    * @return {Object} file object without comments
    */
   function nonComments(obj) {
-    var keys = (0, _keys2.default)(obj),
-        newObj = {};
+    var keys = Object.keys(obj),
+      newObj = {};
 
     for (var i = 0, len = keys.length; i < len; i++) {
       if (!COMMENT_KEY.test(keys[i])) {
@@ -216,12 +209,12 @@ Which is:
 
   function pathToEntitlementsFile() {
     var configXmlHelper = new ConfigXmlHelper(context),
-        projectName = configXmlHelper.getProjectName(),
-        fileName = projectName + '.entitlements';
+      projectName = configXmlHelper.getProjectName(),
+      fileName = projectName + '.entitlements';
 
     return path.join(projectName, 'Resources', fileName);
   }
 
   // endregion
+
 })();
-//# sourceMappingURL=xcodePreferences.js.map

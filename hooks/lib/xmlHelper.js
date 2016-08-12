@@ -1,12 +1,10 @@
-'use strict';
-
 /*
 Small helper class to read/write from/to xml file.
 */
-(function () {
+(function() {
 
   var fs = require('fs'),
-      xml2js = require('xml2js');
+    xml2js = require('xml2js');
 
   module.exports = {
     readXmlAsJson: readXmlAsJson,
@@ -20,12 +18,14 @@ Small helper class to read/write from/to xml file.
    * @return {Object} JSON object with the contents of the xml file
    */
   function readXmlAsJson(filePath) {
-    var xmlData, xmlParser, parsedData;
+    var xmlData,
+      xmlParser,
+      parsedData;
 
     try {
       xmlData = fs.readFileSync(filePath);
       xmlParser = new xml2js.Parser();
-      xmlParser.parseString(xmlData, function (err, data) {
+      xmlParser.parseString(xmlData, function(err, data) {
         if (data) {
           parsedData = data;
         }
@@ -44,8 +44,8 @@ Small helper class to read/write from/to xml file.
    */
   function writeJsonAsXml(jsData, filePath, options) {
     var xmlBuilder = new xml2js.Builder(options),
-        changedXmlData = xmlBuilder.buildObject(jsData),
-        isSaved = true;
+      changedXmlData = xmlBuilder.buildObject(jsData),
+      isSaved = true;
 
     try {
       fs.writeFileSync(filePath, changedXmlData);
@@ -56,5 +56,5 @@ Small helper class to read/write from/to xml file.
 
     return isSaved;
   }
+
 })();
-//# sourceMappingURL=xmlHelper.js.map

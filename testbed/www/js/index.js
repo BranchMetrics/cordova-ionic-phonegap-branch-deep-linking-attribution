@@ -1,11 +1,5 @@
 'use strict';
 
-var _stringify = require('babel-runtime/core-js/json/stringify');
-
-var _stringify2 = _interopRequireDefault(_stringify);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -61,7 +55,7 @@ app.initialize();
 
 function DeepLinkHandler(data) {
     if (data) {
-        alert('Initialize: ' + (0, _stringify2.default)(data));
+        alert('Initialize: ' + JSON.stringify(data));
     } else {
         alert('No data found');
     }
@@ -69,7 +63,7 @@ function DeepLinkHandler(data) {
 
 function NonBranchLinkHandler(data) {
     if (data) {
-        alert('Non-branch link found: ' + (0, _stringify2.default)(data));
+        alert('Non-branch link found: ' + JSON.stringify(data));
     }
 }
 
@@ -79,10 +73,10 @@ function InitSession() {
     Branch.setMixpanelToken('<your-mixpanel-token-here>');
     Branch.initSession().then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -93,10 +87,10 @@ function CustomAction() {
 
     Branch.userCompletedAction(action).then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -105,10 +99,10 @@ function GetLatestReferringParams() {
 
     Branch.getLatestReferringParams().then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -116,10 +110,10 @@ function GetFirstReferringParams() {
     console.log('Trigger GetFirstReferringParams()');
 
     Branch.getFirstReferringParams().then(function (res) {
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
         console.log(res);
     }).catch(function (err) {
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
         console.error(err);
     });
 }
@@ -131,10 +125,10 @@ function SetIdentity() {
 
     Branch.setIdentity(newIdentity).then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -143,10 +137,10 @@ function Logout() {
 
     Branch.logout().then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -167,11 +161,11 @@ function CreateBranchUniversalObject() {
 
     Branch.createBranchUniversalObject(properties).then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
         branchUniversalObj = res;
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -180,10 +174,10 @@ function RegisterView() {
 
     branchUniversalObj.registerView().then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });;
 }
 
@@ -213,7 +207,7 @@ function GenerateShortUrl() {
         document.getElementById('generated-url').value = res.url;
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -248,10 +242,10 @@ function ShowShareSheet() {
         console.log('Share sheet dismissed');
     });
     branchUniversalObj.onLinkShareResponse(function (res) {
-        console.log('Share link response: ' + (0, _stringify2.default)(res));
+        console.log('Share link response: ' + JSON.stringify(res));
     });
     branchUniversalObj.onChannelSelected(function (res) {
-        console.log('Channel selected: ' + (0, _stringify2.default)(res));
+        console.log('Channel selected: ' + JSON.stringify(res));
     });
 
     branchUniversalObj.showShareSheet(properties, controlParams, 'Custom Text');
@@ -261,10 +255,10 @@ function ListOnSpotlight() {
     console.log('Trigger ListOnSpotlight()');
     branchUniversalObj.listOnSpotlight().then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -272,10 +266,10 @@ function LoadRewards() {
     console.log('Trigger LoadRewards()');
     Branch.loadRewards().then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -285,10 +279,10 @@ function RedeemRewards() {
 
     Branch.redeemRewards(reward).then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 
@@ -296,10 +290,10 @@ function CreditHistory() {
     console.log('Trigger CreditHistory()');
     Branch.creditHistory().then(function (res) {
         console.log(res);
-        alert('Response: ' + (0, _stringify2.default)(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function (err) {
         console.error(err);
-        alert('Error: ' + (0, _stringify2.default)(err));
+        alert('Error: ' + JSON.stringify(err));
     });
 }
 //# sourceMappingURL=index.js.map

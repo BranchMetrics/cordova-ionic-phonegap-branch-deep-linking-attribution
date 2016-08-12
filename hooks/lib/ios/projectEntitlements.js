@@ -1,5 +1,3 @@
-'use strict';
-
 /*
 Script creates entitlements file with the list of hosts, specified in config.xml.
 File name is: ProjectName.entitlements
@@ -7,18 +5,18 @@ Location: ProjectName/
 
 Script only generates content. File it self is included in the xcode project in another hook: xcodePreferences.js.
 */
-(function () {
+(function() {
 
   var path = require('path'),
-      fs = require('fs'),
-      plist = require('plist'),
-      mkpath = require('mkpath'),
-      ConfigXmlHelper = require('../configXmlHelper.js'),
-      ASSOCIATED_DOMAINS = 'com.apple.developer.associated-domains',
-      context,
-      projectRoot,
-      projectName,
-      entitlementsFilePath;
+    fs = require('fs'),
+    plist = require('plist'),
+    mkpath = require('mkpath'),
+    ConfigXmlHelper = require('../configXmlHelper.js'),
+    ASSOCIATED_DOMAINS = 'com.apple.developer.associated-domains',
+    context,
+    projectRoot,
+    projectName,
+    entitlementsFilePath;
 
   module.exports = {
     generateAssociatedDomainsEntitlements: generateEntitlements
@@ -36,7 +34,7 @@ Script only generates content. File it self is included in the xcode project in 
     context = cordovaContext;
 
     var currentEntitlements = getEntitlementsFileContent(),
-        newEntitlements = injectPreferences(currentEntitlements, pluginPreferences);
+      newEntitlements = injectPreferences(currentEntitlements, pluginPreferences);
 
     saveContentToEntitlementsFile(newEntitlements);
   }
@@ -52,7 +50,7 @@ Script only generates content. File it self is included in the xcode project in 
    */
   function saveContentToEntitlementsFile(content) {
     var plistContent = plist.build(content),
-        filePath = pathToEntitlementsFile();
+      filePath = pathToEntitlementsFile();
 
     // ensure that file exists
     mkpath.sync(path.dirname(filePath));
@@ -68,7 +66,7 @@ Script only generates content. File it self is included in the xcode project in 
    */
   function getEntitlementsFileContent() {
     var pathToFile = pathToEntitlementsFile(),
-        content;
+      content;
 
     try {
       content = fs.readFileSync(pathToFile, 'utf8');
@@ -97,7 +95,7 @@ Script only generates content. File it self is included in the xcode project in 
    */
   function injectPreferences(currentEntitlements, pluginPreferences) {
     var newEntitlements = currentEntitlements,
-        content = generateAssociatedDomainsContent(pluginPreferences);
+      content = generateAssociatedDomainsContent(pluginPreferences);
 
     newEntitlements[ASSOCIATED_DOMAINS] = content;
 
@@ -112,10 +110,10 @@ Script only generates content. File it self is included in the xcode project in 
    */
   function generateAssociatedDomainsContent(pluginPreferences) {
     var domainsList = [],
-        link;
+      link;
 
     // generate list of host links
-    pluginPreferences.hosts.forEach(function (host) {
+    pluginPreferences.hosts.forEach(function(host) {
       link = domainsListEntryForHost(host);
       domainsList.push(link);
     });
@@ -174,5 +172,5 @@ Script only generates content. File it self is included in the xcode project in 
   }
 
   // endregion
+
 })();
-//# sourceMappingURL=projectEntitlements.js.map

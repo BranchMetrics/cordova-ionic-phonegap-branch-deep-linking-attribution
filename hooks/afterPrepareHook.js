@@ -1,5 +1,3 @@
-'use strict';
-
 /**
 Hook is executed at the end of the 'prepare' stage. Usually, when you call 'cordova build'.
 
@@ -8,15 +6,14 @@ data you have specified in the projects config.xml file.
 */
 
 var configParser = require('./lib/configXmlParser.js'),
-    androidManifestWriter = require('./lib/android/manifestWriter.js'),
+  androidManifestWriter = require('./lib/android/manifestWriter.js'),
+  // androidWebHook = require('./lib/android/webSiteHook.js'),
+  iosProjectEntitlements = require('./lib/ios/projectEntitlements.js'),
+  iosProjectPreferences = require('./lib/ios/xcodePreferences.js'),
+  ANDROID = 'android',
+  IOS = 'ios';
 
-// androidWebHook = require('./lib/android/webSiteHook.js'),
-iosProjectEntitlements = require('./lib/ios/projectEntitlements.js'),
-    iosProjectPreferences = require('./lib/ios/xcodePreferences.js'),
-    ANDROID = 'android',
-    IOS = 'ios';
-
-module.exports = function (ctx) {
+module.exports = function(ctx) {
   run(ctx);
 };
 
@@ -27,7 +24,7 @@ module.exports = function (ctx) {
  */
 function run(cordovaContext) {
   var pluginPreferences = configParser.readPreferences(cordovaContext),
-      platformsList = cordovaContext.opts.platforms;
+    platformsList = cordovaContext.opts.platforms;
 
   // if no preferences are found - exit
   if (pluginPreferences == null) {
@@ -40,15 +37,13 @@ function run(cordovaContext) {
     return;
   }
 
-  platformsList.forEach(function (platform) {
+  platformsList.forEach(function(platform) {
     switch (platform) {
-      case ANDROID:
-        {
+      case ANDROID: {
           activateUniversalLinksInAndroid(cordovaContext, pluginPreferences);
           break;
         }
-      case IOS:
-        {
+      case IOS: {
           activateUniversalLinksInIos(cordovaContext, pluginPreferences);
           break;
         }
@@ -65,6 +60,7 @@ function run(cordovaContext) {
 function activateUniversalLinksInAndroid(cordovaContext, pluginPreferences) {
   // inject preferenes into AndroidManifest.xml
   androidManifestWriter.writePreferences(cordovaContext, pluginPreferences);
+
 }
 
 /**
@@ -79,5 +75,5 @@ function activateUniversalLinksInIos(cordovaContext, pluginPreferences) {
 
   // generate entitlements file
   iosProjectEntitlements.generateAssociatedDomainsEntitlements(cordovaContext, pluginPreferences);
+
 }
-//# sourceMappingURL=afterPrepareHook.js.map

@@ -1,14 +1,12 @@
-'use strict';
-
 /**
 Hook is executed when plugin is added to the project.
 It will check all necessary module dependencies and install the missing ones locally.
 */
 
 var exec = require('child_process').exec,
-    path = require('path'),
-    fs = require('fs'),
-    INSTALLATION_FLAG_FILE_NAME = '.installed';
+  path = require('path'),
+  fs = require('fs'),
+  INSTALLATION_FLAG_FILE_NAME = '.installed';
 
 // region NPM specific
 
@@ -45,7 +43,7 @@ function installNodeModule(moduleName, callback) {
   printLog('Can\'t find module ' + moduleName + ', running npm install');
 
   var cmd = 'npm install -D ' + moduleName;
-  exec(cmd, function (err, stdout, stderr) {
+  exec(cmd, function(err, stdout, stderr) {
     callback(err);
   });
 }
@@ -59,7 +57,7 @@ function installRequiredNodeModules(modulesToInstall) {
   }
 
   var moduleName = modulesToInstall.shift();
-  installNodeModule(moduleName, function (err) {
+  installNodeModule(moduleName, function(err) {
     if (err) {
       printLog('Failed to install module ' + moduleName + ':' + err);
       return;
@@ -95,11 +93,12 @@ function printLog(msg) {
  */
 function isInstallationAlreadyPerformed(ctx) {
   var pathToInstallFlag = path.join(ctx.opts.projectRoot, 'plugins', ctx.opts.plugin.id, INSTALLATION_FLAG_FILE_NAME),
-      isInstalled = false;
+    isInstalled = false;
   try {
     var content = fs.readFileSync(pathToInstallFlag);
     isInstalled = true;
-  } catch (err) {}
+  } catch (err) {
+  }
 
   return isInstalled;
 }
@@ -125,8 +124,8 @@ function createPluginInstalledFlag(ctx) {
  */
 function readDependenciesFromPackageJson(ctx) {
   var data = require(path.join(ctx.opts.projectRoot, 'plugins', ctx.opts.plugin.id, 'package.json')),
-      dependencies = data['dependencies'],
-      modules = [];
+    dependencies = data['dependencies'],
+    modules = [];
 
   if (!dependencies) {
     return modules;
@@ -140,7 +139,7 @@ function readDependenciesFromPackageJson(ctx) {
 }
 
 // hook's entry point
-module.exports = function (ctx) {
+module.exports = function(ctx) {
   // exit if we already executed this hook once
   if (isInstallationAlreadyPerformed(ctx)) {
     return;
@@ -153,4 +152,3 @@ module.exports = function (ctx) {
 
   createPluginInstalledFlag(ctx);
 };
-//# sourceMappingURL=beforePluginInstallHook.js.map
