@@ -30,7 +30,7 @@ There's a full demo app embedded in this repository. It should serve as an examp
 * `BRANCH_KEY` - Your Branch live API key. You can sign up for your own Branch key at [https://dashboard.branch.io](https://dashboard.branch.io).
 * `URI_SCHEME` - It could be your app name or the URI set in your Branch dashboard. As a reminder, the URI scheme is what you use to open your app from a browser, i.e. `yourapp://`.
 
-#### Cordova
+#### Add the plugin
 
 ```sh
 cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
@@ -38,17 +38,6 @@ cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=<your-branch-key> --
 example:
 ```sh
 cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
-```
-
-#### Phonegap
-
-```sh
-phonegap plugin add branch-cordova-sdk --variable BRANCH_KEY=your-branch-key --variable URI_SCHEME=your-app-uri-scheme --variable
-```
-
-example:
-```sh
-phonegap plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 ### Additional App Permissions
