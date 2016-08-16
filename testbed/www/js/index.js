@@ -152,8 +152,8 @@ function CreateBranchUniversalObject() {
 
     var properties = {
         canonicalIdentifier: 'testbed',
-        title: 'testbed',
-        contentDescription: 'Testbed Application',
+        title: 'Here is some content',
+        contentDescription: 'Here is a content description',
         contentImageUrl: 'https://imgflip.com/s/meme/Derp.jpg',
         contentIndexingMode: 'public',
         contentMetadata: {}
@@ -186,21 +186,11 @@ function GenerateShortUrl() {
 
     var properties = {
         feature: 'test',
-        alias: document.getElementById('alias').value,
         channel: 'test',
         stage: 'test',
         duration: 10000
     };
-    var controlParams = {
-        $fallback_url: 'www.another.com',
-        $desktop_url: 'www.desktop.com',
-        $android_url: 'test',
-        $ios_url: 'ios',
-        $ipad_url: 'ipad',
-        $fire_url: 'fire',
-        $blackberry_url: 'blackberry',
-        $windows_phone_url: 'win-phone'
-    };
+    var controlParams = { };
 
     branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
@@ -216,21 +206,10 @@ function ShowShareSheet() {
 
     var properties = {
         feature: 'test',
-        alias: document.getElementById('alias').value,
         channel: 'test',
-        stage: 'test',
-        duration: 10000
+        stage: 'test'
     };
-    var controlParams = {
-        $fallback_url: 'www.another.com',
-        $desktop_url: 'www.desktop.com',
-        $android_url: 'test',
-        $ios_url: 'ios',
-        $ipad_url: 'ipad',
-        $fire_url: 'fire',
-        $blackberry_url: 'blackberry',
-        $windows_phone_url: 'win-phone'
-    };
+    var controlParams = { };
 
     console.log(branchUniversalObj);
 

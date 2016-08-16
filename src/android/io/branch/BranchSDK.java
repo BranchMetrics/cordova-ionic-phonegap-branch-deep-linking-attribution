@@ -428,7 +428,11 @@ public class BranchSDK extends CordovaPlugin
                 .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), "Copy", "Added to clipboard")
                 .setMoreOptionStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_search), "Show More")
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
-                .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL);
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER)
+                .setAsFullWidthStyle(true)
+                .setSharingTitle("Share With");
 
         BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)this.branchObjectWrappers.get(instanceIdx);
         BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);

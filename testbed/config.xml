@@ -32,7 +32,7 @@
     </platform>
     <branch-config>
         <ios-team-id value="4XE8MVRXHY" />
-        <host name="xxxx.app.link" scheme="https" />
-        <host name="xxxx-alternate.app.link" scheme="https" />
+        <host name="2j13.app.link" scheme="https" />
+        <host name="2j13-alternate.app.link" scheme="https" />
     </branch-config>
 </widget>
