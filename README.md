@@ -1,10 +1,10 @@
 # Branch Metrics Cordova/Ionic/Phonegap SDK Reference
 
-This is a repository of our open source Cordova | Phonegap | Ionic SDK, and the information presented here serves as a reference manual for the SDK.
+This is a repository of the [Branch Metrics](https://branch.io/) open source Cordova | Phonegap | Ionic SDK.
 
 ## IMPORTANT: Upgrading to V 2.0
 
-On 2/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. If you don't have time to do so, just use a reference to version 1.8, which we're storing in [locked branch called 'v1.8.0-locked'](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/v1.8.0-locked).
+In Feb. 2016 we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed many bugs and added additional functionality, but also changed the API. If you don't have time to do so, just use a reference to version 1.8, which we're storing in a locked branch called ['v1.8.0-locked'](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/v1.8.0-locked).
 
 ## Get the Demo App
 
@@ -46,9 +46,9 @@ To be able to use all of the deep linking capabilities of the Branch SDK, some m
 
 If you are enabling both iOS Universal Links and Android App Links, these keys in the following sections should be combined into a single parent item without duplicates.
 
-#### Android: Resolving issue with multiple support-lib v4
+#### Android: Resolving issue with multiple support-lib v4s
 
-Branch.IO doesn't depends on `android-support-v4` file. But in any case you will be integrating other Cordova plugins along with Branch.IO, here are possible ways to fix the issue:
+Branch.IO doesn't depend on the `android-support-v4` file. But in case you will be integrating other Cordova plugins along with Branch.IO, here are possible ways to fix the issue:
 
 * Adding `multiDexEnabled true` inside defaultConfig tag in `build.gradle`
 ```
@@ -83,7 +83,7 @@ Add the following entry to your application's `config.xml`:
 </branch-config>
 ```
 
-You can get your iOS Team ID from the Apple Developer Portal. Once done, you have successfully enabled universal links for iOS. `READ_FROM_DASHBOARD` is the four-character value in front of all your links. You can find it listed in the custom domain field at the bottom of the [Branch link settings](https://dashboard.branch.io/#/settings/link). It will look something like this: `/WSuf` (the initial `/` character should be included).
+You can get your iOS Team ID from the Apple Developer Portal. Once done, you have successfully enabled universal links for iOS. `READ_FROM_DASHBOARD` is the four-character value in front of all your links. You can find it listed in the custom domain field at the bottom of the [Branch link settings](https://dashboard.branch.io/#/settings/link). It will look something like this: `/WSuf`. The initial `/` character should be included.
 
 If you use a custom domain or subdomain for your Branch links, you should also add a key for `<host name="mycustomdomainorsubdomain" scheme="https" />`.
 
@@ -138,9 +138,9 @@ function NonBranchLinkHandler(data) {
 ```
 ---------------
 
-## Plugin Methods
+## Promises
 
-**Most methods are promisified**, therefore you can easily get its success and error callback by chaining `.then()` method.
+**Most methods are promisified**, therefore you can easily get its success and error callback by chaining the `.then()` method.
 
 *Example*
 ```js
@@ -152,6 +152,8 @@ Branch.getFirstReferringParams().then(function (res) {
   console.error(err);
 });
 ```
+
+## Plugin Methods
 
 1. Branch Session
   + [initSession](#initSession)
@@ -179,7 +181,7 @@ Branch.getFirstReferringParams().then(function (res) {
 Initializes the branch instance.
 
 ##### Usage
-The `initSession()` method automatically also sets an internal deep link hander whose data can be accesed by implementing the **required** `DeepLinkHandler()` method. To implement, first call the method `initSession`:
+The `initSession()` method automatically sets an internal deep link hander whose data can be accesed by implementing the **required** `DeepLinkHandler()` method. To implement this, first call the method `initSession`:
 
 ```js
 onDeviceReady: function() {
@@ -210,7 +212,7 @@ function DeepLinkHandler(data) {
 
 ### <a id="setMixpanelToken"></a>setMixpanelToken()
 
-Allow Branch SDK to pass the user's Mixpanel distinct id to our servers. Branch will then pass that Distinct ID to Mixpanel when logging any event.
+This method allows the Branch SDK to pass the user's Mixpanel distinct id to our servers. Branch will then pass that Distinct ID to Mixpanel when logging any event.
 **Note:** This should be initialized first before `initSession()` or else Mixpanel integration won't work.
 
 ##### Usage
@@ -236,7 +238,7 @@ Branch.getFirstReferringParams().then(function (res) {
 
 ### <a id="getLatestReferringParams"></a>getLatestReferringParams()
 
-Retrieves the session (install or open) parameters.
+This method retrieves the session (install or open) parameters.
 
 ##### Usage
 ```js
@@ -251,12 +253,12 @@ Branch.getLatestReferringParams().then(function (res) {
 
 ### <a id="setIdentity"></a>setIdentity(object)
 
-Sets the identity of a user and returns the data. To use this function,
+This method sets the identity of a user and returns the data. To use this function,
 pass a unique string that identifies the user - this could be an email address, UUID, Facebook ID, etc.
 
 **Parameters**
 
-**identity**: `string` - A string uniquely identifying the user, ofetn a user ID or email address.
+**identity**: `string` - A string uniquely identifying the user, often a user ID or email address.
 
 ##### Usage
 ```js
@@ -271,7 +273,7 @@ Branch.setIdentity("new_identity").then(function (res) {
 
 ### <a id="logout"></a>logout()
 
-Logs out the current session, replaces session IDs and identity IDs.
+This method logs out the current session and replaces session IDs and identity IDs.
 
 ##### Usage
 ```js
@@ -284,7 +286,7 @@ Branch.logout().then(function (res) {
 
 ### <a id="userCompletedAction"></a>userCompletedAction(action[, metaData])
 
-Registers custom events.
+This method registers custom events.
 
 **Parameters**
 
@@ -310,10 +312,7 @@ Branch.userCompletedAction('registered', { user: 'Test' }).then(function (res) {
 
 ## Branch Universal Object
 
-As more methods evolved in iOS, we've found that it was increasingly hard to manage them all.
-We abstracted as many as we could into the concept of a Branch Universal Object.
-This is the object that is associated with the thing you want to share (content or user).
-You can set all the metadata associated with the object and then call action methods on it to get a link or index in Spotlight.
+The Branch Universal Object encapsulates the thing you want to share (content or user). You can set all the metadata associated with the object and then call action methods on it to get a link or index it in Spotlight.
 
 ### <a id="createBranchUniversalObject"></a>createBranchUniversalObject(object)
 
@@ -329,9 +328,9 @@ Initializes the universal Branch object.
 | ------------------- | ------ | ----------------------------------- |
 | canonicalIdentifier | String | The object identifier               |
 | title               | String | The object title                    |
-| contentDescription  | String | Object Description                  |
+| contentDescription  | String | The Object Description              |
 | contentImageUrl     | String | The Image URL                       |
-| contentIndexingMode | String | Indexing Mode 'private' or 'public' |
+| contentIndexingMode | String | Indexing Mode, 'private' or 'public'|
 | contentMetadata     | Object | Custom key/value                    |
 
 ##### Usage
@@ -357,8 +356,7 @@ Branch.createBranchUniversalObject({
 
 ### <a id="registerView"></a>registerView()
 
-If you want to track how many times a user views a particular piece of content, you can call this method in `viewDidLoad` or `viewDidAppear`
-to tell Branch that this content was viewed.
+If you want to track how many times a user views a particular piece of content, you can call this method in `viewDidLoad` or `viewDidAppear` to tell Branch that this content was viewed.
 
 ##### Usage
 ```js
@@ -379,7 +377,7 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 | alias    | `string` | Specify a link alias in place of the standard encoded short URL (e.g., `[branchsubdomain]/youralias or yourdomain.co/youralias)`. Link aliases are unique, immutable objects that cannot be deleted. **Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight**
 | channel  | `string` | Use channel to tag the route that your link reaches users. For example, tag links with ‘Facebook’ or ‘LinkedIn’ to help track clicks and installs through those paths separately
 | stage    | `string` |   Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter
-| duration |  `int`   | duration of the link.
+| duration |  `int`   | The duration of the link.
 
 **controlParameters**: `object` - Link properties needed to generate the URL.
 
@@ -426,7 +424,7 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 
 ![UIActivityView Share Sheet](https://dev.branch.io/img/pages/getting-started/branch-universal-object/ios_share_sheet.png)
 
-The Branch iOS SDK includes a wrapper on the UIActivityViewController, that will generate a Branch short URL and automatically tag it with the channel the user selects (Facebook, Twitter, etc.).
+The Branch iOS SDK includes a wrapper on the UIActivityViewController that will generate a Branch short URL and automatically tag it with the channel the user selects (Facebook, Twitter, etc.).
 
 **Parameters**
 
@@ -540,7 +538,7 @@ branchUniversalObj.listOnSpotlight().then(function (res) {
 
 ### <a id="loadRewards"></a>loadRewards([bucket])
 
-Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
+Reward balances change on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here's the syntax:
 
 **Parameters**
 
@@ -645,7 +643,7 @@ This is the type of credit transaction
 1. 0 - A reward that was added automatically by the user completing an action or referral
 2. 1 - A reward that was added manually
 3. 2 - A redemption of credits that occurred through our API or SDKs
-4. 3 - This is a very unique case where we will subtract credits automatically when we detect fraud
+4. 3 - This is a very rare case where we will subtract credits automatically when we detect fraud
 
 
 ## Android Build FAQ
