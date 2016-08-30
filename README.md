@@ -1,6 +1,6 @@
 # Branch Metrics Cordova/Ionic/Phonegap SDK Reference
 
-This is a repository of our open source Cordova | Phonegap | Ionic SDK, and the information presented here serves as a reference manual for the SDK. This SDK is a See the table of contents below for a complete list of the content featured in this document.
+This is a repository of our open source Cordova | Phonegap | Ionic SDK, and the information presented here serves as a reference manual for the SDK.
 
 ## IMPORTANT: Upgrading to V 2.0
 
