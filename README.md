@@ -451,7 +451,15 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController that will 
 | $blackberry_url    | `string` | Change the redirect endpoint for Blackberry OS
 | $windows_phone_url | `string` | Change the redirect endpoint for Windows OS
 
-**shareText**: `string` - Custom share text
+**localization**: `object` - Custom text to share
+|        KEY         |   TYPE   |       MEANING
+| ------------------ | -------- | --------------------
+| shareText          | `string` | Content of the message by default: 'This stuff is awesome:'
+| shareTitle         | `string` | Title of the message by default: 'Check this out!'
+| copyToClipboard    | `string` | Copy to clipboard action button label by default: 'Copy'
+| clipboardSuccess   | `string` | Success message on copy to clipboard by default: 'Added to clipboard'
+| more               | `string` | More button by default: 'Show More'
+| shareWith          | `string` | Title of the sharing popup by default: 'Share With'
 
 ##### Usage
 ```js
@@ -464,7 +472,14 @@ branchUniversalObj.showShareSheet({
 }, {
   // put your control parameters here
   "$desktop_url" : "http://desktop-url.com",
-}, 'Custom share text: ');
+}, {
+"shareText": "This stuff is awesome: ",
+"shareTitle": "Check this out!",
+"copyToClipboard": "Copy",
+"clipboardSuccess": "Added to clipboard",
+"more": "Show More",
+"shareWith": "Share With"
+});
 ```
 
 ##### Share Sheet Callbacks
