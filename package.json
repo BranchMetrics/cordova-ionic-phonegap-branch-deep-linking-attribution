@@ -2,7 +2,7 @@
   "name": "branch-cordova-sdk",
   "description": "Branch Metrics Cordova SDK",
   "main": "www/branch.js",
-  "version": "2.1.17-cmt",
+  "version": "0.0.0-semantic-release",
   "homepage": "https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking",
   "repository": {
     "type": "git",
@@ -10,9 +10,6 @@
   },
   "bugs": {
     "url": "https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues"
-  },
-  "publishConfig": {
-    "registry": "http://man-macmini.nce.amadeus.net:4873/"
   },
   "keywords": [
     "ecosystem:cordova",
@@ -35,6 +32,7 @@
   "license": "MIT",
   "scripts": {
     "prerelease": "gulp prerelease",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "commit": "git-cz"
   },
   "dependencies": {
