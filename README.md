@@ -185,16 +185,14 @@ The `initSession()` method automatically sets an internal deep link hander whose
 
 ```js
 onDeviceReady: function() {
-    Branch.initSession().then(function (res) {
-        console.log(res);
-        alert('Response: ' + JSON.stringify(res));
-    }).catch(function (err) {
-        console.error(err);
-        alert('Error: ' + JSON.stringify(err));
-    });;;
+    Branch.initSession();
+},
+onResume: function() {
+    Branch.initSession();
 },
 initialize: function() {
     document.addEventListener('deviceready', onDeviceReady, false);
+    document.addEventListener('resume', onResume, false);
 },
 ```
 
