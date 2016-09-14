@@ -611,7 +611,8 @@ public class BranchSDK extends CordovaPlugin {
         public CallbackContext onChannelSelected;
 
         /**
-         * @param BranchUniversalObject branchUniversalObj
+         *
+         * @param branchUniversalObj branchUniversalObj
          * @constructor
          */
         public BranchUniversalObjectWrapper(BranchUniversalObject branchUniversalObj) {
@@ -900,12 +901,13 @@ public class BranchSDK extends CordovaPlugin {
         private CallbackContext _onChannelSelected;
 
         /**
-         * @param CallbackContext onShareLinkDialogLaunched
-         * @param CallbackContext onShareLinkDialogDismissed
-         * @param CallbackContext onLinkShareResponse
-         * @param CallbackContext onChannelSelected
+         *
+         * @param onShareLinkDialogLaunched
+         * @param onShareLinkDialogDismissed
+         * @param onLinkShareResponse
+         * @param onChannelSelected
          * @constructor
-         **/
+         */
         public ShowShareSheetListener(CallbackContext onShareLinkDialogLaunched, CallbackContext onShareLinkDialogDismissed, CallbackContext onLinkShareResponse, CallbackContext onChannelSelected) {
 
             this._onShareLinkDialogDismissed = onShareLinkDialogDismissed;
@@ -1128,14 +1130,20 @@ public class BranchSDK extends CordovaPlugin {
                     } else if (this.action.equals("registerView")) {
                         registerView(this.args.getInt(0), this.callbackContext);
                     } else if (this.action.equals("showShareSheet")) {
-                        JSONObject defaultStrings = new JSONObject();
-                        defaultStrings.put("shareText", "This stuff is awesome: ");
-                        defaultStrings.put("shareTitle", "Check this out!");
-                        defaultStrings.put("copyToClipboard", "Copy");
-                        defaultStrings.put("clipboardSuccess", "Added to clipboard");
-                        defaultStrings.put("more", "Show More");
-                        defaultStrings.put("shareWith", "Share With");
-                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), this.args.getJSONObject(3) != null ? this.args.getJSONObject(3) : defaultStrings);
+                        Object userLocalization = this.args.opt(3);
+                        JSONObject localization = new JSONObject();
+                        //Limitation is that the user must override all the strings
+                        if (userLocalization != null && userLocalization instanceof JSONObject) {
+                            localization = (JSONObject) userLocalization;
+                        } else {
+                            localization.put("shareText", "This stuff is awesome:");
+                            localization.put("shareTitle", "Check this out!");
+                            localization.put("copyToClipboard", "Copy");
+                            localization.put("clipboardSuccess", "Added to clipboard");
+                            localization.put("more", "Show More");
+                            localization.put("shareWith", "Share With");
+                        }
+                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), localization);
                     }
                 }
             } catch (JSONException e) {
