@@ -21,17 +21,17 @@
     [linkData setupParams:params];
     [linkData setupChannel:@"spotlight"];
     
-    if (self = [super initWithTags:nil alias:nil type:BranchLinkTypeUnlimitedUse matchDuration:0 channel:@"spotlight" feature:BRANCH_FEATURE_TAG_SHARE stage:nil params:params linkData:linkData linkCache:nil callback:nil]) {
+    if (self = [super initWithTags:nil alias:nil type:BranchLinkTypeUnlimitedUse matchDuration:0 channel:@"spotlight" feature:BRANCH_FEATURE_TAG_SHARE stage:nil campaign:nil params:params linkData:linkData linkCache:nil callback:nil]) {
+        self.isSpotlightRequest = YES;
         _spotlightCallback = callback;
     }
-
     return self;
 }
 
 - (void)processResponse:(BNCServerResponse *)response error:(NSError *)error {
     if (error) {
         if (self.spotlightCallback) {
-            self.spotlightCallback(nil, error);
+            self.spotlightCallback([[NSDictionary alloc] init], error);
         }
     }
     else if (self.spotlightCallback) {

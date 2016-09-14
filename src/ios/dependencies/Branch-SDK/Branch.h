@@ -103,6 +103,20 @@ extern NSString * const BRANCH_INIT_KEY_PHONE_NUMBER;
 extern NSString * const BRANCH_INIT_KEY_IS_FIRST_SESSION;
 extern NSString * const BRANCH_INIT_KEY_CLICKED_BRANCH_LINK;
 
+// BUO Constants
+extern NSString * const BNCCanonicalIdList;
+extern NSString * const BNCPurchaseAmount;
+extern NSString * const BNCPurchaseCurrency;
+extern NSString * const BNCCanonicalIdList;
+extern NSString * const BNCPurchaseAmount;
+extern NSString * const BNCRegisterViewEvent;
+extern NSString * const BNCAddToWishlistEvent;
+extern NSString * const BNCAddToCartEvent;
+extern NSString * const BNCPurchaseInitiatedEvent;
+extern NSString * const BNCPurchasedEvent;
+extern NSString * const BNCShareInitiatedEvent;
+extern NSString * const BNCShareCompletedEvent;
+
 #pragma mark - Branch Enums
 typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
     BranchMostRecentFirst,
@@ -198,6 +212,20 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @warning This can fail if the alias is already taken.
  */
 + (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage tags:(NSArray *)tags alias:(NSString *)alias;
+
+/**
+ Create a BranchActivityItemProvider which subclasses the `UIActivityItemProvider` This can be used for simple sharing via a `UIActivityViewController`.
+ 
+ Internally, this will create a short Branch Url that will be attached to the shared content.
+ 
+ @param params A dictionary to use while building up the Branch link.
+ @param feature The feature the generated link will be associated with.
+ @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
+ @param campaign Use this field to organize the links by actual marketing campaign.
+ @param alias The alias for a link.
+ @warning This can fail if the alias is already taken.
+ */
++ (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage campaign:(NSString *)campaign tags:(NSArray *)tags alias:(NSString *)alias;
 
 /**
  Create a BranchActivityItemProvider which subclasses the `UIActivityItemProvider` This can be used for simple sharing via a `UIActivityViewController`.
@@ -360,14 +388,14 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
 /**
  Add a scheme to a whitelist of URI schemes that will be tracked by Branch. Default to all schemes.
  
- @param the scheme to add to the whitelist, i.e. @"http", @"https" or @"myapp"
+ @param scheme to add to the whitelist, i.e. @"http", @"https" or @"myapp"
  */
 -(void)addWhiteListedScheme:(NSString *)scheme;
 
 /**
  Add an array of schemes to a whitelist of URI schemes that will be tracked by Branch. Default to all schemes.
  
- @param the array of schemes to add to the whitelist, i.e. @[@"http", @"https", @"myapp"]
+ @param schemes array to add to the whitelist, i.e. @[@"http", @"https", @"myapp"]
  */
 -(void)setWhiteListedSchemes:(NSArray *)schemes;
 
@@ -407,8 +435,18 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
 - (void)disableCookieBasedMatching;
 
 /**
- If you're using a version of the Facebook SDK that prevents application:didFinishLaunchingWithOptions: from returning
- YES/true when a Universal Link is clicked, you should enable this option.
+ TL;DR: If you're using a version of the Facebook SDK that prevents application:didFinishLaunchingWithOptions: from
+ returning YES/true when a Universal Link is clicked, you should enable this option.
+
+ Long explanation: in application:didFinishLaunchingWithOptions: you should choose one of the following:
+
+ 1. Always `return YES;`, and do *not* invoke `[[Branch getInstance] accountForFacebookSDKPreventingAppLaunch];`
+ 2. Allow the Facebook SDK to determine whether `application:didFinishLaunchingWithOptions:` returns `YES` or `NO`,
+    and invoke `[[Branch getInstance] accountForFacebookSDKPreventingAppLaunch];`
+
+ The reason for this second option is that the Facebook SDK will return `NO` if a Universal Link opens the app
+ but that UL is not a Facebook UL. Some developers prefer not to modify
+ `application:didFinishLaunchingWithOptions:` to always return `YES` and should use this method instead.
  */
 - (void)accountForFacebookSDKPreventingAppLaunch;
 
@@ -421,6 +459,14 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param value Object to be included in request metadata
  */
 - (void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value;
+
+- (void)enableDelayedInit;
+
+- (void)disableDelayedInit;
+
+- (NSURL *)getUrlForOnboardingWithRedirectUrl:(NSString *)redirectUrl;
+
+- (void)resumeInit;
 
 #pragma mark - Session Item methods
 
@@ -701,7 +747,7 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param channel The channel for the link. Examples could be Facebook, Twitter, SMS, etc, depending on where it will be shared.
  @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
  @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
- @param matchDuration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
+ @param duration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
  @warning This method makes a synchronous url request.
  */
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration;
@@ -749,13 +795,14 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias ignoreUAString:(NSString *)ignoreUAString;
 
 /**
- Get a short url with specified tags, params, channel, feature, and stage. The usage type will default to unlimited.
+ Get a short url with specified tags, params, channel, feature, stage and campaign. The usage type will default to unlimited.
  
  @param params Dictionary of parameters to include in the link.
  @param tags An array of tags to associate with this link, useful for tracking.
  @param channel The channel for the link. Examples could be Facebook, Twitter, SMS, etc, depending on where it will be shared.
  @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
  @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
+ @param campaign Use this field to organize the links by actual marketing campaign.
  @param alias The alias for a link.
  @param ignoreUAString The User Agent string to tell the server to ignore the next request from, to prevent it from treating a preview scrape as a link click.
  @param forceLinkCreation Whether we should create a link from the Branch Key even if initSession failed. Defaults to NO.
@@ -763,7 +810,7 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @warning This method is primarily intended to be an internal Branch method, used to work around a bug with SLComposeViewController
  @warning This can fail if the alias is already taken.
  */
-- (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias ignoreUAString:(NSString *)ignoreUAString forceLinkCreation:(BOOL)forceLinkCreation;
+- (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(NSString *)campaign andAlias:(NSString *)alias ignoreUAString:(NSString *)ignoreUAString forceLinkCreation:(BOOL)forceLinkCreation;
 
 /**
  Get a short url with specified tags, params, channel, feature, stage, and type.
@@ -786,7 +833,7 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param channel The channel for the link. Examples could be Facebook, Twitter, SMS, etc, depending on where it will be shared.
  @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
  @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
- @param matchDuration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
+ @param duration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
  @warning This method makes a synchronous url request.
  */
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration;
@@ -800,11 +847,27 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param channel The channel for the link. Examples could be Facebook, Twitter, SMS, etc, depending on where it will be shared.
  @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
  @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
- @param matchDuration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
+ @param duration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
  @warning This method makes a synchronous url request.
  @warning This can fail if the alias is already taken.
  */
 - (NSString *)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration;
+
+
+/**
+ Get a short url with specified params, channel, feature, stage, campaign and match duration. The usage type will default to unlimited.
+ 
+ @param params Dictionary of parameters to include in the link.
+ @param tags An array of tags to associate with this link, useful for tracking.
+ @param alias The alias for a link.
+ @param channel The channel for the link. Examples could be Facebook, Twitter, SMS, etc, depending on where it will be shared.
+ @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
+ @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
+ @param campaign Use this field to organize the links by actual marketing campaign.
+ @param duration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
+ @warning This method makes a synchronous url request.
+ */
+- (NSString *)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:campaign andMatchDuration:(NSUInteger)duration;
 
 #pragma mark - Long Url generation
 
@@ -944,7 +1007,7 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param channel The channel for the link. Examples could be Facebook, Twitter, SMS, etc, depending on where it will be shared.
  @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
  @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
- @param matchDuration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
+ @param duration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
  @param callback Callback called with the url.
  */
 - (void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration andCallback:(callbackWithUrl)callback;
@@ -996,7 +1059,7 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param tags An array of tags to associate with this link, useful for tracking.
  @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
  @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
- @param matchDuration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
+ @param duration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
  @param callback Callback called with the url.
  */
 - (void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration andCallback:(callbackWithUrl)callback;
@@ -1009,12 +1072,28 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param tags An array of tags to associate with this link, useful for tracking.
  @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
  @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
- @param matchDuration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
+ @param duration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
  @param callback Callback called with the url.
  @param alias The alias for a link.
  @warning This can fail if the alias is already taken.
  */
 - (void)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCallback:(callbackWithUrl)callback;
+
+/**
+ Get a short url with the specified params, tags, channel, feature, stage, campaign and match duration. The usage type will default to unlimited.
+ 
+ @param params Dictionary of parameters to include in the link.
+ @param channel The channel for the link. Examples could be Facebook, Twitter, SMS, etc, depending on where it will be shared.
+ @param tags An array of tags to associate with this link, useful for tracking.
+ @param feature The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.
+ @param stage The stage used for the generated link, indicating what part of a funnel the user is in.
+ @param duration How long to keep an unmatched link click in the Branch backend server's queue before discarding.
+ @param campaign Use this field to organize the links by actual marketing campaign.
+ @param callback Callback called with the url.
+ @param alias The alias for a link.
+ @warning This can fail if the alias is already taken.
+ */
+- (void)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(NSString *)campaign andCallback:(callbackWithUrl)callback;
 
 - (void)getSpotlightUrlWithParams:(NSDictionary *)params callback:(callbackWithParams)callback;
 
@@ -1139,9 +1218,8 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param title Title for the spotlight preview item.
  @param description Description for the spotlight preview item.
  @param thumbnailUrl Url to an image to be used for the thumnbail in spotlight.
- @param type The type to use for the NSUserActivity, taken from the list of constants provided in the MobileCoreServices framework.
  @param publiclyIndexable Whether or not this item should be added to Apple's public search index.
- @param keywords A set of keywords to be used in Apple's search index.
+ @param linkParams A set of keywords to be used in Apple's search index.
  @warning These functions are only usable on iOS 9 or above. Earlier versions will simply receive the callback with an error.
  */
 - (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams publiclyIndexable:(BOOL)publiclyIndexable;
@@ -1188,7 +1266,7 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
  @param type The type to use for the NSUserActivity, taken from the list of constants provided in the MobileCoreServices framework.
  @param keywords A set of keywords to be used in Apple's search index.
  @param expirationDate ExpirationDate after which this will not appear in Apple's search index.
- @param callback Callback called with the Branch url this will fallback to.
+ @param spotlightCallback Callback called with the Branch url this will fallback to.
  @warning These functions are only usable on iOS 9 or above. Earlier versions will simply receive the callback with an error.
  */
 - (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate spotlightCallback:(callbackWithUrlAndSpotlightIdentifier)spotlightCallback;
