@@ -1136,7 +1136,7 @@ public class BranchSDK extends CordovaPlugin {
                         if (userLocalization != null && userLocalization instanceof JSONObject) {
                             localization = (JSONObject) userLocalization;
                         } else {
-                            localization.put("shareText", "This stuff is awesome:");
+                            localization.put("shareText", this.args.getString(3) != null ? this.args.getString(3) : "This stuff is awesome: ");
                             localization.put("shareTitle", "Check this out!");
                             localization.put("copyToClipboard", "Copy");
                             localization.put("clipboardSuccess", "Added to clipboard");
