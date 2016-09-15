@@ -382,11 +382,11 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 |        KEY         |   TYPE   |       MEANING
 | ------------------ | -------- | --------------------
 | $fallback_url      | `string` | Change the redirect endpoint for all platforms - so you don’t have to enable it by platform
-| $desktop_url       | `string` | Change the redirect endpoint on desktops  
+| $desktop_url       | `string` | Change the redirect endpoint on desktops
 | $android_url       | `string` | Change the redirect endpoint for Android
 | $ios_url           | `string` | Change the redirect endpoint for iOS
 | $ipad_url          | `string` | Change the redirect endpoint for iPads
-| $fire_url          | `string` | Change the redirect endpoint for Amazon Fire OS 
+| $fire_url          | `string` | Change the redirect endpoint for Amazon Fire OS
 | $blackberry_url    | `string` | Change the redirect endpoint for Blackberry OS
 | $windows_phone_url | `string` | Change the redirect endpoint for Windows OS
 
@@ -441,15 +441,24 @@ The Branch iOS SDK includes a wrapper on the UIActivityViewController that will 
 |        KEY         |   TYPE   |       MEANING
 | ------------------ | -------- | --------------------
 | $fallback_url      | `string` | Change the redirect endpoint for all platforms - so you don’t have to enable it by platform
-| $desktop_url       | `string` | Change the redirect endpoint on desktops  
+| $desktop_url       | `string` | Change the redirect endpoint on desktops
 | $android_url       | `string` | Change the redirect endpoint for Android
 | $ios_url           | `string` | Change the redirect endpoint for iOS
 | $ipad_url          | `string` | Change the redirect endpoint for iPads
-| $fire_url          | `string` | Change the redirect endpoint for Amazon Fire OS 
+| $fire_url          | `string` | Change the redirect endpoint for Amazon Fire OS
 | $blackberry_url    | `string` | Change the redirect endpoint for Blackberry OS
 | $windows_phone_url | `string` | Change the redirect endpoint for Windows OS
 
-**shareText**: `string` - Custom share text
+**localization**: `object` - Custom text to share (From version 2.1.17)
+
+|        KEY         |   TYPE   |       MEANING
+| ------------------ | -------- | --------------------
+| shareText          | `string` | Content of the message by default: 'This stuff is awesome:'
+| shareTitle         | `string` | Title of the message by default: 'Check this out!'
+| copyToClipboard    | `string` | Copy to clipboard action button label by default: 'Copy'
+| clipboardSuccess   | `string` | Success message on copy to clipboard by default: 'Added to clipboard'
+| more               | `string` | More button by default: 'Show More'
+| shareWith          | `string` | Title of the sharing popup by default: 'Share With'
 
 ##### Usage
 ```js
@@ -462,7 +471,14 @@ branchUniversalObj.showShareSheet({
 }, {
   // put your control parameters here
   "$desktop_url" : "http://desktop-url.com",
-}, 'Custom share text: ');
+}, {
+"shareText": "This stuff is awesome: ",
+"shareTitle": "Check this out!",
+"copyToClipboard": "Copy",
+"clipboardSuccess": "Added to clipboard",
+"more": "Show More",
+"shareWith": "Share With"
+});
 ```
 
 ##### Share Sheet Callbacks

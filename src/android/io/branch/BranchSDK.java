@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import android.net.Uri;
 
 import io.branch.indexing.BranchUniversalObject;
@@ -22,10 +23,10 @@ import io.branch.referral.BranchError;
 import io.branch.referral.SharingHelper;
 import io.branch.referral.util.ShareSheetStyle;
 
-public class BranchSDK extends CordovaPlugin
-{
+public class BranchSDK extends CordovaPlugin {
 
-    static class BranchLinkProperties extends io.branch.referral.util.LinkProperties {}
+    static class BranchLinkProperties extends io.branch.referral.util.LinkProperties {
+    }
 
     // Standard Debugging Variables
     private static final String LCAT = "CordovaBranchSDK";
@@ -39,8 +40,7 @@ public class BranchSDK extends CordovaPlugin
     /**
      * Class Constructor
      */
-    public BranchSDK()
-    {
+    public BranchSDK() {
 
         this.activity = null;
         this.instance = null;
@@ -55,7 +55,7 @@ public class BranchSDK extends CordovaPlugin
     protected void pluginInitialize() {
 
         this.activity = this.cordova.getActivity();
-        
+
         Branch.getAutoInstance(this.activity.getApplicationContext());
 
     }
@@ -63,8 +63,7 @@ public class BranchSDK extends CordovaPlugin
     /**
      * Called when the activity receives a new intent.
      */
-    public void onNewIntent(Intent intent)
-    {        
+    public void onNewIntent(Intent intent) {
 
         this.activity.setIntent(intent);
 
@@ -76,20 +75,19 @@ public class BranchSDK extends CordovaPlugin
      * All exec() calls goes to this part.
      * </p>
      *
-     * @param  action A {@link String} value method to be executed.
-     * @param  args   A {@link JSONArray} value parameters passed along with the action param.
-     * @param  callbackContext A {@link CallbackContext} function passed for executing callbacks.
+     * @param action          A {@link String} value method to be executed.
+     * @param args            A {@link JSONArray} value parameters passed along with the action param.
+     * @param callbackContext A {@link CallbackContext} function passed for executing callbacks.
      */
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
-    {
-        
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+
         Runnable r = new RunnableThread(action, args, callbackContext);
 
         if (action.equals("initSession")) {
             cordova.getThreadPool().execute(r);
             return true;
-        }  else if (action.equals("setMixpanelToken")) {
+        } else if (action.equals("setMixpanelToken")) {
             cordova.getThreadPool().execute(r);
             return true;
         } else {
@@ -156,29 +154,29 @@ public class BranchSDK extends CordovaPlugin
                     return true;
                 } else if (action.equals("onShareLinkDialogLaunched")) {
 
-                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
-                                           branchObjWrapper.onShareLinkDialogLaunched = callbackContext;
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper) branchObjectWrappers.get(args.getInt(0));
+                    branchObjWrapper.onShareLinkDialogLaunched = callbackContext;
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
                 } else if (action.equals("onShareLinkDialogDismissed")) {
 
-                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
-                                           branchObjWrapper.onShareLinkDialogDismissed = callbackContext;
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper) branchObjectWrappers.get(args.getInt(0));
+                    branchObjWrapper.onShareLinkDialogDismissed = callbackContext;
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
                 } else if (action.equals("onLinkShareResponse")) {
 
-                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
-                                           branchObjWrapper.onLinkShareResponse = callbackContext;
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper) branchObjectWrappers.get(args.getInt(0));
+                    branchObjWrapper.onLinkShareResponse = callbackContext;
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
                 } else if (action.equals("onChannelSelected")) {
 
-                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)branchObjectWrappers.get(args.getInt(0));
-                                           branchObjWrapper.onChannelSelected = callbackContext;
+                    BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper) branchObjectWrappers.get(args.getInt(0));
+                    branchObjWrapper.onChannelSelected = callbackContext;
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
@@ -203,10 +201,9 @@ public class BranchSDK extends CordovaPlugin
      * <p>Initialises a session with the Branch API, assigning a {@link Branch.BranchUniversalReferralInitListener}
      * to perform an action upon successful initialisation.</p>
      *
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void initSession(CallbackContext callbackContext)
-    {
+    private void initSession(CallbackContext callbackContext) {
 
         this.activity = this.cordova.getActivity();
 
@@ -226,10 +223,9 @@ public class BranchSDK extends CordovaPlugin
      * if you allow users to log out and let their friend use the app, you should call this to notify Branch
      * to create a new user for this device. This will clear the first and latest params, as a new session is created.</p>
      *
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void logout(CallbackContext callbackContext)
-    {
+    private void logout(CallbackContext callbackContext) {
 
         this.instance.logout(new LogoutStatusListener(callbackContext));
 
@@ -240,12 +236,11 @@ public class BranchSDK extends CordovaPlugin
      * credits within it. If the number to redeem exceeds the number available in the bucket, all of
      * the available credits will be redeemed instead.</p>
      *
-     * @param value An {@link Integer} specifying the number of credits to attempt to redeem from
-     *              the bucket.
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param value           An {@link Integer} specifying the number of credits to attempt to redeem from
+     *                        the bucket.
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void redeemRewards(final int value, CallbackContext callbackContext)
-    {
+    private void redeemRewards(final int value, CallbackContext callbackContext) {
 
         this.instance.redeemRewards(value, new RedeemRewardsListener(callbackContext));
 
@@ -256,13 +251,12 @@ public class BranchSDK extends CordovaPlugin
      * credits within it. If the number to redeem exceeds the number available in the bucket, all of
      * the available credits will be redeemed instead.</p>
      *
-     * @param value An {@link Integer} specifying the number of credits to attempt to redeem from
-     *              the bucket.
-     * @param bucket The name of the bucket to remove the credits from.
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param value           An {@link Integer} specifying the number of credits to attempt to redeem from
+     *                        the bucket.
+     * @param bucket          The name of the bucket to remove the credits from.
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void redeemRewards(int value, String bucket, CallbackContext callbackContext)
-    {
+    private void redeemRewards(int value, String bucket, CallbackContext callbackContext) {
 
         this.instance.redeemRewards(bucket, value, new RedeemRewardsListener(callbackContext));
 
@@ -273,11 +267,10 @@ public class BranchSDK extends CordovaPlugin
      * action following successful report of state change. You'll then need to call getCredits
      * in the callback to update the credit totals in your UX.</p>
      *
-     * @param callbackContext   A callback to execute at the end of this method
-     * @param bucket            Load reward of a specific bucket
+     * @param callbackContext A callback to execute at the end of this method
+     * @param bucket          Load reward of a specific bucket
      */
-    private void loadRewards(String bucket, CallbackContext callbackContext)
-    {
+    private void loadRewards(String bucket, CallbackContext callbackContext) {
 
         this.instance.loadRewards(new LoadRewardsListener(bucket, callbackContext, this.instance));
 
@@ -288,10 +281,9 @@ public class BranchSDK extends CordovaPlugin
      * action following successful report of state change. You'll then need to call getCredits
      * in the callback to update the credit totals in your UX.</p>
      *
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void loadRewards(CallbackContext callbackContext)
-    {
+    private void loadRewards(CallbackContext callbackContext) {
 
         this.instance.loadRewards(new LoadRewardsListener(callbackContext, this.instance));
 
@@ -304,13 +296,11 @@ public class BranchSDK extends CordovaPlugin
      * sessions persist for the duration of time that the app is in focus. For example, if you
      * minimize the app, these parameters will be cleared when closeSession is called.</p>
      *
-     * @param callbackContext   A callback to execute at the end of this method
-     *
+     * @param callbackContext A callback to execute at the end of this method
      * @return A {@link JSONObject} containing the latest referring parameters as
      * configured locally.
      */
-    private void getLatestReferringParams(CallbackContext callbackContext)
-    {
+    private void getLatestReferringParams(CallbackContext callbackContext) {
 
         JSONObject sessionParams = this.instance.getLatestReferringParams();
 
@@ -330,10 +320,9 @@ public class BranchSDK extends CordovaPlugin
      * on a fresh install (not upgrade or reinstall). This will change on setIdentity (if the
      * user already exists from a previous device) and logout.</p>
      *
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void getFirstReferringParams(CallbackContext callbackContext)
-    {
+    private void getFirstReferringParams(CallbackContext callbackContext) {
 
         JSONObject installParams = this.instance.getFirstReferringParams();
 
@@ -352,11 +341,9 @@ public class BranchSDK extends CordovaPlugin
      * </p>
      *
      * @param options A {@link JSONObject} value to set for the branch universal object properties.
-     *
      * @return A {@link JSONObject} value of BranchUniversalObject instance.
      */
-    private void createBranchUniversalObject(JSONObject options, CallbackContext callbackContext) throws JSONException
-    {
+    private void createBranchUniversalObject(JSONObject options, CallbackContext callbackContext) throws JSONException {
 
 
         BranchUniversalObject branchObj = new BranchUniversalObject();
@@ -407,8 +394,8 @@ public class BranchSDK extends CordovaPlugin
 
         this.branchObjectWrappers.add(branchObjWrapper);
         JSONObject response = new JSONObject();
-                   response.put("message", "Success");
-                   response.put("branchUniversalObjectId", this.branchObjectWrappers.size() - 1);
+        response.put("message", "Success");
+        response.put("branchUniversalObjectId", this.branchObjectWrappers.size() - 1);
 
         callbackContext.success(response);
 
@@ -417,42 +404,39 @@ public class BranchSDK extends CordovaPlugin
     /**
      * Display a popup of the share sheet.
      *
-     * @param instanceIdx The instance index from branchObjects array
-     * @param options A {@link JSONObject} value to set URL options.
+     * @param instanceIdx   The instance index from branchObjects array
+     * @param options       A {@link JSONObject} value to set URL options.
      * @param controlParams A {@link JSONObject} value to set the URL control parameters.
      */
-    private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams, String shareText) throws JSONException
-    {
+    private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams, JSONObject strings) throws JSONException {
 
-        ShareSheetStyle shareSheetStyle = new ShareSheetStyle(this.activity, "Check this out!", shareText)
-                .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), "Copy", "Added to clipboard")
-                .setMoreOptionStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_search), "Show More")
+        ShareSheetStyle shareSheetStyle = new ShareSheetStyle(this.activity, strings.getString("shareTitle"), strings.getString("shareText"))
+                .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), strings.getString("copyToClipboard"), strings.getString("clipboardSuccess"))
+                .setMoreOptionStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_search), strings.getString("more"))
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL)
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE)
                 .addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER)
                 .setAsFullWidthStyle(true)
-                .setSharingTitle("Share With");
+                .setSharingTitle(strings.getString("shareWith"));
 
-        BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper)this.branchObjectWrappers.get(instanceIdx);
+        BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
         BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
         BranchUniversalObject branchObj = branchObjWrapper.branchUniversalObj;
 
         branchObj.showShareSheet(this.activity, linkProperties, shareSheetStyle,
-                                new ShowShareSheetListener(branchObjWrapper.onShareLinkDialogLaunched, branchObjWrapper.onShareLinkDialogDismissed, branchObjWrapper.onLinkShareResponse, branchObjWrapper.onChannelSelected));
+                new ShowShareSheetListener(branchObjWrapper.onShareLinkDialogLaunched, branchObjWrapper.onShareLinkDialogDismissed, branchObjWrapper.onLinkShareResponse, branchObjWrapper.onChannelSelected));
 
     }
 
     /**
      * Generates a share link.
      *
-     * @param options A {@link JSONObject} value to set URL options.
+     * @param options       A {@link JSONObject} value to set URL options.
      * @param controlParams A {@link JSONObject} value to set the URL control parameters.
-     *
      * @return A {@link io.branch.referral.util.LinkProperties} value.
      */
-    private BranchLinkProperties createLinkProperties(JSONObject options, JSONObject controlParams) throws JSONException
-    {
+    private BranchLinkProperties createLinkProperties(JSONObject options, JSONObject controlParams) throws JSONException {
 
         Log.d(LCAT, "Creating link properties");
 
@@ -516,10 +500,9 @@ public class BranchSDK extends CordovaPlugin
      *
      * @param instanceIdx The instance index from branchObjects array
      */
-    private void registerView(int instanceIdx, CallbackContext callbackContext)
-    {
+    private void registerView(int instanceIdx, CallbackContext callbackContext) {
 
-        BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper)this.branchObjectWrappers.get(instanceIdx);
+        BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
 
         branchUniversalWrapper.branchUniversalObj.registerView(new RegisterViewStatusListener(callbackContext));
 
@@ -528,12 +511,11 @@ public class BranchSDK extends CordovaPlugin
     /**
      * Generate a URL.
      *
-     * @param instanceIdx The instance index from branchObjects array
-     * @param options A {@link JSONObject} value to set URL options.
+     * @param instanceIdx   The instance index from branchObjects array
+     * @param options       A {@link JSONObject} value to set URL options.
      * @param controlParams A {@link JSONObject} value to set the URL control parameters.
      */
-    private void generateShortUrl(int instanceIdx, JSONObject options, JSONObject controlParams, CallbackContext callbackContext) throws JSONException
-    {
+    private void generateShortUrl(int instanceIdx, JSONObject options, JSONObject controlParams, CallbackContext callbackContext) throws JSONException {
 
         BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
 
@@ -547,11 +529,10 @@ public class BranchSDK extends CordovaPlugin
      * <p>Identifies the current user to the Branch API by supplying a unique
      * identifier as a {@link String} value.</p>
      *
-     * @param newIdentity A {@link String} value containing the unique identifier of the user.
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param newIdentity     A {@link String} value containing the unique identifier of the user.
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void setIdentity(String newIdentity, CallbackContext callbackContext)
-    {
+    private void setIdentity(String newIdentity, CallbackContext callbackContext) {
 
         this.instance.setIdentity(newIdentity, new SetIdentityListener(callbackContext));
 
@@ -560,11 +541,10 @@ public class BranchSDK extends CordovaPlugin
     /**
      * <p>Allow Branch SDK to pass the user's Mixpanel distinct id to our servers. Branch will then pass that Distinct ID to Mixpanel when logging any event.</p>
      *
-     * @param token A {@link String} value containing the unique identifier of the Mixpanel user.
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param token           A {@link String} value containing the unique identifier of the Mixpanel user.
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void setMixpanelToken(String token, CallbackContext callbackContext)
-    {
+    private void setMixpanelToken(String token, CallbackContext callbackContext) {
 
         Branch.getInstance().setRequestMetadata("$mixpanel_distinct_id", token);
 
@@ -576,12 +556,11 @@ public class BranchSDK extends CordovaPlugin
      * <p>A void call to indicate that the user has performed a specific action and for that to be
      * reported to the Branch API.</p>
      *
-     * @param action A {@link String} value to be passed as an action that the user has carried out.
-     *               For example "logged in" or "registered".
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param action          A {@link String} value to be passed as an action that the user has carried out.
+     *                        For example "logged in" or "registered".
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void userCompletedAction(String action, CallbackContext callbackContext)
-    {
+    private void userCompletedAction(String action, CallbackContext callbackContext) {
 
         this.instance.userCompletedAction(action);
 
@@ -593,14 +572,13 @@ public class BranchSDK extends CordovaPlugin
      * <p>A void call to indicate that the user has performed a specific action and for that to be
      * reported to the Branch API.</p>
      *
-     * @param action    A {@link String} value to be passed as an action that the user has carried
-     *                  out. For example "logged in" or "registered".
-     * @param metaData  A {@link JSONObject} containing app-defined meta-data to be attached to a
-     *                  user action that has just been completed.
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param action          A {@link String} value to be passed as an action that the user has carried
+     *                        out. For example "logged in" or "registered".
+     * @param metaData        A {@link JSONObject} containing app-defined meta-data to be attached to a
+     *                        user action that has just been completed.
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void userCompletedAction(String action, JSONObject metaData, CallbackContext callbackContext)
-    {
+    private void userCompletedAction(String action, JSONObject metaData, CallbackContext callbackContext) {
 
         this.instance.userCompletedAction(action, metaData);
 
@@ -612,10 +590,9 @@ public class BranchSDK extends CordovaPlugin
      * <p>Gets the credit history of the specified bucket and triggers a callback to handle the
      * response.</p>
      *
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void getCreditHistory(CallbackContext callbackContext)
-    {
+    private void getCreditHistory(CallbackContext callbackContext) {
 
         this.instance.getCreditHistory(new CreditHistoryListener(callbackContext));
 
@@ -623,11 +600,9 @@ public class BranchSDK extends CordovaPlugin
 
     /**
      * @access protected
-     *
      * @class BranchUniversalObjectWrapper
      */
-    protected class BranchUniversalObjectWrapper
-    {
+    protected class BranchUniversalObjectWrapper {
 
         public BranchUniversalObject branchUniversalObj;
         public CallbackContext onShareLinkDialogDismissed;
@@ -636,9 +611,9 @@ public class BranchSDK extends CordovaPlugin
         public CallbackContext onChannelSelected;
 
         /**
-         * @constructor
          *
-         * @param BranchUniversalObject branchUniversalObj
+         * @param branchUniversalObj branchUniversalObj
+         * @constructor
          */
         public BranchUniversalObjectWrapper(BranchUniversalObject branchUniversalObj) {
             this.branchUniversalObj = branchUniversalObj;
@@ -654,8 +629,7 @@ public class BranchSDK extends CordovaPlugin
     //----------- INNER CLASS LISTENERS ------------//
     //////////////////////////////////////////////////
 
-    protected class SessionListener implements Branch.BranchReferralInitListener
-    {
+    protected class SessionListener implements Branch.BranchReferralInitListener {
         private CallbackContext _callbackContext;
 
         public SessionListener(CallbackContext callbackContext) {
@@ -678,10 +652,10 @@ public class BranchSDK extends CordovaPlugin
                         webView.sendJavascript(out);
                     } else if (deepLinkUrl != null) {
                         JSONObject message = new JSONObject();
-                        
+
                         message.put("error", "Not a Branch link!");
                         message.put("url", deepLinkUrl);
-                    
+
                         out = String.format("NonBranchLinkHandler(%s)", message.toString());
                         webView.sendJavascript(out);
                     }
@@ -689,7 +663,7 @@ public class BranchSDK extends CordovaPlugin
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                
+
                 if (this._callbackContext != null) {
                     this._callbackContext.success(referringParams);
                 }
@@ -707,18 +681,16 @@ public class BranchSDK extends CordovaPlugin
                 }
             }
 
-            
 
         }
 
     }
 
-    protected class LogoutStatusListener implements Branch.LogoutStatusListener
-    {
+    protected class LogoutStatusListener implements Branch.LogoutStatusListener {
         private CallbackContext _callbackContext;
 
         // Constructor that takes in a required callbackContext object
-        public LogoutStatusListener (CallbackContext callbackContext) {
+        public LogoutStatusListener(CallbackContext callbackContext) {
             this._callbackContext = callbackContext;
         }
 
@@ -732,25 +704,24 @@ public class BranchSDK extends CordovaPlugin
         @Override
         public void onLogoutFinished(boolean loggedOut, BranchError error) {
             if (error == null) {
-                
+
                 branchObjectWrappers = new ArrayList<BranchUniversalObjectWrapper>();
-                
+
                 this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is logged out */ loggedOut));
-            
+
             } else {
 
                 Log.d(LCAT, "error on logout");
-                
+
                 this._callbackContext.error(error.getMessage());
             }
         }
     }
 
-    protected class SetIdentityListener implements Branch.BranchReferralInitListener
-    {
+    protected class SetIdentityListener implements Branch.BranchReferralInitListener {
         private CallbackContext _callbackContext;
 
-        public SetIdentityListener (CallbackContext callbackContext) {
+        public SetIdentityListener(CallbackContext callbackContext) {
             this._callbackContext = callbackContext;
         }
 
@@ -777,8 +748,7 @@ public class BranchSDK extends CordovaPlugin
 
     }
 
-    protected class RegisterViewStatusListener implements BranchUniversalObject.RegisterViewStatusListener
-    {
+    protected class RegisterViewStatusListener implements BranchUniversalObject.RegisterViewStatusListener {
 
         private CallbackContext _callbackContext;
 
@@ -802,8 +772,7 @@ public class BranchSDK extends CordovaPlugin
         }
     }
 
-    protected class LoadRewardsListener implements Branch.BranchReferralStateChangedListener
-    {
+    protected class LoadRewardsListener implements Branch.BranchReferralStateChangedListener {
         private CallbackContext _callbackContext;
         private Branch _instance;
         private String _bucket;
@@ -826,13 +795,13 @@ public class BranchSDK extends CordovaPlugin
             if (error == null) {
 
                 int credits = 0;
-                
+
                 if (this._bucket.length() > 0) {
                     credits = this._instance.getCreditsForBucket(this._bucket);
                 } else {
                     credits = this._instance.getCredits();
                 }
-                
+
                 this._callbackContext.success(credits);
 
             } else {
@@ -848,8 +817,7 @@ public class BranchSDK extends CordovaPlugin
         }
     }
 
-    protected class RedeemRewardsListener implements Branch.BranchReferralStateChangedListener
-    {
+    protected class RedeemRewardsListener implements Branch.BranchReferralStateChangedListener {
         private CallbackContext _callbackContext;
 
         // Constructor that takes in a required callbackContext object
@@ -864,7 +832,7 @@ public class BranchSDK extends CordovaPlugin
             if (error == null) {
 
                 this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is changed */ changed));
-            
+
             } else {
 
                 String errorMessage = error.getMessage();
@@ -876,8 +844,7 @@ public class BranchSDK extends CordovaPlugin
         }
     }
 
-    protected class GenerateShortUrlListener implements Branch.BranchLinkCreateListener
-    {
+    protected class GenerateShortUrlListener implements Branch.BranchLinkCreateListener {
         private CallbackContext _callbackContext;
 
         // Constructor that takes in a required callbackContext object
@@ -926,8 +893,7 @@ public class BranchSDK extends CordovaPlugin
 
     }
 
-    protected class ShowShareSheetListener implements Branch.BranchLinkShareListener
-    {
+    protected class ShowShareSheetListener implements Branch.BranchLinkShareListener {
 
         private CallbackContext _onShareLinkDialogLaunched;
         private CallbackContext _onShareLinkDialogDismissed;
@@ -935,13 +901,13 @@ public class BranchSDK extends CordovaPlugin
         private CallbackContext _onChannelSelected;
 
         /**
-         * @constructor
          *
-         * @param CallbackContext onShareLinkDialogLaunched
-         * @param CallbackContext onShareLinkDialogDismissed
-         * @param CallbackContext onLinkShareResponse
-         * @param CallbackContext onChannelSelected
-         * */
+         * @param onShareLinkDialogLaunched
+         * @param onShareLinkDialogDismissed
+         * @param onLinkShareResponse
+         * @param onChannelSelected
+         * @constructor
+         */
         public ShowShareSheetListener(CallbackContext onShareLinkDialogLaunched, CallbackContext onShareLinkDialogDismissed, CallbackContext onLinkShareResponse, CallbackContext onChannelSelected) {
 
             this._onShareLinkDialogDismissed = onShareLinkDialogDismissed;
@@ -1052,8 +1018,7 @@ public class BranchSDK extends CordovaPlugin
         }
     }
 
-    protected class CreditHistoryListener implements Branch.BranchListResponseListener
-    {
+    protected class CreditHistoryListener implements Branch.BranchListResponseListener {
         private CallbackContext _callbackContext;
 
         // Constructor that takes in a required callbackContext object
@@ -1127,7 +1092,7 @@ public class BranchSDK extends CordovaPlugin
             try {
                 if (this.action.equals("initSession")) {
                     initSession(this.callbackContext);
-                }  else if (this.action.equals("setMixpanelToken")) {
+                } else if (this.action.equals("setMixpanelToken")) {
                     setMixpanelToken(this.args.getString(0), this.callbackContext);
                 } else {
                     if (this.action.equals("setIdentity")) {
@@ -1165,7 +1130,20 @@ public class BranchSDK extends CordovaPlugin
                     } else if (this.action.equals("registerView")) {
                         registerView(this.args.getInt(0), this.callbackContext);
                     } else if (this.action.equals("showShareSheet")) {
-                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), this.args.getString(3) != null ? this.args.getString(3) : "This stuff is awesome: ");
+                        Object userLocalization = this.args.opt(3);
+                        JSONObject localization = new JSONObject();
+                        //Limitation is that the user must override all the strings
+                        if (userLocalization != null && userLocalization instanceof JSONObject) {
+                            localization = (JSONObject) userLocalization;
+                        } else {
+                            localization.put("shareText", this.args.getString(3) != null ? this.args.getString(3) : "This stuff is awesome: ");
+                            localization.put("shareTitle", "Check this out!");
+                            localization.put("copyToClipboard", "Copy");
+                            localization.put("clipboardSuccess", "Added to clipboard");
+                            localization.put("more", "Show More");
+                            localization.put("shareWith", "Share With");
+                        }
+                        showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), localization);
                     }
                 }
             } catch (JSONException e) {
