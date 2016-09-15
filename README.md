@@ -2,10 +2,6 @@
 
 This is a repository of the [Branch Metrics](https://branch.io/) open source Cordova | Phonegap | Ionic SDK.
 
-## IMPORTANT: Upgrading to V 2.0
-
-In Feb. 2016 we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed many bugs and added additional functionality, but also changed the API. If you don't have time to do so, just use a reference to version 1.8, which we're storing in a locked branch called ['v1.8.0-locked'](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/v1.8.0-locked).
-
 ## Get the Demo App
 
 There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/testbed).
