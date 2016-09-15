@@ -662,12 +662,12 @@ This is the type of credit transaction
 
 ## Android Build FAQ
 
-1. Gradle build cannot find `io.branch.sdk.android:library:1.+` dependency:
+1. Gradle build cannot find `io.branch.sdk.android:library:2.+` dependency:
 
 Go to your `build.gradle` file and find **dependencies** and add the following inside:
 
 ```
-compile "io.branch.sdk.android:library:1.+"
+compile "io.branch.sdk.android:library:2.+"
 ```
 
 ## Bugs / Help / Support
