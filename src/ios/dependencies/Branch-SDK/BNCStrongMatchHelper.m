@@ -20,6 +20,7 @@
 + (BNCStrongMatchHelper *)strongMatchHelper { return nil; }
 - (void)createStrongMatchWithBranchKey:(NSString *)branchKey { }
 - (BOOL)shouldDelayInstallRequest { return NO; }
++ (NSURL *)getUrlForCookieBasedMatchingWithBranchKey:(NSString *)branchKey redirectUrl:(NSString *)redirectUrl { return nil; }
 
 @end
 
@@ -48,6 +49,51 @@ NSInteger const ABOUT_30_DAYS_TIME_IN_SECONDS = 60 * 60 * 24 * 30;
     return strongMatchHelper;
 }
 
++ (NSURL *)getUrlForCookieBasedMatchingWithBranchKey:(NSString *)branchKey redirectUrl:(NSString *)redirectUrl {
+    if (!branchKey) {
+        return nil;
+    }
+    
+    NSString *appDomainLinkURL;
+    id ret = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"branch_app_domain"];
+    if (ret) {
+        if ([ret isKindOfClass:[NSString class]])
+            appDomainLinkURL = [NSString stringWithFormat:@"https://%@", ret];
+    } else {
+        appDomainLinkURL = BNC_LINK_URL;
+    }
+    NSMutableString *urlString = [[NSMutableString alloc] initWithFormat:@"%@/_strong_match?os=%@", appDomainLinkURL, [BNCSystemObserver getOS]];
+    
+    BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
+    BOOL isRealHardwareId;
+    NSString *hardwareIdType;
+    NSString *hardwareId = [BNCSystemObserver getUniqueHardwareId:&isRealHardwareId isDebug:preferenceHelper.isDebug andType:&hardwareIdType];
+    if (!hardwareId || !isRealHardwareId) {
+        [preferenceHelper logWarning:@"Cannot use cookie-based matching while setDebug is enabled"];
+        return nil;
+    }
+    
+    [urlString appendFormat:@"&%@=%@", BRANCH_REQUEST_KEY_HARDWARE_ID, hardwareId];
+
+    if (preferenceHelper.deviceFingerprintID) {
+        [urlString appendFormat:@"&%@=%@", BRANCH_REQUEST_KEY_DEVICE_FINGERPRINT_ID, preferenceHelper.deviceFingerprintID];
+    }
+
+    if ([BNCSystemObserver getAppVersion]) {
+        [urlString appendFormat:@"&%@=%@", BRANCH_REQUEST_KEY_APP_VERSION, [BNCSystemObserver getAppVersion]];
+    }
+    
+    [urlString appendFormat:@"&branch_key=%@", branchKey];
+    
+    [urlString appendFormat:@"&sdk=ios%@", SDK_VERSION];
+    
+    if (redirectUrl) {
+        [urlString appendFormat:@"&redirect_url=%@", [redirectUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    }
+
+    return [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+}
+
 - (void)createStrongMatchWithBranchKey:(NSString *)branchKey {
     if (self.requestInProgress) {
         return;
@@ -67,73 +113,30 @@ NSInteger const ABOUT_30_DAYS_TIME_IN_SECONDS = 60 * 60 * 24 * 30;
 }
 
 - (void)presentSafariVCWithBranchKey:(NSString *)branchKey {
-    
-    NSString *appDomainLinkURL;
-    id ret = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"branch_app_domain"];
-    if (ret) {
-        if ([ret isKindOfClass:[NSString class]])
-            appDomainLinkURL = [NSString stringWithFormat:@"https://%@", ret];
-    } else {
-        appDomainLinkURL = BNC_LINK_URL;
-    }
-    NSMutableString *urlString = [[NSMutableString alloc] initWithFormat:@"%@/_strong_match?os=%@", appDomainLinkURL, [BNCSystemObserver getOS]];
-    
-    BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
-    BOOL isRealHardwareId;
-    NSString *hardwareIdType;
-    NSString *hardwareId = [BNCSystemObserver getUniqueHardwareId:&isRealHardwareId isDebug:preferenceHelper.isDebug andType:&hardwareIdType];
-    if (!hardwareId || !isRealHardwareId) {
-        [preferenceHelper logWarning:@"Cannot use cookie-based matching while setDebug is enabled"];
+    NSURL *strongMatchUrl = [BNCStrongMatchHelper getUrlForCookieBasedMatchingWithBranchKey:branchKey redirectUrl:nil];
+    if (!strongMatchUrl) {
         self.shouldDelayInstallRequest = NO;
         self.requestInProgress = NO;
         return;
     }
     
-    [urlString appendFormat:@"&%@=%@", BRANCH_REQUEST_KEY_HARDWARE_ID, hardwareId];
-
-    if (preferenceHelper.deviceFingerprintID) {
-        [urlString appendFormat:@"&%@=%@", BRANCH_REQUEST_KEY_DEVICE_FINGERPRINT_ID, preferenceHelper.deviceFingerprintID];
-    }
-
-    if ([BNCSystemObserver getAppVersion]) {
-        [urlString appendFormat:@"&%@=%@", BRANCH_REQUEST_KEY_APP_VERSION, [BNCSystemObserver getAppVersion]];
-    }
-
-    if (branchKey) {
-        [urlString appendFormat:@"&branch_key=%@", branchKey];
-    }
-
-    [urlString appendFormat:@"&sdk=ios%@", SDK_VERSION];
-    
     Class SFSafariViewControllerClass = NSClassFromString(@"SFSafariViewController");
+    Class UIApplicationClass = NSClassFromString(@"UIApplication");
     if (SFSafariViewControllerClass) {
-        NSURL *strongMatchUrl = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        if (!strongMatchUrl) {
-            self.requestInProgress = NO;
-            return;
-        }
-        
-        UIViewController * safController = [[SFSafariViewControllerClass alloc] initWithURL:strongMatchUrl];
-        self.secondWindow = [[UIWindow alloc] initWithFrame:[[[[UIApplication sharedApplication] windows] firstObject] bounds]];
-        UIViewController *windowRootController = [[UIViewController alloc] init];
-        self.secondWindow.rootViewController = windowRootController;
-        self.secondWindow.windowLevel = UIWindowLevelNormal - 1;
-        [self.secondWindow setHidden:NO];
-        [self.secondWindow setAlpha:0];
         
         // Must be on next run loop to avoid a warning
         dispatch_async(dispatch_get_main_queue(), ^{
-            // Add the safari view controller using view controller containment
-            [windowRootController addChildViewController:safController];
-            [windowRootController.view addSubview:safController.view];
-            [safController didMoveToParentViewController:windowRootController];
+            UIViewController * safController = [[SFSafariViewControllerClass alloc] initWithURL:strongMatchUrl];
+            self.secondWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+            self.secondWindow.rootViewController = safController;
+            self.secondWindow.windowLevel = UIWindowLevelNormal - 100;
+            [self.secondWindow setHidden:NO];
+            UIWindow *keyWindow = [[UIApplicationClass sharedApplication] keyWindow];
+            [self.secondWindow makeKeyWindow];
             
-            // Give a little bit of time for safari to load the request.
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                // Remove the safari view controller from view controller containment
-                [safController willMoveToParentViewController:nil];
-                [safController.view removeFromSuperview];
-                [safController removeFromParentViewController];
+            // Give enough time for Safari to load the request (optimized for 3G)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [keyWindow makeKeyWindow];
                 
                 // Remove the window and release it's strong reference. This is important to ensure that
                 // applications using view controller based status bar appearance are restored.

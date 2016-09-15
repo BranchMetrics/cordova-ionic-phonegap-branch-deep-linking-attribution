@@ -6,6 +6,7 @@
 //  Copyright © 2015 Branch Metrics. All rights reserved.
 //
 
+#import "BNCPreferenceHelper.h"
 #import "BNCContentDiscoveryManager.h"
 #import "BNCSystemObserver.h"
 #import "BNCError.h"
@@ -29,7 +30,7 @@
 
 @interface BNCContentDiscoveryManager ()
 
-@property (strong, nonatomic) NSUserActivity *currentUserActivity;
+@property (strong, nonatomic) NSMutableDictionary *userInfo;
 
 @end
 
@@ -39,18 +40,14 @@
 
 - (NSString *)spotlightIdentifierFromActivity:(NSUserActivity *)userActivity {
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
-    if ([userActivity.activityType hasPrefix:BRANCH_SPOTLIGHT_PREFIX]) {
-        return userActivity.activityType;
-    }
+    // If it has our prefix, then the link identifier is just the last piece of the identifier.
+    NSString *activityIdentifier = userActivity.userInfo[CSSearchableItemActivityIdentifier];
+    BOOL isBranchIdentifier = [activityIdentifier hasPrefix:BRANCH_SPOTLIGHT_PREFIX];
     
-    // CoreSpotlight version. Matched if it has our prefix, then the link identifier is just the last piece of the identifier.
-    if ([userActivity.activityType isEqualToString:CSSearchableItemActionType]) {
-        NSString *activityIdentifier = userActivity.userInfo[CSSearchableItemActivityIdentifier];
-        BOOL isBranchIdentifier = [activityIdentifier hasPrefix:BRANCH_SPOTLIGHT_PREFIX];
-        
-        if (isBranchIdentifier) {
-            return activityIdentifier;
-        }
+    // Checking for CSSearchableItemActionType in the activity for legacy spotlight indexing (pre 0.12.7)
+    // Now we index NSUserActivies with type set to io.branch. + bundleId for better SEO
+    if ([userActivity.activityType isEqualToString:CSSearchableItemActionType] || isBranchIdentifier) {
+        return activityIdentifier;
     }
 #endif
     
@@ -59,15 +56,13 @@
 
 - (NSString *)standardSpotlightIdentifierFromActivity:(NSUserActivity *)userActivity {
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
-    // CoreSpotlight version. Matched if it has our prefix, then the link identifier is just the last piece of the identifier.
-    if ([userActivity.activityType isEqualToString:CSSearchableItemActionType] && userActivity.userInfo[CSSearchableItemActivityIdentifier]) {
+    if (userActivity.userInfo[CSSearchableItemActivityIdentifier]) {
         return userActivity.userInfo[CSSearchableItemActivityIdentifier];
     }
 #endif
     
     return nil;
 }
-
 
 #pragma mark - Content Indexing
 
@@ -309,7 +304,7 @@
     if ([BNCSystemObserver getOSVersion].integerValue < 9) {
         NSError *error = [NSError errorWithDomain:BNCErrorDomain code:BNCVersionError userInfo:@{ NSLocalizedDescriptionKey: @"Cannot use CoreSpotlight indexing service prior to iOS 9" }];
         if (callback) {
-            callback(nil, error);
+            callback([BNCPreferenceHelper preferenceHelper].userUrl, error);
         }
         else if (spotlightCallback) {
             spotlightCallback(nil, nil, error);
@@ -319,7 +314,7 @@
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
     NSError *error = [NSError errorWithDomain:BNCErrorDomain code:BNCBadRequestError userInfo:@{ NSLocalizedDescriptionKey: @"CoreSpotlight is not available because the base SDK for this project is less than 9.0" }];
     if (callback) {
-        callback(nil, error);
+        callback([BNCPreferenceHelper preferenceHelper].userUrl, error);
     }
     else if (spotlightCallback) {
         spotlightCallback(nil, nil, error);
@@ -334,7 +329,7 @@
     if (!isIndexingAvailable) {
         NSError *error = [NSError errorWithDomain:BNCErrorDomain code:BNCVersionError userInfo:@{ NSLocalizedDescriptionKey: @"Cannot use CoreSpotlight indexing service on this device/OS" }];
         if (callback) {
-            callback(nil, error);
+            callback([BNCPreferenceHelper preferenceHelper].userUrl, error);
         }
         else if (spotlightCallback) {
             spotlightCallback(nil, nil, error);
@@ -345,7 +340,7 @@
     if (!title) {
         NSError *error = [NSError errorWithDomain:BNCErrorDomain code:BNCBadRequestError userInfo:@{ NSLocalizedDescriptionKey: @"Spotlight Indexing requires a title" }];
         if (callback) {
-            callback(nil, error);
+            callback([BNCPreferenceHelper preferenceHelper].userUrl, error);
         }
         else if (spotlightCallback) {
             spotlightCallback(nil, nil, error);
@@ -397,7 +392,7 @@
     [[Branch getInstance] getSpotlightUrlWithParams:spotlightLinkData callback:^(NSDictionary *data, NSError *urlError) {
         if (urlError) {
             if (callback) {
-                callback(nil, urlError);
+                callback([BNCPreferenceHelper preferenceHelper].userUrl, urlError);
             }
             else if (spotlightCallback) {
                 spotlightCallback(nil, nil, urlError);
@@ -430,8 +425,6 @@
     attributes = ((id (*)(id, SEL, NSString *))[attributes methodForSelector:initAttributesSelector])(attributes, initAttributesSelector, type);
     SEL setIdentifierSelector = NSSelectorFromString(@"setIdentifier:");
     ((void (*)(id, SEL, NSString *))[attributes methodForSelector:setIdentifierSelector])(attributes, setIdentifierSelector, spotlightIdentifier);
-    SEL setRelatedUniqueIdentifierSelector = NSSelectorFromString(@"setRelatedUniqueIdentifier:");
-    ((void (*)(id, SEL, NSString *))[attributes methodForSelector:setRelatedUniqueIdentifierSelector])(attributes, setRelatedUniqueIdentifierSelector, spotlightIdentifier);
     SEL setTitleSelector = NSSelectorFromString(@"setTitle:");
     ((void (*)(id, SEL, NSString *))[attributes methodForSelector:setTitleSelector])(attributes, setTitleSelector, title);
     SEL setContentDescriptionSelector = NSSelectorFromString(@"setContentDescription:");
@@ -440,65 +433,82 @@
     ((void (*)(id, SEL, NSURL *))[attributes methodForSelector:setThumbnailURLSelector])(attributes, setThumbnailURLSelector, thumbnailUrl);
     SEL setThumbnailDataSelector = NSSelectorFromString(@"setThumbnailData:");
     ((void (*)(id, SEL, NSData *))[attributes methodForSelector:setThumbnailDataSelector])(attributes, setThumbnailDataSelector, thumbnailData);
+    // NSUserActivity.CSSearchableItemAttributeSet.contentURL
     SEL setContentURLSelector = NSSelectorFromString(@"setContentURL:");
     ((void (*)(id, SEL, NSURL *))[attributes methodForSelector:setContentURLSelector])(attributes, setContentURLSelector, [NSURL URLWithString:url]);
     
-    // Index via the NSUserActivity strategy
-    // Currently (iOS 9 Beta 4) we need a strong reference to this, or it isn't indexed
-    self.currentUserActivity = [[NSUserActivity alloc] initWithActivityType:spotlightIdentifier];
-    self.currentUserActivity.title = title;
-    self.currentUserActivity.webpageURL = [NSURL URLWithString:url]; // This should allow indexed content to fall back to the web if user doesn't have the app installed. Unable to test as of iOS 9 Beta 4
-    self.currentUserActivity.eligibleForSearch = YES;
-    self.currentUserActivity.eligibleForPublicIndexing = publiclyIndexable;
-    SEL setContentAttributeSetSelector = NSSelectorFromString(@"setContentAttributeSet:");
-    ((void (*)(id, SEL, id))[self.currentUserActivity methodForSelector:setContentAttributeSetSelector])(self.currentUserActivity, setContentAttributeSetSelector, attributes);
-    self.currentUserActivity.userInfo = userInfo; // As of iOS 9 Beta 4, this gets lost and never makes it through to application:continueActivity:restorationHandler:
-    self.currentUserActivity.requiredUserInfoKeys = [NSSet setWithArray:userInfo.allKeys]; // This, however, seems to force the userInfo to come through.
-    self.currentUserActivity.keywords = keywords;
-    [self.currentUserActivity becomeCurrent];
+    NSDictionary *userActivityIndexingParams = @{@"title": title,
+                                                 @"url": url,
+                                                 @"spotlightId": spotlightIdentifier,
+                                                 @"userInfo": [userInfo mutableCopy],
+                                                 @"keywords": keywords,
+                                                 @"publiclyIndexable": [NSNumber numberWithBool:publiclyIndexable],
+                                                 @"attributeSet": attributes
+                                                 };
+    [self indexUsingNSUserActivity:userActivityIndexingParams];
     
-    // Index via the CoreSpotlight strategy
-    //get the CSSearchableItem Class object
-    id CSSearchableItemClass = NSClassFromString(@"CSSearchableItem");
-    //alloc an empty instance
-    id searchableItem = [CSSearchableItemClass alloc];
-    //create-by-name a selector fot the init method we want
-    SEL initItemSelector = NSSelectorFromString(@"initWithUniqueIdentifier:domainIdentifier:attributeSet:");
-    //call the selector on the searchableItem with appropriate arguments
-    searchableItem = ((id (*)(id, SEL, NSString *, NSString *, id))[searchableItem methodForSelector:initItemSelector])(searchableItem, initItemSelector, spotlightIdentifier, BRANCH_SPOTLIGHT_PREFIX, attributes);
-  
-    //create an assignment method to set the expiration date on the searchableItem
-    SEL expirationSelector = NSSelectorFromString(@"setExpirationDate:");
-    //now invoke it on the searchableItem, providing the expirationdate
-    ((void (*)(id, SEL, NSDate *))[searchableItem methodForSelector:expirationSelector])(searchableItem, expirationSelector, expirationDate);
-  
-
-    Class CSSearchableIndexClass = NSClassFromString(@"CSSearchableIndex");
-    SEL defaultSearchableIndexSelector = NSSelectorFromString(@"defaultSearchableIndex");
-    id defaultSearchableIndex = ((id (*)(id, SEL))[CSSearchableIndexClass methodForSelector:defaultSearchableIndexSelector])(CSSearchableIndexClass, defaultSearchableIndexSelector);
-    SEL indexSearchableItemsSelector = NSSelectorFromString(@"indexSearchableItems:completionHandler:");
-    void (^__nullable completionBlock)(NSError *indexError) = ^void(NSError *__nullable indexError) {
-        if (callback || spotlightCallback) {
-            if (indexError) {
-                if (callback) {
-                    callback(nil, indexError);
-                }
-                else if (spotlightCallback) {
-                    spotlightCallback(nil, nil, indexError);
-                }
-            }
-            else {
-                if (callback) {
-                    callback(url, nil);
-                }
-                else if (spotlightCallback) {
-                    spotlightCallback(url, spotlightIdentifier, nil);
-                }
-            }
+    // Not handling error scenarios because they are already handled upstream by the caller
+    if (url) {
+        if (callback) {
+            callback(url, nil);
+        } else if (spotlightCallback) {
+            spotlightCallback(url, spotlightIdentifier, nil);
         }
-    };
-    ((void (*)(id, SEL, NSArray *, void (^ __nullable)(NSError * __nullable error)))[defaultSearchableIndex methodForSelector:indexSearchableItemsSelector])(defaultSearchableIndex, indexSearchableItemsSelector, @[searchableItem], completionBlock);
+    }
 #endif
+}
+
+#pragma mark Delegate Methods
+
+- (void)userActivityWillSave:(NSUserActivity *)userActivity {
+    [userActivity addUserInfoEntriesFromDictionary:self.userInfo];
+}
+
+#pragma mark Helper Methods
+
+- (UIViewController *)getActiveViewController {
+    Class UIApplicationClass = NSClassFromString(@"UIApplication");
+    UIViewController *rootViewController = [UIApplicationClass sharedApplication].keyWindow.rootViewController;
+    return [self getActiveViewController:rootViewController];
+}
+
+- (UIViewController *)getActiveViewController:(UIViewController *)rootViewController {
+    UIViewController *activeController;
+    if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+        activeController = ((UINavigationController *)rootViewController).topViewController;
+    } else if ([rootViewController isKindOfClass:[UITabBarController class]]) {
+        activeController = ((UITabBarController *)rootViewController).selectedViewController;
+    } else {
+        activeController = rootViewController;
+    }
+    return activeController;
+}
+
+- (void)indexUsingNSUserActivity:(NSDictionary *)params {
+    self.userInfo = params[@"userInfo"];
+    self.userInfo[CSSearchableItemActivityIdentifier] = params[@"spotlightId"];
+    
+    UIViewController *activeViewController = [self getActiveViewController];
+    
+    if (!activeViewController) {
+        // if no view controller, don't index. Current use case: iMessage extensions
+        return;
+    }
+    NSString *uniqueIdentifier = [NSString stringWithFormat:@"io.branch.%@", [[NSBundle mainBundle] bundleIdentifier]];
+    // Can't create any weak references here to the userActivity, otherwise it will not index.
+    activeViewController.userActivity = [[NSUserActivity alloc] initWithActivityType:uniqueIdentifier];
+    activeViewController.userActivity.delegate = self;
+    activeViewController.userActivity.title = params[@"title"];
+    activeViewController.userActivity.webpageURL = [NSURL URLWithString:params[@"url"]];
+    activeViewController.userActivity.eligibleForSearch = YES;
+    activeViewController.userActivity.eligibleForPublicIndexing = [params[@"publiclyIndexable"] boolValue];
+    activeViewController.userActivity.userInfo = self.userInfo; // This alone doesn't pass userInfo through
+    activeViewController.userActivity.requiredUserInfoKeys = [NSSet setWithArray:self.userInfo.allKeys]; // This along with the delegate method userActivityWillSave, however, seem to force the userInfo to come through.
+    activeViewController.userActivity.keywords = params[@"keywords"];
+    SEL setContentAttributeSetSelector = NSSelectorFromString(@"setContentAttributeSet:");
+    ((void (*)(id, SEL, id))[activeViewController.userActivity methodForSelector:setContentAttributeSetSelector])(activeViewController.userActivity, setContentAttributeSetSelector, params[@"attributeSet"]);
+
+    [activeViewController.userActivity becomeCurrent];
 }
 
 @end
