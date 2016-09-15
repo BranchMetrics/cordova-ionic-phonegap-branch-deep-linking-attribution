@@ -1,6 +1,6 @@
 # Branch Metrics Cordova/Ionic/Phonegap SDK Reference
 
-This is a repository of the [Branch Metrics](https://branch.io/) open source Cordova | Phonegap | Ionic SDK.
+This is the repository of the [Branch Metrics](https://branch.io/) open source Cordova | Phonegap | Ionic SDK.
 
 ## Get the Demo App
 
