@@ -410,8 +410,8 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
     //check to see if a browser activity needs to be handled
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         self.preferenceHelper.universalLinkUrl = [userActivity.webpageURL absoluteString];
-        [self initUserSessionAndCallCallback:YES];
         self.preferenceHelper.shouldWaitForInit = NO;
+        [self initUserSessionAndCallCallback:YES];
         
         id branchUniversalLinkDomains = [self.preferenceHelper getBranchUniversalLinkDomains];
         if ([branchUniversalLinkDomains isKindOfClass:[NSString class]] && [[userActivity.webpageURL absoluteString] containsString:branchUniversalLinkDomains]) {
@@ -448,8 +448,8 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
         }
     }
     
-    [self initUserSessionAndCallCallback:YES];
     self.preferenceHelper.shouldWaitForInit = NO;
+    [self initUserSessionAndCallCallback:YES];
     
     return spotlightIdentifier != nil;
 }
@@ -1165,7 +1165,10 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
                     // First, gather all the requests to fail
                     NSMutableArray *requestsToFail = [[NSMutableArray alloc] init];
                     for (int i = 0; i < self.requestQueue.size; i++) {
-                        [requestsToFail addObject:[self.requestQueue peekAt:i]];
+                        BNCServerRequest *request = [self.requestQueue peekAt:i];
+                        if (request) {
+                            [requestsToFail addObject:request];
+                        }                        
                     }
                     
                     // Next, remove all the requests that should not be replayed. Note, we do this before calling callbacks, in case any
@@ -1361,7 +1364,7 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
 }
 
 + (NSString *)kitDisplayVersion {
-	return @"0.12.9";
+	return @"0.12.10";
 }
 
 @end
