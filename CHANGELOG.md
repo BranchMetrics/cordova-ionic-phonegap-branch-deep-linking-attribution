@@ -2,6 +2,10 @@
 All notable changes to the Branch Web SDK will be documented here.
 The Branch Web SDK adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.2.2] - 2016-09-15
+- Updated iOS library to v 0.12.11
+- Added back support for setDebug
+
 ## [v2.2.1] - 2016-09-15
 - Updated iOS library to v 0.12.10
 - Support for iOS extensions (iMessage apps)
