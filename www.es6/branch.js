@@ -93,13 +93,13 @@ Branch.prototype.setMixpanelToken = function(token) {
  *
  * @return (Promise)
  */
-Branch.prototype.setDebug = function (isEnabled) {
+Branch.prototype.setDebug = function(isEnabled) {
 
     isEnabled = (typeof isEnabled !== 'boolean') ? false : isEnabled;
 
     this.debugMode = isEnabled;
 
-    return execute('setDebug', [isEnabled]);
+    return execute('setDebug', [ isEnabled ]);
 
 };
 
