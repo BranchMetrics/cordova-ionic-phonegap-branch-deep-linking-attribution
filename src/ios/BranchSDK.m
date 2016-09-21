@@ -150,6 +150,18 @@
     
 }
 
+- (void)setDebug:(CDVInvokedUrlCommand*)command
+{
+    bool enableDebug = [[command.arguments objectAtIndex:0] boolValue] == YES;
+    if (enableDebug) {
+        [[Branch getInstance] setDebug];
+    }
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enableDebug];
+
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+ }
+
 - (void)getAutoInstance:(CDVInvokedUrlCommand*)command
 {
     [self initSession:nil];
