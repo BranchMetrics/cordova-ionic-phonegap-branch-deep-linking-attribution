@@ -83,7 +83,7 @@ Branch.prototype.setMixpanelToken = function (token) {
 };
 
 /**
- * Set debug mode.
+ * Set debug mode to simulate fresh installs.
  * NOTE: This must be called before initSession
  *
  * @param (Boolean) isEnabled. Default = false
