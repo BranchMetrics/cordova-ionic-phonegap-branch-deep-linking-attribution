@@ -84,7 +84,12 @@ public class BranchSDK extends CordovaPlugin {
 
         Runnable r = new RunnableThread(action, args, callbackContext);
 
-        if (action.equals("initSession")) {
+        if (action.equals("setDebug")) {
+            if (args.length() == 1) {
+                cordova.getThreadPool().execute(r);
+            }
+            return true;
+        } else if (action.equals("initSession")) {
             cordova.getThreadPool().execute(r);
             return true;
         } else if (action.equals("setMixpanelToken")) {
@@ -523,6 +528,27 @@ public class BranchSDK extends CordovaPlugin {
 
         branchUniversalWrapper.branchUniversalObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener(callbackContext));
 
+    }
+
+    /**
+     * <p>Sets the library to function in debug mode, enabling logging of all requests.</p>
+     * <p>If you want to flag debug, call this <b>before</b> initUserSession</p>
+     *
+     * @param isEnable A {@link Boolean} value to enable/disable debugging mode for the app.
+     * @param callbackContext   A callback to execute at the end of this method
+     */
+    private void setDebug(boolean isEnable, CallbackContext callbackContext)
+    {
+
+        this.activity = this.cordova.getActivity();
+        
+        Branch debugInstance = Branch.getAutoInstance(this.activity.getApplicationContext());
+ 
+        if (isEnable) {
+            debugInstance.setDebug();
+        }
+
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ isEnable));
     }
 
     /**
@@ -1090,7 +1116,9 @@ public class BranchSDK extends CordovaPlugin {
 
         public void run() {
             try {
-                if (this.action.equals("initSession")) {
+                if (this.action.equals("setDebug")) {
+                    setDebug(this.args.getBoolean(0), this.callbackContext);
+                } else if (this.action.equals("initSession")) {
                     initSession(this.callbackContext);
                 } else if (this.action.equals("setMixpanelToken")) {
                     setMixpanelToken(this.args.getString(0), this.callbackContext);
