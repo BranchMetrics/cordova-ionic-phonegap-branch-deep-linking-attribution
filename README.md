@@ -56,7 +56,7 @@ defaultConfig {
 * Executing `./gradlew clean` in the Android directory
 * Excluding `android-support-v4` file for compiling
 ```
-compile ('com.google.android.gms:play-services:6.5.87') {
+compile ('com.google.android.gms:play-services:9.+') {
     exclude module: 'support-v4'
 }
 ```
