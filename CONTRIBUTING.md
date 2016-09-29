@@ -16,7 +16,7 @@ Please format your commit messages to match [Angular's Conventions](https://gith
 
 ## Linting
 
-The style of all js files in this project are strictly checked using [jscs](http://jscs.info/) and [eslint](http://eslint.org/) before any pull request/release is made. You can manually check your local clone using the `gulp lint` command (don't forget to `nom install -g gulp` if you haven't already). Many problems can be automatically fixed by `gulp jscs-fix`. Don't forget to commit before running jscs-fix in case you end up needing to back out changes.
+The style of all js files in this project are strictly checked using [jscs](http://jscs.info/) and [eslint](http://eslint.org/) before any pull request/release is made. You can manually check your local clone using the `gulp lint` command (don't forget to `npm install -g gulp` if you haven't already). Many problems can be automatically fixed by `gulp jscs-fix`. Don't forget to commit before running jscs-fix in case you end up needing to back out changes.
 
 ## Testing
 
