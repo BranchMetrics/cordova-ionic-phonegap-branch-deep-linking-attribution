@@ -219,6 +219,8 @@ function DeepLinkHandler(data) {
 }
 ```
 
+Note, if you are unsure how to set a global function or you are getting a `Reference not defined` error with `DeepLinkHandler`, please review this [Github issue](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/128).
+
 ### <a id="setMixpanelToken"></a>setMixpanelToken()
 
 This method allows the Branch SDK to pass the user's Mixpanel distinct id to our servers. Branch will then pass that Distinct ID to Mixpanel when logging any event.
