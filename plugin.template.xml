@@ -34,10 +34,10 @@ SOFTWARE.
     <keywords>cordova,branch</keywords>
     <repo>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git</repo>
     <issue>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues</issue>
-    
+
     <dependency
       id="es6-promise-plugin"
-      url="https://github.com/vstirbu/PromisesPlugin.git">
+      version="3.0.2">
     </dependency>
 
     <js-module src="www/branch.js" name="Branch">
