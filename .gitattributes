@@ -1,0 +1,26 @@
+* text=auto
+
+*.css eol=lf
+*.eslintrc eol=lf
+*.gitattributes eol=lf
+*.gitignore eol=lf
+*.gradle eol=lf
+*.h eol=lf
+*.html eol=lf
+*.java eol=lf
+*.js eol=lf
+*.jscsrc eol=lf
+*.json eol=lf
+*.m eol=lf
+*.map eol=lf
+*.md eol=lf
+*.modulemap eol=lf
+*.npmignore eol=lf
+*.pch eol=lf
+*.plist eol=lf
+*.sh eol=lf
+*.xml eol=lf
+*.yml eol=lf
+
+*.jar binary
+*.png binary
