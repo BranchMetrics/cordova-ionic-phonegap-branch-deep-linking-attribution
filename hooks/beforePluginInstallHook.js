@@ -58,8 +58,11 @@ function installRequiredNodeModules(modulesToInstall) {
     return;
   }
 
+  console.log('##### modulesToInstall: ', JSON.stringify(modulesToInstall));
+
   var moduleName = modulesToInstall.shift();
   installNodeModule(moduleName, function (err) {
+    console.log('##### moduleName: ', moduleName, JSON.stringify(err));
     if (err) {
       printLog('Failed to install module ' + moduleName + ':' + err);
       return;
