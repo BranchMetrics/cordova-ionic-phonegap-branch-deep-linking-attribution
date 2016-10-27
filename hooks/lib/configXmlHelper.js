@@ -119,4 +119,3 @@ Helper class to read data from config.xml file.
 
   // endregion
 })();
-//# sourceMappingURL=configXmlHelper.js.map

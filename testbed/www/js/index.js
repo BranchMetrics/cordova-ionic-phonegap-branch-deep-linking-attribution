@@ -47,7 +47,6 @@ var app = {
             document.getElementsByTagName("html")[0].className = 'android';
         }
 
-        SetDebug(true);
         InitSession();
     }
 };
@@ -66,14 +65,6 @@ function NonBranchLinkHandler(data) {
     if (data) {
         alert('Non-branch link found: ' + JSON.stringify(data));
     }
-}
-
-function SetDebug(isEnabled) {
-    console.log('Trigger SetDebug()');
-
-    Branch.setDebug(isEnabled);
-
-    alert('Debug mode enabled');
 }
 
 function InitSession() {
@@ -161,8 +152,8 @@ function CreateBranchUniversalObject() {
 
     var properties = {
         canonicalIdentifier: 'testbed',
-        title: 'Here is some content',
-        contentDescription: 'Here is a content description',
+        title: 'testbed',
+        contentDescription: 'Testbed Application',
         contentImageUrl: 'https://imgflip.com/s/meme/Derp.jpg',
         contentIndexingMode: 'public',
         contentMetadata: {}
@@ -195,11 +186,21 @@ function GenerateShortUrl() {
 
     var properties = {
         feature: 'test',
+        alias: document.getElementById('alias').value,
         channel: 'test',
         stage: 'test',
         duration: 10000
     };
-    var controlParams = { };
+    var controlParams = {
+        $fallback_url: 'www.another.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'test',
+        $ios_url: 'ios',
+        $ipad_url: 'ipad',
+        $fire_url: 'fire',
+        $blackberry_url: 'blackberry',
+        $windows_phone_url: 'win-phone'
+    };
 
     branchUniversalObj.generateShortUrl(properties, controlParams).then(function (res) {
         console.log(res);
@@ -215,10 +216,21 @@ function ShowShareSheet() {
 
     var properties = {
         feature: 'test',
+        alias: document.getElementById('alias').value,
         channel: 'test',
-        stage: 'test'
+        stage: 'test',
+        duration: 10000
     };
-    var controlParams = { };
+    var controlParams = {
+        $fallback_url: 'www.another.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'test',
+        $ios_url: 'ios',
+        $ipad_url: 'ipad',
+        $fire_url: 'fire',
+        $blackberry_url: 'blackberry',
+        $windows_phone_url: 'win-phone'
+    };
 
     console.log(branchUniversalObj);
 
@@ -284,4 +296,3 @@ function CreditHistory() {
         alert('Error: ' + JSON.stringify(err));
     });
 }
-//# sourceMappingURL=index.js.map

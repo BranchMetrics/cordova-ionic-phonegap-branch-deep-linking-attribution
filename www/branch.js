@@ -92,12 +92,11 @@ Branch.prototype.setMixpanelToken = function (token) {
  */
 Branch.prototype.setDebug = function (isEnabled) {
 
-    isEnabled = (typeof isEnabled !== 'boolean') ? false : isEnabled;
+    isEnabled = typeof isEnabled !== 'boolean' ? false : isEnabled;
 
     this.debugMode = isEnabled;
 
     return execute('setDebug', [isEnabled]);
-
 };
 
 /**
@@ -395,4 +394,3 @@ Branch.prototype.creditHistory = function () {
 window.NonBranchLinkHandler = typeof NonBranchLinkHandler === 'undefined' ? function (response) {} : NonBranchLinkHandler;
 
 module.exports = new Branch();
-//# sourceMappingURL=branch.js.map

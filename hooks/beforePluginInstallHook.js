@@ -153,4 +153,3 @@ module.exports = function (ctx) {
 
   createPluginInstalledFlag(ctx);
 };
-//# sourceMappingURL=beforePluginInstallHook.js.map

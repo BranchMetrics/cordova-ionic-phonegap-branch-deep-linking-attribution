@@ -131,4 +131,3 @@ Parser for config.xml file. Read plugin-specific preferences (from <branch-confi
 
   // endregion
 })();
-//# sourceMappingURL=configXmlParser.js.map
