@@ -12,3 +12,4 @@ local.properties
 out/
 src/cordova-ionic-phonegap-branch-deep-linking.iml
 npm-debug.log
+*.map
