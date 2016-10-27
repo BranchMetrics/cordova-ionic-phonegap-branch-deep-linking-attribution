@@ -47,6 +47,8 @@ var app = {
             document.getElementsByTagName("html")[0].className = 'android';
         }
 
+        // Branch
+        SetDebug(true);
         InitSession();
     }
 };
@@ -78,6 +80,13 @@ function InitSession() {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
+}
+
+function SetDebug(isEnabled) {
+    console.log('Trigger SetDebug()');
+
+    Branch.setDebug(isEnabled);
+    alert('Debug mode enabled');
 }
 
 function CustomAction() {

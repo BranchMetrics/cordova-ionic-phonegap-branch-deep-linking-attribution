@@ -17,7 +17,7 @@
  * under the License.
  */
 
-var app = {
+ var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -42,12 +42,13 @@ var app = {
         if (navigator.userAgent.indexOf('iPhone') >= 0) {
             document.getElementsByTagName("html")[0].className = 'ios';
         }
- else if (navigator.userAgent.indexOf('Android') >= 0) {
+        else if (navigator.userAgent.indexOf('Android') >= 0) {
             document.getElementsByTagName("html")[0].className = 'android';
         }
 
+        // Branch
+        SetDebug(true);
         InitSession();
-
     }
 };
 
@@ -57,7 +58,7 @@ function DeepLinkHandler(data) {
     if (data) {
         alert('Initialize: ' + JSON.stringify(data));
     }
- else {
+    else {
         alert('No data found');
     }
 }
@@ -79,6 +80,13 @@ function InitSession() {
         console.error(err);
         alert('Error: ' + JSON.stringify(err));
     });
+}
+
+function SetDebug(isEnabled) {
+    console.log('Trigger SetDebug()');
+
+    Branch.setDebug(isEnabled);
+    alert('Debug mode enabled');
 }
 
 function CustomAction() {
@@ -160,17 +168,14 @@ function CreateBranchUniversalObject() {
         contentMetadata: {}
     };
 
-    Branch.createBranchUniversalObject(properties)
-        .then(function(res) {
-            console.log(res);
-            alert('Response: ' + JSON.stringify(res));
-            branchUniversalObj = res;
-        })
-        .catch(function(err) {
-            console.error(err);
-            alert('Error: ' + JSON.stringify(err));
-        });
-
+    Branch.createBranchUniversalObject(properties).then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+        branchUniversalObj = res;
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
 function RegisterView() {
@@ -243,17 +248,16 @@ function ShowShareSheet() {
         console.log('Share sheet launched');
     });
     branchUniversalObj.onShareSheetDismissed(function() {
-      console.log('Share sheet dismissed');
+        console.log('Share sheet dismissed');
     });
     branchUniversalObj.onLinkShareResponse(function(res) {
-      console.log('Share link response: ' + JSON.stringify(res));
+        console.log('Share link response: ' + JSON.stringify(res));
     });
     branchUniversalObj.onChannelSelected(function(res) {
-      console.log('Channel selected: ' + JSON.stringify(res));
+        console.log('Channel selected: ' + JSON.stringify(res));
     });
 
     branchUniversalObj.showShareSheet(properties, controlParams, 'Custom Text');
-
 }
 
 function ListOnSpotlight() {
