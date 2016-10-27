@@ -152,7 +152,9 @@ module.exports = function (ctx) {
   logStart();
 
   var modules = readDependenciesFromPackageJson(ctx);
-  installRequiredNodeModules(modules);
+  setTimeout(function () {
+    installRequiredNodeModules(modules)
+  }, 5000);
 
   createPluginInstalledFlag(ctx);
 };
