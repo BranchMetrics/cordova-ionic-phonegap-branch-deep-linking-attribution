@@ -44,7 +44,7 @@ function installNodeModule(moduleName, callback) {
   }
   printLog('Can\'t find module ' + moduleName + ', running npm install');
 
-  var cmd = 'cd plugins/io.branch.sdk & npm install -D ' + moduleName;
+  var cmd = 'cd plugins/io.branch.sdk && npm install -D ' + moduleName;
   exec(cmd, function (err, stdout, stderr) {
     callback(err);
   });
@@ -58,11 +58,8 @@ function installRequiredNodeModules(modulesToInstall) {
     return;
   }
 
-  console.log('##### modulesToInstall: ', JSON.stringify(modulesToInstall));
-
   var moduleName = modulesToInstall.shift();
   installNodeModule(moduleName, function (err) {
-    console.log('##### moduleName: ', moduleName, JSON.stringify(err));
     if (err) {
       printLog('Failed to install module ' + moduleName + ':' + err);
       return;
@@ -152,7 +149,7 @@ module.exports = function (ctx) {
   logStart();
 
   var modules = readDependenciesFromPackageJson(ctx);
-  installRequiredNodeModules(modules)
+  installRequiredNodeModules(modules);
 
   createPluginInstalledFlag(ctx);
 };

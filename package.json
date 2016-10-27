@@ -40,7 +40,8 @@
     "node-version-compare": "^1.0.1",
     "plist": "^1.2.0",
     "rimraf": "^2.5.2",
-    "xml2js": "^0.4.16"
+    "xml2js": "^0.4.16",
+    "es6-promise": "^4.0.5"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
