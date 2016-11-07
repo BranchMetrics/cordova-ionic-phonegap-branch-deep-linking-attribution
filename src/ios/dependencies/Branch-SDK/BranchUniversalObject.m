@@ -184,7 +184,7 @@
     UIActivityItemProvider *itemProvider = [self getBranchActivityItemWithLinkProperties:linkProperties];
     NSMutableArray *items = [NSMutableArray arrayWithObject:itemProvider];
     if (shareText) {
-        [items insertObject:shareText atIndex:0];
+        [items insertObject:[shareText valueForKey:@"shareText"] atIndex:0];
     }
     UIActivityViewController *shareViewController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
     
@@ -223,6 +223,13 @@
         }
         @catch (NSException *exception) {
             [_preferenceHelper logWarning:@"Unable to setValue 'emailSubject' forKey 'subject' on UIActivityViewController."];
+        }
+    } else if ([shareText valueForKey:@"shareTitle"] != nil) {
+        @try {
+            [shareViewController setValue:[shareText valueForKey:@"shareTitle"] forKey:@"subject"];
+        }
+        @catch (NSException *exception) {
+            [_preferenceHelper logWarning:@"Unable to setValue 'emailSubject' forKey 'subject' on UIActivityViewController as shareTitle is missing"];
         }
     }
     
