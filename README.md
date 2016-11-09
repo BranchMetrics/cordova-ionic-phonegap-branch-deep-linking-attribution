@@ -29,11 +29,11 @@ There's a full demo app embedded in this repository. It should serve as an examp
 #### Add the plugin
 
 ```sh
-cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=<your-branch-key> --variable URI_SCHEME=<your-app-uri-scheme-without-colon-and-slashes>
 ```
 example:
 ```sh
-cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
+cordova plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=branchsters
 ```
 
 ### Additional App Permissions
