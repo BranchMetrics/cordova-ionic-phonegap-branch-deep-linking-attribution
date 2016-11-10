@@ -60,6 +60,14 @@ var Branch = function() {
 
 };
 
+var disableGlobalListenersWarnings = false;
+
+/**
+ * Don't emit warnings regarding use of global listeners.
+ */
+Branch.prototype.disableGlobalListenersWarnings = function() {
+    disableGlobalListenersWarnings = true;
+};
 /**
  * Initialize the Branch instance.
  *
@@ -70,6 +78,33 @@ Branch.prototype.initSession = function() {
     return execute('initSession');
 
 };
+
+
+var nonBranchLinkListener = null;
+function onNonBranchLinkStub(data) {
+    nonBranchLinkListener(data);
+}
+
+/**
+ * Register listener for non branch links.
+ */
+Branch.prototype.onNonBranchLink = function(newHook) {
+    if(!hook) {
+        throw new Error('non branch link hook is falsy, expected a function, not: "' + hook + '"');
+    }
+
+    var currentHook = window.NonBranchLinkHandler;
+    if(currentHook !== undefined && currentHook !== onNonBranchLinkStub) {
+        if(!disableGlobalListenersWarnings) {
+            console.log('WARNING: you are calling onNonBranchLink when an ' +
+                'existing global NonBranchLinkHandler is defined. The global ' +
+                'NonBranchLinkHandler will be overwritten. See https://goo.gl/GijGKP ' +
+                'for details.');
+        }
+    }
+    nonBranchLinkListener = newHook;
+    window.NonBranchLinkHandler = onNonBranchLinkStub;
+}
 
 /**
  * Get Mixpanel tolen/assisstance.
