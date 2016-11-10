@@ -40,7 +40,7 @@ npm install -g gulp-cli;
 ```sh
 git clone git@github.com:BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git;
 cd cordova-ionic-phonegap-branch-deep-linking;
-rm -rf /node_modules;
+rm -rf node_modules;
 npm install;
 ```
 
