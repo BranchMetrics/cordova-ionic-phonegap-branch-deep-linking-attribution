@@ -117,23 +117,6 @@ If your links are of the form `bnc.lt`, you must still use this domain in your c
 ```
 `READ_FROM_DASHBOARD` is the four-character value in front of all your links. You can find it underneath the field labeled SHA256 Cert Fingerprints on the [dashboard](https://dashboard.branch.io/settings/link). It will look something like this: `/WSuf` (the initial `/` character should be included).
 
----------------
-
-## Non-Branch Links
-There are instances where non-branch links are detected by the plugin but not processed.
-You can retrieve the url by implementing the method `NonBranchLinkHandler()` which will act as our callback to return the non-branch url.
-
-To implement:
-
-```js
-function NonBranchLinkHandler(data) {
-    if (data) {
-        alert('Non-Branch Link Detected: ' + JSON.stringify(data));
-    }
-}
-```
----------------
-
 ## Promises
 
 **Most methods are promisified**, therefore you can easily get its success and error callback by chaining the `.then()` method.
@@ -153,6 +136,7 @@ Branch.getFirstReferringParams().then(function (res) {
 
 1. Branch Session
   + [setDebug](#setDebug)
+  + [onNonBranchLink](#onNonBranchLink)
   + [initSession](#initSession)
   + [setMixpanelToken](#setMixpanelToken)
   + [getLatestReferringParams](#getLatestReferringParams)
@@ -172,6 +156,9 @@ Branch.getFirstReferringParams().then(function (res) {
   + [creditHistory](#creditHistory)
 4. FAQ
   + [Android Build FAQ](#android-build-faq)
+5. Deprecated Methods
+  + [Gobal Event Listeners](#deprecated-event-listeners)
+  + [disableGlobalListenersWarnings](#disableGlobalListenersWarnings)
 
 ### <a id="setDebug"></a>setDebug(isEnable)
 
@@ -187,39 +174,45 @@ Setting the SDK debug flag will generate a new device ID each time the app is in
 Branch.setDebug(true);
 ```
 
-### <a id="initSession"></a>initSession()
-
-Initializes the branch instance. **Note:** `setDebug()` should be called first before calling this method.
+### <a id="onNonBranchLink"></a>onNonBranchLink(hook)
+There are instances where non-branch links are detected by the plugin but not processed.
+You can retrieve the url by calling the method `onNonBranchLink(hook)` which will register
+a callback to receive the non-branch url.
 
 ##### Usage
-The `initSession()` method automatically sets an internal deep link hander whose data can be accesed by implementing the **required** `DeepLinkHandler()` method. To implement this, first call the method `initSession`:
-
 ```js
-onDeviceReady: function() {
-    Branch.initSession();
-},
-onResume: function() {
-    Branch.initSession();
-},
-initialize: function() {
-    document.addEventListener('deviceready', onDeviceReady, false);
-    document.addEventListener('resume', onResume, false);
-},
+branch.onNonBranchLink(function NonBranchLinkHandler(data) {
+    if (data) {
+        alert('Non-Branch Link Detected: ' + JSON.stringify(data));
+    }
+});
 ```
 
-Then you should **EXPLICITLY** define a global method called `DeepLinkHandler()` which will act as our callback when the session beings. The deep link data will be included here:
+### <a id="initSession"></a>initSession(onBranchLinkHook)
+
+Initializes the branch instance. **Note:** `setDebug()` should be called first before calling this method. Takes a listener that will be triggered on opening of a branch link.
+
+##### Usage
 
 ```js
-function DeepLinkHandler(data) {
+function onBranchLinkHook(data) {
     if (data) {
         alert('Data from deep link: ' + JSON.stringify(data));
     } else {
         alert('No data found');
     }
 }
+onDeviceReady: function() {
+    Branch.initSession(onBranchLinkHook);
+},
+onResume: function() {
+    Branch.initSession(onBranchLinkHook);
+},
+initialize: function() {
+    document.addEventListener('deviceready', onDeviceReady, false);
+    document.addEventListener('resume', onResume, false);
+},
 ```
-
-Note, if you are unsure how to set a global function or you are getting a `Reference not defined` error with `DeepLinkHandler`, please review this [Github issue](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/128).
 
 ### <a id="setMixpanelToken"></a>setMixpanelToken()
 
@@ -681,6 +674,29 @@ Go to your `build.gradle` file and find **dependencies** and add the following i
 
 ```
 compile "io.branch.sdk.android:library:2.+"
+```
+
+## Deprecated Methods
+
+### <a id="deprecated-event-listeners"></a>Gobal Event Listeners
+
+Before version XXX branch used globaly defined listeners to pass events generated
+by clicking on links outside your cordova app into it. To make this behavior more
+explicit, we've shifted to event listeners passed to the branch object via the
+[`branch.initSession(onBranchLinkHook)`](#initsession) and 
+[`branch.onNonBranchLink(hook)`](#onNonBranchLink). If you don't want to use these
+new methods and instead prefer the old global hooks without seeing warnings, call
+[`branch.disableGlobalListenersWarning()`][#disableGlobalListenersWarnings].
+
+### <a id="disableGlobalListenersWarnings"></a>disableGlobalListenersWarnings
+
+This method turns off warnings about using global listeners instead of hooks passed
+to methods. It also disables warnings about overwriting global listeners with hooks
+passed to methods.
+
+##### Usage
+```js
+branch.disableGlobalListenersWarnings();
 ```
 
 ## Bugs / Help / Support
