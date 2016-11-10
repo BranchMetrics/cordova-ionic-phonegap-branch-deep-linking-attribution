@@ -57,4 +57,3 @@ Small helper class to read/write from/to xml file.
     return isSaved;
   }
 })();
-//# sourceMappingURL=xmlHelper.js.map

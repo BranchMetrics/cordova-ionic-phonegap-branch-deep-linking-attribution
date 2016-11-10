@@ -101,7 +101,6 @@ function babelize(taskName, dir) {
       .pipe(babel({
         presets: [ 'es2015', 'stage-2' ]
       }))
-      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(destDir));
   });
 }

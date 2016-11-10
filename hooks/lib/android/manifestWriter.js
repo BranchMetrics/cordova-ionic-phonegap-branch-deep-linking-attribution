@@ -297,4 +297,3 @@ Class injects plugin preferences into AndroidManifest.xml file.
 
   // endregion
 })();
-//# sourceMappingURL=manifestWriter.js.map

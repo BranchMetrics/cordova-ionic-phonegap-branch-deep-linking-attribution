@@ -78,4 +78,3 @@ function getOldProjectName(projectDir) {
 }
 
 // endregion
-//# sourceMappingURL=iosBeforePrepareHook.js.map
