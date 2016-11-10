@@ -25,9 +25,15 @@ var app = {
     // Bind Event Listeners
     bindEvents: function() {
         document.addEventListener("deviceready", this.onDeviceReady, false);
+        document.addEventListener("resume", this.onDeviceResume, false);
     },
     // Event Handlers
     onDeviceReady: function() {
+        // Branch
+        SetDebug(true);
+        InitSession();
+    },
+    onDeviceResume: function() {
         // Branch
         SetDebug(true);
         InitSession();
@@ -37,15 +43,16 @@ var app = {
 app.initialize();
 
 function DeepLinkHandler(data) {
+    console.log("DeepLinkHandler InitSession()");
+
     if (data) {
-        alert("Initialize: " + JSON.stringify(data));
-    }
-    else {
-        alert("No data found");
+        alert("Data Link handler response: " + JSON.stringify(data));
     }
 }
 
 function NonBranchLinkHandler(data) {
+    console.log("Trigger NonBranchLinkHandler()");
+
     if (data) {
         alert("Non-branch link found: " + JSON.stringify(data));
     }
@@ -113,7 +120,6 @@ function SetIdentity() {
     console.log("Trigger SetIdentity()");
 
     var newIdentity = document.getElementById("identity").value;
-
     Branch.setIdentity(newIdentity).then(function(res) {
         console.log(res);
         alert("Response: " + JSON.stringify(res));
@@ -200,6 +206,7 @@ function GenerateShortUrl() {
     }
     branchUniversalObj.generateShortUrl(properties, controlParams).then(function(res) {
         console.log(res);
+        document.getElementById("generated-url").placeholder = "";
         document.getElementById("generated-url").value = res.url;
     }).catch(function(err) {
         console.error(err);
@@ -253,7 +260,7 @@ function ShowShareSheet() {
 function ListOnSpotlight() {
     console.log("Trigger ListOnSpotlight()");
 
-        if (branchUniversalObj === null) {
+    if (branchUniversalObj === null) {
         return alert("need to Generate Branch Universal Object");
     }
     branchUniversalObj.listOnSpotlight().then(function(res) {

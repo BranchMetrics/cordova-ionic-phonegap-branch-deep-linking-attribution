@@ -1,11 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<!-- widget id = bundle identifier (should match https://dashboard.branch.io/settings/link) -->
-<widget id="io.branch.cordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>branch.io</name>
-    <description>Cordova testbed for branch.io</description>
+<widget id="com.eneff.branch.cordova_testbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Branch Testing</name>
+    <description>Cordova Testing App for Branch</description>
     <author email="support@branch.io" href="http://support.branch.io">Branch Support</author>
     <content src="index.html" />
-    <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -21,11 +19,15 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <!-- branch.io values (should match https://dashboard.branch.io/settings/link) -->
-    <preference name="AndroidLaunchMode" value="singleTask" />
+    <!-- <preference name="AndroidLaunchMode" value="singleTask" /> -->
     <branch-config>
-        <ios-team-id value="4XE8MVRXHY" />
-        <host name="2j13.app.link" scheme="https" />
-        <host name="2j13-alternate.app.link" scheme="https" />
+        <ios-team-id value="PW4Q8885U7" />
+        <host name="cordova.app.link" scheme="https" />
+        <host name="cordova-alternate.app.link" scheme="https" />
     </branch-config>
+<!--     <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="io.branch.sdk" spec="..">
+        <variable name="BRANCH_KEY" value="key_live_ijsatik0UBZLTzTnpOZ9Vpngwuni25T0" />
+        <variable name="URI_SCHEME" value="branchcordovatestbed" />
+    </plugin> -->
 </widget>

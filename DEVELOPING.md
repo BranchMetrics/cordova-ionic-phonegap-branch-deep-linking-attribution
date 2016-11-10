@@ -72,17 +72,18 @@ npm install -g cordova;
 cordova platform remove ios;
 cordova platform remove android;
 cordova platform remove browser;
+cordova plugin remove io.branch.sdk;
+cordova plugin add ../ --variable BRANCH_KEY=key_live_boqiApp0Hv8VKuPnhH71Nmekrxcd80JY --variable URI_SCHEME=branchcordovatestbed;
 cordova platform add ios;
 cordova platform add android;
-cordova plugin remove io.branch.sdk;
-cordova plugin add ../ --variable BRANCH_KEY=key_live_ijsatik0UBZLTzTnpOZ9Vpngwuni25T0 --variable URI_SCHEME=branchcordovatestbed;
 ```
   
 > Validate all features on both `iOS` and `Android`
 
 ```sh
-cordova plugin run ios;
-cordova plugin run android;
+cordova build ios;
+open -a Xcode platforms/ios/Branch\ Testing.xcodeproj;
+cordova run android;
 ```
 
 > Test harnesses `TODO`
