@@ -80,20 +80,20 @@ function onBranchLinkStub(data) {
  * @return (Promise)
  */
 Branch.prototype.initSession = function(onBranchLinkHook) {
-    if(!onBranchLinkHook && !disableGlobalListenersWarnings) {
+    if (!onBranchLinkHook && !disableGlobalListenersWarnings) {
         console.log('WARNING: branch link hook is not being passed to initSession. ' +
             'Falling back to global DeepLinkHandler method. See https://goo.gl/GijGKP for details.');
     } else {
         var currentHook = window.DeepLinkHandler;
-        if(currentHook !== undefined && currentHook !== onBranchLinkStub) {
-            if(!disableGlobalListenersWarnings) {
+        if (currentHook !== undefined && currentHook !== onBranchLinkStub) {
+            if (!disableGlobalListenersWarnings) {
                 console.log('WARNING: you are calling initSession with a branch link hook when an ' +
                     'existing global DeepLinkHandler is defined. The global ' +
                     'DeepLinkHandler will be overwritten. See https://goo.gl/GijGKP ' +
                     'for details.');
             }
         }
-        if(onBranchLinkHook) {
+        if (onBranchLinkHook) {
             branchLinkListener = onBranchLinkHook;
             window.DeepLinkHandler = onBranchLinkStub;
         }
@@ -112,13 +112,13 @@ function onNonBranchLinkStub(data) {
  * Register listener for non branch links.
  */
 Branch.prototype.onNonBranchLink = function(newHook) {
-    if(!hook) {
+    if (!hook) {
         throw new Error('non branch link hook is falsy, expected a function, not: "' + hook + '"');
     }
 
     var currentHook = window.NonBranchLinkHandler;
-    if(currentHook !== undefined && currentHook !== onNonBranchLinkStub) {
-        if(!disableGlobalListenersWarnings) {
+    if (currentHook !== undefined && currentHook !== onNonBranchLinkStub) {
+        if (!disableGlobalListenersWarnings) {
             console.log('WARNING: you are calling onNonBranchLink when an ' +
                 'existing global NonBranchLinkHandler is defined. The global ' +
                 'NonBranchLinkHandler will be overwritten. See https://goo.gl/GijGKP ' +
