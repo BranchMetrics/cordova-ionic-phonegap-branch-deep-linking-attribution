@@ -83,7 +83,8 @@ Branch.prototype.initSession = function(onBranchLinkHook) {
     if (!onBranchLinkHook && !disableGlobalListenersWarnings) {
         console.log('WARNING: branch link hook is not being passed to initSession. ' +
             'Falling back to global DeepLinkHandler method. See https://goo.gl/GijGKP for details.');
-    } else {
+    }
+    else {
         var currentHook = window.DeepLinkHandler;
         if (currentHook !== undefined && currentHook !== onBranchLinkStub) {
             if (!disableGlobalListenersWarnings) {
