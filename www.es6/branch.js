@@ -68,15 +68,38 @@ var disableGlobalListenersWarnings = false;
 Branch.prototype.disableGlobalListenersWarnings = function() {
     disableGlobalListenersWarnings = true;
 };
+
+var branchLinkListener = null;
+function onBranchLinkStub(data) {
+    branchLinkListener(data);
+}
+
 /**
  * Initialize the Branch instance.
- *
+ * @param (Function) onBranchLinkHook. listener to trigger on deep links.
  * @return (Promise)
  */
-Branch.prototype.initSession = function() {
+Branch.prototype.initSession = function(onBranchLinkHook) {
+    if(!onBranchLinkHook && !disableGlobalListenersWarnings) {
+        console.log('WARNING: branch link hook is not being passed to initSession. ' +
+            'Falling back to global DeepLinkHandler method. See https://goo.gl/GijGKP for details.');
+    } else {
+        var currentHook = window.DeepLinkHandler;
+        if(currentHook !== undefined && currentHook !== onBranchLinkStub) {
+            if(!disableGlobalListenersWarnings) {
+                console.log('WARNING: you are calling initSession with a branch link hook when an ' +
+                    'existing global DeepLinkHandler is defined. The global ' +
+                    'DeepLinkHandler will be overwritten. See https://goo.gl/GijGKP ' +
+                    'for details.');
+            }
+        }
+        if(onBranchLinkHook) {
+            branchLinkListener = onBranchLinkHook;
+            window.DeepLinkHandler = onBranchLinkStub;
+        }
+    }
 
     return execute('initSession');
-
 };
 
 
