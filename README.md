@@ -683,7 +683,7 @@ compile "io.branch.sdk.android:library:2.+"
 Before version XXX branch used globaly defined listeners to pass events generated
 by clicking on links outside your cordova app into it. To make this behavior more
 explicit, we've shifted to event listeners passed to the branch object via the
-[`branch.initSession(onBranchLinkHook)`](#initsession) and 
+[`branch.initSession(onBranchLinkHook)`](#initSession) and 
 [`branch.onNonBranchLink(hook)`](#onNonBranchLink). If you don't want to use these
 new methods and instead prefer the old global hooks without seeing warnings, call
 [`branch.disableGlobalListenersWarning()`][#disableGlobalListenersWarnings].
