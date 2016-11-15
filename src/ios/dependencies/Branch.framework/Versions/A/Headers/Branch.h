@@ -407,6 +407,19 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
 - (void)registerFacebookDeepLinkingClass:(id)FBSDKAppLinkUtility;
 
 /**
+ Check for Apple Search Ads before initialization. Will add about 1 second from call to initSession to callback due to Apple's latency.
+ */
+- (void)delayInitToCheckForSearchAds;
+
+/**
+ Set the SDK into Apple Search Ad debug mode where it passes fake campaign params back 100%
+ 
+ @warning This should not be used in production.
+ */
+- (void)setAppleSearchAdsDebugMode;
+
+
+/**
  Specify the time to wait in seconds between retries in the case of a Branch server error
  
  @param retryInterval Number of seconds to wait between retries.
@@ -428,9 +441,8 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
 - (void)setNetworkTimeout:(NSTimeInterval)timeout;
 
 /**
- Specify that Branch should use an invisible SFSafariViewController to attempt cookie-based matching. Enabled by default.
- 
- @warning Please import SafariServices in order for this to work.
+ Specify that Branch should NOT use an invisible SFSafariViewController to attempt cookie-based matching upon install.
+ If you call this method, we will fall back to using our pool of cookie-IDFA pairs for matching.
  */
 - (void)disableCookieBasedMatching;
 
@@ -469,6 +481,7 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
 - (void)resumeInit;
 
 - (void)setInstallRequestDelay:(NSInteger)installRequestDelay;
+
 
 #pragma mark - Session Item methods
 

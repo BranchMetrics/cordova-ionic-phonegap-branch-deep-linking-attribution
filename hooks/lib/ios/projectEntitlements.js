@@ -175,4 +175,3 @@ Script only generates content. File it self is included in the xcode project in 
 
   // endregion
 })();
-//# sourceMappingURL=projectEntitlements.js.map
