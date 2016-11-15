@@ -1,22 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.branch.testbed"
-        version="0.0.1"
-        xmlns="http://www.w3.org/ns/widgets"
-        xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Branch.IO Testbed</name>
-    <description>
-        Testbed application for Branch.IO Cordova.
-    </description>
-    
-    <content src="index.html" />
-    
-    <!-- Replace <content> with this, if you want to run the unit-test -->
-    <!-- <content src="cdvtests/index.html" /> -->
+<widget id="com.eneff.branch.example" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
 
+    <!-- Branch -->
+    <branch-config>
+      <ios-team-id value="PW4Q8885U7"/>
+      <host name="eneff.app.link" scheme="https" />
+      <host name="eneff-alternate.app.link" scheme="https" />
+    </branch-config>
+
+    <name>Branch Testing</name>
+    <description>Testing App For Branch Cordova</description>
+    <author email="support@branch.io" href="https://support.branch.io/support/tickets/new">Branch Support</author>
+
+    <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
-    <preference name="AndroidLaunchMode" value="singleTask" />
     <access origin="*" />
-    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -25,15 +23,9 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <preference name="android-minSdkVersion" value="15" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <branch-config>
-        <ios-team-id value="4XE8MVRXHY" />
-        <host name="2j13.app.link" scheme="https" />
-        <host name="2j13-alternate.app.link" scheme="https" />
-    </branch-config>
 </widget>

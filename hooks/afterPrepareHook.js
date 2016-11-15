@@ -80,4 +80,3 @@ function activateUniversalLinksInIos(cordovaContext, pluginPreferences) {
   // generate entitlements file
   iosProjectEntitlements.generateAssociatedDomainsEntitlements(cordovaContext, pluginPreferences);
 }
-//# sourceMappingURL=afterPrepareHook.js.map

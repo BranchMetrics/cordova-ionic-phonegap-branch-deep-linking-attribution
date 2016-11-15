@@ -6,6 +6,7 @@ var eslint     = require('gulp-eslint');
 var jscs       = require('gulp-jscs');
 
 gulp.task('prerelease', [ 'setupNpm', 'babel', 'lint' ]);
+gulp.task('predev', [ 'setupDev', 'babel', 'lint' ]);
 
 // -----------------------------------------------------------------------------
 // setup for development use
@@ -101,7 +102,6 @@ function babelize(taskName, dir) {
       .pipe(babel({
         presets: [ 'es2015', 'stage-2' ]
       }))
-      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(destDir));
   });
 }
@@ -142,7 +142,6 @@ function jscsTask(fix) {
     .pipe(jscs({ fix: fix }))
     .pipe(jscs.reporter())
     .pipe(jscs.reporter('fail'));
-
   if (fix) {
     ret.pipe(gulp.dest('.'));
   }
