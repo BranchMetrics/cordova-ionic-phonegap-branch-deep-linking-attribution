@@ -6,6 +6,7 @@ var eslint     = require('gulp-eslint');
 var jscs       = require('gulp-jscs');
 
 gulp.task('prerelease', [ 'setupNpm', 'babel', 'lint' ]);
+gulp.task('predev', [ 'setupDev', 'babel', 'lint' ]);
 
 // -----------------------------------------------------------------------------
 // setup for development use
