@@ -464,11 +464,12 @@ public class BranchSDK extends CordovaPlugin {
         }
 
         if (options.has("tags")) {
-            ArrayList<String> tags = (ArrayList<String>) options.get("tags");
-
-            for (String tag : tags) {
-                linkProperties.addTag(tag);
-            }
+            JSONArray array = (JSONArray) options.get("tags");
+            if (array != null) {
+                for (int i=0;i<array.length();i++){
+                    linkProperties.addTag(array.get(i).toString());
+                }
+           }
         }
 
         if (controlParams.has("$fallback_url")) {
@@ -541,9 +542,9 @@ public class BranchSDK extends CordovaPlugin {
     {
 
         this.activity = this.cordova.getActivity();
-        
+
         Branch debugInstance = Branch.getAutoInstance(this.activity.getApplicationContext());
- 
+
         if (isEnable) {
             debugInstance.setDebug();
         }
