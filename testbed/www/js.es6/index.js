@@ -1,6 +1,4 @@
-/////////////////////////////
 // app
-/////////////////////////////
 var app = {
   initialize: function() {
     this.bindEvents();
@@ -19,9 +17,8 @@ var app = {
 app.initialize();
 
 
-/////////////////////////////
+
 // branch
-/////////////////////////////
 function DeepLinkHandler(data) {
   console.log('Trigger DeepLinkHandler()');
 
@@ -177,7 +174,7 @@ function BranchDeepLink() {
     feature: "feature",
     campaign: "campaign",
     stage: "stage",
-    tags: ["one","two","three"],
+    tags: [ "one", "two", "three" ],
     alias: document.getElementById('alias').value
   };
 
@@ -218,7 +215,7 @@ function BranchShareSheet() {
     feature: "feature",
     campaign: "campaign",
     stage: "stage",
-    tags: ["one","two","three"]
+    tags: [ "one", "two", "three" ]
   };
 
   // optional fields

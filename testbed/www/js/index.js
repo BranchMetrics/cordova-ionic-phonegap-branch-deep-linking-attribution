@@ -1,27 +1,24 @@
-/////////////////////////////
+'use strict';
+
 // app
-/////////////////////////////
 var app = {
-  initialize: function() {
+  initialize: function initialize() {
     this.bindEvents();
   },
-  bindEvents: function() {
+  bindEvents: function bindEvents() {
     document.addEventListener('deviceready', this.onDeviceReady, false);
     document.addEventListener('resume', this.onDeviceResume, false);
   },
-  onDeviceReady: function() {
+  onDeviceReady: function onDeviceReady() {
     BranchInit(true);
   },
-  onDeviceResume: function() {
+  onDeviceResume: function onDeviceResume() {
     BranchInit(true);
   }
 };
 app.initialize();
 
-
-/////////////////////////////
 // branch
-/////////////////////////////
 function DeepLinkHandler(data) {
   console.log('Trigger DeepLinkHandler()');
 
@@ -48,9 +45,9 @@ function BranchInit(isDebug) {
   // sync with mixpanel if installed
   Branch.setMixpanelToken('your_mixpanel_token');
   // init
-  Branch.initSession().then(function(res) {
+  Branch.initSession().then(function (res) {
     console.log(res);
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
   });
 }
@@ -63,10 +60,10 @@ function BranchEvent() {
 
   // optional
   var metadata = { "custom_dictionary": 123 };
-  Branch.userCompletedAction(event, metadata).then(function(res) {
+  Branch.userCompletedAction(event, metadata).then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -75,10 +72,10 @@ function BranchEvent() {
 function BranchFirstData() {
   console.log('Trigger BranchFirstData()');
 
-  Branch.getFirstReferringParams().then(function(res) {
+  Branch.getFirstReferringParams().then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -87,10 +84,10 @@ function BranchFirstData() {
 function BranchLatestData() {
   console.log('Trigger BranchLatestData()');
 
-  Branch.getLatestReferringParams().then(function(res) {
+  Branch.getLatestReferringParams().then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -100,10 +97,10 @@ function BranchUser() {
   console.log('Trigger BranchUser()');
 
   var userId = document.getElementById('identity').value;
-  Branch.setIdentity(userId).then(function(res) {
+  Branch.setIdentity(userId).then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -112,10 +109,10 @@ function BranchUser() {
 function BranchLogout() {
   console.log('Trigger BranchLogout()');
 
-  Branch.logout().then(function(res) {
+  Branch.logout().then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -143,11 +140,11 @@ function BranchUniversalObject() {
   };
 
   // create a branchUniversalObj variable to reference with other Branch methods
-  Branch.createBranchUniversalObject(properties).then(function(res) {
+  Branch.createBranchUniversalObject(properties).then(function (res) {
     console.log(res);
     branchUniversalObj = res;
     alert("Response: " + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.log(err);
     alert("Error: " + JSON.stringify(err));
   });
@@ -159,10 +156,10 @@ function BranchView() {
   if (branchUniversalObj === null) {
     return alert('need to Generate Branch Universal Object');
   }
-  branchUniversalObj.registerView().then(function(res) {
+  branchUniversalObj.registerView().then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -177,7 +174,7 @@ function BranchDeepLink() {
     feature: "feature",
     campaign: "campaign",
     stage: "stage",
-    tags: ["one","two","three"],
+    tags: ["one", "two", "three"],
     alias: document.getElementById('alias').value
   };
 
@@ -198,12 +195,12 @@ function BranchDeepLink() {
     return alert('need to Generate Branch Universal Object');
   }
 
-  branchUniversalObj.generateShortUrl(analytics, properties).then(function(res) {
+  branchUniversalObj.generateShortUrl(analytics, properties).then(function (res) {
     console.log(res);
     document.getElementById('generated-url').placeholder = '';
     document.getElementById('generated-url').value = res.url;
     alert(JSON.stringify(res.url));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert(JSON.stringify(err));
   });
@@ -218,7 +215,7 @@ function BranchShareSheet() {
     feature: "feature",
     campaign: "campaign",
     stage: "stage",
-    tags: ["one","two","three"]
+    tags: ["one", "two", "three"]
   };
 
   // optional fields
@@ -241,20 +238,20 @@ function BranchShareSheet() {
   }
 
   // optional listeners (must be called before showShareSheet)
-  branchUniversalObj.onShareSheetLaunched(function(res) {
+  branchUniversalObj.onShareSheetLaunched(function (res) {
     // android only
     console.log(res);
     alert(JSON.stringify(res));
   });
-  branchUniversalObj.onShareSheetDismissed(function(res) {
+  branchUniversalObj.onShareSheetDismissed(function (res) {
     console.log(res);
     alert(JSON.stringify(res));
   });
-  branchUniversalObj.onLinkShareResponse(function(res) {
+  branchUniversalObj.onLinkShareResponse(function (res) {
     console.log(res);
     alert(JSON.stringify(res));
   });
-  branchUniversalObj.onChannelSelected(function(res) {
+  branchUniversalObj.onChannelSelected(function (res) {
     // android only
     console.log(res);
     alert(JSON.stringify(res));
@@ -270,10 +267,10 @@ function BranchSpotlight() {
   if (branchUniversalObj === null) {
     return alert('need to Generate Branch Universal Object');
   }
-  branchUniversalObj.listOnSpotlight().then(function(res) {
+  branchUniversalObj.listOnSpotlight().then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -282,10 +279,10 @@ function BranchSpotlight() {
 function BranchReferralsLoad() {
   console.log('Trigger BranchReferralsLoad()');
 
-  Branch.loadRewards().then(function(res) {
+  Branch.loadRewards().then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -295,10 +292,10 @@ function BranchReferralsRedeem() {
   console.log('Trigger BranchReferralsRedeem()');
 
   var reward = 1000;
-  Branch.redeemRewards(reward).then(function(res) {
+  Branch.redeemRewards(reward).then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
@@ -307,11 +304,12 @@ function BranchReferralsRedeem() {
 function BranchReferralsHistory() {
   console.log('Trigger BranchReferralsHistory()');
 
-  Branch.creditHistory().then(function(res) {
+  Branch.creditHistory().then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
 }
+//# sourceMappingURL=index.js.map
