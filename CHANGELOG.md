@@ -2,6 +2,16 @@
 All notable changes to the Branch Web SDK will be documented here.
 The Branch Web SDK adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.3.2] - 2016-11-15
+- Fixed .map console error [image](https://cloud.githubusercontent.com/assets/2933593/19788120/7ba0a9e6-9c5b-11e6-90b1-ae669102fcea.png)
+- Fixed missing dependencies within npm [#226](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/226)
+- Fixed Branch tags on Android [image](https://cloud.githubusercontent.com/assets/2933593/20316177/aaddf6e6-ab15-11e6-94f4-a0f3b4ad8dc6.png)
+- Fixed setDebug() in the testbed app
+- Removed node modules and map files from repo
+- Updated the testbed app appearance
+- Updated iOS SDK to 0.12.16
+- Updated docs on how to contribute to the SDK
+
 ## [v2.2.2] - 2016-09-15
 - Updated iOS library to v 0.12.11
 - Added back support for setDebug

@@ -53,7 +53,7 @@ npm install;
 > Build
 
 ```sh
-gulp prerelease;
+gulp predev;
 ```
   
 > **[optional]** Update [iOS SDK](https://github.com/BranchMetrics/ios-branch-deep-linking/tags) (will need to update `plugin.xml` dependencies if new iOS files)
@@ -109,5 +109,8 @@ git push origin BRANCH_NAME;
 ```
 
 ### Publish
-  
-> Code to NPM will happen automatically whenever pull request is merged into master
+
+> Update `CHANGELOG.md`
+> Update version within plugin.template.xml
+> Run `gulp prerelease`
+> Merge Pull Request - code to NPM will happen automatically 
