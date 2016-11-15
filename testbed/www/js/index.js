@@ -312,4 +312,3 @@ function BranchReferralsHistory() {
     alert('Error: ' + JSON.stringify(err));
   });
 }
-//# sourceMappingURL=index.js.map

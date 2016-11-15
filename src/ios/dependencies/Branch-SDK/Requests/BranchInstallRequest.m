@@ -11,6 +11,8 @@
 #import "BNCSystemObserver.h"
 #import "BranchConstants.h"
 #import "BNCStrongMatchHelper.h"
+#import "BNCEncodingUtils.h"
+
 
 @implementation BranchInstallRequest
 
@@ -32,12 +34,23 @@
     [self safeSetValue:preferenceHelper.linkClickIdentifier forKey:BRANCH_REQUEST_KEY_LINK_IDENTIFIER onDict:params];
     [self safeSetValue:preferenceHelper.spotlightIdentifier forKey:BRANCH_REQUEST_KEY_SPOTLIGHT_IDENTIFIER onDict:params];
     [self safeSetValue:preferenceHelper.universalLinkUrl forKey:BRANCH_REQUEST_KEY_UNIVERSAL_LINK_URL onDict:params];
-    
+
     params[BRANCH_REQUEST_KEY_DEBUG] = @(preferenceHelper.isDebug);
-    
+
+    if (preferenceHelper.appleSearchAdDetails) {
+        NSString *encodedSearchData = nil;
+        @try {
+            NSData *jsonData = [BNCEncodingUtils encodeDictionaryToJsonData:preferenceHelper.appleSearchAdDetails];
+            encodedSearchData = [BNCEncodingUtils base64EncodeData:jsonData];
+        } @catch (id e) { }
+        [self safeSetValue:encodedSearchData
+                    forKey:BRANCH_REQUEST_KEY_SEARCH_AD
+                    onDict:params];
+    }
+
     if ([[BNCStrongMatchHelper strongMatchHelper] shouldDelayInstallRequest]) {
         NSInteger delay = 750;
-        if (preferenceHelper.installRequestDelay) {
+        if (preferenceHelper.installRequestDelay > 0) {
             delay = preferenceHelper.installRequestDelay;
         }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{

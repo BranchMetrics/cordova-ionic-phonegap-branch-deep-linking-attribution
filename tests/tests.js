@@ -206,4 +206,3 @@ exports.defineAutoTests = function () {
 		}, 10000);
 	});
 };
-//# sourceMappingURL=tests.js.map

@@ -394,4 +394,3 @@ Branch.prototype.creditHistory = function () {
 window.NonBranchLinkHandler = typeof NonBranchLinkHandler === 'undefined' ? function (response) {} : NonBranchLinkHandler;
 
 module.exports = new Branch();
-//# sourceMappingURL=branch.js.map
