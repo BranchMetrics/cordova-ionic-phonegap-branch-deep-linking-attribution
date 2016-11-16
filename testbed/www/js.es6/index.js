@@ -16,25 +16,31 @@ var app = {
 };
 app.initialize();
 
-
-
-// branch
-function DeepLinkHandler(data) {
-  console.log('Trigger DeepLinkHandler()');
-
-  if (data) {
-    console.log(data);
-    alert('Data Link handler response: ' + JSON.stringify(data));
-  }
+function onBranchLinkHook(data) {
+    if (data) {
+        alert('Initialize: ' + JSON.stringify(data));
+    }
+ else {
+        alert('No data found');
+    }
 }
 
-function NonBranchLinkHandler(data) {
-  console.log('Trigger NonBranchLinkHandler()');
+function InitSession() {
+    console.log('Trigger InitSession()');
 
-  if (data) {
-    console.log(data);
-    alert('Non-branch link found: ' + JSON.stringify(data));
-  }
+    Branch.setMixpanelToken('<your-mixpanel-token-here>');
+    Branch.initSession(onBranchLinkHook).then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+    Branch.onNonBranchLink(function NonBranchLinkHandler(data) {
+        if (data) {
+            alert('Non-branch link found: ' + JSON.stringify(data));
+        }
+    });
 }
 
 function BranchInit(isDebug) {
