@@ -118,7 +118,7 @@ Branch.prototype.onNonBranchLink = function(newHook) {
     }
 
     var currentHook = window.NonBranchLinkHandler;
-    if (currentHook !== undefined && currentHook !== onNonBranchLinkStub) {
+    if (currentHook !== undefined && currentHook !== onNonBranchLinkStub && currentHook !== defaultNonBranchLinkHandler) {
         if (!disableGlobalListenersWarnings) {
             console.log('WARNING: you are calling onNonBranchLink when an ' +
                 'existing global NonBranchLinkHandler is defined. The global ' +
@@ -473,6 +473,7 @@ Branch.prototype.creditHistory = function() {
  *
  * @param {String} response
  */
-window.NonBranchLinkHandler = (typeof NonBranchLinkHandler === 'undefined') ? function(response) {} : NonBranchLinkHandler;
+var defaultNonBranchLinkHandler = function(response) {};
+window.NonBranchLinkHandler = (typeof NonBranchLinkHandler === 'undefined') ? defaultNonBranchLinkHandler : NonBranchLinkHandler;
 
 module.exports = new Branch;
