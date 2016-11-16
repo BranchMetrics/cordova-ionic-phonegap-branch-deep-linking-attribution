@@ -3,6 +3,7 @@
 // app
 var app = {
   initialize: function initialize() {
+    alert("Launched the simulator now for Safari debug");
     this.bindEvents();
   },
   bindEvents: function bindEvents() {
