@@ -1,26 +1,64 @@
-// app
-var app = {
-  initialize: function() {
-    this.bindEvents();
-  },
-  bindEvents: function() {
-    document.addEventListener('deviceready', this.onDeviceReady, false);
-    document.addEventListener('resume', this.onDeviceResume, false);
-  },
-  onDeviceReady: function() {
-    BranchInit(true);
-  },
-  onDeviceResume: function() {
-    BranchInit(true);
-  }
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+ var app = {
+    // Application Constructor
+    initialize: function() {
+        alert("hello");
+        this.bindEvents();
+    },
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
+    bindEvents: function() {
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicitly call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+        app.receivedEvent('app');
+    },
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+
+        if (navigator.userAgent.indexOf('iPhone') >= 0) {
+            document.getElementsByTagName("html")[0].className = 'ios';
+        }
+        else if (navigator.userAgent.indexOf('Android') >= 0) {
+            document.getElementsByTagName("html")[0].className = 'android';
+        }
+
+        InitSession();
+
+    }
 };
+
 app.initialize();
 
 function onBranchLinkHook(data) {
     if (data) {
         alert('Initialize: ' + JSON.stringify(data));
     }
- else {
+    else {
         alert('No data found');
     }
 }
@@ -43,278 +81,223 @@ function InitSession() {
     });
 }
 
-function BranchInit(isDebug) {
-  console.log('Trigger BranchInit()');
+function CustomAction() {
+    console.log('Trigger CustomAction()');
 
-  // for development and debugging only
-  Branch.setDebug(isDebug);
-  // sync with mixpanel if installed
-  Branch.setMixpanelToken('your_mixpanel_token');
-  // init
-  Branch.initSession().then(function(res) {
-    console.log(res);
-  }).catch(function(err) {
-    console.error(err);
-  });
+    var action = document.getElementById('custom-action').value;
+
+    Branch.userCompletedAction(action).then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
-function BranchEvent() {
-  console.log('Trigger BranchEvent()');
+function GetLatestReferringParams() {
+    console.log('Trigger GetLatestReferringParams()');
 
-  // event name
-  var event = document.getElementById('custom-action').value;
-
-  // optional
-  var metadata = { "custom_dictionary": 123 };
-  Branch.userCompletedAction(event, metadata).then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+    Branch.getLatestReferringParams().then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
-function BranchFirstData() {
-  console.log('Trigger BranchFirstData()');
+function GetFirstReferringParams() {
+    console.log('Trigger GetFirstReferringParams()');
 
-  Branch.getFirstReferringParams().then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+    Branch.getFirstReferringParams().then(function(res) {
+        alert('Response: ' + JSON.stringify(res));
+        console.log(res);
+    }).catch(function(err) {
+        alert('Error: ' + JSON.stringify(err));
+        console.error(err);
+    });
 }
 
-function BranchLatestData() {
-  console.log('Trigger BranchLatestData()');
+function SetIdentity() {
+    console.log('Trigger SetIdentity()');
 
-  Branch.getLatestReferringParams().then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+    var newIdentity = document.getElementById('identity').value;
+
+    Branch.setIdentity(newIdentity).then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
-function BranchUser() {
-  console.log('Trigger BranchUser()');
+function Logout() {
+    console.log('Trigger Logout()');
 
-  var userId = document.getElementById('identity').value;
-  Branch.setIdentity(userId).then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
-}
-
-function BranchLogout() {
-  console.log('Trigger BranchLogout()');
-
-  Branch.logout().then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+    Branch.logout().then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
 var branchUniversalObj = null;
-function BranchUniversalObject() {
-  console.log('Trigger BranchUniversalObject()');
 
-  // only canonicalIdentifier is required
-  var properties = {
-    canonicalIdentifier: "123",
-    canonicalUrl: "http://example.com/123",
-    title: "Content 123",
-    contentDescription: "Content 123 " + Date.now(),
-    contentImageUrl: "http://lorempixel.com/400/400",
-    price: 12.12,
-    currency: "GBD",
-    contentIndexingMode: "private",
-    contentMetadata: {
-      "custom": "data",
-      "testing": 123,
-      "this_is": true
-    }
-  };
+function CreateBranchUniversalObject() {
 
-  // create a branchUniversalObj variable to reference with other Branch methods
-  Branch.createBranchUniversalObject(properties).then(function(res) {
-    console.log(res);
-    branchUniversalObj = res;
-    alert("Response: " + JSON.stringify(res));
-  }).catch(function(err) {
-    console.log(err);
-    alert("Error: " + JSON.stringify(err));
-  });
+    console.log('Trigger CreateBranchUniversalObject()');
+
+    var properties = {
+        canonicalIdentifier: 'testbed',
+        title: 'testbed',
+        contentDescription: 'Testbed Application',
+        contentImageUrl: 'https://imgflip.com/s/meme/Derp.jpg',
+        contentIndexingMode: 'public',
+        contentMetadata: {}
+    };
+
+    Branch.createBranchUniversalObject(properties)
+    .then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+        branchUniversalObj = res;
+    })
+    .catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
+
 }
 
-function BranchView() {
-  console.log('Trigger BranchView()');
+function RegisterView() {
+    console.log('Trigger RegisterView()');
 
-  if (branchUniversalObj === null) {
-    return alert('need to Generate Branch Universal Object');
-  }
-  branchUniversalObj.registerView().then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+    branchUniversalObj.registerView().then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });;
 }
 
-function BranchDeepLink() {
-  console.log('Trigger BranchDeepLink()');
+function GenerateShortUrl() {
+    console.log('Trigger GenerateShortUrl()');
 
-  // optional fields
-  var analytics = {
-    channel: "channel",
-    feature: "feature",
-    campaign: "campaign",
-    stage: "stage",
-    tags: [ "one", "two", "three" ],
-    alias: document.getElementById('alias').value
-  };
+    var properties = {
+        feature: 'test',
+        alias: document.getElementById('alias').value,
+        channel: 'test',
+        stage: 'test',
+        duration: 10000
+    };
+    var controlParams = {
+        $fallback_url: 'www.another.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'test',
+        $ios_url: 'ios',
+        $ipad_url: 'ipad',
+        $fire_url: 'fire',
+        $blackberry_url: 'blackberry',
+        $windows_phone_url: 'win-phone'
+    };
 
-  // optional fields
-  var properties = {
-    $fallback_url: "www.example.com",
-    $desktop_url: "www.desktop.com",
-    $android_url: "www.android.com",
-    $ios_url: "www.ios.com",
-    $ipad_url: "www.ipad.com",
-    more_custom: "data",
-    even_more_custom: true,
-    this_is_custom: 41231
-  };
-
-  // needs a universal object
-  if (branchUniversalObj === null) {
-    return alert('need to Generate Branch Universal Object');
-  }
-
-  branchUniversalObj.generateShortUrl(analytics, properties).then(function(res) {
-    console.log(res);
-    document.getElementById('generated-url').placeholder = '';
-    document.getElementById('generated-url').value = res.url;
-    alert(JSON.stringify(res.url));
-  }).catch(function(err) {
-    console.error(err);
-    alert(JSON.stringify(err));
-  });
+    branchUniversalObj.generateShortUrl(properties, controlParams).then(function(res) {
+        console.log(res);
+        document.getElementById('generated-url').value = res.url;
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
-function BranchShareSheet() {
-  console.log('Trigger BranchShareSheet()');
+function ShowShareSheet() {
+    console.log('Trigger ShowShareSheet()');
 
-  // optional fields
-  var analytics = {
-    channel: "channel",
-    feature: "feature",
-    campaign: "campaign",
-    stage: "stage",
-    tags: [ "one", "two", "three" ]
-  };
+    var properties = {
+        feature: 'test',
+        alias: document.getElementById('alias').value,
+        channel: 'test',
+        stage: 'test',
+        duration: 10000
+    };
+    var controlParams = {
+        $fallback_url: 'www.another.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'test',
+        $ios_url: 'ios',
+        $ipad_url: 'ipad',
+        $fire_url: 'fire',
+        $blackberry_url: 'blackberry',
+        $windows_phone_url: 'win-phone'
+    };
 
-  // optional fields
-  var properties = {
-    $fallback_url: "www.example.com",
-    $desktop_url: "www.desktop.com",
-    $android_url: "www.android.com",
-    $ios_url: "www.ios.com",
-    $ipad_url: "www.ipad.com",
-    more_custom: "data",
-    even_more_custom: true,
-    this_is_custom: 41231
-  };
+    console.log(branchUniversalObj);
 
-  var message = "Check out this link";
-
-  // needs a universal object
-  if (branchUniversalObj === null) {
-    return alert('need to Generate Branch Universal Object');
-  }
-
-  // optional listeners (must be called before showShareSheet)
-  branchUniversalObj.onShareSheetLaunched(function(res) {
-    // android only
-    console.log(res);
-    alert(JSON.stringify(res));
+    // Set listeners
+    branchUniversalObj.onShareSheetLaunched(function() {
+        console.log('Share sheet launched');
+    });
+    branchUniversalObj.onShareSheetDismissed(function() {
+      console.log('Share sheet dismissed');
   });
-  branchUniversalObj.onShareSheetDismissed(function(res) {
-    console.log(res);
-    alert(JSON.stringify(res));
+    branchUniversalObj.onLinkShareResponse(function(res) {
+      console.log('Share link response: ' + JSON.stringify(res));
   });
-  branchUniversalObj.onLinkShareResponse(function(res) {
-    console.log(res);
-    alert(JSON.stringify(res));
-  });
-  branchUniversalObj.onChannelSelected(function(res) {
-    // android only
-    console.log(res);
-    alert(JSON.stringify(res));
+    branchUniversalObj.onChannelSelected(function(res) {
+      console.log('Channel selected: ' + JSON.stringify(res));
   });
 
-  // share sheet
-  branchUniversalObj.showShareSheet(analytics, properties, message);
+    branchUniversalObj.showShareSheet(properties, controlParams, 'Custom Text');
+
 }
 
-function BranchSpotlight() {
-  console.log('Trigger ListOnSpotlight()');
-
-  if (branchUniversalObj === null) {
-    return alert('need to Generate Branch Universal Object');
-  }
-  branchUniversalObj.listOnSpotlight().then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+function ListOnSpotlight() {
+    console.log('Trigger ListOnSpotlight()');
+    branchUniversalObj.listOnSpotlight().then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
-function BranchReferralsLoad() {
-  console.log('Trigger BranchReferralsLoad()');
-
-  Branch.loadRewards().then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+function LoadRewards() {
+    console.log('Trigger LoadRewards()');
+    Branch.loadRewards().then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
-function BranchReferralsRedeem() {
-  console.log('Trigger BranchReferralsRedeem()');
+function RedeemRewards() {
+    console.log('Trigger RedeemRewards()');
+    var reward = 1000;
 
-  var reward = 1000;
-  Branch.redeemRewards(reward).then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+    Branch.redeemRewards(reward).then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
 
-function BranchReferralsHistory() {
-  console.log('Trigger BranchReferralsHistory()');
-
-  Branch.creditHistory().then(function(res) {
-    console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
-    console.error(err);
-    alert('Error: ' + JSON.stringify(err));
-  });
+function CreditHistory() {
+    console.log('Trigger CreditHistory()');
+    Branch.creditHistory().then(function(res) {
+        console.log(res);
+        alert('Response: ' + JSON.stringify(res));
+    }).catch(function(err) {
+        console.error(err);
+        alert('Error: ' + JSON.stringify(err));
+    });
 }
