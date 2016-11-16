@@ -113,8 +113,8 @@ function onNonBranchLinkStub(data) {
  * Register listener for non branch links.
  */
 Branch.prototype.onNonBranchLink = function(newHook) {
-    if (!hook) {
-        throw new Error('non branch link hook is falsy, expected a function, not: "' + hook + '"');
+    if (!newHook) {
+        throw new Error('non branch link hook is falsy, expected a function, not: "' + newHook + '"');
     }
 
     var currentHook = window.NonBranchLinkHandler;
