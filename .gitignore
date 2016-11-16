@@ -2,9 +2,6 @@
 testbed/platforms
 testbed/plugins
 testbed/hooks
-t1/platforms
-t1/plugins
-t1/hooks
 node_modules
 .installed
 .gradle/
