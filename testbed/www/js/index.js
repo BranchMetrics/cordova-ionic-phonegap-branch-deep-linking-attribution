@@ -3,6 +3,7 @@
 // app
 var app = {
   initialize: function initialize() {
+    alert("Launched the simulator now for Safari debug");
     this.bindEvents();
   },
   bindEvents: function bindEvents() {
@@ -19,21 +20,12 @@ var app = {
 app.initialize();
 
 // branch
-function DeepLinkHandler(data) {
-  console.log('Trigger DeepLinkHandler()');
-
+function onBranchLinkHook(data) {
   if (data) {
-    console.log(data);
-    alert('Data Link handler response: ' + JSON.stringify(data));
+    alert('Initialize: ' + JSON.stringify(data));
   }
-}
-
-function NonBranchLinkHandler(data) {
-  console.log('Trigger NonBranchLinkHandler()');
-
-  if (data) {
-    console.log(data);
-    alert('Non-branch link found: ' + JSON.stringify(data));
+  else {
+    alert('No data found');
   }
 }
 
@@ -45,10 +37,17 @@ function BranchInit(isDebug) {
   // sync with mixpanel if installed
   Branch.setMixpanelToken('your_mixpanel_token');
   // init
-  Branch.initSession().then(function (res) {
+  Branch.initSession(onBranchLinkHook).then(function(res) {
     console.log(res);
-  }).catch(function (err) {
+    alert('Response: ' + JSON.stringify(res));
+  }).catch(function(err) {
     console.error(err);
+    alert('Error: ' + JSON.stringify(err));
+  });
+  Branch.onNonBranchLink(function NonBranchLinkHandler(data) {
+    if (data) {
+      alert('Non-branch link found: ' + JSON.stringify(data));
+    }
   });
 }
 
