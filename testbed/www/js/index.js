@@ -1,52 +1,53 @@
 'use strict';
 
 // app
+
 var app = {
   initialize: function initialize() {
-    alert("Launched the simulator now for Safari debug");
     this.bindEvents();
   },
   bindEvents: function bindEvents() {
     document.addEventListener('deviceready', this.onDeviceReady, false);
-    document.addEventListener('resume', this.onDeviceResume, false);
   },
   onDeviceReady: function onDeviceReady() {
-    BranchInit(true);
-  },
-  onDeviceResume: function onDeviceResume() {
     BranchInit(true);
   }
 };
 app.initialize();
 
 // branch
-function onBranchLinkHook(data) {
-  if (data) {
-    alert('Initialize: ' + JSON.stringify(data));
-  }
-  else {
-    alert('No data found');
-  }
-}
 
 function BranchInit(isDebug) {
   console.log('Trigger BranchInit()');
 
   // for development and debugging only
   Branch.setDebug(isDebug);
+
   // sync with mixpanel if installed
   Branch.setMixpanelToken('your_mixpanel_token');
+
   // init
-  Branch.initSession(onBranchLinkHook).then(function(res) {
+  Branch.initSession(BranchLinkData).then(function (res) {
     console.log(res);
-    alert('Response: ' + JSON.stringify(res));
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
-    alert('Error: ' + JSON.stringify(err));
   });
-  Branch.onNonBranchLink(function NonBranchLinkHandler(data) {
+
+  // handler for deep link data
+  function BranchLinkData(data) {
+    console.log('Trigger BranchLinkData()');
+
     if (data) {
-      alert('Non-branch link found: ' + JSON.stringify(data));
+      alert(JSON.stringify(data));
+    }
+  }
+
+  // optional
+  Branch.onNonBranchLink(function NonBranchLinkHandler(data) {
+    console.log('Trigger NonBranchLinkData()');
+
+    if (data) {
+      alert(JSON.stringify(data));
     }
   });
 }
@@ -127,7 +128,7 @@ function BranchUniversalObject() {
     canonicalUrl: "http://example.com/123",
     title: "Content 123",
     contentDescription: "Content 123 " + Date.now(),
-    contentImageUrl: "http://lorempixel.com/400/400",
+    contentImageUrl: "http://lorempixel.com/400/400/",
     price: 12.12,
     currency: "GBD",
     contentIndexingMode: "private",

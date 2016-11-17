@@ -53,7 +53,7 @@ npm install;
 > Build
 
 ```sh
-gulp predev;
+gulp prerelease;
 ```
   
 > **[optional]** Update [iOS SDK](https://github.com/BranchMetrics/ios-branch-deep-linking/tags) (will need to update `plugin.xml` dependencies if new iOS files)
