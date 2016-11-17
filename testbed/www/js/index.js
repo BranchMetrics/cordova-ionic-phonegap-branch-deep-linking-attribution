@@ -8,26 +8,14 @@ var app = {
   },
   bindEvents: function bindEvents() {
     document.addEventListener('deviceready', this.onDeviceReady, false);
-    document.addEventListener('resume', this.onDeviceResume, false);
   },
   onDeviceReady: function onDeviceReady() {
     BranchInit(true);
   },
-  onDeviceResume: function onDeviceResume() {
-    BranchInit(true);
-  }
 };
 app.initialize();
 
 // branch
-function onBranchLinkHook(data) {
-  if (data) {
-    alert('Initialize: ' + JSON.stringify(data));
-  }
-  else {
-    alert('No data found');
-  }
-}
 
 function BranchInit(isDebug) {
   console.log('Trigger BranchInit()');
@@ -44,9 +32,17 @@ function BranchInit(isDebug) {
     console.error(err);
     alert('Error: ' + JSON.stringify(err));
   });
+
+  // handler for deep link data
+  function onBranchLinkHook(data) {
+    if (data) {
+      alert(JSON.stringify(data));
+    }
+  }
+  // optional
   Branch.onNonBranchLink(function NonBranchLinkHandler(data) {
     if (data) {
-      alert('Non-branch link found: ' + JSON.stringify(data));
+      alert(JSON.stringify(data));
     }
   });
 }
