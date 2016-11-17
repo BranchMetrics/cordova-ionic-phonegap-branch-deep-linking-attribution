@@ -1,3 +1,13 @@
+<h1 align="center">
+  <a href="https://branch.io"><img src="http://i.imgur.com/Y5EPQTo.png" alt="Branch for Cordova/PhoneGap/Ionic" width="600"></a>
+</h1>
+<p align="center">
+  <a href="https://travis-ci.org/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking"><img src="https://img.shields.io/travis/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/master.svg" alt="Travis"></a>
+  <a href="https://www.npmjs.com/package/branch-cordova-sdk"><img src="https://img.shields.io/npm/dm/branch-cordova-sdk.svg" alt="npm downloads"></a>
+  <a href="https://www.npmjs.com/package/branch-cordova-sdk"><img src="https://img.shields.io/npm/v/branch-cordova-sdk.svg" alt="npm version"></a>
+</p>
+
+
 # Branch for Cordova/PhoneGap/Ionic
 *Questions? [Contact us](https://support.branch.io/support/tickets/new)*
 
