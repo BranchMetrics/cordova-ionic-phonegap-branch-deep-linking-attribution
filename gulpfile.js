@@ -38,7 +38,20 @@ function genNpmPluginXML() {
 
   fs.writeFileSync('plugin.xml', xml);
 };
+// first match only!
+var PLUGIN_XML_VERSION_REGEX = /^\s*version=\"[\d\.]*\"\>$/m;
+gulp.task('update-plugin-xml-version', () => {
+  var versionNumber = require('./package.json').version;
+  // this will break if plugin.xml is not formatted exactly as we expect
+  // so you might end up needing to fix the regex
+  for (target of [ '.xml', '.template.xml' ]) {
+    var pluginXML = fs.readFileSync('plugin' + target, 'utf8');
+    var newVersionXML = `        version="${versionNumber}">`;
+    pluginXML = pluginXML.replace(PLUGIN_XML_VERSION_REGEX, newVersionXML);
+    fs.writeFileSync('plugin' + target, pluginXML);
+  }
 
+});
 // generate plugin.xml for local development
 // here we reference the frameworks instead of all the files directly
 function getDevPluginXML() {

@@ -32,7 +32,7 @@
   "license": "MIT",
   "scripts": {
     "prerelease": "gulp prerelease",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "semantic-release pre && gulp update-plugin-xml-version && npm publish && semantic-release post",
     "commit": "git-cz"
   },
   "dependencies": {
