@@ -1113,4 +1113,10 @@
 
 # Additional Documentation
 
+- [Branch Dashboard](https://dashboard.branch.io/settings/link)
+
 - [Branch Docs](https://dev.branch.io/)
+
+- [Change Log](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/CHANGELOG.md)
+
+- [Contributing to the SDK](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/DEVELOPING.md)
