@@ -76,6 +76,7 @@ cordova platform remove browser;
 
 cordova plugin remove io.branch.sdk;
 cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
+# cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
 
 cordova platform add ios;
 cordova platform add android;
