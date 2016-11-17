@@ -1,6 +1,7 @@
 'use strict';
 
 // app
+
 var app = {
   initialize: function initialize() {
     this.bindEvents();
@@ -10,11 +11,12 @@ var app = {
   },
   onDeviceReady: function onDeviceReady() {
     BranchInit(true);
-  },
+  }
 };
 app.initialize();
 
 // branch
+
 function BranchInit(isDebug) {
   console.log('Trigger BranchInit()');
 
@@ -25,9 +27,9 @@ function BranchInit(isDebug) {
   Branch.setMixpanelToken('your_mixpanel_token');
 
   // init
-  Branch.initSession(BranchLinkData).then(function(res) {
+  Branch.initSession(BranchLinkData).then(function (res) {
     console.log(res);
-  }).catch(function(err) {
+  }).catch(function (err) {
     console.error(err);
   });
 

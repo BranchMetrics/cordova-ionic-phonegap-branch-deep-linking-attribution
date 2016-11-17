@@ -154,12 +154,11 @@ Branch.prototype.setMixpanelToken = function(token) {
  */
 Branch.prototype.setDebug = function(isEnabled) {
 
-    isEnabled = (typeof isEnabled !== 'boolean') ? false : isEnabled;
+    isEnabled = typeof isEnabled !== 'boolean' ? false : isEnabled;
 
     this.debugMode = isEnabled;
 
     return execute('setDebug', [ isEnabled ]);
-
 };
 
 /**
@@ -476,4 +475,4 @@ Branch.prototype.creditHistory = function() {
 var defaultNonBranchLinkHandler = function(response) {};
 window.NonBranchLinkHandler = (typeof NonBranchLinkHandler === 'undefined') ? defaultNonBranchLinkHandler : NonBranchLinkHandler;
 
-module.exports = new Branch;
+module.exports = new Branch();
