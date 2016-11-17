@@ -5,7 +5,7 @@ var babel = require('gulp-babel');
 var eslint = require('gulp-eslint');
 var jscs = require('gulp-jscs');
 
-gulp.task('prerelease', ['setupNpm', 'babel', 'lint']);
+gulp.task('prerelease', [ 'setupNpm', 'babel', 'lint' ]);
 
 // -----------------------------------------------------------------------------
 // setup for development use
@@ -52,9 +52,11 @@ function getDevPluginXML() {
 function setIosNpmOrDev(npmOrDev) {
   if (npmOrDev === 'npm') {
     content = '#define BRANCH_NPM true';
-  } else if (npmOrDev === 'dev') {
+  }
+  else if (npmOrDev === 'dev') {
     content = '//empty';
-  } else {
+  }
+  else {
     throw new Error('expected deployed|local, not ' + deployedOrLocal);
   }
   fs.writeFileSync('src/ios/BranchNPM.h', content + '\n');
@@ -67,7 +69,8 @@ function emitFiles(path) {
     var fileType = null;
     if (filename.match(/\.m$/)) {
       fileType = 'source';
-    } else if (filename.match(/\.h$/) || filename.match(/\.pch$/)) {
+    }
+    else if (filename.match(/\.h$/) || filename.match(/\.pch$/)) {
       fileType = 'header';
     }
     if (fileType) {
@@ -92,11 +95,11 @@ function babelize(taskName, dir) {
   gulp.task(taskName + '-copy', () => {
     return gulp.src(srcDir + '**/*.*').pipe(gulp.dest(destDir));
   });
-  gulp.task(taskName + '-babel', [taskName + '-copy'], () => {
+  gulp.task(taskName + '-babel', [ taskName + '-copy' ], () => {
     return gulp.src(srcPattern)
     .pipe(sourcemaps.init())
     .pipe(babel({
-      presets: ['es2015', 'stage-2']
+      presets: [ 'es2015', 'stage-2' ]
     }))
     .pipe(gulp.dest(destDir));
   });
@@ -111,7 +114,7 @@ gulp.task('babel', babelTasks);
 // -----------------------------------------------------------------------------
 // linting
 
-gulp.task('lint', ['eslint', 'jscs-lint']);
+gulp.task('lint', [ 'eslint', 'jscs-lint' ]);
 
 var srcs = [
 'hooks.es6/**/*.js',
