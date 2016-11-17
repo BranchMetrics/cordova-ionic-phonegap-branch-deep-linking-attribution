@@ -15,31 +15,35 @@ var app = {
 app.initialize();
 
 // branch
-
 function BranchInit(isDebug) {
   console.log('Trigger BranchInit()');
 
   // for development and debugging only
   Branch.setDebug(isDebug);
+
   // sync with mixpanel if installed
   Branch.setMixpanelToken('your_mixpanel_token');
+
   // init
-  Branch.initSession(onBranchLinkHook).then(function(res) {
+  Branch.initSession(BranchLinkData).then(function(res) {
     console.log(res);
-    alert('Response: ' + JSON.stringify(res));
   }).catch(function(err) {
     console.error(err);
-    alert('Error: ' + JSON.stringify(err));
   });
 
   // handler for deep link data
-  function onBranchLinkHook(data) {
+  function BranchLinkData(data) {
+    console.log('Trigger BranchLinkData()');
+
     if (data) {
       alert(JSON.stringify(data));
     }
   }
+
   // optional
   Branch.onNonBranchLink(function NonBranchLinkHandler(data) {
+    console.log('Trigger NonBranchLinkData()');
+
     if (data) {
       alert(JSON.stringify(data));
     }
@@ -122,7 +126,7 @@ function BranchUniversalObject() {
     canonicalUrl: "http://example.com/123",
     title: "Content 123",
     contentDescription: "Content 123 " + Date.now(),
-    contentImageUrl: "http://lorempixel.com/400/400",
+    contentImageUrl: "http://lorempixel.com/400/400/",
     price: 12.12,
     currency: "GBD",
     contentIndexingMode: "private",
