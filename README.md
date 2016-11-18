@@ -207,7 +207,7 @@
 
 - #### Test Deep Link iOS
 
-  - Wait 30 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  - Wait 15 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
