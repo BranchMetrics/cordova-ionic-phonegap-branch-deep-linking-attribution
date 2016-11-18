@@ -261,7 +261,7 @@
     Branch.initSession().then(function(res) {
       console.log(res);
     }).catch(function(err) {
-      console.error(err);
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -451,7 +451,7 @@
         $ipad_url: 'www.ipad.com',
         more_custom: 'data',
         even_more_custom: true,
-        this_is_custom: 41231
+        this_is_custom: 321
     };
 
     branchUniversalObj.generateShortUrl(analytics, properties).then(function(res) {
@@ -601,11 +601,11 @@
 
   - <details><summary>Example (set)</summary>
     ```js
-    var userId = "email_or_id";
+    var userId = 'email_or_id';
     Branch.setIdentity(userId).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -677,6 +677,7 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
+
     ```js
     var amount = 10;
     Branch.redeemRewards(amount).then(function(res) {
@@ -696,6 +697,7 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
+
     ```js
     Branch.loadRewards().then(function(res) {
       alert('Response: ' + JSON.stringify(res));
