@@ -3,14 +3,28 @@
 // app
 
 var app = {
-  initialize: function initialize() {
+  initialize: function() {
     this.bindEvents();
   },
-  bindEvents: function bindEvents() {
+  bindEvents: function() {
     document.addEventListener('deviceready', this.onDeviceReady, false);
+    document.addEventListener('resume', this.onDeviceReady, false);
   },
-  onDeviceReady: function onDeviceReady() {
-    BranchInit(true);
+  onDeviceReady: function() {
+    app.branchInit();
+  },
+  onDeviceResume: function() {
+    app.branchInit();
+  },
+  branchInit: function() {
+    // Branch debug
+    Branch.setDebug(true);
+
+    // Branch initialization
+    Branch.initSession(function(data) {
+      // read deep link data on click
+      alert('Deep Link Data: ' + JSON.stringify(data));
+    });
   }
 };
 app.initialize();

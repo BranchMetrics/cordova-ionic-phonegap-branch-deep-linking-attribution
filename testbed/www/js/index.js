@@ -8,9 +8,23 @@ var app = {
   },
   bindEvents: function bindEvents() {
     document.addEventListener('deviceready', this.onDeviceReady, false);
+    document.addEventListener('resume', this.onDeviceReady, false);
   },
   onDeviceReady: function onDeviceReady() {
-    BranchInit(true);
+    app.branchInit();
+  },
+  onDeviceResume: function onDeviceResume() {
+    app.branchInit();
+  },
+  branchInit: function branchInit() {
+    // Branch debug
+    Branch.setDebug(true);
+
+    // Branch initialization
+    Branch.initSession(function (data) {
+      // read deep link data on click
+      alert('Deep Link Data: ' + JSON.stringify(data));
+    });
   }
 };
 app.initialize();
