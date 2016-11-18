@@ -16,7 +16,6 @@
   - [Install Branch](#install-branch)
   - [Configure App](#configure-app)
   - [Initialize Branch](#initialize-branch)
-  - [Listen Deep Link](#listen-deep-link)
   - [Test Deep Link iOS](#test-deep-link-ios)
   - [Test Deep Link Android](#test-deep-link-android)
 - [Features](#features)
@@ -102,29 +101,29 @@
 
   - <details><summary>Cordova and PhoneGap</summary>  
     ```js
-    // sample index.js
     var app = {
       initialize: function() {
         this.bindEvents();
       },
-
       bindEvents: function() {
-        document.addEventListener("deviceready", this.onDeviceReady, false);
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('resume', this.onDeviceReady, false);
       },
       onDeviceReady: function() {
-        BranchInit(true);
+        app.branchInit();
       },
-
-      function BranchInit(isDebug) {
-        Branch.setDebug(isDebug); // for development and debugging only
-        Branch.initSession().then(function(res) {
-          console.log(res);
-        }).catch(function(err) {
-          console.error(err);
+      onDeviceResume: function() {
+        app.branchInit();
+      },
+      branchInit: function() {
+        // Branch initialization
+        Branch.initSession(function(data) {
+          // read deep link data on click
+          alert('Deep Link Data: ' + JSON.stringify(data));
         });
       }
     };
-    
+
     app.initialize();
     ```
     </details>
@@ -132,76 +131,59 @@
   - <details><summary>Ionic 1</summary>
     ```js
     // sample app.js
+    angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+
     .run(function($ionicPlatform) {
       $ionicPlatform.ready(function() {
-
-        $ionicPlatform.on("deviceready", function(){
-          BranchInit(true);
-        });
-
-        function BranchInit(isDebug) {
-          Branch.setDebug(isDebug); // for development and debugging only
-          Branch.initSession().then(function(res) {
-            console.log(res);
-          }).catch(function(err) {
-            console.error(err);
-          });
+        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+          cordova.plugins.Keyboard.disableScroll(true);
         }
+        if (window.StatusBar) {
+          StatusBar.styleDefault();
+        }
+
+        // Branch initialization
+        Branch.initSession(function(data) {
+          // read deep link data on click
+          alert('Deep Link Data: ' + JSON.stringify(data));
+        });
       });
     })
+    // ...
     ```
     </details>
 
   - <details><summary>Ionic 2</summary>
     ```typescript
     // sample app.component.js
+    import { Component } from '@angular/core';
+    import { Platform } from 'ionic-angular';
+    import { StatusBar, Splashscreen } from 'ionic-native';
+    import { TabsPage } from '../pages/tabs/tabs';
+
+    // Branch import
     declare var Branch;
 
     @Component({
-      // ...
+      template: `<ion-nav [root]="rootPage"></ion-nav>`
     })
-
     export class MyApp {
+      rootPage = TabsPage;
+
       constructor(platform: Platform) {
         platform.ready().then(() => {
+          StatusBar.styleDefault();
+          Splashscreen.hide();
 
-          // Branch
-          Branch.setDebug(isDebug); // for development and debugging only
-          Branch.initSession().then(function(res) {
-            console.log(res);
-          }).catch(function(err) {
-            console.error(err);
+          // Branch initialization
+          Branch.initSession(function(data) {
+            // read deep link data on click
+            alert('Deep Link Data: ' + JSON.stringify(data));
           });
         });
       }
     }
-    ```
-    </details>
-
-- #### Listen Deep Link
-
-  - `DeepLinkHandler` must be a global function and does not have to be in `index.html`
-
-  - <details><summary>Cordova and PhoneGap and Ionic</summary>
-    ```html
-    <!-- sample index.html -->
-        <script>
-          // required
-          function DeepLinkHandler(data) {
-            if (data) {
-              alert("Data Link handler response: " + JSON.stringify(data));
-            }
-          }
-
-          // optional
-          function NonBranchLinkHandler(data) {
-            if (data) {
-              alert("Non-Branch Link Detected: " + JSON.stringify(data));
-            }
-          }
-        </script>
-      </body>
-    </html>
     ```
     </details>
 
@@ -252,14 +234,17 @@
   - <details><summary>Example</summary>
     ```js
     // for development and debugging only
-    Branch.setDebug(isDebug);
+    Branch.setDebug(true);
 
     // sync with Mixpanel if installed
     Branch.setMixpanelToken('your_mixpanel_token');
 
-    // init Branch
-    Branch.initSession().then(function(res) {
-      console.log(res);
+    // Branch initialization
+    Branch.initSession(function(data) {
+      // read deep link data on click
+      alert('Deep Link Data: ' + JSON.stringify(data)); 
+    }).then(function(res) {
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
       alert('Error: ' + JSON.stringify(err));
     });
@@ -520,26 +505,38 @@
 
   - Retrieve Branch data from a deep link
 
-  - Best practice to receive data from `DeepLinkHandler` listener
+  - Best practice to receive data from the `listener`
 
   - <details><summary>Example (listener)</summary>
-    > must be global functions
-
     ```js
-    // required
-    function DeepLinkHandler(data) {
-      if (data) {
-        // window.location = "#/tab/chats/3"; // navigate to page based on data
-        alert("Data Link handler response: " + JSON.stringify(data));
-      }
-    }
+    // Branch initialization within your deviceReady
+    Branch.initSession(function(deepLinkData) {
+      // handler for deep link data on click
+      alert(JSON.stringify(deepLinkData));
+    });
+    ```
+    </details>
 
-    // optional
-    function NonBranchLinkHandler(data) {
-      if (data) {
-        alert("Non-branch link found: " + JSON.stringify(data));
-      }
-    }
+  - <details><summary>Example (listener) *[depreciated]*</summary>
+    ```html
+    <!-- sample index.html -->
+        <script>
+          // required
+          function DeepLinkHandler(data) {
+            if (data) {
+              alert('Data Link Data Response: ' + JSON.stringify(data));
+            }
+          }
+
+          // optional
+          function NonBranchLinkHandler(data) {
+            if (data) {
+              alert('Non-Branch Link Detected: ' + JSON.stringify(data));
+            }
+          }
+        </script>
+      </body>
+    </html>
     ```
     </details>
 
