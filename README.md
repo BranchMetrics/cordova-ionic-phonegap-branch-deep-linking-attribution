@@ -60,7 +60,7 @@
 
 - #### Install Branch
 
-  - Change `key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq`, and `branchcordova` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  - Change `key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq` and `branchcordova` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
   - <details><summary>Cordova and PhoneGap and Ionic</summary>
     ```sh
@@ -289,18 +289,18 @@
     ```js
     // only canonicalIdentifier is required
     var properties = {
-        canonicalIdentifier: "123",
-        canonicalUrl: "http://example.com/123",
-        title: "Content 123",
-        contentDescription: "Content 123 " + Date.now(),
-        contentImageUrl: "http://lorempixel.com/400/400",
+        canonicalIdentifier: '123',
+        canonicalUrl: 'http://example.com/123',
+        title: 'Content 123',
+        contentDescription: 'Content 123 ' + Date.now(),
+        contentImageUrl: 'http://lorempixel.com/400/400/',
         price: 12.12,
-        currency: "GBD",
-        contentIndexingMode: "private",
+        currency: 'GBD',
+        contentIndexingMode: 'private',
         contentMetadata: {
-            "custom": "data",
-            "testing": 123,
-            "this_is": true
+            'custom': 'data',
+            'testing': 123,
+            'this_is': true
         }
     };
 
@@ -308,9 +308,9 @@
     var branchUniversalObj = null;
     Branch.createBranchUniversalObject(properties).then(function(res) {
         branchUniversalObj = res;
-        alert("Response: " + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-        alert("Error: " + JSON.stringify(err));
+        alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -435,29 +435,29 @@
     ```js
     // optional fields
     var analytics = {
-        channel: "channel",
-        feature: "feature",
-        campaign: "campaign",
-        stage: "stage",
-        tags: ["one","two","three"]
+        channel: 'channel',
+        feature: 'feature',
+        campaign: 'campaign',
+        stage: 'stage',
+        tags: ['one', 'two', 'three']
     };
 
     // optional fields
     var properties = {
-        $fallback_url: "www.example.com",
-        $desktop_url: "www.desktop.com",
-        $android_url: "www.android.com",
-        $ios_url: "www.ios.com",
-        $ipad_url: "www.ipad.com",
-        more_custom: "data",
+        $fallback_url: 'www.example.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'www.android.com',
+        $ios_url: 'www.ios.com',
+        $ipad_url: 'www.ipad.com',
+        more_custom: 'data',
         even_more_custom: true,
         this_is_custom: 41231
     };
 
     branchUniversalObj.generateShortUrl(analytics, properties).then(function(res) {
-        alert(JSON.stringify(res.url));
+        alert('Response: ' + JSON.stringify(res.url));
     }).catch(function(err) {
-        alert(JSON.stringify(err));
+        alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -474,23 +474,23 @@
     ```js
     // optional fields
     var analytics = {
-        channel: "channel",
-        feature: "feature",
-        campaign: "campaign",
-        stage: "stage",
-        tags: ["one","two","three"]
+        channel: 'channel',
+        feature: 'feature',
+        campaign: 'campaign',
+        stage: 'stage',
+        tags: ['one', 'two', 'three']
     };
 
     // optional fields
     var properties = {
-        $fallback_url: "www.example.com",
-        $desktop_url: "www.desktop.com",
-        $android_url: "www.android.com",
-        $ios_url: "www.ios.com",
-        $ipad_url: "www.ipad.com",
-        more_custom: "data",
+        $fallback_url: 'www.example.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'www.android.com',
+        $ios_url: 'www.ios.com',
+        $ipad_url: 'www.ipad.com',
+        more_custom: 'data',
         even_more_custom: true,
-        this_is_custom: 41231
+        this_is_custom: 321
     };
 
     var message = "Check out this link";
@@ -498,17 +498,17 @@
     // optional listeners (must be called before showShareSheet)
     branchUniversalObj.onShareSheetLaunched(function(res) {
       // android only
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     });
     branchUniversalObj.onShareSheetDismissed(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     });
     branchUniversalObj.onLinkShareResponse(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     });
     branchUniversalObj.onChannelSelected(function(res) {
       // android only
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     });
 
     // share sheet
@@ -546,9 +546,9 @@
   - <details><summary>Example (first data)</summary>
     ```js
     Branch.getFirstReferringParams().then(function(res) {
-      alert("Response: " + JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert("Error: " + JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -556,9 +556,9 @@
   - <details><summary>Example (latest data)</summary>
     ```js
     Branch.getLatestReferringParams().then(function(res) {
-      alert("Response: " + JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert("Error: " + JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -572,9 +572,9 @@
   - <details><summary>Example</summary>
     ```js
     branchUniversalObj.listOnSpotlight().then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -588,9 +588,9 @@
   - <details><summary>Example</summary>
     ```js
     branchUniversalObj.registerView().then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -615,7 +615,7 @@
     Branch.logout().then(function(res) {
       alert(JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -628,20 +628,20 @@
 
   - <details><summary>Example</summary>
     ```js
-    var eventName = "clicked_on_this";
-    var metaData = { "custom_dictionary": 123 }; // optional
+    var eventName = 'clicked_on_this';
+    var metaData = { custom_dictionary: 123 }; // optional
     Branch.userCompletedAction(eventName, metaData).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     ```js
     var eventName = "clicked_on_this";
     Branch.userCompletedAction(eventName).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -670,37 +670,37 @@
   - <details><summary>Example (spend credits)</summary>
     ```js
     var amount = 10;
-    var bucket = "this_bucket"; // optional
+    var bucket = 'this_bucket'; // optional
     Branch.redeemRewards(amount, bucket).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     ```js
     var amount = 10;
     Branch.redeemRewards(amount).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
 
   - <details><summary>Example (load credits)</summary>
     ```js
-    var bucket = "this_bucket"; // optional
+    var bucket = 'this_bucket'; // optional
     Branch.loadRewards(bucket).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     ```js
     Branch.loadRewards().then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -708,9 +708,9 @@
   - <details><summary>Example (load history)</summary>
     ```js
     Branch.creditHistory().then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -748,9 +748,9 @@
     ```
 
     - **Update config.xml**
-    ```js
+    ```xml
     <!-- values should be from your Branch Dashboard https://dashboard.branch.io/settings/link -->
-    <widget id="com.eneff.branch.ionic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/-0**">**
+    <widget id="com.eneff.branch.ionic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
       <branch-config>
         <ios-team-id value="PW4Q8885U7"/>
         <host name="cluv.app.link" scheme="https"/>
@@ -864,7 +864,7 @@
     | | iOS | Details | Android | Details 
     | --- | :-: | --- | :-: | ---
     | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | 
-    | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | Works except the `app.link` domain is not clickable |
+    | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | Works except the `app.link` domain is not click-able |
     | Twitter | ✅ | | ✅ |
     | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | 🅾️ | 
     | Slack | ✅ | | ✅ | |
@@ -935,10 +935,8 @@
     function DeepLinkHandler(data) {
       if (data) {
         // access the angular Factory("DeepLink")
-        angular.element(document.querySelector("[ng-app]")).injector().get("DeepLink").set(data);
-        console.log("Data Link handler response: " + JSON.stringify(data));
-      } else {
-        console.error("Data Link handler no data");
+        angular.element(document.querySelector('[ng-app]')).injector().get("DeepLink").set(data);
+        console.log('Data Link handler response: ' + JSON.stringify(data));
       }
     }
     ```
@@ -1047,12 +1045,13 @@
     - Open Android Studio -> New project -> ... -> Run -> Create new emulator -> Nexus 6p 23 -> Finish
 
       ```sh
-      sudo cat >> ~/.bash_profile <<EOF
-
+      # add to ~/.bash_profile
       export ANDROID_HOME=$HOME/Library/Android/sdk
       export PATH=$ANDROID_HOME/tools:$PATH
       export PATH=$ANDROID_HOME/platform-tools:$PATH
-      EOF
+      ```
+
+      ```sh
       source ~/.bash_profile;
       ```
 
@@ -1064,7 +1063,7 @@
 
     </details>
 
-  - <details><summary>Genymotion *(optional)*</summary>
+  - <details><summary>Genymotion *[optional]*</summary>
     - Install [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
 
     - Install [Genymotion](https://www.genymotion.com/download/)
