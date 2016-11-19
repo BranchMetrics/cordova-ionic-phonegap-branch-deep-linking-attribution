@@ -16,7 +16,6 @@
   - [Install Branch](#install-branch)
   - [Configure App](#configure-app)
   - [Initialize Branch](#initialize-branch)
-  - [Listen Deep Link](#listen-deep-link)
   - [Test Deep Link iOS](#test-deep-link-ios)
   - [Test Deep Link Android](#test-deep-link-android)
 - [Features](#features)
@@ -40,7 +39,7 @@
   - [Link Domain: Custom](#link-domain-custom)
   - [Link Domain: Bnc.lt](#link-domain-bnclt)
   - [Link Data: Convert to Ionic/Angular](#link-data-convert-to-ionicangular)
-  - [Link Data: Depreciated Methods](#link-data-depreciated-methods)
+  - [Link Data: Global Listener Warning](#link-data-global-listener-warning)
   - [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
   - [Compiling: Visual Studio TACO](#compiling-visual-studio-taco)
@@ -60,7 +59,7 @@
 
 - #### Install Branch
 
-  - Change `key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq`, and `branchcordova` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  - Change `key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq` and `branchcordova` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
   - <details><summary>Cordova and PhoneGap and Ionic</summary>
     ```sh
@@ -102,29 +101,29 @@
 
   - <details><summary>Cordova and PhoneGap</summary>  
     ```js
-    // sample index.js
     var app = {
       initialize: function() {
         this.bindEvents();
       },
-
       bindEvents: function() {
-        document.addEventListener("deviceready", this.onDeviceReady, false);
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('resume', this.onDeviceReady, false);
       },
       onDeviceReady: function() {
-        BranchInit(true);
+        app.branchInit();
       },
-
-      function BranchInit(isDebug) {
-        Branch.setDebug(isDebug); // for development and debugging only
-        Branch.initSession().then(function(res) {
-          console.log(res);
-        }).catch(function(err) {
-          console.error(err);
+      onDeviceResume: function() {
+        app.branchInit();
+      },
+      branchInit: function() {
+        // Branch initialization
+        Branch.initSession(function(data) {
+          // read deep link data on click
+          alert('Deep Link Data: ' + JSON.stringify(data));
         });
       }
     };
-    
+
     app.initialize();
     ```
     </details>
@@ -132,45 +131,55 @@
   - <details><summary>Ionic 1</summary>
     ```js
     // sample app.js
+    angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+
     .run(function($ionicPlatform) {
       $ionicPlatform.ready(function() {
-
-        $ionicPlatform.on("deviceready", function(){
-          BranchInit(true);
-        });
-
-        function BranchInit(isDebug) {
-          Branch.setDebug(isDebug); // for development and debugging only
-          Branch.initSession().then(function(res) {
-            console.log(res);
-          }).catch(function(err) {
-            console.error(err);
-          });
+        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+          cordova.plugins.Keyboard.disableScroll(true);
         }
+        if (window.StatusBar) {
+          StatusBar.styleDefault();
+        }
+
+        // Branch initialization
+        Branch.initSession(function(data) {
+          // read deep link data on click
+          alert('Deep Link Data: ' + JSON.stringify(data));
+        });
       });
     })
+    // ...
     ```
     </details>
 
   - <details><summary>Ionic 2</summary>
     ```typescript
     // sample app.component.js
+    import { Component } from '@angular/core';
+    import { Platform } from 'ionic-angular';
+    import { StatusBar, Splashscreen } from 'ionic-native';
+    import { TabsPage } from '../pages/tabs/tabs';
+
+    // Branch import
     declare var Branch;
 
     @Component({
-      // ...
+      template: `<ion-nav [root]="rootPage"></ion-nav>`
     })
-
     export class MyApp {
+      rootPage = TabsPage;
+
       constructor(platform: Platform) {
         platform.ready().then(() => {
+          StatusBar.styleDefault();
+          Splashscreen.hide();
 
-          // Branch
-          Branch.setDebug(isDebug); // for development and debugging only
-          Branch.initSession().then(function(res) {
-            console.log(res);
-          }).catch(function(err) {
-            console.error(err);
+          // Branch initialization
+          Branch.initSession(function(data) {
+            // read deep link data on click
+            alert('Deep Link Data: ' + JSON.stringify(data));
           });
         });
       }
@@ -178,36 +187,9 @@
     ```
     </details>
 
-- #### Listen Deep Link
-
-  - `DeepLinkHandler` must be a global function and does not have to be in `index.html`
-
-  - <details><summary>Cordova and PhoneGap and Ionic</summary>
-    ```html
-    <!-- sample index.html -->
-        <script>
-          // required
-          function DeepLinkHandler(data) {
-            if (data) {
-              alert("Data Link handler response: " + JSON.stringify(data));
-            }
-          }
-
-          // optional
-          function NonBranchLinkHandler(data) {
-            if (data) {
-              alert("Non-Branch Link Detected: " + JSON.stringify(data));
-            }
-          }
-        </script>
-      </body>
-    </html>
-    ```
-    </details>
-
 - #### Test Deep Link iOS
 
-  - Wait 30 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  - Wait 15 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
@@ -229,7 +211,7 @@
 
 - #### Test Deep Link Android
 
-  - Wait 30 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  - Wait 15 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
@@ -252,16 +234,19 @@
   - <details><summary>Example</summary>
     ```js
     // for development and debugging only
-    Branch.setDebug(isDebug);
+    Branch.setDebug(true);
 
     // sync with Mixpanel if installed
     Branch.setMixpanelToken('your_mixpanel_token');
 
-    // init Branch
-    Branch.initSession().then(function(res) {
-      console.log(res);
+    // Branch initialization
+    Branch.initSession(function(data) {
+      // read deep link data on click
+      alert('Deep Link Data: ' + JSON.stringify(data)); 
+    }).then(function(res) {
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      console.error(err);
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -289,18 +274,18 @@
     ```js
     // only canonicalIdentifier is required
     var properties = {
-        canonicalIdentifier: "123",
-        canonicalUrl: "http://example.com/123",
-        title: "Content 123",
-        contentDescription: "Content 123 " + Date.now(),
-        contentImageUrl: "http://lorempixel.com/400/400",
+        canonicalIdentifier: '123',
+        canonicalUrl: 'http://example.com/123',
+        title: 'Content 123',
+        contentDescription: 'Content 123 ' + Date.now(),
+        contentImageUrl: 'http://lorempixel.com/400/400/',
         price: 12.12,
-        currency: "GBD",
-        contentIndexingMode: "private",
+        currency: 'GBD',
+        contentIndexingMode: 'private',
         contentMetadata: {
-            "custom": "data",
-            "testing": 123,
-            "this_is": true
+            'custom': 'data',
+            'testing': 123,
+            'this_is': true
         }
     };
 
@@ -308,9 +293,9 @@
     var branchUniversalObj = null;
     Branch.createBranchUniversalObject(properties).then(function(res) {
         branchUniversalObj = res;
-        alert("Response: " + JSON.stringify(res));
+        alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-        alert("Error: " + JSON.stringify(err));
+        alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -435,29 +420,29 @@
     ```js
     // optional fields
     var analytics = {
-        channel: "channel",
-        feature: "feature",
-        campaign: "campaign",
-        stage: "stage",
-        tags: ["one","two","three"]
+        channel: 'channel',
+        feature: 'feature',
+        campaign: 'campaign',
+        stage: 'stage',
+        tags: ['one', 'two', 'three']
     };
 
     // optional fields
     var properties = {
-        $fallback_url: "www.example.com",
-        $desktop_url: "www.desktop.com",
-        $android_url: "www.android.com",
-        $ios_url: "www.ios.com",
-        $ipad_url: "www.ipad.com",
-        more_custom: "data",
+        $fallback_url: 'www.example.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'www.android.com',
+        $ios_url: 'www.ios.com',
+        $ipad_url: 'www.ipad.com',
+        more_custom: 'data',
         even_more_custom: true,
-        this_is_custom: 41231
+        this_is_custom: 321
     };
 
     branchUniversalObj.generateShortUrl(analytics, properties).then(function(res) {
-        alert(JSON.stringify(res.url));
+        alert('Response: ' + JSON.stringify(res.url));
     }).catch(function(err) {
-        alert(JSON.stringify(err));
+        alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -474,23 +459,23 @@
     ```js
     // optional fields
     var analytics = {
-        channel: "channel",
-        feature: "feature",
-        campaign: "campaign",
-        stage: "stage",
-        tags: ["one","two","three"]
+        channel: 'channel',
+        feature: 'feature',
+        campaign: 'campaign',
+        stage: 'stage',
+        tags: ['one', 'two', 'three']
     };
 
     // optional fields
     var properties = {
-        $fallback_url: "www.example.com",
-        $desktop_url: "www.desktop.com",
-        $android_url: "www.android.com",
-        $ios_url: "www.ios.com",
-        $ipad_url: "www.ipad.com",
-        more_custom: "data",
+        $fallback_url: 'www.example.com',
+        $desktop_url: 'www.desktop.com',
+        $android_url: 'www.android.com',
+        $ios_url: 'www.ios.com',
+        $ipad_url: 'www.ipad.com',
+        more_custom: 'data',
         even_more_custom: true,
-        this_is_custom: 41231
+        this_is_custom: 321
     };
 
     var message = "Check out this link";
@@ -498,17 +483,17 @@
     // optional listeners (must be called before showShareSheet)
     branchUniversalObj.onShareSheetLaunched(function(res) {
       // android only
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     });
     branchUniversalObj.onShareSheetDismissed(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     });
     branchUniversalObj.onLinkShareResponse(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     });
     branchUniversalObj.onChannelSelected(function(res) {
       // android only
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     });
 
     // share sheet
@@ -520,35 +505,47 @@
 
   - Retrieve Branch data from a deep link
 
-  - Best practice to receive data from `DeepLinkHandler` listener
+  - Best practice to receive data from the `listener`
 
   - <details><summary>Example (listener)</summary>
-    > must be global functions
-
     ```js
-    // required
-    function DeepLinkHandler(data) {
-      if (data) {
-        // window.location = "#/tab/chats/3"; // navigate to page based on data
-        alert("Data Link handler response: " + JSON.stringify(data));
-      }
-    }
+    // Branch initialization within your deviceReady
+    Branch.initSession(function(deepLinkData) {
+      // handler for deep link data on click
+      alert(JSON.stringify(deepLinkData));
+    });
+    ```
+    </details>
 
-    // optional
-    function NonBranchLinkHandler(data) {
-      if (data) {
-        alert("Non-branch link found: " + JSON.stringify(data));
-      }
-    }
+  - <details><summary>Example (listener) *[depreciated]*</summary>
+    ```html
+    <!-- sample index.html -->
+        <script>
+          // required
+          function DeepLinkHandler(data) {
+            if (data) {
+              alert('Data Link Data Response: ' + JSON.stringify(data));
+            }
+          }
+
+          // optional
+          function NonBranchLinkHandler(data) {
+            if (data) {
+              alert('Non-Branch Link Detected: ' + JSON.stringify(data));
+            }
+          }
+        </script>
+      </body>
+    </html>
     ```
     </details>
 
   - <details><summary>Example (first data)</summary>
     ```js
     Branch.getFirstReferringParams().then(function(res) {
-      alert("Response: " + JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert("Error: " + JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -556,9 +553,9 @@
   - <details><summary>Example (latest data)</summary>
     ```js
     Branch.getLatestReferringParams().then(function(res) {
-      alert("Response: " + JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert("Error: " + JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -572,9 +569,9 @@
   - <details><summary>Example</summary>
     ```js
     branchUniversalObj.listOnSpotlight().then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -588,9 +585,9 @@
   - <details><summary>Example</summary>
     ```js
     branchUniversalObj.registerView().then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -601,11 +598,11 @@
 
   - <details><summary>Example (set)</summary>
     ```js
-    var userId = "email_or_id";
+    var userId = 'email_or_id';
     Branch.setIdentity(userId).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -615,7 +612,7 @@
     Branch.logout().then(function(res) {
       alert(JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -628,20 +625,20 @@
 
   - <details><summary>Example</summary>
     ```js
-    var eventName = "clicked_on_this";
-    var metaData = { "custom_dictionary": 123 }; // optional
+    var eventName = 'clicked_on_this';
+    var metaData = { custom_dictionary: 123 }; // optional
     Branch.userCompletedAction(eventName, metaData).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     ```js
     var eventName = "clicked_on_this";
     Branch.userCompletedAction(eventName).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -670,37 +667,39 @@
   - <details><summary>Example (spend credits)</summary>
     ```js
     var amount = 10;
-    var bucket = "this_bucket"; // optional
+    var bucket = 'this_bucket'; // optional
     Branch.redeemRewards(amount, bucket).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
+
     ```js
     var amount = 10;
     Branch.redeemRewards(amount).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
 
   - <details><summary>Example (load credits)</summary>
     ```js
-    var bucket = "this_bucket"; // optional
+    var bucket = 'this_bucket'; // optional
     Branch.loadRewards(bucket).then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
+
     ```js
     Branch.loadRewards().then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -708,9 +707,9 @@
   - <details><summary>Example (load history)</summary>
     ```js
     Branch.creditHistory().then(function(res) {
-      alert(JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
-      alert(JSON.stringify(err));
+      alert('Error: ' + JSON.stringify(err));
     });
     ```
     </details>
@@ -748,9 +747,9 @@
     ```
 
     - **Update config.xml**
-    ```js
+    ```xml
     <!-- values should be from your Branch Dashboard https://dashboard.branch.io/settings/link -->
-    <widget id="com.eneff.branch.ionic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/-0**">**
+    <widget id="com.eneff.branch.ionic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
       <branch-config>
         <ios-team-id value="PW4Q8885U7"/>
         <host name="cluv.app.link" scheme="https"/>
@@ -864,7 +863,7 @@
     | | iOS | Details | Android | Details 
     | --- | :-: | --- | :-: | ---
     | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | 
-    | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | Works except the `app.link` domain is not clickable |
+    | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | Works except the `app.link` domain is not click-able |
     | Twitter | ✅ | | ✅ |
     | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | 🅾️ | 
     | Slack | ✅ | | ✅ | |
@@ -935,10 +934,8 @@
     function DeepLinkHandler(data) {
       if (data) {
         // access the angular Factory("DeepLink")
-        angular.element(document.querySelector("[ng-app]")).injector().get("DeepLink").set(data);
-        console.log("Data Link handler response: " + JSON.stringify(data));
-      } else {
-        console.error("Data Link handler no data");
+        angular.element(document.querySelector('[ng-app]')).injector().get("DeepLink").set(data);
+        console.log('Data Link handler response: ' + JSON.stringify(data));
       }
     }
     ```
@@ -982,11 +979,11 @@
     ```
     </details>
 
-- #### Link Data: Depreciated Methods
+- #### Link Data: Global Listener Warning
 
-  - Before version `2.4.0`, Branch used globally defined listeners to pass events generated by clicking on links outside your cordova app into it. To make this behavior more explicit, we've shifted to event listeners passed to the branch object via the branch.initSession(onBranchLinkHook) and branch.onNonBranchLink(hook). If you don't want to use these new methods and instead prefer the old global hooks without seeing warnings, call branch.disableGlobalListenersWarning().
+  - After Branch SDK `2.4.0`, deep link data is handled within `Branch.initSession(DeepLinkDataFunction);`
 
-  - `branch.disableGlobalListenersWarnings();` turns off warnings about using global listeners.
+  - Use `Branch.disableGlobalListenersWarnings();` to turn off the warning errors generated from `DeepLinkHandler` and `NonBranchLinkHandler`
 
 - #### Compiling: Updating the Branch SDK
 
@@ -1047,12 +1044,13 @@
     - Open Android Studio -> New project -> ... -> Run -> Create new emulator -> Nexus 6p 23 -> Finish
 
       ```sh
-      sudo cat >> ~/.bash_profile <<EOF
-
+      # add to ~/.bash_profile
       export ANDROID_HOME=$HOME/Library/Android/sdk
       export PATH=$ANDROID_HOME/tools:$PATH
       export PATH=$ANDROID_HOME/platform-tools:$PATH
-      EOF
+      ```
+
+      ```sh
       source ~/.bash_profile;
       ```
 
@@ -1064,7 +1062,7 @@
 
     </details>
 
-  - <details><summary>Genymotion *(optional)*</summary>
+  - <details><summary>Genymotion *[optional]*</summary>
     - Install [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
 
     - Install [Genymotion](https://www.genymotion.com/download/)

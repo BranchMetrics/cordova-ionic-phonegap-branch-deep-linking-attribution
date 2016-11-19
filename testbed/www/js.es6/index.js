@@ -1,46 +1,41 @@
-'use strict';
-
 // app
-
 var app = {
-  initialize: function initialize() {
+  initialize: function() {
     this.bindEvents();
   },
-  bindEvents: function bindEvents() {
+  bindEvents: function() {
     document.addEventListener('deviceready', this.onDeviceReady, false);
+    document.addEventListener('resume', this.onDeviceReady, false);
   },
-  onDeviceReady: function onDeviceReady() {
+  onDeviceReady: function() {
+    BranchInit(true);
+  },
+  onDeviceResume: function() {
     BranchInit(true);
   }
 };
 app.initialize();
 
 // branch
-
 function BranchInit(isDebug) {
   console.log('Trigger BranchInit()');
 
   // for development and debugging only
   Branch.setDebug(isDebug);
 
-  // sync with mixpanel if installed
+  // sync with Mixpanel if installed
   Branch.setMixpanelToken('your_mixpanel_token');
 
-  // init
-  Branch.initSession(BranchLinkData).then(function(res) {
+  // Branch initialization
+  Branch.initSession(function(data) {
+    // read deep link data on click
+    console.log('Trigger DeepLinkHandler()');
+    alert('Deep Link Data: ' + JSON.stringify(data));
+  }).then(function(res) {
     console.log(res);
   }).catch(function(err) {
     console.error(err);
   });
-
-  // handler for deep link data
-  function BranchLinkData(data) {
-    console.log('Trigger BranchLinkData()');
-
-    if (data) {
-      alert(JSON.stringify(data));
-    }
-  }
 
   // optional
   Branch.onNonBranchLink(function NonBranchLinkHandler(data) {
