@@ -562,7 +562,7 @@
     ```
     </details>
 
-- #### Show Content
+- #### Display Content
 
   - List content on iOS Spotlight
 
