@@ -197,7 +197,9 @@
 
   - Compile your app *(`cordova build ios` `phonegap build ios` `ionic build ios`)*
 
-  - Launch your app to device from Xcode *(not TestFlight or Simulator)*
+  - Open the app in Xcode and set your Provisioning Profile `Team`
+
+  - Launch your app to `device` *(not Simulator or TestFlight)*
 
   - Paste deep link in Apple Notes
 
@@ -219,7 +221,7 @@
 
   - Compile your app *(`cordova build android` `phonegap build android` `ionic build android`)*
 
-  - Launch your app to device
+  - Launch your app to `device` *(not Simulator or Genymotion)*
 
   - Paste deep link in Google Hangouts
 
