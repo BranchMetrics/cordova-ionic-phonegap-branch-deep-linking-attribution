@@ -46,6 +46,12 @@
   - [Compiling: Multiple support-lib v4s](#compiling-multiple-support-lib-v4s)
   - [Compiling: Missing Android Dependency](#compiling-missing-android-dependency)
 - [Additional](#additional)
+  - [SDK Development](#sdk-development)
+  - [Bulk Link Creation](#bulk-link-creation)
+  - [Analytical Data](#analytical-data)
+  - [Webpage Features](#webpage-features)
+  - [Premium Features](#premium-feature)
+  - [Support](#support)
 
 # Integration
 
@@ -1113,19 +1119,19 @@
 
 # Additional
 
-- #### Branch Cordova SDK
+- #### SDK Development
 
   - [Changelog](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/CHANGELOG.md)
   
   - [Contributing](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/DEVELOPING.md)
   
-- #### Branch Bulk Link Creation
+- #### Bulk Link Creation
 
  - [HTTP API](https://github.com/BranchMetrics/branch-deep-linking-public-api)
  
  - [Marketing Dashboard](https://dashboard.branch.io/marketing)
 
-- #### Branch Analytical Data
+- #### Analytical Data
 
   - [Summary Dashboard](https://dashboard.branch.io/)
   
@@ -1135,7 +1141,15 @@
   
   - [Webhooks](https://dev.branch.io/getting-started/webhooks/guide/)
 
-- #### Branch Premium
+- #### Webpage Features
+
+  - [Text Me The App](https://github.com/BranchMetrics/web-branch-deep-linking#sendsmsphone-linkdata-options-callback)
+  
+  - [Smart Banner](https://github.com/BranchMetrics/web-branch-deep-linking#banneroptions-data)
+  
+  - [DeepView](https://github.com/BranchMetrics/web-branch-deep-linking#deepview)
+
+- #### Premium Features
 
   - [Journey App Banner](https://dev.branch.io/premium-solutions/)
 
@@ -1143,7 +1157,7 @@
 
   - [Data Integrations](https://dev.branch.io/premium-solutions/)
 
-- #### Branch Support
+- #### Support
 
   - [Documentation](https://dev.branch.io/)
   
