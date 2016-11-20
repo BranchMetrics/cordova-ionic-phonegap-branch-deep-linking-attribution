@@ -45,7 +45,7 @@
   - [Compiling: Visual Studio TACO](#compiling-visual-studio-taco)
   - [Compiling: Multiple support-lib v4s](#compiling-multiple-support-lib-v4s)
   - [Compiling: Missing Android Dependency](#compiling-missing-android-dependency)
-- [Additional Documentation](#additional-documentation)
+- [Additional](#additional)
 
 # Integration
 
@@ -1111,12 +1111,40 @@
     ```
     </details>
 
-# Additional Documentation
+# Additional
 
-- [Branch Dashboard](https://dashboard.branch.io/settings/link)
+- #### Branch Cordova SDK
 
-- [Branch Docs](https://dev.branch.io/)
+  - [Changelog](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/CHANGELOG.md)
+  
+  - [Contributing](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/DEVELOPING.md)
+  
+- #### Branch Bulk Link Creation
 
-- [Change Log](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/CHANGELOG.md)
+ - [HTTP API](https://github.com/BranchMetrics/branch-deep-linking-public-api)
+ 
+ - [Marketing Dashboard](https://dashboard.branch.io/marketing)
 
-- [Contributing to the SDK](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/DEVELOPING.md)
+- #### Branch Analytical Data
+
+  - [Summary Dashboard](https://dashboard.branch.io/)
+  
+  - [Export Button](https://dashboard.branch.io/liveview/links)
+  
+  - [Export API](https://dev.branch.io/methods-endpoints/data-export-api/guide/)
+  
+  - [Webhooks](https://dev.branch.io/getting-started/webhooks/guide/)
+
+- #### Branch Premium
+
+  - [Journey App Banner](https://dev.branch.io/premium-solutions/)
+
+  - [Deep Link Emails](https://dev.branch.io/premium-solutions/)
+
+  - [Data Integrations](https://dev.branch.io/premium-solutions/)
+
+- #### Branch Support
+
+  - [Documentation](https://dev.branch.io/)
+  
+  - [Contact](https://support.branch.io/support/tickets/new)
