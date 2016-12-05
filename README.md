@@ -1007,13 +1007,13 @@
     cordova platform remove android;
     cordova platform remove browser;
 
-    # update Branch SDK
-    cordova plugin remove io.branch.sdk;
-    cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=xxxx --variable URI_SCHEME=xxxx;
-
     # add platforms back
     cordova platform add ios;
     cordova platform add android;
+    
+    # update Branch SDK
+    cordova plugin remove io.branch.sdk;
+    cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=xxxx --variable URI_SCHEME=xxxx;
 
     # compile platform code
     cordova build ios;
