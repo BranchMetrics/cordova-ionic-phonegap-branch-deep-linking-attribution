@@ -459,6 +459,9 @@ public class BranchSDK extends CordovaPlugin {
         if (options.has("stage")) {
             linkProperties.setStage(options.getString("stage"));
         }
+        if (options.has("campaign")) {
+            linkProperties.setCampaign(options.getString("campaign"));
+        }
         if (options.has("duration")) {
             linkProperties.setDuration(options.getInt("duration"));
         }
