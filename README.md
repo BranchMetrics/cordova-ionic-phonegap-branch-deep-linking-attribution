@@ -11,7 +11,7 @@
 # Branch for Cordova/PhoneGap/Ionic
 *Questions? [Contact us](https://support.branch.io/support/tickets/new)*
 
-- [Integration](#integration)
+- [Getting Started](#getting-started)
   - [Configure Branch](#configure-branch)
   - [Install Branch](#install-branch)
   - [Configure App](#configure-app)
@@ -53,33 +53,28 @@
   - [Premium Features](#premium-feature)
   - [Support](#support)
 
-# Integration
+# Getting Started
 
 - #### Configure Branch
 
   - Complete your [Branch Dashboard](https://dashboard.branch.io/settings/link)
   
-  - <details><summary>Example</summary>
     ![image](http://i.imgur.com/tkEolFM.png)
-    </details>
 
 - #### Install Branch
 
-  - Change `key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq` and `branchcordova` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
-  - <details><summary>Cordova and PhoneGap and Ionic</summary>
+  - Cordova and Ionic and PhoneGap
     ```sh
     # terminal
     cordova plugin remove io.branch.sdk;
     cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq --variable URI_SCHEME=branchcordova;
     ```
-    </details>
+
+  - Change `key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq` and `branchcordova` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
 - #### Configure App
 
-  - Change `com.eneff.branch.cordova`, `PW4Q8885U7`, `2d0s.app.link`, and `2d0s-alternate.app.link` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
-  - <details><summary>Cordova and Ionic</summary>
+  - Cordova and Ionic
     ```xml
     <!-- sample config.xml -->
     <widget id="com.eneff.branch.cordova" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
@@ -89,9 +84,8 @@
         <host name="2d0s-alternate.app.link" scheme="https" />
       </branch-config>
     ```
-    </details>
 
-  - <details><summary>PhoneGap</summary>
+  - PhoneGap
     ```xml
     <!-- sample config.xml -->
     <widget id="com.eneff.branch.cordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
@@ -101,12 +95,14 @@
         <host name="2d0s-alternate.app.link" scheme="https" />
       </branch-config>
     ```
-    </details>
+
+  - Change `com.eneff.branch.cordova`, `PW4Q8885U7`, `2d0s.app.link`, and `2d0s-alternate.app.link` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)    
 
 - #### Initialize Branch
 
-  - <details><summary>Cordova and PhoneGap</summary>  
+  - Cordova and PhoneGap
     ```js
+    // sample index.js
     var app = {
       initialize: function() {
         this.bindEvents();
@@ -132,9 +128,8 @@
 
     app.initialize();
     ```
-    </details>
 
-  - <details><summary>Ionic 1</summary>
+  - Ionic 1
     ```js
     // sample app.js
     angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
@@ -158,9 +153,8 @@
     })
     // ...
     ```
-    </details>
 
-  - <details><summary>Ionic 2</summary>
+  - Ionic 2
     ```typescript
     // sample app.component.js
     import { Component } from '@angular/core';
@@ -191,7 +185,6 @@
       }
     }
     ```
-    </details>
 
 - #### Test Deep Link iOS
 
@@ -199,7 +192,7 @@
 
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
-  - Delete your app from the device *(reset the Apple AASA scraping)*
+  - Delete your app from the device *(resets the Apple AASA scraping)*
 
   - Compile your app *(`cordova build ios` `phonegap build ios` `ionic build ios`)*
 
@@ -211,11 +204,7 @@
 
   - Long press on the deep link *(not 3D Touch)*
 
-  - Click `Open in "APP_NAME"` to open app
-
-  - <details><summary>Example</summary>
-    ![image](http://i.imgur.com/VJVICXd.png)
-    </details>
+  - Click `Open in "APP_NAME"` to open app *([example](http://i.imgur.com/VJVICXd.png))*
 
 - #### Test Deep Link Android
 
@@ -237,9 +226,10 @@
 
 - #### Initialize Branch Features
 
-  - Load Branch into your app. Must be called on `deviceReady`
+  - Loads Branch into your app
+  
+  - Must be called on `deviceReady`
 
-  - <details><summary>Example</summary>
     ```js
     // for development and debugging only
     Branch.setDebug(true);
@@ -257,28 +247,11 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
 - #### Create Content Reference
 
-  - The Branch Universal Object encapsulates the thing you want to share (content or user)
+  - The **Branch Universal Object** encapsulates the thing you want to share (content or user)
 
-  - <details><summary>Properties</summary>
-
-    | Key | Default | Usage | Link Property
-    | --- | :-: | --- | :-:
-    | canonicalIdentifier | | **(Required)** This is the unique identifier for content that will help Branch dedupe across many instances of the same thing. Suitable options: a website with pathing, or a database with identifiers for entities | `$canonical_identifier`
-    | canonicalUrl | | The canonical URL, used for SEO purposes | `$canonical_url`
-    | title | | The name for the piece of content | `$og_title`
-    | contentDescription | | A description for the content | `$og_description`
-    | contentImageUrl | | The image URL for the content | `$og_image_url `
-    | price | | The price of the item | `$amount`
-    | currency | | The currency representing the price in ISO 4217 currency code | `$currency`
-    | contentIndexMode | `"public"` | Can be set to either `"public"` or `"private"`. Public indicates that you’d like this content to be discovered by other apps. | `$publicly_indexable`
-    | contentMetadata | | Any custom key-value data e.g. `{ "custom": "data" }`
-    </details>
-
-  - <details><summary>Example</summary>
     ```js
     // only canonicalIdentifier is required
     var properties = {
@@ -306,7 +279,20 @@
         alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
+
+  - Properties
+
+    | Key | Default | Usage | Link Property
+    | --- | :-: | --- | :-:
+    | canonicalIdentifier | | **(Required)** This is the unique identifier for content that will help Branch dedupe across many instances of the same thing. Suitable options: a website with pathing, or a database with identifiers for entities | `$canonical_identifier`
+    | canonicalUrl | | The canonical URL, used for SEO purposes | `$canonical_url`
+    | title | | The name for the piece of content | `$og_title`
+    | contentDescription | | A description for the content | `$og_description`
+    | contentImageUrl | | The image URL for the content | `$og_image_url `
+    | price | | The price of the item | `$amount`
+    | currency | | The currency representing the price in ISO 4217 currency code | `$currency`
+    | contentIndexMode | `"public"` | Can be set to either `"public"` or `"private"`. Public indicates that you’d like this content to be discovered by other apps. | `$publicly_indexable`
+    | contentMetadata | | Any custom key-value data e.g. `{ "custom": "data" }`
 
 - #### Create Deep Link
 
@@ -314,7 +300,36 @@
 
   - Needs a [Branch Universal Object](#create-content-reference)
 
-  - <details><summary>Analytics</summary>
+    ```js
+    // optional fields
+    var analytics = {
+        channel: 'channel',
+        feature: 'feature',
+        campaign: 'campaign',
+        stage: 'stage',
+        tags: ['one', 'two', 'three']
+    };
+
+    // optional fields
+    var properties = {
+        $fallback_url: 'http://www.example.com/fallback',
+        $desktop_url: 'http://www.example.com/desktop',
+        $android_url: 'http://www.example.com/android',
+        $ios_url: 'http://www.example.com/ios',
+        $ipad_url: 'http://www.example.com/ipad',
+        more_custom: 'data',
+        even_more_custom: true,
+        this_is_custom: 321
+    };
+
+    branchUniversalObj.generateShortUrl(analytics, properties).then(function(res) {
+        alert('Response: ' + JSON.stringify(res.url));
+    }).catch(function(err) {
+        alert('Error: ' + JSON.stringify(err));
+    });
+    ```
+
+  - Analytics
 
     | Key | Default | Usage
     | --- | :-: | ---
@@ -325,20 +340,18 @@
     | tags | | This is a free form entry with unlimited values `["string"]`. Use it to organize your link data with labels that don’t fit within the bounds of the above
     | alias | | Specify a link alias in place of the standard encoded short URL e.g. `yourdomain.com/youralias`. Link aliases are unique, immutable objects that cannot be deleted. Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight
     | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing)
-    </details>
 
-  - <details><summary>Properties</summary>
+  - Properties
 
-    - <details><summary>Custom Data</summary>
+    - Custom Data
 
       | Key | Value | Usage
       | --- | :-: | ---
       | random | `123` | Any key-value pair
       | hello | `"world"` | Any key-value pair
       | custom_data | `true` | Any key-value pair
-      </details>
 
-    - <details><summary>Redirection</summary>
+    - Redirection
 
       | Key | Default | Usage
       | --- | :-: | ---
@@ -354,9 +367,8 @@
       | $android_wechat_url | | Change the redirect endpoint for WeChat on Android devices  `$android_url` value
       | $after_click_url | | URL redirect to after the main click redirect has completed
       | $web_only | `false` | Force to open the `$fallback_url` instead of the app
-      </details>
 
-    - <details><summary>Deep Link</summary>
+    - Deep Link
 
       | Key | Default | Usage
       | --- | :-: | ---
@@ -369,9 +381,8 @@
       | $android_redirect_timeout | `750` | Control the timeout that the clientside JS waits after trying to open up the app before redirecting to the Play Store. Specified in milliseconds
       | $one_time_use | `false` | Set to `true` to limit deep linking behavior of the generated link to a single use. Can also be set using type
       | $custom_sms_text | | Text for SMS link sent for desktop clicks to this link. Must contain `{{ link }}` Value of Text me the app page in Settings
-      </details>
 
-    - <details><summary>Content</summary>
+    - Content
 
       | Key | Default | Usage
       | --- | :-: | ---
@@ -380,18 +391,16 @@
       | $canonical_identifier | | This is the unique identifier for content that will help Branch dedupe across many instances of the same thing. Suitable options: a website with pathing, or a database with identifiers for entities
       | $exp_date | `0` | Cannot modify here. Needs to be set by the Branch Universal Object
       | $content_type | | This is a label for the type of content present. Apple recommends that you use uniform type identifier as described here
-      </details>
 
-    - <details><summary>DeepView</summary>
+    - DeepView
 
       | Key | Default | Usage
       | --- | :-: | ---
       | $ios_deepview | `default_template` | The name of the deepview template to use for iOS
       | $android_deepview | `default_template` | The name of the deepview template to use for Android
       | $desktop_deepview | `default_template` | The name of the deepview template to use for the Desktop
-      </details>
 
-    - <details><summary>Open Graph</summary>
+    - Open Graph
 
       | Key | Default | Usage
       | --- | :-: | ---
@@ -405,9 +414,8 @@
       | $og_type | | Set the type of custom card format link as it will be seen in social media displays
       | $og_redirect | | (Advanced, not recommended) Set a custom URL that we redirect the social media robots to in order to retrieve all the appropriate tags
       | $og_app_id | | (Rarely used) Sets the app id tag
-      </details>
 
-    - <details><summary>Twitter</summary>
+    - Twitter
 
       | Key | Default | Usage
       | --- | :-: | ---
@@ -420,40 +428,6 @@
       | $twitter_player | | Set the video player’s URL. Defaults to the value of `$og_video`.
       | $twitter_player_width | | Set the player’s width in pixels
       | $twitter_player_height | | Set the player’s height in pixels
-      </details>
-
-    </details>
-
-  - <details><summary>Example</summary>
-    ```js
-    // optional fields
-    var analytics = {
-        channel: 'channel',
-        feature: 'feature',
-        campaign: 'campaign',
-        stage: 'stage',
-        tags: ['one', 'two', 'three']
-    };
-
-    // optional fields
-    var properties = {
-        $fallback_url: 'www.example.com',
-        $desktop_url: 'www.desktop.com',
-        $android_url: 'www.android.com',
-        $ios_url: 'www.ios.com',
-        $ipad_url: 'www.ipad.com',
-        more_custom: 'data',
-        even_more_custom: true,
-        this_is_custom: 321
-    };
-
-    branchUniversalObj.generateShortUrl(analytics, properties).then(function(res) {
-        alert('Response: ' + JSON.stringify(res.url));
-    }).catch(function(err) {
-        alert('Error: ' + JSON.stringify(err));
-    });
-    ```
-    </details>
 
 - #### Share Deep Link
 
@@ -463,7 +437,6 @@
 
   - `Analytics` and `Properties` use the same key-value pairs as [Create Deep Link](#create-deep-link)
 
-  - <details><summary>Example</summary>
     ```js
     // optional fields
     var analytics = {
@@ -476,11 +449,11 @@
 
     // optional fields
     var properties = {
-        $fallback_url: 'www.example.com',
-        $desktop_url: 'www.desktop.com',
-        $android_url: 'www.android.com',
-        $ios_url: 'www.ios.com',
-        $ipad_url: 'www.ipad.com',
+        $fallback_url: 'http://www.example.com/example',
+        $desktop_url: 'http://www.example.com/desktop',
+        $android_url: 'http://www.example.com/android',
+        $ios_url: 'http://www.example.com/ios',
+        $ipad_url: 'http://www.example.com/ipad',
         more_custom: 'data',
         even_more_custom: true,
         this_is_custom: 321
@@ -507,7 +480,6 @@
     // share sheet
     branchUniversalObj.showShareSheet(analytics, properties, message);
     ```
-    </details>
 
 - #### Read Deep Link
 
@@ -515,7 +487,7 @@
 
   - Best practice to receive data from the `listener`
 
-  - <details><summary>Example (listener)</summary>
+  - Listener
     ```js
     // Branch initialization within your deviceReady
     Branch.initSession(function(deepLinkData) {
@@ -523,9 +495,8 @@
       alert(JSON.stringify(deepLinkData));
     });
     ```
-    </details>
 
-  - <details><summary>Example (listener) *[depreciated]*</summary>
+  - Listener *[depreciated in 2.4.0]*
     ```html
     <!-- sample index.html -->
         <script>
@@ -546,9 +517,8 @@
       </body>
     </html>
     ```
-    </details>
 
-  - <details><summary>Example (first data)</summary>
+  - First data
     ```js
     Branch.getFirstReferringParams().then(function(res) {
       alert('Response: ' + JSON.stringify(res));
@@ -556,9 +526,8 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
-  - <details><summary>Example (latest data)</summary>
+  - Latest data
     ```js
     Branch.getLatestReferringParams().then(function(res) {
       alert('Response: ' + JSON.stringify(res));
@@ -566,7 +535,6 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
 - #### Display Content
 
@@ -574,7 +542,6 @@
 
   - Needs a [Branch Universal Object](#create-content-reference)
 
-  - <details><summary>Example</summary>
     ```js
     branchUniversalObj.listOnSpotlight().then(function(res) {
       alert('Response: ' + JSON.stringify(res));
@@ -582,7 +549,6 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
 - #### Track Content
 
@@ -590,7 +556,6 @@
 
   - Needs a [Branch Universal Object](#create-content-reference)
 
-  - <details><summary>Example</summary>
     ```js
     branchUniversalObj.registerView().then(function(res) {
       alert('Response: ' + JSON.stringify(res));
@@ -598,13 +563,11 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
 - #### Track User
 
   - Sets the identity of a user (email, ID, UUID, etc) for events, deep links, and referrals
 
-  - <details><summary>Example (set)</summary>
     ```js
     var userId = 'email_or_id';
     Branch.setIdentity(userId).then(function(res) {
@@ -613,9 +576,7 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
-
-  - <details><summary>Example (logout)</summary>
+ 
     ```js
     Branch.logout().then(function(res) {
       alert(JSON.stringify(res));
@@ -623,7 +584,6 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
 - #### Track Event
 
@@ -631,7 +591,6 @@
 
   - Must [Track User](#track-user) before [Track Event](#track-event) to associate events with a user
 
-  - <details><summary>Example</summary>
     ```js
     var eventName = 'clicked_on_this';
     var metaData = { custom_dictionary: 123 }; // optional
@@ -641,6 +600,7 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
+
     ```js
     var eventName = "clicked_on_this";
     Branch.userCompletedAction(eventName).then(function(res) {
@@ -649,13 +609,13 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
 - #### Handle Referrals
 
   - Referral points are obtained from events triggered by users from rules created on the [Branch Dashboard](https://dashboard.branch.io/referrals/rules)
 
-  - <details><summary>Example (get credits)</summary>
+  - Get credits
+  
     - Referrer is [tracked](#track-user)
     
     - Referrer [creates a deep link](#create-deep-link)
@@ -670,9 +630,8 @@
     
     - Referrer gets referral points
 
-    </details>
+  - Spend credits
 
-  - <details><summary>Example (spend credits)</summary>
     ```js
     var amount = 10;
     var bucket = 'this_bucket'; // optional
@@ -691,9 +650,9 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
-  - <details><summary>Example (load credits)</summary>
+  - Load credits
+
     ```js
     var bucket = 'this_bucket'; // optional
     Branch.loadRewards(bucket).then(function(res) {
@@ -710,9 +669,9 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
-  - <details><summary>Example (load history)</summary>
+  - Load history
+
     ```js
     Branch.creditHistory().then(function(res) {
       alert('Response: ' + JSON.stringify(res));
@@ -720,7 +679,6 @@
       alert('Error: ' + JSON.stringify(err));
     });
     ```
-    </details>
 
 # Troubleshooting
 
@@ -740,7 +698,7 @@
 
 - #### Testing: Sample Integration App
 
-  - <details><summary>Example (Ionic)</summary>
+  - Ionic 1
     
     - **Install**
     ```bash
@@ -814,11 +772,11 @@
 
       - ![image](http://i.imgur.com/YzeE14X.gif)
 
-    </details>
 
 - #### Testing: Show Console Logs
 
-  - <details><summary>iOS Simulator</summary>
+  - iOS Simulator
+  
     - `cordova run ios;`
 
     - Safari -> Preferences -> Advance -> Show Develop menu in menu bar
@@ -829,9 +787,8 @@
 
     - *May need to open Xcode and update provisioning profile*
 
-    </details>
-
-  - <details><summary>iOS Xcode</summary>
+  - iOS Xcode
+  
     - `cordova plugin add cordova-plugin-console;`
 
     - `cordova build ios;`
@@ -844,29 +801,26 @@
 
     - Xcode -> View -> Debug Area -> Activate Console
 
-    </details>
-
-  - <details><summary>Android Device</summary>
+  - Android Device
+  
     - Plug device in
 
     - `cordova run android;`
 
     - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
 
-    </details>
-
-  - <details><summary>Android Genymotion</summary>
+  - Android Genymotion
+  
     - Genymotion -> Start
 
     - `cordova run android;`
 
     - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
 
-    </details>
 
 - #### Testing: Supported Platforms
 
-  - <details><summary>Apps which support Branch deep links</summary>
+  - Apps which support Branch deep links
 
     | | iOS | Details | Android | Details 
     | --- | :-: | --- | :-: | ---
@@ -887,7 +841,6 @@
     | iMessage | ✅ | | |
     | Apple Mail | ✅ | | |
     | Gmail | ✅ | | ✅ |
-    </detail>
 
 - #### Testing: Simulating an Install
   
@@ -897,17 +850,16 @@
 
   - *[iOS only]* iPhone -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
 
-  - Click on deep link
+  - Click on deep link *(will navigate to fallback url because app is not installed)*
 
-  - Install app
+  - Install and open app 
 
-  - Read from `DeepLinkHandler` for `+is_first_session = true`
+  - Read from `Branch.initSession(data)` for `+is_first_session = true`
 
 - #### Link Domain: Custom
 
-  - Change `PW4Q8885U7` and `custom.domain.com` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
-  - <details><summary>Cordova and PhoneGap and Ionic</summary>
+  - Cordova and PhoneGap and Ionic
+  
     ```xml
     <!-- sample config.xml -->
     <branch-config>
@@ -915,13 +867,13 @@
       <host name="custom.domain.com" scheme="https" />
     </branch-config>
     ```
-    </details>
+
+  - Change `PW4Q8885U7` and `custom.domain.com` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
 - #### Link Domain: Bnc.lt
 
-  - Change `PW4Q8885U7` and `/WSuf` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
-  - <details><summary>Cordova and PhoneGap and Ionic</summary>
+  - Cordova and PhoneGap and Ionic
+  
     ```xml
     <!-- sample config.xml -->
     <branch-config>
@@ -930,13 +882,15 @@
       <host name="bnc.lt" scheme="https" />
     </branch-config>
     ```
-    </details>
+
+  - Change `PW4Q8885U7` and `/WSuf` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
 - #### Link Data: Convert to Ionic/Angular
 
   - Convert Branch deep link data from `DeepLinkHandler` into Ionic and Angular
 
-  - <details><summary>Listen to Branch data, and save it into an Angular `DeepLink` factory</summary>
+  - Listen to Branch data, and save it into an Angular `DeepLink`
+
     ```js
     // must be a global function
     function DeepLinkHandler(data) {
@@ -947,9 +901,9 @@
       }
     }
     ```
-    </details>
 
-  - <details><summary>Create a `DeepLink` factory</summary>
+  - Create a `DeepLink` factory
+
     ```js
     angular.module("starter.services", [])
     .factory("DeepLink", function($window, $timeout) {
@@ -971,9 +925,9 @@
       };
     });
     ```
-    </details>
 
-  - <details><summary>Access `DeepLink` factory</summary>
+  - Access `DeepLink` factory
+
     ```js
     angular.module("starter.controllers", [])
 
@@ -985,7 +939,6 @@
       };
     })
     ```
-    </details>
 
 - #### Link Data: Global Listener Warning
 
@@ -995,9 +948,6 @@
 
 - #### Compiling: Updating the Branch SDK
 
-  - Change `xxxx`, and `xxxx` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
-  - <details><summary>Example</summary>
     ```bash
     # update cordova
     npm install -g cordova;
@@ -1019,28 +969,30 @@
     cordova build ios;
     cordova build android;
     ```
-    </details>
+
+  - Change `xxxx`, and `xxxx` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+
+  - `cordova plugin add branch-cordova-sdk` can sometimes miss installing dependencies if you run more than 1 command at a time
 
 - #### Compiling: Cordova Dependencies
 
-  - <details><summary>Node</summary>
+  - Node
     ```sh
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)";
     brew update;
     brew install node;
     ```
-    </details>
 
-  - <details><summary>Xcode</summary>
+  - Xcode
+
     - Install [Xcode](https://developer.apple.com/download/)
 
     - Open Xcode -> agree to SDK license agreement
 
     - Open Xcode -> Create new Xcode project -> Run simulator -> Agree to developer mode on mac
 
-    </details>
+  - Android Studio
 
-  - <details><summary>Android Studio</summary>
     - Read [instructions](https://developer.android.com/studio/install.html)
 
     - Install [JVM](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
@@ -1068,16 +1020,14 @@
 
     - Install Android SDK build-tools 24.0.1
 
-    </details>
+  - Genymotion *[optional]*
 
-  - <details><summary>Genymotion *[optional]*</summary>
     - Install [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
 
     - Install [Genymotion](https://www.genymotion.com/download/)
 
     - Genymotion -> Add virtual device -> Google Nexus 6P - 6.0.0 - API 23 -> Next
 
-    </details>
 
 - #### Compiling: Visual Studio TACO
 
@@ -1087,35 +1037,35 @@
 
   - Branch does not depend on the `android-support-v4` file, but other Cordova plugins could cause an issue
 
-  - <details><summary>Add `multiDexEnabled true` inside defaultConfig tag in `build.gradle`</summary>
+  - Add `multiDexEnabled true` inside defaultConfig tag in `build.gradle`
+  
     ```sh
     defaultConfig {
       multiDexEnabled true
     }
     ```
-    </details>
 
   - Remove the `android-support-v4.jar` in Android `libs` directory
 
   - Run `./gradlew clean` in the Android directory
 
-  - <details><summary>Run `android-support-v4` file for compiling</summary>
+  - Run `android-support-v4` file for compiling
+  
     ```sh
     compile ("com.google.android.gms:play-services-ads:9.+") {
       exclude module: "support-v4"
     }
     ```
-    </details>
 
 - #### Compiling: Missing Android Dependency
 
   - Gradle build cannot find `io.branch.sdk.android:library:2.+` dependency
 
-  - <details><summary>Add into your `build.gradle` file</summary>
+  - Add into your `build.gradle` file
+ 
     ```sh
     compile "io.branch.sdk.android:library:2.+"
     ```
-    </details>
 
 # Additional
 
