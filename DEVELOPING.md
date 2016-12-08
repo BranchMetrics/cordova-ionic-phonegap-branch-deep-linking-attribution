@@ -67,32 +67,19 @@ gulp prerelease;
 > Modify `BRANCH_KEY` and `URI_SCHEME` and `config.xml` to values in [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
 ```sh
-cd testbed;
-npm install -g cordova;
+gulp prerelease && cd testbed && npm install -g cordova && cordova platform remove ios && cordova platform remove android && cordova platform remove browser && cordova platform add ios && cordova platform add android && cordova plugin remove io.branch.sdk && cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
 
-cordova platform remove ios;
-cordova platform remove android;
-cordova platform remove browser;
-
-cordova platform add ios;
-cordova platform add android;
-
-cordova plugin remove io.branch.sdk;
-cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
 # cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
-
-cordova build ios;
-cordova build android;
 ```
   
 > Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)
 
 ```sh
-cordova build ios;
-open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
+cordova build ios && open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
 ```
+
 ```sh
-cordova run android;
+cordova build android && cordova run android;
 chrome://inspect/#devices
 ```
 

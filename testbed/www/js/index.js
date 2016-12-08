@@ -177,11 +177,11 @@ function BranchDeepLink() {
 
   // optional fields
   var properties = {
-    $fallback_url: "www.example.com",
-    $desktop_url: "www.desktop.com",
-    $android_url: "www.android.com",
-    $ios_url: "www.ios.com",
-    $ipad_url: "www.ipad.com",
+    $fallback_url: "http://www.example.com/example",
+    $desktop_url: "http://www.example.com/desktop",
+    $android_url: "http://www.example.com/android",
+    $ios_url: "http://www.example.com/ios",
+    $ipad_url: "http://www.example.com/ipad",
     more_custom: "data",
     even_more_custom: true,
     this_is_custom: 41231
@@ -217,11 +217,11 @@ function BranchShareSheet() {
 
   // optional fields
   var properties = {
-    $fallback_url: "www.example.com",
-    $desktop_url: "www.desktop.com",
-    $android_url: "www.android.com",
-    $ios_url: "www.ios.com",
-    $ipad_url: "www.ipad.com",
+    $fallback_url: "http://www.example.com/example",
+    $desktop_url: "http://www.example.com/desktop",
+    $android_url: "http://www.example.com/android",
+    $ios_url: "http://www.example.com/ios",
+    $ipad_url: "http://www.example.com/ipad",
     more_custom: "data",
     even_more_custom: true,
     this_is_custom: 41231

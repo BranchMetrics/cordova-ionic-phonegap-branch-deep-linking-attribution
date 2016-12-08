@@ -101,6 +101,11 @@ SOFTWARE.
                 </dict>
             </array>
         </config-file>
+        <framework src="SafariServices.framework"/>
+        <framework src="AdSupport.framework"/>
+        <framework src="CoreTelephony.framework"/>
+        <framework src="CoreSpotlight.framework"/>
+        <framework src="MobileCoreServices.framework"/>
         <header-file src="src/ios/BranchNPM.h" />
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
