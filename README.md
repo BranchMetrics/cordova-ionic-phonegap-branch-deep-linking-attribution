@@ -8,7 +8,17 @@
   <a href="https://www.npmjs.com/package/branch-cordova-sdk"><img src="https://img.shields.io/npm/l/branch-cordova-sdk.svg" alt="npm version"></a>
 </p>
 
-# Branch for Cordova/PhoneGap/Ionic
+> Users should have the best experience regardless of device or operating system when clicking on hyperlinks.
+
+> Branch deep links allow users to install and open your app with custom data.
+
+> Branch deep links can also navigate users to specific app content, convert web users to app users, have user-to-user sharing, track referrals, track users, and track conversion, increase engagement, and grow your app.
+
+<p align="center">
+  <a href="https://youtu.be/MXgLQ8QDXk8"><img src="http://i.imgur.com/NF2NEDn.gif"/></a>
+</p>
+
+# Branch for Cordova, PhoneGap, and Ionic
 *Questions? [Contact us](https://support.branch.io/support/tickets/new)*
 
 - [Getting Started](#getting-started)
@@ -63,7 +73,7 @@
 
 - #### Install Branch
 
-  - Cordova and Ionic and PhoneGap
+  - Cordova and PhoneGap and Ionic
     ```sh
     # terminal
     cordova plugin remove io.branch.sdk;
