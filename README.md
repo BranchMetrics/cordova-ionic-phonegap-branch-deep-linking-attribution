@@ -696,7 +696,7 @@
 
   - Use the Branch `key_live`
   
-  - Always use the `DeepLinkHandler` to read Deep Link data
+  - Always use the `Branch.initSession(function(data) {});` to read Deep Link data
 
   - Always test on `device` (`simulator` `browser` `genymotion` will break)
   
