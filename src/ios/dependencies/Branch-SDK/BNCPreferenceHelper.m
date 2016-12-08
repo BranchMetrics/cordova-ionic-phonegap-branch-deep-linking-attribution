@@ -633,7 +633,11 @@ static NSString * const BNC_BRANCH_FABRIC_APP_KEY_KEY = @"branch_key";
     @synchronized (self) {
         NSDictionary *persistenceDict = [self.persistenceDict copy];
         NSBlockOperation *newPersistOp = [NSBlockOperation blockOperationWithBlock:^ {
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:persistenceDict];
+            NSData *data = nil;
+            @try {
+                data = [NSKeyedArchiver archivedDataWithRootObject:persistenceDict];
+            } @catch (id n) {
+            }
             if (!data) {
                 [self logWarning:@"Can't create preferences archive."];
                 return;
@@ -659,7 +663,7 @@ static NSString * const BNC_BRANCH_FABRIC_APP_KEY_KEY = @"branch_key";
         @try {
             NSError *error = nil;
             NSData *data = [NSData dataWithContentsOfURL:self.class.URLForPrefsFile
-                    options:0 error:&error];
+                options:0 error:&error];
             if (!error && data)
                 persistenceDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         }
@@ -713,35 +717,64 @@ static NSString * const BNC_BRANCH_FABRIC_APP_KEY_KEY = @"branch_key";
     return path;
 }
 
-+ (NSURL*) URLForBranchDirectory {
++ (NSURL* _Nonnull) URLForBranchDirectory {
+    NSSearchPathDirectory kSearchDirectories[] = {
+        NSApplicationSupportDirectory,
+        NSCachesDirectory,
+        NSDocumentDirectory,
+    };
+
+    #define _countof(array)     (sizeof(array)/sizeof(array[0]))
+
+    for (NSSearchPathDirectory directory = 0; directory < _countof(kSearchDirectories); directory++) {
+        NSURL *URL = [self createDirectoryForBranchURLWithPath:kSearchDirectories[directory]];
+        if (URL) return URL;
+    }
+
+    #undef _countof
+
+    //  Worst case backup plan:
+    NSString *path = [@"~/Library/io.branch" stringByExpandingTildeInPath];
+    NSURL *branchURL = [NSURL fileURLWithPath:path isDirectory:YES];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
-    NSURL *URL =
-        [[NSFileManager defaultManager]
-            URLForDirectory:NSApplicationSupportDirectory
-            inDomain:NSUserDomainMask
-            appropriateForURL:nil
-            create:YES
+    BOOL success =
+        [fileManager
+            createDirectoryAtURL:branchURL
+            withIntermediateDirectories:YES
+            attributes:nil
             error:&error];
-    if (error) {
-        NSLog(@"Error creating URLForPrefsDirectory: %@.", error);
-        return nil;
+    if (!success) {
+        NSLog(@"Worst case CreateBranchURL error: %@ URL: %@.", error, branchURL);
     }
-    URL = [URL URLByAppendingPathComponent:@"io.branch"];
-    [[NSFileManager defaultManager]
-        createDirectoryAtURL:URL
-        withIntermediateDirectories:YES
-        attributes:nil
-        error:&error];
-    if (error) {
-        NSLog(@"Error creating URLForPrefsDirectory: %@.", error);
-        return nil;
-    }
-    return URL;
+    return branchURL;
 }
 
-+ (NSURL*) URLForPrefsFile {
++ (NSURL* _Null_unspecified) createDirectoryForBranchURLWithPath:(NSSearchPathDirectory)directory {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *URLs = [fileManager URLsForDirectory:directory inDomains:NSUserDomainMask | NSLocalDomainMask];
+
+    for (NSURL *URL in URLs) {
+        NSError *error = nil;
+        NSURL *branchURL = [URL URLByAppendingPathComponent:@"io.branch" isDirectory:YES];
+        BOOL success =
+            [fileManager
+                createDirectoryAtURL:branchURL
+                withIntermediateDirectories:YES
+                attributes:nil
+                error:&error];
+        if (success) {
+            return branchURL;
+        } else  {
+            NSLog(@"CreateBranchURL error: %@ URL: %@.", error, branchURL);
+        }
+    }
+    return nil;
+}
+
++ (NSURL* _Nonnull) URLForPrefsFile {
     NSURL *URL = [self URLForBranchDirectory];
-    URL = [URL URLByAppendingPathComponent:BRANCH_PREFS_FILE];
+    URL = [URL URLByAppendingPathComponent:BRANCH_PREFS_FILE isDirectory:NO];
     return URL;
 }
 
