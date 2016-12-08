@@ -711,6 +711,7 @@
   - Ionic 1
     
     - **Install**
+    
     ```bash
     npm install -g cordova ionic;
     ionic start t3 tabs;
@@ -723,6 +724,7 @@
     ```
 
     - **Update config.xml**
+    
     ```xml
     <!-- values should be from your Branch Dashboard https://dashboard.branch.io/settings/link -->
     <widget id="com.eneff.branch.ionic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
@@ -734,6 +736,7 @@
     ```  
 
     - **update app.js**
+    
     ```js
     // global function
     function DeepLinkHandler(data) {
@@ -768,16 +771,19 @@
     - **Delete app off device**
 
     - **Compile ionic**
+    
     ```bash
     ionic build ios;
     ```
 
     - **Run on device through xcode**
+    
     ```bash
     open -a Xcode platforms/ios/t3.xcodeproj;
     ```
 
     - **Click on a deep link in iMessage to open the app**
+    
        - For example, the deep link [https://cluv.app.link/6TOiVlCqXx](https://cluv.app.link/6TOiVlCqXx) can be created from your [Branch Dashboard](https://dashboard.branch.io/marketing)
 
       - ![image](http://i.imgur.com/YzeE14X.gif)
@@ -987,6 +993,7 @@
 - #### Compiling: Cordova Dependencies
 
   - Node
+  
     ```sh
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)";
     brew update;
@@ -1037,7 +1044,6 @@
     - Install [Genymotion](https://www.genymotion.com/download/)
 
     - Genymotion -> Add virtual device -> Google Nexus 6P - 6.0.0 - API 23 -> Next
-
 
 - #### Compiling: Visual Studio TACO
 
