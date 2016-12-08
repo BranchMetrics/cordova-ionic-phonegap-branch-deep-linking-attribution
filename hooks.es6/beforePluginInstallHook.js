@@ -42,7 +42,7 @@ function installNodeModule(moduleName, callback) {
   }
   printLog('Can\'t find module ' + moduleName + ', running npm install');
 
-  var cmd = 'cd plugins/io.branch.sdk; npm install -D ' + moduleName;
+  var cmd = 'cd plugins/io.branch.sdk && npm install -D ' + moduleName;
   exec(cmd, function(err, stdout, stderr) {
     callback(err);
   });
