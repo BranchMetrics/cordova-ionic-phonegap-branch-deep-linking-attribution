@@ -182,7 +182,8 @@ function BranchDeepLink() {
     $ipad_url: "http://www.example.com/ipad",
     more_custom: "data",
     even_more_custom: true,
-    this_is_custom: 41231
+    this_is_custom: 41231,
+    this_is_date: Date.now()
   };
 
   // needs a universal object
