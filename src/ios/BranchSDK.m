@@ -454,6 +454,9 @@
         else if ([key isEqualToString:@"stage"]) {
             props.stage = [arg1 objectForKey:key];
         }
+        else if ([key isEqualToString:@"campaign"]) {
+            props.campaign = [arg1 objectForKey:key];
+        }
         else if ([key isEqualToString:@"alias"]) {
             props.alias = [arg1 objectForKey:key];
         }
