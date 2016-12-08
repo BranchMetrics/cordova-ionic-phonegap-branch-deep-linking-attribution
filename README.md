@@ -204,9 +204,9 @@
 
   - Delete your app from the device *(resets the Apple AASA scraping)*
 
-  - Compile your app *(`cordova build ios` `phonegap build ios` `ionic build ios`)*
+  - Compile your app *(`cordova build ios --developmentTeam="PW4Q8885U7" --device;`)*
 
-  - Open the app in Xcode and set your Provisioning Profile `Team`
+  - Open the app in Xcode and set your Provisioning Profile `Development Team`
 
   - Launch your app to `device` *(not Simulator or TestFlight)*
 
@@ -224,7 +224,7 @@
 
   - Delete your app from the device
 
-  - Compile your app *(`cordova build android` `phonegap build android` `ionic build android`)*
+  - Compile your app *(`cordova run android`)*
 
   - Launch your app to `device` *(not Simulator or Genymotion)*
 
