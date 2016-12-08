@@ -274,8 +274,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    |  feature  |   String   |   The link feature    |
              *    |   alias   |   String   |    The link alias     |
              *    |  channel  |   String   |   The link channel    |
-             *    | campaign  |   String   |   The campaign that   |
-             *    |           |            |  the link belongs to  |
+             *    |  campaign |   String   |   The link campaign   |
              *    |   stage   |   String   |    The link stage     |
              *    |  duration |    Int     |   The link duration   |
              *    --------------------------------------------------
@@ -315,8 +314,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
              *    |  feature  |   String   |   The link feature    |
              *    |   alias   |   String   |    The link alias     |
              *    |  channel  |   String   |   The link channel    |
-             *    | campaign  |   String   |   The campaign that   |
-             *    |           |            |  the link belongs to  |
+             *    |  campaign |   String   |   The link campaign   |
              *    |   stage   |   String   |    The link stage     |
              *    |  duration |    Int     |   The link duration   |
              *    --------------------------------------------------
