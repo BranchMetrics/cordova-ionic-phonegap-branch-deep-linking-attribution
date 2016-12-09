@@ -1,26 +1,34 @@
 'use strict';
 
-function installNodeModule(exec, modules, callback) {
+// installs the node modules via npm install one at a time
+// @return {callback(error)}
+function installNodeModules(exec, modules, callback) {
+  // base case
   if (modules.length <= 0) {
     return callback(false);
   }
 
+  // install one at a time
   var module = modules.pop();
-  var install = 'npm install --prefix ./plugins/io.branch.sdk -D ' + module;
-
   console.log('Installing "' + module + '"');
+
+  var install = 'npm install --prefix ./plugins/io.branch.sdk -D ' + module;
   exec(install, function(err, stdout, stderr) {
+    // handle error
     if (err) {
       console.error('Failed to install Branch Dependency: "' + module + '"');
       return callback(true);
     }
+    // next module
     else {
-      installNodeModule(exec, modules, callback);
+      installNodeModules(exec, modules, callback);
     }
   });
 }
 
-function getUninstalledNodeModules(dependencies) {
+// checks to see which node modules need to be installed
+// @return {[string]} of node modules from package.json.dependencies
+function getNodeModulesToInstall(dependencies) {
   var modules = [];
   for (var module in dependencies) {
     if (dependencies.hasOwnProperty(module)) {
@@ -34,6 +42,8 @@ function getUninstalledNodeModules(dependencies) {
   return modules;
 }
 
+// if the Branch SDK package has already been installed
+// @return {boolean} based on .installed file is found
 function getPackageInstalled(filesave, installFlagLocation) {
   try {
     var exists = filesave.readFileSync(installFlagLocation);
@@ -43,12 +53,16 @@ function getPackageInstalled(filesave, installFlagLocation) {
   }
 }
 
+// set that the Branch SDK package has been installed
+// @return {void} based on .installed file is created
 function setPackageInstalled(filesave, installFlagLocation) {
   filesave.closeSync(filesave.openSync(installFlagLocation, 'w'));
 }
 
-// hook's entry point
+// hooks entry point
+// @return {void} based on async npm install completion
 module.exports = function(context) {
+  // properties
   var q = context.requireCordovaModule('q');
   var async = new q.defer();
   var filesave = require('fs');
@@ -58,20 +72,26 @@ module.exports = function(context) {
   var installFlagLocation = path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, installFlagName);
   var dependencies = require(path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, 'package.json')).dependencies;
 
+  // only run once
   if (getPackageInstalled(filesave, installFlagLocation)) {
     return;
   }
 
-  var modules = getUninstalledNodeModules(dependencies);
-  installNodeModule(exec, modules, function(err) {
+  // install node modules
+  var modules = getNodeModulesToInstall(dependencies);
+  installNodeModules(exec, modules, function(err) {
+    // handle error
     if (err) {
       console.error('Failed to install the Branch SDK');
     }
+    // only run once
     else {
       setPackageInstalled(filesave, installFlagLocation);
     }
+    // async complete
     async.resolve();
   });
 
+  // wait until callbacks from the all the npm install complete
   return async.promise;
 };
