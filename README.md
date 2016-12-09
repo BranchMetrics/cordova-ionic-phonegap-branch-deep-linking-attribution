@@ -76,7 +76,6 @@
   - Cordova and PhoneGap and Ionic
     ```sh
     # terminal
-    cordova plugin remove io.branch.sdk;
     cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq --variable URI_SCHEME=branchcordova;
     ```
 
