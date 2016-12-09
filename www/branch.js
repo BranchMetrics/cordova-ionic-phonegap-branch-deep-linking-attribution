@@ -1,5 +1,7 @@
 'use strict';
 
+require('es6-promise').polyfill();
+
 /**
  * Branch.IO SDK
  * -------------
