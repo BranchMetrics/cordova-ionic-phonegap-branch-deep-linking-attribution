@@ -350,7 +350,6 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void createBranchUniversalObject(JSONObject options, CallbackContext callbackContext) throws JSONException {
 
-
         BranchUniversalObject branchObj = new BranchUniversalObject();
 
         // Set object properties
@@ -373,7 +372,6 @@ public class BranchSDK extends CordovaPlugin {
 
         // Set content visibility
         if (options.has("contentIndexingMode")) {
-
             if (options.getString("contentIndexingMode").equals("private")) {
                 branchObj.setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
             } else {
@@ -447,6 +445,7 @@ public class BranchSDK extends CordovaPlugin {
 
         BranchLinkProperties linkProperties = new BranchLinkProperties();
 
+        // Add link properties
         if (options.has("feature")) {
             linkProperties.setFeature(options.getString("feature"));
         }
@@ -465,39 +464,26 @@ public class BranchSDK extends CordovaPlugin {
         if (options.has("duration")) {
             linkProperties.setDuration(options.getInt("duration"));
         }
-
         if (options.has("tags")) {
             JSONArray array = (JSONArray) options.get("tags");
             if (array != null) {
-                for (int i=0;i<array.length();i++){
+                for (int i=0; i<array.length(); i++){
                     linkProperties.addTag(array.get(i).toString());
                 }
            }
         }
 
-        if (controlParams.has("$fallback_url")) {
-            linkProperties.addControlParameter("$fallback_url", controlParams.getString("$fallback_url"));
-        }
-        if (controlParams.has("$desktop_url")) {
-            linkProperties.addControlParameter("$desktop_url", controlParams.getString("$desktop_url"));
-        }
-        if (controlParams.has("$android_url")) {
-            linkProperties.addControlParameter("$android_url", controlParams.getString("$android_url"));
-        }
-        if (controlParams.has("$ios_url")) {
-            linkProperties.addControlParameter("$ios_url", controlParams.getString("$ios_url"));
-        }
-        if (controlParams.has("$ipad_url")) {
-            linkProperties.addControlParameter("$ipad_url", controlParams.getString("$ipad_url"));
-        }
-        if (controlParams.has("$fire_url")) {
-            linkProperties.addControlParameter("$fire_url", controlParams.getString("$fire_url"));
-        }
-        if (controlParams.has("$blackberry_url")) {
-            linkProperties.addControlParameter("$blackberry_url", controlParams.getString("$blackberry_url"));
-        }
-        if (controlParams.has("$windows_phone_url")) {
-            linkProperties.addControlParameter("$windows_phone_url", controlParams.getString("$windows_phone_url"));
+        Log.d(LCAT, "Adding control parameters:");
+
+        // Add and iterate control parameters properties
+        Iterator<?> keys = controlParams.keys();
+        
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
+
+            Log.d(LCAT, String.format("key: %s", key));
+
+            linkProperties.addControlParameter(key, controlParams.getString(key));
         }
 
         return linkProperties;
