@@ -2,10 +2,13 @@
 <widget id="com.eneff.branch.example" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
 
     <!-- Branch -->
+    <plugin name="branch-cordova-sdk" />
+    <preference name="AndroidLaunchMode" value="singleInstance" />
     <branch-config>
-      <ios-team-id value="PW4Q8885U7"/>
-      <host name="eneff.app.link" scheme="https" />
-      <host name="eneff-alternate.app.link" scheme="https" />
+      <branch-key value="key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT" />
+      <ios-team-id value="PW4Q8885U7" />
+      <uri-scheme value="branchtest" />
+      <link-domain value="ethan.app.link" />
     </branch-config>
 
     <name>Branch Testing</name>
