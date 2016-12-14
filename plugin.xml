@@ -86,21 +86,6 @@ SOFTWARE.
                 <param name="ios-package" value="BranchSDK" />
             </feature>
         </config-file>
-        <config-file target="*-Info.plist" parent="branch_key">
-                <string>$BRANCH_KEY</string>
-        </config-file>
-        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
-            <array>
-                <dict>
-                    <key>CFBundleURLName</key>
-                    <string>io.branch.sdk</string>
-                    <key>CFBundleURLSchemes</key>
-                    <array>
-                        <string>$URI_SCHEME</string>
-                    </array>
-                </dict>
-            </array>
-        </config-file>
 
         <framework src="SafariServices.framework"/>
         <framework src="AdSupport.framework"/>
