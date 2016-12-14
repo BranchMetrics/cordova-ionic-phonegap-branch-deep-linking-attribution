@@ -36,8 +36,8 @@ SOFTWARE.
     <issue>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues</issue>
 
     <dependency
-      id="es6-promise-plugin"
-      version="3.0.2">
+        id="es6-promise-plugin"
+        version="3.0.2">
     </dependency>
 
     <js-module src="www/branch.js" name="Branch">
