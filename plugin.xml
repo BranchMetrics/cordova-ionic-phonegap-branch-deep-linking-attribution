@@ -48,8 +48,8 @@ SOFTWARE.
     <preference name="URI_SCHEME" />
 
     <!-- Hooks -->
-    <hook src="hooks/afterPrepareHook.js" type="after_prepare" />
-    <hook src="hooks/beforePluginInstallHook.js" type="before_prepare" />
+    <hook src="hooks/before_plugin_install.js" type="before_plugin_install" />
+    <hook src="hooks/after_prepare.js" type="after_prepare" />
 
     <engines>
         <engine name="cordova" version=">=3.5.0" />
