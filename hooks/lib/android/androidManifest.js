@@ -1,13 +1,13 @@
 'use strict';
 
-/**
-Class injects plugin preferences into AndroidManifest.xml file.
-*/
+// injects config.xml preferences into AndroidManifest.xml file.
+
 (function () {
+  // properties
+  var path = require('path');
+  var xmlHelper = require('../xmlHelper.js');
 
-  var path = require('path'),
-      xmlHelper = require('../xmlHelper.js');
-
+  // entry
   module.exports = {
     writePreferences: writePreferences
   };
