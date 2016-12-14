@@ -101,23 +101,25 @@ SOFTWARE.
                 </dict>
             </array>
         </config-file>
+
         <framework src="SafariServices.framework"/>
         <framework src="AdSupport.framework"/>
         <framework src="CoreTelephony.framework"/>
         <framework src="CoreSpotlight.framework"/>
         <framework src="MobileCoreServices.framework"/>
+
         <header-file src="src/ios/BranchNPM.h" />
         <header-file src="src/ios/BranchSDK.h" />
         <source-file src="src/ios/BranchSDK.m" />
         <source-file src="src/ios/AppDelegate+BranchSdk.m" />
-        
+
         <header-file src="src/ios/dependencies/Fabric/ANSCompatibility.h" />
         <header-file src="src/ios/dependencies/Fabric/Answers.h" />
         <header-file src="src/ios/dependencies/Fabric/FABAttributes.h" />
         <header-file src="src/ios/dependencies/Fabric/FABKitProtocol.h" />
         <header-file src="src/ios/dependencies/Fabric/Fabric+FABKits.h" />
         <header-file src="src/ios/dependencies/Fabric/Fabric.h" />
-        
+
         <header-file src="src/ios/dependencies/Branch-SDK/BNCCallbacks.h" />
         <header-file src="src/ios/dependencies/Branch-SDK/BNCConfig.h" />
         <header-file src="src/ios/dependencies/Branch-SDK/BNCContentDiscoveryManager.h" />
@@ -172,7 +174,7 @@ SOFTWARE.
         <source-file src="src/ios/dependencies/Branch-SDK/BranchView.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.m" />
-        
+
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchCloseRequest.h" />
@@ -202,6 +204,6 @@ SOFTWARE.
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/Requests/BranchUserCompletedActionRequest.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/Requests/PromoViewHandler.h" />
-        
+
     </platform>
 </plugin>
