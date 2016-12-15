@@ -1,262 +1,183 @@
-'use strict';
-
 // injects config.xml preferences into AndroidManifest.xml file.
-
 (function () {
   // properties
-  var path = require('path');
-  var xmlHelper = require('../xmlHelper.js');
+  'use strict'
+  var path = require('path')
+  var xmlHelper = require('../xmlHelper.js')
 
   // entry
   module.exports = {
     writePreferences: writePreferences
-  };
+  }
 
-  // region Public API
-
-  /**
-   * Inject preferences into AndroidManifest.xml file.
-   *
-   * @param {Object} cordovaContext - cordova context object
-   * @param {Object} pluginPreferences - plugin preferences as JSON object; already parsed
-   */
-  function writePreferences(cordovaContext, pluginPreferences) {
-    var pathToManifest = path.join(cordovaContext.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml'),
-        manifestSource = xmlHelper.readXmlAsJson(pathToManifest),
-        cleanManifest,
-        updatedManifest;
+  function writePreferences (cordovaContext, pluginPreferences) {
+    var pathToManifest = path.join(cordovaContext.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
+    var manifestSource = xmlHelper.readXmlAsJson(pathToManifest)
+    var cleanManifest
+    var updatedManifest
 
     // remove old intent-filters
-    cleanManifest = removeOldOptions(manifestSource);
+    cleanManifest = removeOldOptions(manifestSource)
 
     // inject intent-filters based on plugin preferences
-    updatedManifest = injectOptions(cleanManifest, pluginPreferences);
+    updatedManifest = injectOptions(cleanManifest, pluginPreferences)
 
     // save new version of the AndroidManifest
-    xmlHelper.writeJsonAsXml(updatedManifest, pathToManifest);
+    xmlHelper.writeJsonAsXml(updatedManifest, pathToManifest)
   }
 
-  // endregion
+  function removeOldOptions (manifestData) {
+    var cleanManifest = manifestData
+    var activities = manifestData['manifest']['application'][0]['activity']
 
-  // region Manifest cleanup methods
+    activities.forEach(removeIntentFiltersFromActivity)
+    cleanManifest['manifest']['application'][0]['activity'] = activities
 
-  /**
-   * Remove old intent-filters from the manifest file.
-   *
-   * @param {Object} manifestData - manifest content as JSON object
-   * @return {Object} manifest data without old intent-filters
-   */
-  function removeOldOptions(manifestData) {
-    var cleanManifest = manifestData,
-        activities = manifestData['manifest']['application'][0]['activity'];
-
-    activities.forEach(removeIntentFiltersFromActivity);
-    cleanManifest['manifest']['application'][0]['activity'] = activities;
-
-    return cleanManifest;
+    return cleanManifest
   }
 
-  /**
-   * Remove old intent filters from the given activity.
-   *
-   * @param {Object} activity - activity, from which we need to remove intent-filters.
-   *                            Changes applied to the passed object.
-   */
-  function removeIntentFiltersFromActivity(activity) {
-    var oldIntentFilters = activity['intent-filter'],
-        newIntentFilters = [];
-    if (oldIntentFilters == null || oldIntentFilters.length == 0) {
-      return;
+  function removeIntentFiltersFromActivity (activity) {
+    var oldIntentFilters = activity['intent-filter']
+    var newIntentFilters = []
+
+    if (oldIntentFilters == null || oldIntentFilters.length === 0) {
+      return
     }
 
     oldIntentFilters.forEach(function (intentFilter) {
       if (!isIntentFilterForUniversalLinks(intentFilter)) {
-        newIntentFilters.push(intentFilter);
+        newIntentFilters.push(intentFilter)
       }
-    });
+    })
 
-    activity['intent-filter'] = newIntentFilters;
+    activity['intent-filter'] = newIntentFilters
   }
 
-  /**
-   * Check if given intent-filter is for Universal Links.
-   *
-   * @param {Object} intentFilter - intent-filter to check
-   * @return {Boolean} true - if intent-filter for Universal Links; otherwise - false;
-   */
-  function isIntentFilterForUniversalLinks(intentFilter) {
-    var actions = intentFilter['action'],
-        categories = intentFilter['category'],
-        data = intentFilter['data'];
+  function isIntentFilterForUniversalLinks (intentFilter) {
+    var actions = intentFilter['action']
+    var categories = intentFilter['category']
+    var data = intentFilter['data']
 
-    return isActionForUniversalLinks(actions) && isCategoriesForUniversalLinks(categories) && isDataTagForUniversalLinks(data);
+    return isActionForUniversalLinks(actions) && isCategoriesForUniversalLinks(categories) && isDataTagForUniversalLinks(data)
   }
 
-  /**
-   * Check if actions from the intent-filter corresponds to actions for Universal Links.
-   *
-   * @param {Array} actions - list of actions in the intent-filter
-   * @return {Boolean} true - if action for Universal Links; otherwise - false
-   */
-  function isActionForUniversalLinks(actions) {
+  function isActionForUniversalLinks (actions) {
     // there can be only 1 action
-    if (actions == null || actions.length != 1) {
-      return false;
+    if (actions == null || actions.length !== 1) {
+      return false
     }
 
-    var action = actions[0]['$']['android:name'];
+    var action = actions[0]['$']['android:name']
 
-    return action === 'android.intent.action.VIEW';
+    return action === 'android.intent.action.VIEW'
   }
 
-  /**
-   * Check if categories in the intent-filter corresponds to categories for Universal Links.
-   *
-   * @param {Array} categories - list of categories in the intent-filter
-   * @return {Boolean} true - if action for Universal Links; otherwise - false
-   */
-  function isCategoriesForUniversalLinks(categories) {
+  function isCategoriesForUniversalLinks (categories) {
     // there can be only 2 categories
-    if (categories == null || categories.length != 2) {
-      return false;
+    if (categories == null || categories.length !== 2) {
+      return false
     }
 
-    var isBrowsable = false,
-        isDefault = false;
+    var isBrowsable = false
+    var isDefault = false
 
     // check intent categories
     categories.forEach(function (category) {
-      var categoryName = category['$']['android:name'];
+      var categoryName = category['$']['android:name']
       if (!isBrowsable) {
-        isBrowsable = categoryName === 'android.intent.category.BROWSABLE';
+        isBrowsable = categoryName === 'android.intent.category.BROWSABLE'
       }
 
       if (!isDefault) {
-        isDefault = categoryName === 'android.intent.category.DEFAULT';
+        isDefault = categoryName === 'android.intent.category.DEFAULT'
       }
-    });
+    })
 
-    return isDefault && isBrowsable;
+    return isDefault && isBrowsable
   }
 
-  /**
-   * Check if data tag from intent-filter corresponds to data for Universal Links.
-   *
-   * @param {Array} data - list of data tags in the intent-filter
-   * @return {Boolean} true - if data tag for Universal Links; otherwise - false
-   */
-  function isDataTagForUniversalLinks(data) {
+  function isDataTagForUniversalLinks (data) {
     // can have only 1 data tag in the intent-filter
-    if (data == null || data.length != 1) {
-      return false;
+    if (data == null || data.length !== 1) {
+      return false
     }
 
-    var dataHost = data[0]['$']['android:host'],
-        dataScheme = data[0]['$']['android:scheme'],
-        hostIsSet = dataHost != null && dataHost.length > 0,
-        schemeIsSet = dataScheme != null && dataScheme.length > 0;
+    var dataHost = data[0]['$']['android:host']
+    var dataScheme = data[0]['$']['android:scheme']
+    var hostIsSet = dataHost != null && dataHost.length > 0
+    var schemeIsSet = dataScheme != null && dataScheme.length > 0
 
-    return hostIsSet && schemeIsSet;
+    return hostIsSet && schemeIsSet
   }
 
-  // endregion
-
-  // region Methods to inject preferences into AndroidManifest.xml file
-
-  /**
-   * Inject options into manifest file.
-   *
-   * @param {Object} manifestData - manifest content where preferences should be injected
-   * @param {Object} pluginPreferences - plugin preferences from config.xml; already parsed
-   * @return {Object} updated manifest data with corresponding intent-filters
-   */
-  function injectOptions(manifestData, pluginPreferences) {
-    var changedManifest = manifestData,
-        targetSdk = changedManifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion'],
-        activitiesList = changedManifest['manifest']['application'][0]['activity'],
-        launchActivityIndex = getMainLaunchActivityIndex(activitiesList),
-        ulIntentFilters = [],
-        launchActivity;
+  function injectOptions (manifestData, pluginPreferences) {
+    var changedManifest = manifestData
+    var targetSdk = changedManifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion']
+    var activitiesList = changedManifest['manifest']['application'][0]['activity']
+    var launchActivityIndex = getMainLaunchActivityIndex(activitiesList)
+    var ulIntentFilters = []
+    var launchActivity
 
     if (launchActivityIndex < 0) {
-      console.warn('Could not find launch activity in the AndroidManifest file. Can\'t inject Universal Links preferences.');
-      return;
+      console.warn('Could not find launch activity in the AndroidManifest file. Can\'t inject Universal Links preferences.')
+      return
     }
 
     // get launch activity
-    launchActivity = activitiesList[launchActivityIndex];
+    launchActivity = activitiesList[launchActivityIndex]
 
     // generate intent-filters
     pluginPreferences.hosts.forEach(function (host) {
-      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, pluginPreferences.androidPrefix, parseInt(targetSdk) >= 23));
-    });
+      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, pluginPreferences.androidPrefix, parseInt(targetSdk) >= 23))
+    })
 
     // add Universal Links intent-filters to the launch activity
-    launchActivity['intent-filter'] = launchActivity['intent-filter'].concat(ulIntentFilters);
+    launchActivity['intent-filter'] = launchActivity['intent-filter'].concat(ulIntentFilters)
 
-    return changedManifest;
+    return changedManifest
   }
 
-  /**
-   * Find index of the applications launcher activity.
-   *
-   * @param {Array} activities - list of all activities in the app
-   * @return {Integer} index of the launch activity; -1 - if none was found
-   */
-  function getMainLaunchActivityIndex(activities) {
-    var launchActivityIndex = -1;
+  function getMainLaunchActivityIndex (activities) {
+    var launchActivityIndex = -1
+
     activities.some(function (activity, index) {
       if (isLaunchActivity(activity)) {
-        launchActivityIndex = index;
-        return true;
+        launchActivityIndex = index
+        return true
       }
 
-      return false;
-    });
+      return false
+    })
 
-    return launchActivityIndex;
+    return launchActivityIndex
   }
 
-  /**
-   * Check if the given actvity is a launch activity.
-   *
-   * @param {Object} activity - activity to check
-   * @return {Boolean} true - if this is a launch activity; otherwise - false
-   */
-  function isLaunchActivity(activity) {
-    var intentFilters = activity['intent-filter'],
-        isLauncher = false;
+  function isLaunchActivity (activity) {
+    var intentFilters = activity['intent-filter']
+    var isLauncher = false
 
-    if (intentFilters == null || intentFilters.length == 0) {
-      return false;
+    if (intentFilters == null || intentFilters.length === 0) {
+      return false
     }
 
     isLauncher = intentFilters.some(function (intentFilter) {
-      var action = intentFilter['action'],
-          category = intentFilter['category'];
+      var action = intentFilter['action']
+      var category = intentFilter['category']
 
-      if (action == null || action.length != 1 || category == null || category.length != 1) {
-        return false;
+      if (action == null || action.length !== 1 || category == null || category.length !== 1) {
+        return false
       }
 
-      var isMainAction = action[0]['$']['android:name'] === 'android.intent.action.MAIN',
-          isLauncherCategory = category[0]['$']['android:name'] === 'android.intent.category.LAUNCHER';
+      var isMainAction = action[0]['$']['android:name'] === 'android.intent.action.MAIN'
+      var isLauncherCategory = category[0]['$']['android:name'] === 'android.intent.category.LAUNCHER'
 
-      return isMainAction && isLauncherCategory;
-    });
+      return isMainAction && isLauncherCategory
+    })
 
-    return isLauncher;
+    return isLauncher
   }
 
-  /**
-   * Create JSON object that represent intent-filter for universal link.
-   *
-   * @param {String} host - host name
-   * @param {String} scheme - host scheme
-   * @param {String} pathName - host path
-   * @return {Object} intent-filter as a JSON object
-   */
-  function createIntentFilter(host, scheme, pathPrefix, androidM) {
+  function createIntentFilter (host, scheme, pathPrefix, androidM) {
     var intentFilter = {
       '$': {
         'android:autoVerify': 'true'
@@ -282,18 +203,16 @@
           'android:pathPrefix': pathPrefix
         }
       }]
-    };
+    }
 
     if (!pathPrefix) {
-      delete intentFilter['data'][0]['$']['android:pathPrefix'];
+      delete intentFilter['data'][0]['$']['android:pathPrefix']
     }
 
     if (!androidM) {
-      delete intentFilter['$']['android:autoVerify'];
+      delete intentFilter['$']['android:autoVerify']
     }
 
-    return intentFilter;
+    return intentFilter
   }
-
-  // endregion
-})();
+})()

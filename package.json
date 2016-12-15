@@ -47,6 +47,7 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-sourcemaps": "^1.6.0",
+    "gulp-standard": "^8.0.3",
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
     "plist": "^1.2.0",
