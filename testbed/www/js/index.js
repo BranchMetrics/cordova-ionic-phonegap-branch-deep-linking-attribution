@@ -179,14 +179,14 @@ function BranchDeepLink () {
 
   // optional fields
   var properties = {
-    $fallback_url: "http://www.example.com/example",
-    $desktop_url: "http://www.example.com/desktop",
-    $android_url: "http://www.example.com/android",
-    $ios_url: "http://www.example.com/ios",
-    $ipad_url: "http://www.example.com/ipad",
-    $deeplink_path: "content/123",
+    $fallback_url: 'http://www.example.com/example',
+    $desktop_url: 'http://www.example.com/desktop',
+    $android_url: 'http://www.example.com/android',
+    $ios_url: 'http://www.example.com/ios',
+    $ipad_url: 'http://www.example.com/ipad',
+    $deeplink_path: 'content/123',
     $match_duration: 2000,
-    more_custom: "data",
+    more_custom: 'data',
     even_more_custom: true,
     this_is_custom: 41231,
     this_is_date: Date.now()
