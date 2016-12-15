@@ -180,6 +180,8 @@ function BranchDeepLink() {
     $android_url: "http://www.example.com/android",
     $ios_url: "http://www.example.com/ios",
     $ipad_url: "http://www.example.com/ipad",
+    $deeplink_path: "content/123",
+    $match_duration: 2000,
     more_custom: "data",
     even_more_custom: true,
     this_is_custom: 41231,
