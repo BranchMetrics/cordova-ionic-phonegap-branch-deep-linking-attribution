@@ -120,6 +120,7 @@ SOFTWARE.
         
         <header-file src="src/ios/dependencies/Branch-SDK/BNCCallbacks.h" />
         <header-file src="src/ios/dependencies/Branch-SDK/BNCConfig.h" />
+        <source-file src="src/ios/dependencies/Branch-SDK/BNCConfig.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/BNCContentDiscoveryManager.h" />
         <source-file src="src/ios/dependencies/Branch-SDK/BNCContentDiscoveryManager.m" />
         <header-file src="src/ios/dependencies/Branch-SDK/BNCDeviceInfo.h" />
