@@ -205,9 +205,9 @@
 
   - Delete your app from the device *(resets the Apple AASA scraping)*
 
-  - Compile your app *(`cordova build ios --developmentTeam="PW4Q8885U7" --device;`)*
+  - Compile your app *(`cordova build ios` `phone gap build ios` `ionic build ios`)*
 
-  - Open the app in Xcode and set your Provisioning Profile `Development Team`
+  - Open the app in `Xcode` and set your Provisioning Profile `Development Team`
 
   - Launch your app to `device` *(not Simulator or TestFlight)*
 
@@ -225,7 +225,7 @@
 
   - Delete your app from the device
 
-  - Compile your app *(`cordova run android`)*
+  - Compile your app *(`cordova build android` `phone gap build android` `ionic build android`)*
 
   - Launch your app to `device` *(not Simulator or Genymotion)*
 
@@ -700,6 +700,8 @@
   - Always use the `Branch.initSession(function(data) {});` to read Deep Link data
 
   - Always test on `device` (`simulator` `browser` `genymotion` will break)
+
+  - You must launch the app through `Xcode` for iOS
   
   - Other deep link plugins (ex `cordova-universal-links-plugin`) will interferer with Branch
 
