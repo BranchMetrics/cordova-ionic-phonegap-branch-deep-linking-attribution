@@ -4,41 +4,32 @@
   'use strict'
   var path = require('path')
   var compare = require('node-version-compare')
-  var ConfigXmlHelper = require('../sdk/configXmlHelper.js')
   var IOS_DEPLOYMENT_TARGET = '8.0'
   var COMMENT_KEY = /_comment$/
-  var context
 
   // entry
   module.exports = {
     enableAssociatedDomains: enableAssociatedDomains
   }
 
-  function enableAssociatedDomains (cordovaContext) {
-    context = cordovaContext
+  function enableAssociatedDomains (preferences) {
+    var entitlementsFile = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
+    var projectFile = preferences.projectPlatform.parseProjectFile(path.join(preferences.projectRoot, 'platforms', 'ios'))
 
-    var projectFile = loadProjectFile()
-
-    // adjust preferences
-    activateAssociativeDomains(projectFile.xcode)
-
-    // add entitlements file to pbxfilereference
-    addPbxReference(projectFile.xcode)
-
-    // save changes
+    activateAssociativeDomains(projectFile.xcode, entitlementsFile)
+    addPbxReference(projectFile.xcode, entitlementsFile)
     projectFile.write()
   }
 
-  function activateAssociativeDomains (xcodeProject) {
-    var configurations = nonComments(xcodeProject.pbxXCBuildConfigurationSection())
-    var entitlementsFilePath = pathToEntitlementsFile()
+  function activateAssociativeDomains (xcodeProject, entitlementsFile) {
+    var configurations = removeComments(xcodeProject.pbxXCBuildConfigurationSection())
     var config
     var buildSettings
     var deploymentTargetIsUpdated
 
     for (config in configurations) {
       buildSettings = configurations[config].buildSettings
-      buildSettings.CODE_SIGN_ENTITLEMENTS = '"' + entitlementsFilePath + '"'
+      buildSettings.CODE_SIGN_ENTITLEMENTS = '"' + entitlementsFile + '"'
 
       // if deployment target is less then the required one - increase it
       if (buildSettings.IPHONEOS_DEPLOYMENT_TARGET) {
@@ -57,30 +48,29 @@
       console.log('IOS project now has deployment target set as: ' + IOS_DEPLOYMENT_TARGET)
     }
 
-    console.log('IOS project Code Sign Entitlements now set to: ' + entitlementsFilePath)
+    console.log('IOS project Code Sign Entitlements now set to: ' + entitlementsFile)
   }
 
-  function addPbxReference (xcodeProject) {
-    var fileReferenceSection = nonComments(xcodeProject.pbxFileReferenceSection())
-    var entitlementsRelativeFilePath = pathToEntitlementsFile()
+  function addPbxReference (xcodeProject, entitlementsFile) {
+    var fileReferenceSection = removeComments(xcodeProject.pbxFileReferenceSection())
 
-    if (isPbxReferenceAlreadySet(fileReferenceSection, entitlementsRelativeFilePath)) {
+    if (isPbxReferenceAlreadySet(fileReferenceSection, entitlementsFile)) {
       console.log('Entitlements file is in reference section.')
       return
     }
 
     console.log('Entitlements file is not in references section, adding it')
-    createPbxFileReference(xcodeProject, entitlementsRelativeFilePath)
+    xcodeProject.addResourceFile(path.basename(entitlementsFile))
   }
 
-  function isPbxReferenceAlreadySet (fileReferenceSection, entitlementsRelativeFilePath) {
+  function isPbxReferenceAlreadySet (fileReferenceSection, entitlementsFile) {
     var isAlreadyInReferencesSection = false
     var uuid
     var fileRefEntry
 
     for (uuid in fileReferenceSection) {
       fileRefEntry = fileReferenceSection[uuid]
-      if (fileRefEntry.path && fileRefEntry.path.indexOf(entitlementsRelativeFilePath) > -1) {
+      if (fileRefEntry.path && fileRefEntry.path.indexOf(entitlementsFile) > -1) {
         isAlreadyInReferencesSection = true
         break
       }
@@ -89,28 +79,7 @@
     return isAlreadyInReferencesSection
   }
 
-  function createPbxFileReference (xcodeProject, entitlementsRelativeFilePath) {
-    xcodeProject.addResourceFile(path.basename(entitlementsRelativeFilePath))
-  }
-
-  function loadProjectFile () {
-    var platform
-    var projectFile
-
-    try {
-      // try pre-5.0 cordova structure
-      platform = context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios
-      projectFile = platform.parseProjectFile(iosPlatformPath())
-    } catch (e) {
-      // let's try cordova 5.0 structure
-      platform = context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios')
-      projectFile = platform.parseProjectFile(iosPlatformPath())
-    }
-
-    return projectFile
-  }
-
-  function nonComments (obj) {
+  function removeComments (obj) {
     var keys = Object.keys(obj)
     var newObj = {}
 
@@ -121,21 +90,5 @@
     }
 
     return newObj
-  }
-
-  function iosPlatformPath () {
-    return path.join(projectRoot(), 'platforms', 'ios')
-  }
-
-  function projectRoot () {
-    return context.opts.projectRoot
-  }
-
-  function pathToEntitlementsFile () {
-    var configXmlHelper = new ConfigXmlHelper(context)
-    var projectName = configXmlHelper.getProjectName()
-    var fileName = projectName + '.entitlements'
-
-    return path.join(projectName, 'Resources', fileName)
   }
 })()

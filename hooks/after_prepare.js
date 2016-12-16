@@ -7,6 +7,7 @@
   var iosPlist = require('./lib/ios/plist.js')
   var iosPreferences = require('./lib/ios/preferences.js')
   var iosAssociatedDomains = require('./lib/ios/associatedDomains.js')
+  var iosDevelopmentTeam = require('./lib/ios/developmentTeam.js')
   // var androidManifest = require('.lib/android/androidManifest.js')
   var IOS = 'ios'
   var ANDROID = 'android'
@@ -29,9 +30,10 @@
 
       }
       if (platform === IOS) {
-        iosPlist.update(preferences)
-        iosPreferences.enableAssociatedDomains(context)
+        iosPlist.addBranchSettings(preferences)
+        iosPreferences.enableAssociatedDomains(preferences)
         iosAssociatedDomains.addAssociatedDomains(preferences)
+        iosDevelopmentTeam.addDevelopmentTeam(context, preferences)
       }
     })
   }
@@ -46,6 +48,15 @@
 
     var branchXmlPerferences = branchXml[0]
 
+    var projectPlatform
+    try {
+      // pre-5.0 cordova structure
+      projectPlatform = context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios
+    } catch (e) {
+      // post-5.0 cordova structure
+      projectPlatform = context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios')
+    }
+
     var bundleId = (configXml.widget['$'].hasOwnProperty('id')) ? configXml.widget['$']['id'] : null
     var bundleName = (configXml.widget.hasOwnProperty('name')) ? configXml.widget.name[0] : null
     var branchKey = (branchXmlPerferences.hasOwnProperty('branch-key')) ? branchXmlPerferences['branch-key'][0]['$']['value'] : null
@@ -56,6 +67,7 @@
 
     return {
       'projectRoot': context.opts.projectRoot,
+      'projectPlatform': projectPlatform,
       'bundleId': bundleId,
       'bundleName': bundleName,
       'branchKey': branchKey,
