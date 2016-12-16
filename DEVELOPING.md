@@ -41,7 +41,7 @@ npm install -g gulp-cli;
 git clone git@github.com:BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git;
 cd cordova-ionic-phonegap-branch-deep-linking;
 rm -rf node_modules;
-npm install;
+npm install --save-dev;
 ```
 
 ### Develop
@@ -63,9 +63,20 @@ gulp prerelease;
 > Modify `BRANCH_KEY` and `URI_SCHEME` and `config.xml` to values in [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
 ```sh
-gulp prerelease; cd testbed; npm install -g cordova; cordova platform remove ios; cordova platform remove android; cordova platform remove browser; cordova platform add ios; cordova platform add android; cordova plugin remove io.branch.sdk; cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
+gulp prerelease; cd testbed; npm install -g cordova; cordova platform remove ios; cordova platform remove android; cordova platform remove browser; cordova platform add ios; cordova platform add android; cordova plugin remove branch-cordova-sdk; cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
 
-# cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
+gulp prod;
+cd testbed;
+npm uninstall mkpath node-version-compare plist xml2js;
+rm -rf ../.installed;
+rm -rf ./plugins;
+rm -rf ./platforms;
+cordova platform add ios;
+cordova plugin rm branch-cordova-sdk;
+cordova plugin add ../;
+cordova build ios;
+open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
+
 ```
   
 > Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)
