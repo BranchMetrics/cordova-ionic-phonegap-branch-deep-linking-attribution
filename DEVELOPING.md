@@ -46,10 +46,6 @@ npm install;
 
 ### Develop
 
-> Code in .es6 files 
-
-### Validate
-
 > Build
 
 ```sh

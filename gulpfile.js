@@ -2,12 +2,11 @@
 var gulp = require('gulp')
 var fs = require('fs')
 var sourcemaps = require('gulp-sourcemaps')
-var babel = require('gulp-babel')
 var standard = require('gulp-standard')
 
 // primary tasks
-gulp.task('predev', ['setupDev', 'babel', 'lint'])
-gulp.task('prerelease', ['setupNpm', 'babel', 'lint'])
+gulp.task('predev', ['setupDev', 'lint'])
+gulp.task('prerelease', ['setupNpm', 'lint'])
 gulp.task('lint', ['standard'])
 
 // secondary tasks
@@ -117,39 +116,3 @@ function emitFiles (path) {
   ret.push('')
   return ret
 }
-
-// --------------------------------------------------
-// Babel
-// --------------------------------------------------
-gulp.task('babel', babelTasks)
-
-var babelTasks = []
-function babelize (taskName, dir) {
-  // copy resources and compile es6 from corresponding directories
-  // list of all babel tasks so we can build all of them
-
-  babelTasks.push(taskName + '-babel')
-  if (!dir) {
-    dir = taskName
-  }
-  var srcDir = dir + '.es6/'
-  var srcPattern = dir + '.es6/**/*.js'
-  var destDir = dir + '/'
-  gulp.task(taskName + '-copy', function () {
-    return gulp.src(srcDir + '**/*.*').pipe(gulp.dest(destDir))
-  })
-  gulp.task(taskName + '-babel', [ taskName + '-copy' ], function () {
-    return gulp.src(srcPattern)
-    .pipe(sourcemaps.init())
-    .pipe(babel({
-      presets: [ 'es2015', 'stage-2' ]
-    }))
-    .pipe(gulp.dest(destDir))
-  })
-}
-
-babelize('hooks')
-babelize('www')
-babelize('tests')
-babelize('testbed', 'testbed/www/js')
-
