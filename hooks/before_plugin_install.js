@@ -1,11 +1,103 @@
-// before Branch SDK install hooks
+// install the node dependencies for Branch SDK
 (function () {
   // properties
   'use strict'
-  var nodeDependencies = require('./lib/sdk/nodeDependencies.js')
+  var SDK = 'branch-cordova-sdk'
+  var fs = require('fs')
+  var path = require('path')
+  var exec = require('child_process').exec
+  var installFlagName = '.installed'
+  var installFlagLocation
+  var dependencies
+  var deferral
+  var q
 
-  // entry
-  module.exports = function (context) {
-    nodeDependencies.install(context)
+  // hook entry
+  module.exports = install
+
+  function install (context) {
+    q = context.requireCordovaModule('q')
+    deferral = new q.defer() // eslint-disable-line
+    installFlagLocation = path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, installFlagName)
+    dependencies = require(path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, 'package.json')).dependencies
+
+    // only run once
+    if (getPackageInstalled()) {
+      return
+    }
+
+    // install node modules
+    var modules = getNodeModulesToInstall(dependencies)
+    installNodeModules(modules, function (err) {
+      if (err) {
+        // handle error
+        throw new Error('Failed to install the Branch SDK')
+      } else {
+        // only run once
+        setPackageInstalled()
+      }
+      deferral.resolve()
+    })
+
+    // wait until callbacks from the all the npm install complete
+    return deferral.promise
+  }
+
+  // installs the node modules via npm install one at a time
+  // @return {callback(error)}
+  function installNodeModules (modules, callback) {
+    // base case
+    if (modules.length <= 0) {
+      return callback(false)
+    }
+
+    // install one at a time
+    var module = modules.pop()
+    console.log('Installing "' + module + '"')
+
+    var install = 'npm install --prefix ./plugins/' + SDK + ' -D ' + module
+    exec(install, function (err, stdout, stderr) {
+      // handle error
+      if (err) {
+        callback(true)
+        throw new Error('Failed to install Branch Dependency: "' + module + '"')
+      } else {
+        // next module
+        installNodeModules(modules, callback)
+      }
+    })
+  }
+
+  // checks to see which node modules need to be installed
+  // @return {[string]} of node modules from package.json.dependencies
+  function getNodeModulesToInstall (dependencies) {
+    var modules = []
+    for (var module in dependencies) {
+      if (dependencies.hasOwnProperty(module)) {
+        try {
+          require(module)
+        } catch (err) {
+          modules.push(module)
+        }
+      }
+    }
+    return modules
+  }
+
+  // if the Branch SDK package has already been installed
+  // @return {boolean} based on .installed file is found
+  function getPackageInstalled () {
+    try {
+      fs.readFileSync(installFlagLocation)
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
+  // set that the Branch SDK package has been installed
+  // @return {void} based on .installed file is created
+  function setPackageInstalled () {
+    fs.closeSync(fs.openSync(installFlagLocation, 'w'))
   }
 })()
