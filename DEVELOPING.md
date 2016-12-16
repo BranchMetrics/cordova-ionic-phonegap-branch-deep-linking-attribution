@@ -75,7 +75,7 @@ gulp prerelease; cd testbed; npm install -g cordova; cordova platform remove ios
 > Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)
 
 ```sh
-cordova build ios && open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
+cordova build ios --developmentTeam="PW4Q8885U7"; open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
 ```
 
 ```sh
