@@ -5,8 +5,8 @@ var sourcemaps = require('gulp-sourcemaps')
 var standard = require('gulp-standard')
 
 // primary tasks
-gulp.task('predev', ['setupDev', 'lint'])
-gulp.task('prerelease', ['setupNpm', 'lint'])
+gulp.task('dev', ['setupDev', 'lint'])
+gulp.task('prod', ['setupNpm', 'lint'])
 gulp.task('lint', ['standard'])
 
 // secondary tasks
@@ -54,7 +54,7 @@ gulp.task('update-plugin-xml-version', function () {
   // so you might end up needing to fix the regex
   for (var target of [ '.xml', '.template.xml' ]) {
     var pluginXML = fs.readFileSync('plugin' + target, 'utf8')
-    var newVersionXML = `        version="${versionNumber}">`
+    var newVersionXML = `    version="${versionNumber}">`
     pluginXML = pluginXML.replace(PLUGIN_XML_VERSION_REGEX, newVersionXML)
     fs.writeFileSync('plugin' + target, pluginXML)
   }
@@ -76,7 +76,7 @@ function genNpmPluginXML () {
   var xml = fs.readFileSync('plugin.template.xml', 'utf-8')
   var files = []
   var head = 'src/ios/dependencies/'
-  var newLineIndent = '\n        '
+  var newLineIndent = '\n    '
 
   files = files.concat(emitFiles(head + 'Fabric/'))
   files = files.concat(emitFiles(head + 'Branch-SDK/'))

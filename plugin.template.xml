@@ -24,92 +24,76 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        id="io.branch.sdk"
-        version="2.4.0">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="branch-cordova-sdk"
+  version="0.0.0">
 
-    <name>branch-cordova-sdk</name>
-    <description>Branch SDK Plugin</description>
-    <license>Apache 2.0</license>
-    <keywords>cordova,branch</keywords>
-    <repo>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git</repo>
-    <issue>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues</issue>
+  <name>branch-cordova-sdk</name>
+  <description>Branch SDK Plugin</description>
+  <license>Apache 2.0</license>
+  <keywords>cordova,branch</keywords>
+  <repo>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git</repo>
+  <issue>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues</issue>
 
-    <dependency
-      id="es6-promise-plugin"
-      version="3.0.2">
-    </dependency>
+  <dependency
+    id="es6-promise-plugin"
+    version="3.0.2">
+  </dependency>
 
-    <js-module src="www/branch.js" name="Branch">
-        <clobbers target="Branch" />
-    </js-module>
+  <js-module src="www/branch.js" name="Branch">
+    <clobbers target="Branch" />
+  </js-module>
 
-    <preference name="BRANCH_KEY" />
-    <preference name="URI_SCHEME" />
+  <!-- Hooks -->
+  <hook src="hooks/before_plugin_install.js" type="before_plugin_install" />
+  <hook src="hooks/after_prepare.js" type="after_prepare" />
 
-    <!-- Hooks -->
-    <hook src="hooks/afterPrepareHook.js" type="after_prepare" />
-    <hook src="hooks/beforePluginInstallHook.js" type="before_prepare" />
+  <engines>
+    <engine name="cordova" version=">=3.5.0" />
+  </engines>
 
-    <engines>
-        <engine name="cordova" version=">=3.5.0" />
-    </engines>
+  <!-- android -->
+  <platform name="android">
+    <config-file target="config.xml" parent="/*">
+      <feature name="BranchSDK">
+        <param name="android-package" value="io.branch.BranchSDK" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_KEY" />
+    </config-file>
+    <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
+      <!-- Non AppLink example -->
+      <intent-filter>
+        <data android:scheme="$URI_SCHEME" />
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+      </intent-filter>
+    </config-file>
+    <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
+    <framework src="io.branch.sdk.android:library:2+" />
+  </platform>
 
-    <!-- android -->
-    <platform name="android">
-        <config-file target="config.xml" parent="/*">
-            <feature name="BranchSDK">
-                <param name="android-package" value="io.branch.BranchSDK" />
-                <param name="onload" value="true" />
-            </feature>
-        </config-file>
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_KEY" />
-        </config-file>
-        <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
-            <!-- Non AppLink example -->
-            <intent-filter>
-                <data android:scheme="$URI_SCHEME" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </config-file>
-        <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-        <framework src="io.branch.sdk.android:library:2+" />
-    </platform>
+  <!-- ios -->
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="BranchSDK">
+        <param name="ios-package" value="BranchSDK" />
+      </feature>
+    </config-file>
 
-    <!-- ios -->
-    <platform name="ios">
-        <config-file target="config.xml" parent="/*">
-            <feature name="BranchSDK">
-                <param name="ios-package" value="BranchSDK" />
-            </feature>
-        </config-file>
-        <config-file target="*-Info.plist" parent="branch_key">
-                <string>$BRANCH_KEY</string>
-        </config-file>
-        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
-            <array>
-                <dict>
-                    <key>CFBundleURLName</key>
-                    <string>io.branch.sdk</string>
-                    <key>CFBundleURLSchemes</key>
-                    <array>
-                        <string>$URI_SCHEME</string>
-                    </array>
-                </dict>
-            </array>
-        </config-file>
-        <framework src="SafariServices.framework"/>
-        <framework src="AdSupport.framework"/>
-        <framework src="CoreTelephony.framework"/>
-        <framework src="CoreSpotlight.framework"/>
-        <framework src="MobileCoreServices.framework"/>
-        <header-file src="src/ios/BranchNPM.h" />
-        <header-file src="src/ios/BranchSDK.h" />
-        <source-file src="src/ios/BranchSDK.m" />
-        <source-file src="src/ios/AppDelegate+BranchSdk.m" />
-        <!--[Branch Framework Reference]-->
-    </platform>
+    <framework src="SafariServices.framework"/>
+    <framework src="AdSupport.framework"/>
+    <framework src="CoreTelephony.framework"/>
+    <framework src="CoreSpotlight.framework"/>
+    <framework src="MobileCoreServices.framework"/>
+
+    <header-file src="src/ios/BranchNPM.h" />
+    <header-file src="src/ios/BranchSDK.h" />
+    <source-file src="src/ios/BranchSDK.m" />
+    <source-file src="src/ios/AppDelegate+BranchSdk.m" />
+    <!--[Branch Framework Reference]-->
+  </platform>
 </plugin>

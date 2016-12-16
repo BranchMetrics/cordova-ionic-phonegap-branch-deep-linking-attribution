@@ -37,7 +37,7 @@
   },
   "scripts": {
     "commitmsg": "validate-commit-msg",
-    "prerelease": "gulp prerelease",
+    "prerelease": "gulp prod",
     "semantic-release": "semantic-release pre && gulp update-plugin-xml-version && npm publish && semantic-release post"
   },
   "dependencies": {
