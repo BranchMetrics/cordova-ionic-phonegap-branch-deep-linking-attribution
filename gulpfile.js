@@ -1,7 +1,6 @@
 // import
 var gulp = require('gulp')
 var fs = require('fs')
-var sourcemaps = require('gulp-sourcemaps')
 var standard = require('gulp-standard')
 
 // primary tasks
