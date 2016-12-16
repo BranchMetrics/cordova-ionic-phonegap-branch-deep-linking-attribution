@@ -8,15 +8,15 @@
 
   // entry
   module.exports = {
-    update: update
+    addBranchSettings: addBranchSettings
   }
 
-  function update (perferences) {
-    var filePath = 'platforms/ios/' + perferences.bundleName + '/' + perferences.bundleName + '-Info.plist'
+  function addBranchSettings (preferences) {
+    var filePath = 'platforms/ios/' + preferences.bundleName + '/' + preferences.bundleName + '-Info.plist'
     var xml = readPlist(filePath)
     var obj = convertXmlToObject(xml)
 
-    obj = appendPlist(obj, perferences)
+    obj = appendPlist(obj, preferences)
     xml = convertObjectToXml(obj)
 
     writePList(filePath, xml)
@@ -39,10 +39,10 @@
     return fs.writeFileSync(filePath, xml, { encoding: 'utf8' })
   }
 
-  function appendPlist (obj, perferences) {
+  function appendPlist (obj, preferences) {
     var urlType = {
       CFBundleURLName: SDK,
-      CFBundleURLSchemes: [perferences.uriScheme]
+      CFBundleURLSchemes: [preferences.uriScheme]
     }
 
     if (!obj.hasOwnProperty('CFBundleURLTypes')) {
@@ -56,7 +56,7 @@
       for (var i = urls.length - 1; i >= 0; i--) {
         var url = urls[i]
         if (url.hasOwnProperty('CFBundleURLName') && url.CFBundleURLName === SDK) {
-          url.CFBundleURLSchemes = [perferences.uriScheme]
+          url.CFBundleURLSchemes = [preferences.uriScheme]
           found = true
           break
         }
@@ -68,8 +68,8 @@
     }
 
     // override
-    obj.branch_key = perferences.branchKey
-    obj.branch_app_domain = perferences.linkDomain
+    obj.branch_key = preferences.branchKey
+    obj.branch_app_domain = preferences.linkDomain
 
     return obj
   }
