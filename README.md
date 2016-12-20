@@ -328,7 +328,7 @@
         $android_url: 'http://www.example.com/android',
         $ios_url: 'http://www.example.com/ios',
         $ipad_url: 'http://www.example.com/ipad',
-        $deeplink_path: "content/123",
+        $deeplink_path: 'content/123',
         more_custom: 'data',
         even_more_custom: true,
         this_is_custom: 321
@@ -471,7 +471,7 @@
         this_is_custom: 321
     };
 
-    var message = "Check out this link";
+    var message = 'Check out this link';
 
     // optional listeners (must be called before showShareSheet)
     branchUniversalObj.onShareSheetLaunched(function(res) {
@@ -614,7 +614,7 @@
     ```
 
     ```js
-    var eventName = "clicked_on_this";
+    var eventName = 'clicked_on_this';
     Branch.userCompletedAction(eventName).then(function(res) {
       alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
@@ -915,8 +915,8 @@
     // must be a global function
     function DeepLinkHandler(data) {
       if (data) {
-        // access the angular Factory("DeepLink")
-        angular.element(document.querySelector('[ng-app]')).injector().get("DeepLink").set(data);
+        // access the angular Factory('DeepLink')
+        angular.element(document.querySelector('[ng-app]')).injector().get('DeepLink').set(data);
         console.log('Data Link handler response: ' + JSON.stringify(data));
       }
     }
@@ -925,8 +925,8 @@
   - Create a `DeepLink` factory
 
     ```js
-    angular.module("starter.services", [])
-    .factory("DeepLink", function($window, $timeout) {
+    angular.module('starter.services', [])
+    .factory('DeepLink', function($window, $timeout) {
       var data = {};
 
       return {
@@ -939,7 +939,7 @@
             // set the data
             data = json;
             // navigate example
-            $window.location = "#/tab/chats/3";
+            $window.location = '#/tab/chats/3';
           }, 0);
         }
       };
@@ -949,9 +949,9 @@
   - Access `DeepLink` factory
 
     ```js
-    angular.module("starter.controllers", [])
+    angular.module('starter.controllers', [])
 
-    .controller("DashCtrl", function($scope, DeepLink) {
+    .controller('DashCtrl', function($scope, DeepLink) {
       $scope.content = {}
       $scope.buttonPressed = function() {
         // put branch data into a label that has ng-model content.data
