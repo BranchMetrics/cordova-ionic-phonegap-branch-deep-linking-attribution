@@ -872,7 +872,9 @@
 
   - Click on deep link *(will navigate to fallback url because app is not installed)*
 
-  - Install and open app 
+  - Install the app
+
+  - Open the app 
 
   - Read from `Branch.initSession(data)` for `+is_first_session = true`
 
