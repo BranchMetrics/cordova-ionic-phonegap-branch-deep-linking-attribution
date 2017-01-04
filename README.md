@@ -240,7 +240,7 @@
 
   - Loads Branch into your app
   
-  - Must be called on `deviceReady`
+  - Must be called on `deviceready` and 'resume'
 
     ```js
     // for development and debugging only
@@ -502,7 +502,7 @@
 
   - Listener
     ```js
-    // Branch initialization within your deviceReady
+    // Branch initialization within your deviceready and resume
     Branch.initSession(function(deepLinkData) {
       // handler for deep link data on click
       alert(JSON.stringify(deepLinkData));
