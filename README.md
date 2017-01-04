@@ -50,6 +50,7 @@
   - [Link Domain: Bnc.lt](#link-domain-bnclt)
   - [Link Data: Convert to Ionic/Angular](#link-data-convert-to-ionicangular)
   - [Link Data: Global Listener Warning](#link-data-global-listener-warning)
+  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins) 
   - [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
   - [Compiling: Visual Studio TACO](#compiling-visual-studio-taco)
@@ -967,6 +968,18 @@
   - After Branch SDK `2.4.0`, deep link data is handled within `Branch.initSession(DeepLinkDataFunction);`
 
   - Use `Branch.disableGlobalListenersWarnings();` to turn off the warning errors generated from `DeepLinkHandler` and `NonBranchLinkHandler`
+
+- #### Compiling: Incompatible Plugins
+  
+  - The following plugins will not work with the Branch SDK
+  
+  - [PhoneGap NFC Plugin](https://github.com/chariotsolutions/phonegap-nfc)
+  
+  - [Custom URL scheme](https://github.com/EddyVerbruggen/Custom-URL-scheme)
+  
+  - [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
+  
+  - [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
 
 - #### Compiling: Updating the Branch SDK
 
