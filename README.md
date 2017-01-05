@@ -50,6 +50,7 @@
   - [Link Domain: Bnc.lt](#link-domain-bnclt)
   - [Link Data: Convert to Ionic/Angular](#link-data-convert-to-ionicangular)
   - [Link Data: Global Listener Warning](#link-data-global-listener-warning)
+  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins) 
   - [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
   - [Compiling: Visual Studio TACO](#compiling-visual-studio-taco)
@@ -205,7 +206,7 @@
 
   - Delete your app from the device *(resets the Apple AASA scraping)*
 
-  - Compile your app *(`cordova build ios` `phone gap build ios` `ionic build ios`)*
+  - Compile your app *(`cordova build ios` `phonegap build ios` `ionic build ios`)*
 
   - Open the app in `Xcode` and set your Provisioning Profile `Development Team`
 
@@ -225,7 +226,7 @@
 
   - Delete your app from the device
 
-  - Compile your app *(`cordova build android` `phone gap build android` `ionic build android`)*
+  - Compile your app *(`cordova build android` `phonegap build android` `ionic build android`)*
 
   - Launch your app to `device` *(not Simulator or Genymotion)*
 
@@ -239,7 +240,7 @@
 
   - Loads Branch into your app
   
-  - Must be called on `deviceReady`
+  - Must be called on `deviceready` and 'resume'
 
     ```js
     // for development and debugging only
@@ -328,7 +329,7 @@
         $android_url: 'http://www.example.com/android',
         $ios_url: 'http://www.example.com/ios',
         $ipad_url: 'http://www.example.com/ipad',
-        $deeplink_path: "content/123",
+        $deeplink_path: 'content/123',
         more_custom: 'data',
         even_more_custom: true,
         this_is_custom: 321
@@ -401,7 +402,7 @@
       | $publicly_indexable | `1` | Cannot modify here. Needs to be set by the Branch Universal Object
       | $keywords | | Keywords for which this content should be discovered by. Just assign an array of strings with the keywords you’d like to use
       | $canonical_identifier | | This is the unique identifier for content that will help Branch dedupe across many instances of the same thing. Suitable options: a website with pathing, or a database with identifiers for entities
-      | $exp_date | `0` | Cannot modify here. Needs to be set by the Branch Universal Object
+      | $exp_date | `0` | Cannot modify here. Needs to be set by the Branch Universal Object. Must be epoch timestamp with milliseconds
       | $content_type | | This is a label for the type of content present. Apple recommends that you use uniform type identifier as described here
 
     - DeepView
@@ -471,7 +472,7 @@
         this_is_custom: 321
     };
 
-    var message = "Check out this link";
+    var message = 'Check out this link';
 
     // optional listeners (must be called before showShareSheet)
     branchUniversalObj.onShareSheetLaunched(function(res) {
@@ -501,7 +502,7 @@
 
   - Listener
     ```js
-    // Branch initialization within your deviceReady
+    // Branch initialization within your deviceready and resume
     Branch.initSession(function(deepLinkData) {
       // handler for deep link data on click
       alert(JSON.stringify(deepLinkData));
@@ -614,7 +615,7 @@
     ```
 
     ```js
-    var eventName = "clicked_on_this";
+    var eventName = 'clicked_on_this';
     Branch.userCompletedAction(eventName).then(function(res) {
       alert('Response: ' + JSON.stringify(res));
     }).catch(function(err) {
@@ -872,7 +873,9 @@
 
   - Click on deep link *(will navigate to fallback url because app is not installed)*
 
-  - Install and open app 
+  - Install the app
+
+  - Open the app 
 
   - Read from `Branch.initSession(data)` for `+is_first_session = true`
 
@@ -915,8 +918,8 @@
     // must be a global function
     function DeepLinkHandler(data) {
       if (data) {
-        // access the angular Factory("DeepLink")
-        angular.element(document.querySelector('[ng-app]')).injector().get("DeepLink").set(data);
+        // access the angular Factory('DeepLink')
+        angular.element(document.querySelector('[ng-app]')).injector().get('DeepLink').set(data);
         console.log('Data Link handler response: ' + JSON.stringify(data));
       }
     }
@@ -925,8 +928,8 @@
   - Create a `DeepLink` factory
 
     ```js
-    angular.module("starter.services", [])
-    .factory("DeepLink", function($window, $timeout) {
+    angular.module('starter.services', [])
+    .factory('DeepLink', function($window, $timeout) {
       var data = {};
 
       return {
@@ -939,7 +942,7 @@
             // set the data
             data = json;
             // navigate example
-            $window.location = "#/tab/chats/3";
+            $window.location = '#/tab/chats/3';
           }, 0);
         }
       };
@@ -949,9 +952,9 @@
   - Access `DeepLink` factory
 
     ```js
-    angular.module("starter.controllers", [])
+    angular.module('starter.controllers', [])
 
-    .controller("DashCtrl", function($scope, DeepLink) {
+    .controller('DashCtrl', function($scope, DeepLink) {
       $scope.content = {}
       $scope.buttonPressed = function() {
         // put branch data into a label that has ng-model content.data
@@ -965,6 +968,18 @@
   - After Branch SDK `2.4.0`, deep link data is handled within `Branch.initSession(DeepLinkDataFunction);`
 
   - Use `Branch.disableGlobalListenersWarnings();` to turn off the warning errors generated from `DeepLinkHandler` and `NonBranchLinkHandler`
+
+- #### Compiling: Incompatible Plugins
+  
+  - The following plugins will not work with the Branch SDK
+  
+  - [PhoneGap NFC Plugin](https://github.com/chariotsolutions/phonegap-nfc)
+  
+  - [Custom URL scheme](https://github.com/EddyVerbruggen/Custom-URL-scheme)
+  
+  - [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
+  
+  - [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
 
 - #### Compiling: Updating the Branch SDK
 
