@@ -44,6 +44,7 @@ gulp.task('setupNpm', function () {
   setIosNpmOrDev('npm')
 })
 
+// TODO: does not work.. need to revise and update package.json -> semantic-release
 gulp.task('update-plugin-xml-version', function () {
   // first match only!
   var PLUGIN_XML_VERSION_REGEX = /^\s*version=\"[\d\.]*\"\>$/m // eslint-disable-line
@@ -70,7 +71,7 @@ function getDevPluginXML () {
 }
 
 function genNpmPluginXML () {
-  // generate plugin.xml for use as a cordova plugin
+  // generate plugin.xml for use as a Cordova plugin
   // here we explode the contents of the frameworks
   var xml = fs.readFileSync('plugin.template.xml', 'utf-8')
   var files = []
@@ -99,7 +100,7 @@ function setIosNpmOrDev (npmOrDev) {
 }
 
 function emitFiles (path) {
-  // emit array of cordova file references for all .h/.m files in path
+  // emit array of Cordova file references for all .h/.m files in path
   var ret = []
   for (var filename of fs.readdirSync(path)) {
     var fileType = null
