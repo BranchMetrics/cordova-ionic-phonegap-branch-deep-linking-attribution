@@ -95,7 +95,7 @@
 
         if (!error) {
             if (params != nil && [params count] > 0 && isFromBranchLink) {
- 
+
                 NSError *err;
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&err];
 
@@ -136,7 +136,7 @@
             [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"BSDKPostUnhandledURL" object:self.deepLinkUrl]];
         }
         self.deepLinkUrl = nil;
-        
+
         if (command != nil) {
             [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
         }
@@ -147,7 +147,7 @@
 {
 
     [[Branch getInstance] setRequestMetadataKey:@"$mixpanel_distinct_id" value:[command.arguments objectAtIndex:0]];
-    
+
 }
 
 - (void)setDebug:(CDVInvokedUrlCommand*)command
@@ -208,10 +208,10 @@
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         }
         else {
-            
+
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
         }
-        
+
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
@@ -227,6 +227,7 @@
 {
     NSString *name;
     NSDictionary *state;
+
     // if a state dictionary is passed as an argument
     if ([command.arguments count] == 2) {
         name = [command.arguments objectAtIndex:0];
@@ -245,7 +246,7 @@
         [branch userCompletedAction:name];
     }
 
-    // TODO: need to resolve according to result of userCompletedAction, but no callback version of the method is exposed.
+    // TODO: iOS Branch.userCompletedAction needs a callback for success or failure
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"Success"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -417,7 +418,7 @@
 - (void)registerView:(CDVInvokedUrlCommand*)command
 {
     int branchUniversalObjectId = [[command.arguments objectAtIndex:0] intValue];
-    
+
     NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
     BranchUniversalObject *branchUniversalObj = [branchUniversalObjDict objectForKey:@"branchUniversalObj"];
 
@@ -532,7 +533,7 @@
                                                 completion:^(NSString *activityType, BOOL completed) {
 
         int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
-        
+
         if (completed) {
             NSLog(@"Share link complete");
             [branchUniversalObj getShortUrlWithLinkProperties:linkProperties andCallback:^(NSString *url, NSError *error) {
@@ -542,7 +543,7 @@
                 }
             }];
         }
-        
+
         CDVPluginResult *shareDialogDismissed = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
         NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:listenerCallbackId];
@@ -615,7 +616,7 @@
     // We create a JSON string result, because we're unable to handle the url. We will include the url in the return string.
     NSError *error;
     NSString *urlString;
-    
+
 //    if ([notification.object respondsToSelector:@selector(absoluteString:)]) {
     SEL selector = NSSelectorFromString(@"absoluteString:");
     if ([notification.object respondsToSelector:selector]) {
