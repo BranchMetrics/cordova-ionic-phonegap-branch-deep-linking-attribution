@@ -68,7 +68,14 @@ gulp prerelease;
 
 ```sh
 gulp prerelease; cd testbed; npm install -g cordova; cordova platform remove ios; cordova platform remove android; cordova platform remove browser; cordova platform add ios; cordova platform add android; cordova plugin remove io.branch.sdk; cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
+```
 
+```sh
+gulp prerelease; cd testbed; rm -rf platforms; rm -rf plugins; cordova platform add ios; cordova platform add android; cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
+
+```
+
+```sh
 # cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
 ```
   
