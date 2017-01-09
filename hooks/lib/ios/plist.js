@@ -11,6 +11,7 @@
     addBranchSettings: addBranchSettings
   }
 
+  // methods
   function addBranchSettings (preferences) {
     var filePath = 'platforms/ios/' + preferences.bundleName + '/' + preferences.bundleName + '-Info.plist'
     var xml = readPlist(filePath)
@@ -22,7 +23,6 @@
     writePList(filePath, xml)
   }
 
-  // helper methods
   function convertXmlToObject (xml) {
     return plist.parse(xml)
   }

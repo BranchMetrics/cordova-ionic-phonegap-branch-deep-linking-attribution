@@ -13,6 +13,7 @@
     addAssociatedDomains: addAssociatedDomains
   }
 
+  // methods
   function addAssociatedDomains (preferences) {
     var file = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
     var entitlements = getEntitlements(file)
@@ -22,7 +23,6 @@
     setEntitlements(file, entitlements)
   }
 
-  // helper methods
   function setEntitlements (file, entitlements) {
     var plistContent = plist.build(entitlements)
 

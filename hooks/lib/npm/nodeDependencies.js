@@ -12,11 +12,12 @@
   var deferral
   var q
 
-  // hook entry
+  // entry
   module.exports = {
     install: install
   }
 
+  // methods
   function install (context) {
     // set properties
     q = context.requireCordovaModule('q')

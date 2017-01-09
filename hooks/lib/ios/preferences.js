@@ -12,6 +12,7 @@
     enableAssociatedDomains: enableAssociatedDomains
   }
 
+  // methods
   function enableAssociatedDomains (preferences) {
     var entitlementsFile = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
     var projectFile = preferences.projectPlatform.parseProjectFile(path.join(preferences.projectRoot, 'platforms', 'ios'))
@@ -45,21 +46,21 @@
     }
 
     if (deploymentTargetIsUpdated) {
-      console.log('IOS project now has deployment target set as: ' + IOS_DEPLOYMENT_TARGET)
+      console.warn('IOS project now has deployment target set as: ' + IOS_DEPLOYMENT_TARGET)
     }
 
-    console.log('IOS project Code Sign Entitlements now set to: ' + entitlementsFile)
+    console.warn('IOS project Code Sign Entitlements now set to: ' + entitlementsFile)
   }
 
   function addPbxReference (xcodeProject, entitlementsFile) {
     var fileReferenceSection = removeComments(xcodeProject.pbxFileReferenceSection())
 
     if (isPbxReferenceAlreadySet(fileReferenceSection, entitlementsFile)) {
-      console.log('Entitlements file is in reference section.')
+      console.warn('Entitlements file is in reference section.')
       return
     }
 
-    console.log('Entitlements file is not in references section, adding it')
+    console.warn('Entitlements file is not in references section, adding it')
     xcodeProject.addResourceFile(path.basename(entitlementsFile))
   }
 

@@ -1,3 +1,4 @@
+// TODO: does not work
 // update the development team for Universal Links
 (function () {
   // properties
@@ -12,6 +13,7 @@
     addDevelopmentTeam: addDevelopmentTeam
   }
 
+  // methods
   function addDevelopmentTeam (context, preferences) {
     if (context.opts.cordova.platforms.indexOf('ios') === -1) return
     if (!context.opts.options) return
