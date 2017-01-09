@@ -38,7 +38,7 @@
     try {
       fs.writeFileSync(filePath, changedXmlData)
     } catch (err) {
-      console.log(err)
+      console.error(err)
       isSaved = false
     }
 
