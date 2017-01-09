@@ -76,7 +76,6 @@ cordova plugin rm branch-cordova-sdk;
 cordova plugin add ../;
 cordova build ios;
 open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
-
 ```
   
 > Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)

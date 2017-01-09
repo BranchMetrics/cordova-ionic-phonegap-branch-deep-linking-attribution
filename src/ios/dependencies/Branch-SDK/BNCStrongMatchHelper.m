@@ -174,7 +174,7 @@
     }
     
     [urlString appendFormat:@"&branch_key=%@", branchKey];
-    [urlString appendFormat:@"&sdk=ios%@", SDK_VERSION];
+    [urlString appendFormat:@"&sdk=ios%@", BNC_SDK_VERSION];
     
     if (redirectUrl) {
         [urlString appendFormat:@"&redirect_url=%@",
@@ -240,6 +240,33 @@
     return YES;
 }
 
+- (UIWindow*) keyWindow {
+    Class UIApplicationClass = NSClassFromString(@"UIApplication");
+    UIWindow *keyWindow = [UIApplicationClass sharedApplication].keyWindow;
+    if (keyWindow) return keyWindow;
+	// ToDo: Put different code for extensions here.
+    return nil;
+}
+
+/**
+  Find the top view controller that is not of type UINavigationController or UITabBarController
+ */
+- (UIViewController *)topViewController:(UIViewController *)baseViewController {
+    if ([baseViewController isKindOfClass:[UINavigationController class]]) {
+        return [self topViewController: ((UINavigationController *)baseViewController).visibleViewController];
+    }
+
+    if ([baseViewController isKindOfClass:[UITabBarController class]]) {
+        return [self topViewController: ((UITabBarController *)baseViewController).selectedViewController];
+    }
+
+    if ([baseViewController presentedViewController] != nil) {
+        return [self topViewController: [baseViewController presentedViewController]];
+    }
+
+    return baseViewController;
+}
+
 - (BOOL) willLoadViewControllerWithURL:(NSURL*)matchURL {
     if (self.primaryWindow) return NO;
 
@@ -271,10 +298,11 @@
     }
 
     NSLog(@"Safari initializing."); //  eDebug
+    self.primaryWindow = [self keyWindow];
+
     self.matchViewController = [[BNCMatchViewControllerSubclass alloc] initWithURL:matchURL];
     if (!self.matchViewController) return NO;
     
-    self.primaryWindow = [[UIApplication sharedApplication] keyWindow];
     self.matchViewController.delegate = self;
     self.matchViewController.view.frame = self.primaryWindow.bounds;
 
@@ -282,11 +310,13 @@
     self.matchView.alpha = 1.0;
     [self.matchView addSubview:self.matchViewController.view];
 
-    [self.primaryWindow.rootViewController addChildViewController:self.matchViewController];
-    UIView *parentView = self.primaryWindow.rootViewController.view ?: self.primaryWindow;
+    UIViewController *rootViewController = [self topViewController:self.primaryWindow.rootViewController];
+
+    [rootViewController addChildViewController:self.matchViewController];
+    UIView *parentView = rootViewController.view ?: self.primaryWindow;
     [parentView insertSubview:self.matchView atIndex:0];
 
-    [self.matchViewController didMoveToParentViewController:self.primaryWindow.rootViewController];
+    [self.matchViewController didMoveToParentViewController:rootViewController];
 
     return YES;
 }
