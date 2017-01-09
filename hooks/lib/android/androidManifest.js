@@ -3,15 +3,15 @@
   // properties
   'use strict'
   var path = require('path')
-  var xmlHelper = require('../xmlHelper.js')
+  var xmlHelper = require('../sdk/xmlHelper.js')
 
   // entry
   module.exports = {
     writePreferences: writePreferences
   }
 
-  function writePreferences (cordovaContext, pluginPreferences) {
-    var pathToManifest = path.join(cordovaContext.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
+  function writePreferences (context, preferences) {
+    var pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
     var manifestSource = xmlHelper.readXmlAsJson(pathToManifest)
     var cleanManifest
     var updatedManifest
@@ -20,7 +20,7 @@
     cleanManifest = removeOldOptions(manifestSource)
 
     // inject intent-filters based on plugin preferences
-    updatedManifest = injectOptions(cleanManifest, pluginPreferences)
+    updatedManifest = injectOptions(cleanManifest, preferences)
 
     // save new version of the AndroidManifest
     xmlHelper.writeJsonAsXml(updatedManifest, pathToManifest)
@@ -110,7 +110,7 @@
     return hostIsSet && schemeIsSet
   }
 
-  function injectOptions (manifestData, pluginPreferences) {
+  function injectOptions (manifestData, preferences) {
     var changedManifest = manifestData
     var targetSdk = changedManifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion']
     var activitiesList = changedManifest['manifest']['application'][0]['activity']
@@ -127,8 +127,8 @@
     launchActivity = activitiesList[launchActivityIndex]
 
     // generate intent-filters
-    pluginPreferences.hosts.forEach(function (host) {
-      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, pluginPreferences.androidPrefix, parseInt(targetSdk) >= 23))
+    preferences.hosts.forEach(function (host) {
+      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, preferences.androidPrefix, parseInt(targetSdk) >= 23))
     })
 
     // add Universal Links intent-filters to the launch activity
