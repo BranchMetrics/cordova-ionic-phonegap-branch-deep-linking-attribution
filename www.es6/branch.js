@@ -224,6 +224,11 @@ Branch.prototype.logout = function() {
  * @return (Promise)
  */
 Branch.prototype.userCompletedAction = function(action, metaData) {
+    if (!action) {
+        return new Promise(function(resolve, reject) {
+            reject('Please set an event name');
+        });
+    }
 
     var args = [ action ];
 

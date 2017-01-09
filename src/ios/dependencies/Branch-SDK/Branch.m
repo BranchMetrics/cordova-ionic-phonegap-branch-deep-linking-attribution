@@ -73,6 +73,7 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
 
 @property (strong, nonatomic) BNCServerInterface *bServerInterface;
 @property (strong, nonatomic) BNCServerRequestQueue *requestQueue;
+@property (strong, nonatomic) NSTimer *sessionTimer;
 @property (strong, nonatomic) dispatch_semaphore_t processing_sema;
 @property (copy,   nonatomic) callbackWithParams sessionInitWithParamsCallback;
 @property (copy,   nonatomic) callbackWithBranchUniversalObject sessionInitWithBranchUniversalObjectCallback;
@@ -93,7 +94,6 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
 @property (assign, nonatomic) BOOL delayForAppleAds;
 @property (assign, nonatomic) BOOL searchAdsDebugMode;
 @property (strong, nonatomic) NSMutableArray *whiteListedSchemeList;
-@property (assign, nonatomic) BOOL appIsInBackground;
 @end
 
 @implementation Branch
@@ -330,7 +330,16 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
 
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable explicitlyRequestedReferrable:(BOOL)explicitlyRequestedReferrable automaticallyDisplayController:(BOOL)automaticallyDisplayController {
     self.shouldAutomaticallyDeepLink = automaticallyDisplayController;
+    
+    // If the SDK is already initialized, this means that initSession is being called later in the app lifecycle
+    // and that the developer is expecting to receive deep link parameters via the callback block immediately
+    if (self.isInitialized) {
+        [self initUserSessionAndCallCallback:YES];
+    }
 
+    // The rest of this function assumes that initSession is being called BEFORE continueUserActivity and openUrl
+    // in the application life cycle, and that the SDK is not yet initialized.
+    
     // Handle push notification on app launch
     if ([options objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
         id branchUrlFromPush = [options objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey][BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY];
@@ -340,13 +349,22 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
     }
 
     if ([BNCSystemObserver getOSVersion].integerValue >= 8) {
-        if (![options.allKeys containsObject:UIApplicationLaunchOptionsURLKey] && ![options.allKeys containsObject:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
-            // If Facebook SDK is present, call deferred app link check here
+        
+        // Handle case where there's no URI scheme or Universal Link
+        if (![options.allKeys containsObject:UIApplicationLaunchOptionsURLKey] &&
+            ![options.allKeys containsObject:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
+            
+            // If Facebook SDK is present, call deferred app link check here which will later on call initUserSession
             if (![self checkFacebookAppLinks] && ![self checkAppleSearchAdsAttribution]) {
+                
+                // If we're not looking for App Links or Apple Search Ads, initialize
                 [self initUserSessionAndCallCallback:YES];
             }
         }
+        // Handle case where there is Universal Link present
         else if ([options.allKeys containsObject:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
+            // Optional flag for the developer if they're letting Facebook return the boolean on didFinishLaunchingWithOptions
+            // Note that this is no longer a recommended path, and that we tell developers to just return YES
             if (self.accountForFacebookSDK) {
                 // does not work in Swift, because Objective-C to Swift interop is bad
                 id activity = [[options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey] objectForKey:@"UIApplicationLaunchOptionsUserActivityKey"];
@@ -355,6 +373,7 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
                     return;
                 }
             }
+            // Wait for continueUserActivity Branch AppDelegate call to come through
             self.preferenceHelper.shouldWaitForInit = YES;
         }
     }
@@ -665,6 +684,20 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
 }
 
 
+- (void) sendCommerceEvent:(BNCCommerceEvent *)commerceEvent
+				  metadata:(NSDictionary*)metadata
+			withCompletion:(void (^)(NSDictionary *, NSError *))completion {
+
+    [self initSessionIfNeededAndNotInProgress];
+    BranchCommerceEventRequest *request =
+		[[BranchCommerceEventRequest alloc]
+			initWithCommerceEvent:commerceEvent
+			metadata:metadata
+			completion:completion];
+    [self.requestQueue enqueue:request];
+    [self processNextQueueItem];
+}
+
 #pragma mark - Credit methods
 
 - (void)loadRewardsWithCallback:(callbackWithStatus)callback {
@@ -764,7 +797,9 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
     NSDictionary *origInstallParams = [BNCEncodingUtils decodeJsonStringToDictionary:self.preferenceHelper.installParams];
     
     if (self.deepLinkDebugParams) {
-        NSMutableDictionary* debugInstallParams = [[BNCEncodingUtils decodeJsonStringToDictionary:self.preferenceHelper.sessionParams] mutableCopy];
+        NSMutableDictionary* debugInstallParams =
+			[[BNCEncodingUtils decodeJsonStringToDictionary:self.preferenceHelper.sessionParams]
+				mutableCopy];
         [debugInstallParams addEntriesFromDictionary:self.deepLinkDebugParams];
         return debugInstallParams;
     }
@@ -1120,9 +1155,12 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
     if ([stage length]) {
         [longUrl appendFormat:@"stage=%@&", stage];
     }
-    
-    [longUrl appendFormat:@"type=%ld&", (long)type];
-    [longUrl appendFormat:@"matchDuration=%ld&", (long)duration];
+    if (type) {
+        [longUrl appendFormat:@"type=%ld&", (long)type];
+    }
+    if (duration) {
+        [longUrl appendFormat:@"matchDuration=%ld&", (long)duration];
+    }
     
     NSData *jsonData = [BNCEncodingUtils encodeDictionaryToJsonData:params];
     NSString *base64EncodedParams = [BNCEncodingUtils base64EncodeData:jsonData];
@@ -1164,15 +1202,15 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
 #pragma mark - Application State Change methods
 
 - (void)applicationDidBecomeActive {
-    self.appIsInBackground = NO;
+    [self clearTimer];
     if (!self.isInitialized && !self.preferenceHelper.shouldWaitForInit && ![self.requestQueue containsInstallOrOpen]) {
         [self initUserSessionAndCallCallback:YES];
     }
 }
 
 - (void)applicationWillResignActive {
-    self.appIsInBackground = YES;
-    [self callClose];
+    [self clearTimer];
+    self.sessionTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(callClose) userInfo:nil repeats:NO];
     [self.requestQueue persistImmediately];
 }
 
@@ -1194,6 +1232,9 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
     }
 }
 
+- (void)clearTimer {
+    [self.sessionTimer invalidate];
+}
 
 #pragma mark - Queue management
 
@@ -1264,8 +1305,15 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
                 [req processResponse:nil error:[NSError errorWithDomain:BNCErrorDomain code:BNCInitError userInfo:@{ NSLocalizedDescriptionKey: @"Branch User Session has not been initialized" }]];
                 return;
             }
-                        
-            [req makeRequest:self.bServerInterface key:self.branchKey callback:callback];
+
+            if (![req isKindOfClass:[BranchCloseRequest class]]) {
+                [self clearTimer];
+            }
+
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+            dispatch_async(queue, ^ {
+                [req makeRequest:self.bServerInterface key:self.branchKey callback:callback];
+            });
         }
     }
     else {
@@ -1339,8 +1387,7 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
 }
 
 - (void)handleInitSuccess {
-    if (!self.appIsInBackground)
-        self.isInitialized = YES;
+    self.isInitialized = YES;
     
     NSDictionary *latestReferringParams = [self getLatestReferringParams];
     if (self.shouldCallSessionInitCallback) {
@@ -1416,7 +1463,7 @@ NSString * const BNCShareCompletedEvent = @"Share Completed";
 }
 
 + (NSString *)kitDisplayVersion {
-	return SDK_VERSION;
+	return BNC_SDK_VERSION;
 }
 
 @end
