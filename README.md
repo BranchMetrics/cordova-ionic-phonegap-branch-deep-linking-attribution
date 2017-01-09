@@ -603,6 +603,8 @@
   - Registers custom events
 
   - Must [Track User](#track-user) before [Track Event](#track-event) to associate events with a user
+  
+  - Do not use name your custom event to events restricted by Branch (`open`, `install`, `close`) 
 
     ```js
     var eventName = 'clicked_on_this';
