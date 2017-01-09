@@ -45,8 +45,8 @@ SOFTWARE.
   </js-module>
 
   <!-- Hooks -->
-  <hook src="hooks/before_plugin_install.js" type="before_plugin_install" />
-  <hook src="hooks/after_prepare.js" type="after_prepare" />
+  <hook src="hooks/beforePluginInstall.js" type="before_plugin_install" />
+  <hook src="hooks/afterPrepare.js" type="after_prepare" />
 
   <engines>
     <engine name="cordova" version=">=3.5.0" />
