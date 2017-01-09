@@ -94,6 +94,8 @@ chrome://inspect/#devices
 
 ### Submit
 
+> **Required** [Semantic Release](https://github.com/semantic-release/semantic-release) comments `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `revert`
+
 > Submit code with a [pull request](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking)
  
 ```sh
