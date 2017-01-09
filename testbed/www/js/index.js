@@ -53,10 +53,10 @@ function BranchEvent() {
   console.log('Trigger BranchEvent()');
 
   // event name
-  var event = document.getElementById('custom-action').value;
+  var event = document.getElementById('custom-action').value || 'blank';
 
   // optional
-  var metadata = { "custom_dictionary": 123 };
+  var metadata = { 'custom_dictionary': 123, 'anything': 'everything' };
   Branch.userCompletedAction(event, metadata).then(function (res) {
     console.log(res);
     alert('Response: ' + JSON.stringify(res));
