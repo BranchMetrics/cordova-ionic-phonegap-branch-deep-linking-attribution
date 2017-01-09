@@ -4,7 +4,7 @@
   'use strict'
   var configPrefrences = require('./lib/sdk/configXml.js')
   var iosPlist = require('./lib/ios/plist.js')
-  var iosPreferences = require('./lib/ios/xcodePreferences.js')
+  var iosPreferences = require('./lib/ios/preferences.js')
   var iosAssociatedDomains = require('./lib/ios/associatedDomains.js')
   var iosDevelopmentTeam = require('./lib/ios/developmentTeam.js')
   var androidManifest = require('./lib/android/androidManifest.js')
