@@ -39,6 +39,7 @@
       } else {
         // only run once
         setPackageInstalled()
+        removeEtcDirectory()
       }
       deferral.resolve()
     })
@@ -99,5 +100,11 @@
   // set that the Branch SDK package has been installed
   function setPackageInstalled () {
     fs.closeSync(fs.openSync(installFlagLocation, 'w'))
+  }
+
+  // artifact caused by 'npm install --prefix'
+  function removeEtcDirectory () {
+    var remove = 'rm -r ./plugins/' + SDK + '/etc'
+    exec(remove)
   }
 })()
