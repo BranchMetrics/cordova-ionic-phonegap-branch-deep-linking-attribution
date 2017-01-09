@@ -13,9 +13,12 @@
   var q
 
   // hook entry
-  module.exports = install
+  module.exports = {
+    install: install
+  }
 
   function install (context) {
+    // set properties
     q = context.requireCordovaModule('q')
     deferral = new q.defer() // eslint-disable-line
     installFlagLocation = path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, installFlagName)
@@ -44,7 +47,6 @@
   }
 
   // installs the node modules via npm install one at a time
-  // @return {callback(error)}
   function installNodeModules (modules, callback) {
     // base case
     if (modules.length <= 0) {
@@ -68,8 +70,7 @@
     })
   }
 
-  // checks to see which node modules need to be installed
-  // @return {[string]} of node modules from package.json.dependencies
+  // checks to see which node modules need to be installed from package.json.dependencies
   function getNodeModulesToInstall (dependencies) {
     var modules = []
     for (var module in dependencies) {
@@ -85,7 +86,6 @@
   }
 
   // if the Branch SDK package has already been installed
-  // @return {boolean} based on .installed file is found
   function getPackageInstalled () {
     try {
       fs.readFileSync(installFlagLocation)
@@ -96,7 +96,6 @@
   }
 
   // set that the Branch SDK package has been installed
-  // @return {void} based on .installed file is created
   function setPackageInstalled () {
     fs.closeSync(fs.openSync(installFlagLocation, 'w'))
   }
