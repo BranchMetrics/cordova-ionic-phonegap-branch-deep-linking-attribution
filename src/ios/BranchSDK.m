@@ -234,7 +234,7 @@
         state = [command.arguments objectAtIndex:1];
     }
     else {
-        name = (NSString *)command.arguments;
+        name = [command.arguments objectAtIndex:0];
     }
 
     Branch *branch = [self getInstance];
