@@ -60,18 +60,7 @@ SOFTWARE.
         <param name="onload" value="true" />
       </feature>
     </config-file>
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <meta-data android:name="io.branch.sdk.BranchKey" android:value="$BRANCH_KEY" />
-    </config-file>
-    <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
-      <!-- Non AppLink example -->
-      <intent-filter>
-        <data android:scheme="$URI_SCHEME" />
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-      </intent-filter>
-    </config-file>
+
     <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
     <framework src="io.branch.sdk.android:library:2+" />
   </platform>
