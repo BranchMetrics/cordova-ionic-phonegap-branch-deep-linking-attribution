@@ -123,10 +123,10 @@ function BranchUniversalObject () {
 
   // only canonicalIdentifier is required
   var properties = {
-    canonicalIdentifier: '123',
-    canonicalUrl: 'http://example.com/123',
-    title: 'Content 123',
-    contentDescription: 'Content 123 ' + Date.now(),
+    canonicalIdentifier: 'content/123',
+    canonicalUrl: 'https://example.com/content/123',
+    title: 'Content 123 Title',
+    contentDescription: 'Content 123 Description ' + Date.now(),
     contentImageUrl: 'http://lorempixel.com/400/400/',
     price: 12.12,
     currency: 'GBD',
@@ -169,17 +169,16 @@ function BranchDeepLink () {
 
   // optional fields
   var analytics = {
-    channel: 'channel',
-    feature: 'feature',
-    campaign: 'campaign',
-    stage: 'stage',
+    channel: 'facebook',
+    feature: 'onboarding',
+    campaign: 'content 123 launch',
+    stage: 'new user',
     tags: ['one', 'two', 'three'],
     alias: document.getElementById('alias').value
   }
 
   // optional fields
   var properties = {
-    $fallback_url: 'http://www.example.com/example',
     $desktop_url: 'http://www.example.com/desktop',
     $android_url: 'http://www.example.com/android',
     $ios_url: 'http://www.example.com/ios',
@@ -201,10 +200,10 @@ function BranchDeepLink () {
     console.log(res)
     document.getElementById('generated-url').placeholder = ''
     document.getElementById('generated-url').value = res.url
-    alert(JSON.stringify(res.url))
+    alert(JSON.stringify('Response: ' + res.url))
   }).catch(function (err) {
     console.error(err)
-    alert(JSON.stringify(err))
+    alert(JSON.stringify('Error: ' + err))
   })
 }
 
@@ -213,20 +212,16 @@ function BranchShareSheet () {
 
   // optional fields
   var analytics = {
-    channel: 'channel',
-    feature: 'feature',
-    campaign: 'campaign',
-    stage: 'stage',
+    channel: 'facebook',
+    feature: 'onboarding',
+    campaign: 'content 123 launch',
+    stage: 'new user',
     tags: ['one', 'two', 'three']
   }
 
   // optional fields
   var properties = {
-    $fallback_url: 'http://www.example.com/example',
     $desktop_url: 'http://www.example.com/desktop',
-    $android_url: 'http://www.example.com/android',
-    $ios_url: 'http://www.example.com/ios',
-    $ipad_url: 'http://www.example.com/ipad',
     more_custom: 'data',
     even_more_custom: true,
     this_is_custom: 41231
@@ -243,20 +238,16 @@ function BranchShareSheet () {
   branchUniversalObj.onShareSheetLaunched(function (res) {
     // android only
     console.log(res)
-    alert(JSON.stringify(res))
   })
   branchUniversalObj.onShareSheetDismissed(function (res) {
     console.log(res)
-    alert(JSON.stringify(res))
   })
   branchUniversalObj.onLinkShareResponse(function (res) {
     console.log(res)
-    alert(JSON.stringify(res))
   })
   branchUniversalObj.onChannelSelected(function (res) {
     // android only
     console.log(res)
-    alert(JSON.stringify(res))
   })
 
   // share sheet
@@ -293,8 +284,8 @@ function BranchReferralsLoad () {
 function BranchReferralsRedeem () {
   console.log('Trigger BranchReferralsRedeem()')
 
-  var reward = 1000
-  Branch.redeemRewards(reward).then(function (res) {
+  var amount = 100
+  Branch.redeemRewards(amount).then(function (res) {
     console.log(res)
     alert('Response: ' + JSON.stringify(res))
   }).catch(function (err) {
