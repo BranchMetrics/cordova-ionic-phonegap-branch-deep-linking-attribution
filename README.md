@@ -246,20 +246,20 @@
 
     ```js
     // for development and debugging only
-    Branch.setDebug(true);
+    Branch.setDebug(true)
 
     // sync with Mixpanel if installed
-    Branch.setMixpanelToken('your_mixpanel_token');
+    Branch.setMixpanelToken('your_mixpanel_token')
 
     // Branch initialization
     Branch.initSession(function(data) {
       // read deep link data on click
-      alert('Deep Link Data: ' + JSON.stringify(data)); 
+      alert('Deep Link Data: ' + JSON.stringify(data))
     }).then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res))
     }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 - #### Create Content Reference
@@ -271,29 +271,29 @@
     ```js
     // only canonicalIdentifier is required
     var properties = {
-        canonicalIdentifier: '123',
-        canonicalUrl: 'http://example.com/123',
-        title: 'Content 123',
-        contentDescription: 'Content 123 ' + Date.now(),
-        contentImageUrl: 'http://lorempixel.com/400/400/',
-        price: 12.12,
-        currency: 'GBD',
-        contentIndexingMode: 'private',
-        contentMetadata: {
-            'custom': 'data',
-            'testing': 123,
-            'this_is': true
-        }
-    };
+      canonicalIdentifier: 'content/123',
+      canonicalUrl: 'https://example.com/content/123',
+      title: 'Content 123 Title',
+      contentDescription: 'Content 123 Description ' + Date.now(),
+      contentImageUrl: 'http://lorempixel.com/400/400/',
+      price: 12.12,
+      currency: 'GBD',
+      contentIndexingMode: 'private',
+      contentMetadata: {
+        custom: 'data',
+        testing: 123,
+        this_is: true
+      }
+    }
 
     // create a branchUniversalObj variable to reference with other Branch methods
-    var branchUniversalObj = null;
-    Branch.createBranchUniversalObject(properties).then(function(res) {
-        branchUniversalObj = res;
-        alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-        alert('Error: ' + JSON.stringify(err));
-    });
+    var branchUniversalObj = null
+    Branch.createBranchUniversalObject(properties).then(function (res) {
+      branchUniversalObj = res
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 - #### Create Deep Link
@@ -307,31 +307,32 @@
     ```js
     // optional fields
     var analytics = {
-        channel: 'channel',
-        feature: 'feature',
-        campaign: 'campaign',
-        stage: 'stage',
-        tags: ['one', 'two', 'three']
-    };
+      channel: 'facebook',
+      feature: 'onboarding',
+      campaign: 'content 123 launch',
+      stage: 'new user',
+      tags: ['one', 'two', 'three']
+    }
 
     // optional fields
     var properties = {
-        $fallback_url: 'http://www.example.com/fallback',
-        $desktop_url: 'http://www.example.com/desktop',
-        $android_url: 'http://www.example.com/android',
-        $ios_url: 'http://www.example.com/ios',
-        $ipad_url: 'http://www.example.com/ipad',
-        $deeplink_path: 'content/123',
-        more_custom: 'data',
-        even_more_custom: true,
-        this_is_custom: 321
-    };
+      $desktop_url: 'http://www.example.com/desktop',
+      $android_url: 'http://www.example.com/android',
+      $ios_url: 'http://www.example.com/ios',
+      $ipad_url: 'http://www.example.com/ipad',
+      $deeplink_path: 'content/123',
+      $match_duration: 2000,
+      more_custom: 'data',
+      even_more_custom: true,
+      this_is_custom: 41231,
+      this_is_date: Date.now()
+    }
 
-    branchUniversalObj.generateShortUrl(analytics, properties).then(function(res) {
-        alert('Response: ' + JSON.stringify(res.url));
-    }).catch(function(err) {
-        alert('Error: ' + JSON.stringify(err));
-    });
+    branchUniversalObj.generateShortUrl(analytics, properties).then(function (res) {
+      alert('Response: ' + JSON.stringify(res.url))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 - #### Share Deep Link
@@ -345,45 +346,41 @@
     ```js
     // optional fields
     var analytics = {
-        channel: 'channel',
-        feature: 'feature',
-        campaign: 'campaign',
-        stage: 'stage',
-        tags: ['one', 'two', 'three']
-    };
+      channel: 'facebook',
+      feature: 'onboarding',
+      campaign: 'content 123 launch',
+      stage: 'new user',
+      tags: ['one', 'two', 'three']
+    }
 
     // optional fields
     var properties = {
-        $fallback_url: 'http://www.example.com/example',
-        $desktop_url: 'http://www.example.com/desktop',
-        $android_url: 'http://www.example.com/android',
-        $ios_url: 'http://www.example.com/ios',
-        $ipad_url: 'http://www.example.com/ipad',
-        more_custom: 'data',
-        even_more_custom: true,
-        this_is_custom: 321
-    };
+      $desktop_url: 'http://www.example.com/desktop',
+      more_custom: 'data',
+      even_more_custom: true,
+      this_is_custom: 41231
+    }
 
-    var message = 'Check out this link';
+    var message = 'Check out this link'
 
     // optional listeners (must be called before showShareSheet)
-    branchUniversalObj.onShareSheetLaunched(function(res) {
+    branchUniversalObj.onShareSheetLaunched(function (res) {
       // android only
-      alert('Response: ' + JSON.stringify(res));
-    });
-    branchUniversalObj.onShareSheetDismissed(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    });
-    branchUniversalObj.onLinkShareResponse(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    });
-    branchUniversalObj.onChannelSelected(function(res) {
+      console.log(res)
+    })
+    branchUniversalObj.onShareSheetDismissed(function (res) {
+      console.log(res)
+    })
+    branchUniversalObj.onLinkShareResponse(function (res) {
+      console.log(res)
+    })
+    branchUniversalObj.onChannelSelected(function (res) {
       // android only
-      alert('Response: ' + JSON.stringify(res));
-    });
+      console.log(res)
+    })
 
     // share sheet
-    branchUniversalObj.showShareSheet(analytics, properties, message);
+    branchUniversalObj.showShareSheet(analytics, properties, message)
     ```
 
 - #### Read Deep Link
@@ -397,26 +394,26 @@
     // Branch initialization within your deviceready and resume
     Branch.initSession(function(deepLinkData) {
       // handler for deep link data on click
-      alert(JSON.stringify(deepLinkData));
-    });
+      alert('Response: ' + JSON.stringify(deepLinkData))
+    })
     ```
 
   - First data
     ```js
     Branch.getFirstReferringParams().then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res))
     }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
   - Latest data
     ```js
     Branch.getLatestReferringParams().then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res))
     }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 - #### Display Content
@@ -426,11 +423,11 @@
   - Needs a [Branch Universal Object](#create-content-reference)
 
     ```js
-    branchUniversalObj.listOnSpotlight().then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    branchUniversalObj.listOnSpotlight().then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 - #### Track Content
@@ -440,11 +437,11 @@
   - Needs a [Branch Universal Object](#create-content-reference)
 
     ```js
-    branchUniversalObj.registerView().then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    branchUniversalObj.registerView().then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 - #### Track User
@@ -454,20 +451,20 @@
   - Must be a `string`
 
     ```js
-    var userId = 'email_or_id';
-    Branch.setIdentity(userId).then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    var userId = '123456'
+    Branch.setIdentity(userId).then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
  
     ```js
-    Branch.logout().then(function(res) {
-      alert(JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    Branch.logout().then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 - #### Track Event
@@ -479,22 +476,22 @@
   - Event names `open`, `install`, and `close` are restricted by Branch
 
     ```js
-    var eventName = 'clicked_on_this';
-    var metaData = { custom_dictionary: 123 }; // optional
-    Branch.userCompletedAction(eventName, metaData).then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    var eventName = 'clicked_on_this'
+    var metadata = { 'custom_dictionary': 123, 'anything': 'everything' }
+    Branch.userCompletedAction(eventName, metaData).then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
     ```js
-    var eventName = 'clicked_on_this';
-    Branch.userCompletedAction(eventName).then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    var eventName = 'clicked_on_this'
+    Branch.userCompletedAction(eventName).then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 - #### Handle Referrals
@@ -520,51 +517,51 @@
   - Spend credits
 
     ```js
-    var amount = 10;
-    var bucket = 'this_bucket'; // optional
-    Branch.redeemRewards(amount, bucket).then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    var amount = 10
+    var bucket = 'this_bucket'
+    Branch.redeemRewards(amount, bucket).then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
     ```js
-    var amount = 10;
-    Branch.redeemRewards(amount).then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    var amount = 10
+    Branch.redeemRewards(amount).then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
   - Load credits
 
     ```js
-    var bucket = 'this_bucket'; // optional
+    var bucket = 'this_bucket'
     Branch.loadRewards(bucket).then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
+      alert('Response: ' + JSON.stringify(res))
     }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
     ```js
-    Branch.loadRewards().then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    Branch.loadRewards().then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
   - Load history
 
     ```js
-    Branch.creditHistory().then(function(res) {
-      alert('Response: ' + JSON.stringify(res));
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err));
-    });
+    Branch.creditHistory().then(function (res) {
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      alert('Error: ' + JSON.stringify(err))
+    })
     ```
 
 # Troubleshooting
@@ -573,7 +570,7 @@
 
   - Use the Branch `key_live`
   
-  - Always use the `Branch.initSession(function(data) {});` to read Deep Link data
+  - Always use the `Branch.initSession(function(data) {})` to read Deep Link data
 
   - Always test on `device` (`simulator` `browser` `genymotion` will break)
 
@@ -667,7 +664,6 @@
 
       - ![image](http://i.imgur.com/YzeE14X.gif)
 
-
 - #### Testing: Show Console Logs
 
   - iOS Simulator
@@ -711,7 +707,6 @@
     - `cordova run android;`
 
     - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
-
 
 - #### Testing: Supported Platforms
 
@@ -813,7 +808,7 @@
     | campaign | | Use this field to organize the links by actual campaign. For example, if you launched a new feature or product and want to run a campaign around that
     | stage | | Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter
     | tags | | This is a free form entry with unlimited values `["string"]`. Use it to organize your link data with labels that don’t fit within the bounds of the above
-    | alias | | Specify a link alias in place of the standard encoded short URL e.g. `yourdomain.com/youralias`. Link aliases are unique, immutable objects that cannot be deleted. Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight
+    | alias | | Specify a link alias in place of the standard encoded short URL e.g. `yourdomain.com/youralias`. Link aliases are unique, immutable objects that cannot be deleted. You cannot change the alias of existing links. Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight
     | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing)
 
   - Properties
@@ -830,7 +825,7 @@
 
       | Key | Default | Usage
       | --- | :-: | ---
-      | $fallback_url | | Change the redirect endpoint for all platforms - so you don’t have to enable it by platform. Note that Branch will forward all robots to this URL, overriding any OG tags entered in the link.  System-wide Default URL (set in Link Settings)
+      | $fallback_url | | Change the redirect endpoint for all platforms - so you don’t have to enable it by platform. Note that Branch will forward all robots to this URL, which **overrides any OG tags** entered in the link.  System-wide Default URL (set in Link Settings)
       | $desktop_url | | Change the redirect endpoint on desktops Text-Me-The-App page (set in Link Settings)
       | $ios_url | | Change the redirect endpoint for iOS  App Store page for your app (set in Link Settings)
       | $ipad_url | | Change the redirect endpoint for iPads `$ios_url` value
