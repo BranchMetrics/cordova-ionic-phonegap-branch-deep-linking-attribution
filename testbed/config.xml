@@ -31,7 +31,7 @@
     <allow-intent href="itms-apps:*" />
   </platform>
 
-  <!-- icon -->
+  <!-- icon (https://github.com/eberlitz/splashicon-generator) -->
   <platform name="android">
     <icon density="ldpi" src="res/icons/android/icon-36-ldpi.png" />
     <icon density="mdpi" src="res/icons/android/icon-48-mdpi.png" />
