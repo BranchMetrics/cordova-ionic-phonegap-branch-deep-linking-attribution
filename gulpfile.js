@@ -8,8 +8,6 @@ gulp.task('dev', ['setupDev', 'lint'])
 gulp.task('prod', ['setupNpm', 'lint'])
 gulp.task('lint', ['standard'])
 
-// secondary tasks
-
 // --------------------------------------------------
 // Linting
 // --------------------------------------------------
@@ -44,7 +42,7 @@ gulp.task('setupNpm', function () {
   setIosNpmOrDev('npm')
 })
 
-// TODO: does not work.. need to revise and update package.json -> semantic-release
+// TODO: does not work. need to revise and update package.json -> semantic-release
 gulp.task('update-plugin-xml-version', function () {
   // first match only!
   var PLUGIN_XML_VERSION_REGEX = /^\s*version=\"[\d\.]*\"\>$/m // eslint-disable-line
