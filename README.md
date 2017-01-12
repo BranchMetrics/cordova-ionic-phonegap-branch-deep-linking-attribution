@@ -68,7 +68,7 @@
   - [Premium Features](#premium-feature)
   - [Support](#support)
 
-# Getting Started
+## Getting Started
 
 - #### Configure Branch
 
@@ -238,7 +238,7 @@
 
   - Tap on the deep link to open app
 
-# Features
+## Features
 
 - #### Initialize Branch Features
 
@@ -566,7 +566,7 @@
     })
     ```
 
-# Troubleshooting
+## Troubleshooting
 
 - #### Testing: Key Points
 
@@ -1117,7 +1117,7 @@
     compile "io.branch.sdk.android:library:2.+"
     ```
 
-# Additional
+## Additional
 
 - #### SDK Development
 
