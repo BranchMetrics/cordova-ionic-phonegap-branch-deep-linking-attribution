@@ -8,7 +8,7 @@
   <a href="https://www.npmjs.com/package/branch-cordova-sdk"><img src="https://img.shields.io/npm/l/branch-cordova-sdk.svg" alt="npm version"></a>
 </p>
 
-> Hyperlinks can navigate to a website, but cannot navigate to your app.
+> Hyperlinks can navigate to a website, but not to your app.
 
 > Branch deep links allow users to install, open, and navigate to content inside your app.
 
