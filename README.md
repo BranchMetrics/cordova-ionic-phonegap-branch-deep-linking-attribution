@@ -12,7 +12,9 @@
 
 > Branch deep links allow users to install, open, and navigate to content inside your app.
 
-> Branch deep links will grow your app. Convert web users to app users. Enable user-to-user sharing. Personalize user experiences. Track users. Track referrals. Track campaigns. Track conversions. Increase engagement.
+> Branch deep links will grow your app.
+
+> Convert web users to app users, enable user-to-user sharing, personalize user experiences, track users, track referrals, track campaigns, track conversions, and increase overall engagement.
 
 <p align="center">
   <a href="https://youtu.be/MXgLQ8QDXk8"><img src="http://i.imgur.com/NF2NEDn.gif"/></a>
