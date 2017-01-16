@@ -794,7 +794,7 @@
     | contentImageUrl | | The image URL for the content | `$og_image_url `
     | price | | The price of the item | `$amount`
     | currency | | The currency representing the price in ISO 4217 currency code | `$currency`
-    | contentIndexMode | `"public"` | Can be set to either `"public"` or `"private"`. Public indicates that you’d like this content to be discovered by other apps. | `$publicly_indexable`
+    | contentIndexingMode | `"public"` | Can be set to either `"public"` or `"private"`. Public indicates that you’d like this content to be discovered by other apps. | `$publicly_indexable`
     | contentMetadata | | Any custom key-value data e.g. `{ "custom": "data" }`
 
 - #### Link Data: Deep Link Properties
