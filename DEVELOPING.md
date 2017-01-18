@@ -72,7 +72,6 @@ rm -rf ../.installed;
 rm -rf ./plugins;
 rm -rf ./platforms;
 cordova platform add ios;
-cordova plugin rm branch-cordova-sdk;
 cordova plugin add ../;
 cordova build ios --developmentTeam="PW4Q8885U7";
 open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;

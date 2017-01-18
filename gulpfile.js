@@ -16,7 +16,8 @@ gulp.task('standard', function () {
   var javascript = [
     './hooks/**/*.js',
     './testbed/www/js/**/*.js',
-    './gulpfile.js'
+    './gulpfile.js',
+    './www/branch.js'
   ]
 
   return gulp.src(javascript)

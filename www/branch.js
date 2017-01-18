@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Branch.IO SDK
@@ -7,10 +7,9 @@
  *     All methods are promisified, therefore you can call .then(successCallback, errorCallback) for any of the method
  *     called for executing success or error callbacks.
  */
-
-var exec = require('cordova/exec');
-var deviceVendor = window.clientInformation.vendor;
-var _API_CLASS = 'BranchSDK'; // SDK Class
+var exec = require('cordova/exec')
+var deviceVendor = window.clientInformation.vendor
+var _API_CLASS = 'BranchSDK' // SDK Class
 
 /**
  * Execute SDK method using cordova.exec()
@@ -20,17 +19,16 @@ var _API_CLASS = 'BranchSDK'; // SDK Class
  *
  * @return (Promise)
  */
-function execute(method, params) {
+function execute (method, params) {
+  params = !params ? [] : params
 
-    params = !params ? [] : params;
-
-    return new Promise(function (resolve, reject) {
-        exec(function (res) {
-            resolve(res);
-        }, function (err) {
-            reject(err);
-        }, _API_CLASS, method, params);
-    });
+  return new Promise(function (resolve, reject) {
+    exec(function (res) {
+      resolve(res)
+    }, function (err) {
+      reject(err)
+    }, _API_CLASS, method, params)
+  })
 }
 
 /**
@@ -42,35 +40,34 @@ function execute(method, params) {
  *
  * @return (Promise)
  */
-function executeCallback(method, callback, params) {
+function executeCallback (method, callback, params) {
+  params = !params ? [] : params
 
-    params = !params ? [] : params;
-
-    exec(callback, function (err) {
-        console.error(err);
-    }, _API_CLASS, method, params);
+  exec(callback, function (err) {
+    console.error(err)
+  }, _API_CLASS, method, params)
 }
 
 /**
  * @class Branch
  */
-var Branch = function Branch() {
+var Branch = function Branch () {
+  this.debugMode = false
+}
 
-    this.debugMode = false;
-};
-
-var disableGlobalListenersWarnings = false;
+var disableGlobalListenersWarnings = false
 
 /**
  * Don't emit warnings regarding use of global listeners.
  */
 Branch.prototype.disableGlobalListenersWarnings = function () {
-    disableGlobalListenersWarnings = true;
-};
+  disableGlobalListenersWarnings = true
+}
 
-var branchLinkListener = null;
-function onBranchLinkStub(data) {
-    branchLinkListener(data);
+var branchLinkListener = null
+
+function onBranchLinkStub (data) {
+  branchLinkListener(data)
 }
 
 /**
@@ -79,46 +76,47 @@ function onBranchLinkStub(data) {
  * @return (Promise)
  */
 Branch.prototype.initSession = function (onBranchLinkHook) {
-    if (!onBranchLinkHook && !disableGlobalListenersWarnings) {
-        console.log('WARNING: branch link hook is not being passed to initSession. ' + 'Falling back to global DeepLinkHandler method. See https://goo.gl/GijGKP for details.');
-    } else {
-        var currentHook = window.DeepLinkHandler;
-        if (currentHook !== undefined && currentHook !== onBranchLinkStub) {
-            if (!disableGlobalListenersWarnings) {
-                console.log('WARNING: you are calling initSession with a branch link hook when an ' + 'existing global DeepLinkHandler is defined. The global ' + 'DeepLinkHandler will be overwritten. See https://goo.gl/GijGKP ' + 'for details.');
-            }
-        }
-        if (onBranchLinkHook) {
-            branchLinkListener = onBranchLinkHook;
-            window.DeepLinkHandler = onBranchLinkStub;
-        }
+  if (!onBranchLinkHook && !disableGlobalListenersWarnings) {
+    console.log('WARNING: branch link hook is not being passed to initSession. ' + 'Falling back to global DeepLinkHandler method. See https://goo.gl/GijGKP for details.')
+  } else {
+    var currentHook = window.DeepLinkHandler
+    if (currentHook !== undefined && currentHook !== onBranchLinkStub) {
+      if (!disableGlobalListenersWarnings) {
+        console.log('WARNING: you are calling initSession with a branch link hook when an ' + 'existing global DeepLinkHandler is defined. The global ' + 'DeepLinkHandler will be overwritten. See https://goo.gl/GijGKP ' + 'for details.')
+      }
     }
+    if (onBranchLinkHook) {
+      branchLinkListener = onBranchLinkHook
+      window.DeepLinkHandler = onBranchLinkStub
+    }
+  }
 
-    return execute('initSession');
-};
+  return execute('initSession')
+}
 
-var nonBranchLinkListener = null;
-function onNonBranchLinkStub(data) {
-    nonBranchLinkListener(data);
+var nonBranchLinkListener = null
+
+function onNonBranchLinkStub (data) {
+  nonBranchLinkListener(data)
 }
 
 /**
  * Register listener for non branch links.
  */
 Branch.prototype.onNonBranchLink = function (newHook) {
-    if (!newHook) {
-        throw new Error('non branch link hook is falsy, expected a function, not: "' + newHook + '"');
-    }
+  if (!newHook) {
+    throw new Error('non branch link hook is falsy, expected a function, not: "' + newHook + '"')
+  }
 
-    var currentHook = window.NonBranchLinkHandler;
-    if (currentHook !== undefined && currentHook !== onNonBranchLinkStub && currentHook !== defaultNonBranchLinkHandler) {
-        if (!disableGlobalListenersWarnings) {
-            console.log('WARNING: you are calling onNonBranchLink when an ' + 'existing global NonBranchLinkHandler is defined. The global ' + 'NonBranchLinkHandler will be overwritten. See https://goo.gl/GijGKP ' + 'for details.');
-        }
+  var currentHook = window.NonBranchLinkHandler
+  if (currentHook !== undefined && currentHook !== onNonBranchLinkStub && currentHook !== defaultNonBranchLinkHandler) {
+    if (!disableGlobalListenersWarnings) {
+      console.log('WARNING: you are calling onNonBranchLink when an ' + 'existing global NonBranchLinkHandler is defined. The global ' + 'NonBranchLinkHandler will be overwritten. See https://goo.gl/GijGKP ' + 'for details.')
     }
-    nonBranchLinkListener = newHook;
-    window.NonBranchLinkHandler = onNonBranchLinkStub;
-};
+  }
+  nonBranchLinkListener = newHook
+  window.NonBranchLinkHandler = onNonBranchLinkStub
+}
 
 /**
  * Get Mixpanel tolen/assisstance.
@@ -129,9 +127,8 @@ Branch.prototype.onNonBranchLink = function (newHook) {
  * @return (Promise)
  */
 Branch.prototype.setMixpanelToken = function (token) {
-
-    return execute('setMixpanelToken', [token]);
-};
+  return execute('setMixpanelToken', [token])
+}
 
 /**
  * Set debug mode to simulate fresh installs.
@@ -142,13 +139,12 @@ Branch.prototype.setMixpanelToken = function (token) {
  * @return (Promise)
  */
 Branch.prototype.setDebug = function (isEnabled) {
+  isEnabled = typeof isEnabled !== 'boolean' ? false : isEnabled
 
-    isEnabled = typeof isEnabled !== 'boolean' ? false : isEnabled;
+  this.debugMode = isEnabled
 
-    this.debugMode = isEnabled;
-
-    return execute('setDebug', [isEnabled]);
-};
+  return execute('setDebug', [isEnabled])
+}
 
 /**
  * Retrieves the install session parameters.
@@ -156,9 +152,8 @@ Branch.prototype.setDebug = function (isEnabled) {
  * @return (Promise)
  */
 Branch.prototype.getFirstReferringParams = function () {
-
-    return execute('getFirstReferringParams');
-};
+  return execute('getFirstReferringParams')
+}
 
 /**
  * Retrieves the latest referring parameters.
@@ -166,9 +161,8 @@ Branch.prototype.getFirstReferringParams = function () {
  * @return (Promise)
  */
 Branch.prototype.getLatestReferringParams = function () {
-
-    return execute('getLatestReferringParams');
-};
+  return execute('getLatestReferringParams')
+}
 
 /**
  * Sets the identity of a user and returns the data.
@@ -179,15 +173,14 @@ Branch.prototype.getLatestReferringParams = function () {
  *
  */
 Branch.prototype.setIdentity = function (identity) {
-
-    if (identity) {
-        return execute('setIdentity', [identity]);
-    } else {
-        return new Promise(function (resolve, reject) {
-            reject('Please set an identity');
-        });
-    }
-};
+  if (identity) {
+    return execute('setIdentity', [identity])
+  } else {
+    return new Promise(function (resolve, reject) {
+      reject('Please set an identity')
+    })
+  }
+}
 
 /**
  * Logout from the current session. Replace session and identity IDs.
@@ -195,9 +188,8 @@ Branch.prototype.setIdentity = function (identity) {
  * @return (Promise)
  */
 Branch.prototype.logout = function () {
-
-    return execute('logout');
-};
+  return execute('logout')
+}
 
 /**
  * Register custom events.
@@ -208,20 +200,20 @@ Branch.prototype.logout = function () {
  * @return (Promise)
  */
 Branch.prototype.userCompletedAction = function (action, metaData) {
-    if (!action) {
-        return new Promise(function (resolve, reject) {
-            reject('Please set an event name');
-        });
-    }
+  if (!action) {
+    return new Promise(function (resolve, reject) {
+      reject('Please set an event name')
+    })
+  }
 
-    var args = [action];
+  var args = [action]
 
-    if (metaData) {
-        args.push(metaData);
-    }
+  if (metaData) {
+    args.push(metaData)
+  }
 
-    return execute('userCompletedAction', args);
-};
+  return execute('userCompletedAction', args)
+}
 
 /**
  * Create an universal Branch object
@@ -244,162 +236,152 @@ Branch.prototype.userCompletedAction = function (action, metaData) {
  *    --------------------------------------------------------------
  */
 Branch.prototype.createBranchUniversalObject = function (options) {
+  return new Promise(function (resolve, reject) {
+    execute('createBranchUniversalObject', [options]).then(function (res) {
+      var obj = {
+        message: res.message,
+        instanceId: res.branchUniversalObjectId
+      }
 
-    return new Promise(function (resolve, reject) {
-        execute('createBranchUniversalObject', [options]).then(function (res) {
+      // Attach object functions
+      /**
+       * Register view count.
+       *
+       * @return (Promise)
+       */
+      obj.registerView = function () {
+        return execute('registerView', [obj.instanceId])
+      }
 
-            var obj = {
-                message: res.message,
-                instanceId: res.branchUniversalObjectId
-            };
+      /**
+       * Generates a short url.
+       *
+       * @param (Object) options
+       * @param (Object) controlParameters
+       *
+       * @return (Promise)
+       *
+       * options:
+       *    --------------------------------------------------
+       *    |    KEY    |    TYPE    |      DESCRIPTION      |
+       *    --------------------------------------------------
+       *    |  feature  |   String   |   The link feature    |
+       *    |   alias   |   String   |    The link alias     |
+       *    |  channel  |   String   |   The link channel    |
+       *    |  campaign |   String   |   The link campaign   |
+       *    |   stage   |   String   |    The link stage     |
+       *    |  duration |    Int     |   The link duration   |
+       *    --------------------------------------------------
+       *
+       * controlParameters:
+       *    -------------------------------------------------------
+       *    |         KEY        |    TYPE    |    DESCRIPTION    |
+       *    -------------------------------------------------------
+       *    |    $fallback_url   |   String   |   Fallback URL    |
+       *    |    $desktop_url    |   String   |   Desktop URL     |
+       *    |    $android_url    |   String   |   Android URL     |
+       *    |      $ios_url      |   String   |     iOS URL       |
+       *    |      $ipad_url     |   String   |    iPad URL       |
+       *    |      $fire_url     |   String   |  Kindle Fire URL  |
+       *    |  $blackberry_url   |   String   |   Blackberry URL  |
+       *    | $windows_phone_url |   String   |  Kindle Fire URL  |
+       *    -------------------------------------------------------
+       */
+      obj.generateShortUrl = function (options, controlParameters) {
+        return execute('generateShortUrl', [obj.instanceId, options, controlParameters])
+      }
 
-            // Attach object functions
-            /**
-             * Register view count.
-             *
-             * @return (Promise)
-             */
-            obj.registerView = function () {
+      /**
+       * Show the share dialog.
+       *
+       * @param (Object) options
+       * @param (Object) controlParameters
+       * @param (String) shareText [OPTIONAL]
+       *
+       * @return (Promise)
+       *
+       * options:
+       *    --------------------------------------------------
+       *    |    KEY    |    TYPE    |      DESCRIPTION      |
+       *    --------------------------------------------------
+       *    |  feature  |   String   |   The link feature    |
+       *    |   alias   |   String   |    The link alias     |
+       *    |  channel  |   String   |   The link channel    |
+       *    |  campaign |   String   |   The link campaign   |
+       *    |   stage   |   String   |    The link stage     |
+       *    |  duration |    Int     |   The link duration   |
+       *    --------------------------------------------------
+       *
+       * controlParameters:
+       *    -------------------------------------------------------
+       *    |         KEY        |    TYPE    |    DESCRIPTION    |
+       *    -------------------------------------------------------
+       *    |    $fallback_url   |   String   |   Fallback URL    |
+       *    |    $desktop_url    |   String   |   Desktop URL     |
+       *    |    $android_url    |   String   |   Android URL     |
+       *    |      $ios_url      |   String   |     iOS URL       |
+       *    |      $ipad_url     |   String   |    iPad URL       |
+       *    |      $fire_url     |   String   |  Kindle Fire URL  |
+       *    |  $blackberry_url   |   String   |   Blackberry URL  |
+       *    | $windows_phone_url |   String   |  Kindle Fire URL  |
+       *    -------------------------------------------------------
+       */
+      obj.showShareSheet = function (options, controlParameters, shareText) {
+        if (!shareText) {
+          shareText = 'This stuff is awesome: '
+        }
 
-                return execute('registerView', [obj.instanceId]);
-            };
+        return execute('showShareSheet', [obj.instanceId, options, controlParameters, shareText])
+      }
 
-            /**
-             * Generates a short url.
-             *
-             * @param (Object) options
-             * @param (Object) controlParameters
-             *
-             * @return (Promise)
-             *
-             * options:
-             *    --------------------------------------------------
-             *    |    KEY    |    TYPE    |      DESCRIPTION      |
-             *    --------------------------------------------------
-             *    |  feature  |   String   |   The link feature    |
-             *    |   alias   |   String   |    The link alias     |
-             *    |  channel  |   String   |   The link channel    |
-             *    |  campaign |   String   |   The link campaign   |
-             *    |   stage   |   String   |    The link stage     |
-             *    |  duration |    Int     |   The link duration   |
-             *    --------------------------------------------------
-             *
-             * controlParameters:
-             *    -------------------------------------------------------
-             *    |         KEY        |    TYPE    |    DESCRIPTION    |
-             *    -------------------------------------------------------
-             *    |    $fallback_url   |   String   |   Fallback URL    |
-             *    |    $desktop_url    |   String   |   Desktop URL     |
-             *    |    $android_url    |   String   |   Android URL     |
-             *    |      $ios_url      |   String   |     iOS URL       |
-             *    |      $ipad_url     |   String   |    iPad URL       |
-             *    |      $fire_url     |   String   |  Kindle Fire URL  |
-             *    |  $blackberry_url   |   String   |   Blackberry URL  |
-             *    | $windows_phone_url |   String   |  Kindle Fire URL  |
-             *    -------------------------------------------------------
-             */
-            obj.generateShortUrl = function (options, controlParameters) {
+      /**
+       * Set on share sheet launched listener callback.
+       *
+       * @param (Function) callback
+       */
+      obj.onShareSheetLaunched = function (callback) {
+        if (deviceVendor.indexOf('Apple') < 0) {
+          executeCallback('onShareLinkDialogLaunched', callback, [obj.instanceId])
+        }
+      }
 
-                return execute('generateShortUrl', [obj.instanceId, options, controlParameters]);
-            };
+      obj.onShareSheetDismissed = function (callback) {
+        executeCallback('onShareLinkDialogDismissed', callback, [obj.instanceId])
+      }
 
-            /**
-             * Show the share dialog.
-             *
-             * @param (Object) options
-             * @param (Object) controlParameters
-             * @param (String) shareText [OPTIONAL]
-             *
-             * @return (Promise)
-             *
-             * options:
-             *    --------------------------------------------------
-             *    |    KEY    |    TYPE    |      DESCRIPTION      |
-             *    --------------------------------------------------
-             *    |  feature  |   String   |   The link feature    |
-             *    |   alias   |   String   |    The link alias     |
-             *    |  channel  |   String   |   The link channel    |
-             *    |  campaign |   String   |   The link campaign   |
-             *    |   stage   |   String   |    The link stage     |
-             *    |  duration |    Int     |   The link duration   |
-             *    --------------------------------------------------
-             *
-             * controlParameters:
-             *    -------------------------------------------------------
-             *    |         KEY        |    TYPE    |    DESCRIPTION    |
-             *    -------------------------------------------------------
-             *    |    $fallback_url   |   String   |   Fallback URL    |
-             *    |    $desktop_url    |   String   |   Desktop URL     |
-             *    |    $android_url    |   String   |   Android URL     |
-             *    |      $ios_url      |   String   |     iOS URL       |
-             *    |      $ipad_url     |   String   |    iPad URL       |
-             *    |      $fire_url     |   String   |  Kindle Fire URL  |
-             *    |  $blackberry_url   |   String   |   Blackberry URL  |
-             *    | $windows_phone_url |   String   |  Kindle Fire URL  |
-             *    -------------------------------------------------------
-             */
-            obj.showShareSheet = function (options, controlParameters, shareText) {
+      /**
+       * Set on link share listener callback.
+       *
+       * @param (Function) callback
+       */
+      obj.onLinkShareResponse = function (callback) {
+        executeCallback('onLinkShareResponse', callback, [obj.instanceId])
+      }
 
-                if (!shareText) {
-                    shareText = 'This stuff is awesome: ';
-                }
+      /**
+       * Set on channel select listener callback.
+       *
+       * @param (Function) callback
+       */
+      obj.onChannelSelected = function (callback) {
+        if (deviceVendor.indexOf('Apple') < 0) {
+          executeCallback('onChannelSelected', callback, [obj.instanceId])
+        }
+      }
 
-                return execute('showShareSheet', [obj.instanceId, options, controlParameters, shareText]);
-            };
+      /**
+       * List item on Spotlight (iOS Only).
+       */
+      obj.listOnSpotlight = function () {
+        return execute('listOnSpotlight', [obj.instanceId])
+      }
 
-            /**
-             * Set on share sheet launched listener callback.
-             *
-             * @param (Function) callback
-             */
-            obj.onShareSheetLaunched = function (callback) {
-
-                if (deviceVendor.indexOf('Apple') < 0) {
-                    executeCallback('onShareLinkDialogLaunched', callback, [obj.instanceId]);
-                }
-            };
-
-            obj.onShareSheetDismissed = function (callback) {
-
-                executeCallback('onShareLinkDialogDismissed', callback, [obj.instanceId]);
-            };
-
-            /**
-             * Set on link share listener callback.
-             *
-             * @param (Function) callback
-             */
-            obj.onLinkShareResponse = function (callback) {
-
-                executeCallback('onLinkShareResponse', callback, [obj.instanceId]);
-            };
-
-            /**
-             * Set on channel select listener callback.
-             *
-             * @param (Function) callback
-             */
-            obj.onChannelSelected = function (callback) {
-
-                if (deviceVendor.indexOf('Apple') < 0) {
-                    executeCallback('onChannelSelected', callback, [obj.instanceId]);
-                }
-            };
-
-            /**
-             * List item on Spotlight (iOS Only).
-             */
-            obj.listOnSpotlight = function () {
-
-                return execute('listOnSpotlight', [obj.instanceId]);
-            };
-
-            resolve(obj);
-        }, function (err) {
-            reject(err);
-        });
-    });
-};
+      resolve(obj)
+    }, function (err) {
+      reject(err)
+    })
+  })
+}
 
 /**
  * Retrieve the current reward balance.
@@ -407,13 +389,12 @@ Branch.prototype.createBranchUniversalObject = function (options) {
  * @return (Promise)
  */
 Branch.prototype.loadRewards = function (bucket) {
+  if (!bucket) {
+    bucket = ''
+  }
 
-    if (!bucket) {
-        bucket = '';
-    }
-
-    return execute('loadRewards', [bucket]);
-};
+  return execute('loadRewards', [bucket])
+}
 
 /**
  * Redeem rewards to your account.
@@ -424,15 +405,14 @@ Branch.prototype.loadRewards = function (bucket) {
  * @return (Promise)
  */
 Branch.prototype.redeemRewards = function (value, bucket) {
+  var params = [value]
 
-    var params = [value];
+  if (bucket) {
+    params.push(bucket)
+  }
 
-    if (bucket) {
-        params.push(bucket);
-    }
-
-    return execute('redeemRewards', params);
-};
+  return execute('redeemRewards', params)
+}
 
 /**
  * Retrieve the entire history of credits and redemptions from the individual user.
@@ -440,16 +420,15 @@ Branch.prototype.redeemRewards = function (value, bucket) {
  * @return (Promise)
  */
 Branch.prototype.creditHistory = function () {
-
-    return execute('getCreditHistory');
-};
+  return execute('getCreditHistory')
+}
 
 /**
  * NonBranchLinkHandler callback placeholder.
  *
  * @param {String} response
  */
-var defaultNonBranchLinkHandler = function defaultNonBranchLinkHandler(response) {};
-window.NonBranchLinkHandler = typeof NonBranchLinkHandler === 'undefined' ? defaultNonBranchLinkHandler : NonBranchLinkHandler;
+var defaultNonBranchLinkHandler = function defaultNonBranchLinkHandler (response) {}
+window.NonBranchLinkHandler = typeof NonBranchLinkHandler === 'undefined' ? defaultNonBranchLinkHandler : window.NonBranchLinkHandler
 
-module.exports = new Branch();
+module.exports = new Branch()
