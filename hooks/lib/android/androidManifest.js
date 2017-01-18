@@ -10,30 +10,101 @@
     writePreferences: writePreferences
   }
 
+  // methods
   function writePreferences (context, preferences) {
     var pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
-    var manifestSource = xmlHelper.readXmlAsJson(pathToManifest)
-    var cleanManifest
-    var updatedManifest
+    var manifest = xmlHelper.readXmlAsJson(pathToManifest)
 
-    // remove old intent-filters
-    cleanManifest = removeOldOptions(manifestSource)
-
-    // inject intent-filters based on plugin preferences
-    updatedManifest = injectOptions(cleanManifest, preferences)
+    // update manifest
+    manifest = removePreviousOptions(manifest)
+    manifest = updateBranchKeyMetaData(manifest, preferences)
+    manifest = updateBranchReferrerTracking(manifest)
+    manifest = updateLaunchOptionToSingleTask(manifest, preferences)
+    manifest = updateBranchURIScheme(manifest, preferences)
+    manifest = updateBranchAppLinks(manifest, preferences)
 
     // save new version of the AndroidManifest
-    xmlHelper.writeJsonAsXml(updatedManifest, pathToManifest)
+    xmlHelper.writeJsonAsXml(manifest, pathToManifest)
   }
 
-  function removeOldOptions (manifestData) {
-    var cleanManifest = manifestData
-    var activities = manifestData['manifest']['application'][0]['activity']
+  function updateBranchURIScheme (manifest, preferences) {
+    var intentFilter = manifest['manifest']['application'][0]['activity'][0]['intent-filter'] || []
+    // TODO: need to validate main activity (second [0])
+
+    manifest['manifest']['application'][0]['activity'][0]['intent-filter'] = intentFilter.concat([{
+      'action': [{
+        '$': {
+          'android:name': 'android.intent.action.VIEW'
+        }
+      }],
+      'category': [{
+        '$': {
+          'android:name': 'android.intent.category.DEFAULT'
+        }
+      }, {
+        '$': {
+          'android:name': 'android.intent.category.BROWSABLE'
+        }
+      }],
+      'data': [{
+        '$': {
+          'android:scheme': preferences.uriScheme,
+          'android:host': 'open'
+        }
+      }]
+    }])
+
+    return manifest
+  }
+
+  function updateLaunchOptionToSingleTask (manifest, preferences) {
+    manifest['manifest']['application'][0]['activity'][0]['$']['android:launchMode'] = 'singleTask'
+    return manifest
+  }
+
+  function updateBranchReferrerTracking (manifest) {
+    var receiver = manifest['manifest']['application'][0]['receiver'] || []
+
+    manifest['manifest']['application'][0]['receiver'] = receiver.concat([{
+      '$': {
+        'android:name': 'io.branch.referral.InstallListener',
+        'android:exported': true
+      },
+      'intent-filter': [{
+        'action': [{
+          '$': {
+            'android:name': 'com.android.vending.INSTALL_REFERRER'
+          }
+        }]
+      }]
+    }])
+
+    return manifest
+  }
+
+  function updateBranchKeyMetaData (manifest, preferences) {
+    var metadata = manifest['manifest']['application'][0]['meta-data'] || []
+
+    // loop through
+    // if exists, update
+    // if not, append
+    manifest['manifest']['application'][0]['meta-data'] = metadata.concat([{
+      '$': {
+        'android:name': 'io.branch.sdk.BranchKey',
+        'android:value': preferences.branchKey
+      }
+    }])
+
+    return manifest
+  }
+
+  function removePreviousOptions (manifest) {
+    var activities = manifest['manifest']['application'][0]['activity']
 
     activities.forEach(removeIntentFiltersFromActivity)
-    cleanManifest['manifest']['application'][0]['activity'] = activities
+    manifest['manifest']['application'][0]['activity'] = activities
 
-    return cleanManifest
+    return manifest
   }
 
   function removeIntentFiltersFromActivity (activity) {
@@ -110,31 +181,23 @@
     return hostIsSet && schemeIsSet
   }
 
-  function injectOptions (manifestData, preferences) {
-    var changedManifest = manifestData
-    var targetSdk = changedManifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion']
-    var activitiesList = changedManifest['manifest']['application'][0]['activity']
+  function updateBranchAppLinks (manifest, preferences) {
+    var activitiesList = manifest['manifest']['application'][0]['activity']
     var launchActivityIndex = getMainLaunchActivityIndex(activitiesList)
-    var ulIntentFilters = []
+    var intentFilters = createAppLinkIntentFilter(preferences)
     var launchActivity
 
     if (launchActivityIndex < 0) {
-      console.warn('Could not find launch activity in the AndroidManifest file. Can\'t inject Universal Links preferences.')
-      return
+      throw new Error('BRANCH SDK - Could not find launch activity in the AndroidManifest file. Can\'t inject Universal Links preferences.')
     }
 
     // get launch activity
     launchActivity = activitiesList[launchActivityIndex]
 
-    // generate intent-filters
-    preferences.hosts.forEach(function (host) {
-      ulIntentFilters.push(createIntentFilter(host.name, host.scheme, preferences.androidPrefix, parseInt(targetSdk) >= 23))
-    })
-
     // add Universal Links intent-filters to the launch activity
-    launchActivity['intent-filter'] = launchActivity['intent-filter'].concat(ulIntentFilters)
+    launchActivity['intent-filter'] = launchActivity['intent-filter'].concat(intentFilters)
 
-    return changedManifest
+    return manifest
   }
 
   function getMainLaunchActivityIndex (activities) {
@@ -177,8 +240,9 @@
     return isLauncher
   }
 
-  function createIntentFilter (host, scheme, pathPrefix, androidM) {
-    var intentFilter = {
+  function createAppLinkIntentFilter (preferences) {
+    var data = getAppLinkIntentFilterData(preferences)
+    var intentFilter = [{
       '$': {
         'android:autoVerify': 'true'
       },
@@ -196,23 +260,59 @@
           'android:name': 'android.intent.category.BROWSABLE'
         }
       }],
-      'data': [{
-        '$': {
-          'android:host': host,
-          'android:scheme': scheme,
-          'android:pathPrefix': pathPrefix
-        }
-      }]
-    }
-
-    if (!pathPrefix) {
-      delete intentFilter['data'][0]['$']['android:pathPrefix']
-    }
-
-    if (!androidM) {
-      delete intentFilter['$']['android:autoVerify']
-    }
+      'data': data
+    }]
 
     return intentFilter
+  }
+
+  function getAppLinkIntentFilterData (preferences) {
+    var intentFilterData = []
+
+    if (preferences.linkDomain.indexOf('app.link') !== -1) {
+      // app.link
+      var first = preferences.linkDomain.split('.')[0]
+      var rest = preferences.linkDomain.split('.').slice(2).join('.')
+      var alternate = first + '-alternate' + '.' + rest
+
+      intentFilterData.push(getAppLinkIntentFilterDictionary(preferences.linkDomain))
+      intentFilterData.push(getAppLinkIntentFilterDictionary(alternate))
+    } else if (preferences.linkDomain.indexOf('bnc.lt') !== -1) {
+      // bnc.lt
+      if (preferences.androidPrefix == null) {
+        throw new Error('Branch SDK plugin is missing "android-prefix" in <branch-config> in your config.xml')
+      }
+
+      intentFilterData.push(getAppLinkIntentFilterDictionary(preferences.linkDomain, preferences.androidPrefix))
+    } else {
+      // custom
+      intentFilterData.push(getAppLinkIntentFilterDictionary(preferences.linkDomain))
+    }
+
+    return intentFilterData
+  }
+
+  function getAppLinkIntentFilterDictionary (linkDomain, androidPrefix) {
+    var scheme = 'https'
+    var output
+
+    if (androidPrefix) {
+      output = {
+        '$': {
+          'android:host': linkDomain,
+          'android:scheme': scheme,
+          'android:pathPrefix': androidPrefix
+        }
+      }
+    } else {
+      output = {
+        '$': {
+          'android:host': linkDomain,
+          'android:scheme': scheme
+        }
+      }
+    }
+
+    return output
   }
 })()

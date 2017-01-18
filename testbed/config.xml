@@ -2,7 +2,6 @@
 <widget id="com.eneff.branch.example" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <!-- Branch -->
   <plugin name="branch-cordova-sdk" />
-  <preference name="AndroidLaunchMode" value="singleInstance" />
   <branch-config>
     <branch-key value="key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT" />
     <ios-team-id value="PW4Q8885U7" />
