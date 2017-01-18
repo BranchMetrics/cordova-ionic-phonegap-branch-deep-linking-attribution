@@ -60,11 +60,8 @@
       var second = preferences.linkDomain.split('.')[1]
       var rest = preferences.linkDomain.split('.').slice(2).join('.')
       var alternate = first + '-alternate'
-      var test = 'test-' + second
 
       domainList.push(prefix + alternate + '.' + second + '.' + rest)
-      domainList.push(prefix + first + '.' + test + '.' + rest)
-      domainList.push(prefix + alternate + '.' + test + '.' + rest)
     }
 
     return domainList
