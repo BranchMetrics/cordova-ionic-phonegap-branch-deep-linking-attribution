@@ -15,6 +15,7 @@
     var pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
     var manifest = xmlHelper.readXmlAsJson(pathToManifest)
 
+    console.log('BRANCH SDK: Updating AndroidManifest.xml')
     // update manifest
     manifest = removePreviousOptions(manifest)
     manifest = updateBranchKeyMetaData(manifest, preferences)

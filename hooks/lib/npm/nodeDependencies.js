@@ -31,11 +31,12 @@
     }
 
     // install node modules
+    console.log('BRANCH SDK: Installing node dependencies')
     var modules = getNodeModulesToInstall(dependencies)
     installNodeModules(modules, function (err) {
       if (err) {
         // handle error
-        throw new Error('Failed to install the Branch SDK')
+        throw new Error('BRANCH SDK: Failed to install the Branch SDK')
       } else {
         // only run once
         setPackageInstalled()
@@ -57,14 +58,14 @@
 
     // install one at a time
     var module = modules.pop()
-    console.log('Installing "' + module + '"')
+    console.log('BRANCH SDK: Installing "' + module + '"')
 
     var install = 'npm install --prefix ./plugins/' + SDK + ' -D ' + module
     exec(install, function (err, stdout, stderr) {
       // handle error
       if (err) {
         callback(true)
-        throw new Error('Failed to install Branch Dependency: "' + module + '"')
+        throw new Error('BRANCH SDK: Failed to install Branch Dependency: "' + module + '"')
       } else {
         // next module
         installNodeModules(modules, callback)

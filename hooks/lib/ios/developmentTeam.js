@@ -15,6 +15,8 @@
 
   // methods
   function addDevelopmentTeam (context, preferences) {
+    console.log('BRANCH SDK: Updating Development Team')
+
     if (context.opts.cordova.platforms.indexOf('ios') === -1) return
     if (!context.opts.options) return
     if (!context.opts.options.buildConfig) return

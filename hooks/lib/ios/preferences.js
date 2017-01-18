@@ -14,6 +14,8 @@
 
   // methods
   function enableAssociatedDomains (preferences) {
+    console.log('BRANCH SDK: Updating Xcode preferences')
+
     var entitlementsFile = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
     var projectFile = preferences.projectPlatform.parseProjectFile(path.join(preferences.projectRoot, 'platforms', 'ios'))
 
