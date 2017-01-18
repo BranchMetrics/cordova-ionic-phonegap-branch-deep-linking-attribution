@@ -13,6 +13,8 @@
 
   // methods
   function addBranchSettings (preferences) {
+    console.log('BRANCH SDK: Updating Info.plist')
+
     var filePath = 'platforms/ios/' + preferences.bundleName + '/' + preferences.bundleName + '-Info.plist'
     var xml = readPlist(filePath)
     var obj = convertXmlToObject(xml)
