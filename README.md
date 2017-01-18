@@ -97,7 +97,7 @@
         <host name="2d0s.app.link" scheme="https" />
         <host name="2d0s-alternate.app.link" scheme="https" />
       </branch-config>
-      <preference name="AndroidLaunchMode" value="singleInstance" />
+      <preference name="AndroidLaunchMode" value="singleTask" />
     ```
 
   - PhoneGap
@@ -109,7 +109,7 @@
         <host name="2d0s.app.link" scheme="https" />
         <host name="2d0s-alternate.app.link" scheme="https" />
       </branch-config>
-      <preference name="AndroidLaunchMode" value="singleInstance" />
+      <preference name="AndroidLaunchMode" value="singleTask" />
     ```
 
   - Change `com.eneff.branch.cordova`, `PW4Q8885U7`, `2d0s.app.link`, and `2d0s-alternate.app.link` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)    
