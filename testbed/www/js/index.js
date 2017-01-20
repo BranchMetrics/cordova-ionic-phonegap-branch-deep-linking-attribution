@@ -9,7 +9,7 @@ var app = {
   },
   bindEvents: function bindEvents () {
     document.addEventListener('deviceready', this.onDeviceReady, false)
-    document.addEventListener('resume', this.onDeviceReady, false)
+    document.addEventListener('resume', this.onDeviceResume, false)
   },
   onDeviceReady: function onDeviceReady () {
     BranchInit(true)
