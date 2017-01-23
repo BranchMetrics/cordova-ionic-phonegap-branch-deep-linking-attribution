@@ -8,13 +8,13 @@
   <a href="https://www.npmjs.com/package/branch-cordova-sdk"><img src="https://img.shields.io/npm/l/branch-cordova-sdk.svg" alt="npm version"></a>
 </p>
 
-> Hyperlinks can navigate to a website, but not to your app.
+> Hyperlinks can navigate to your website, but not to your app.
 
 > Branch deep links allow users to install, open, and navigate to content inside your app.
 
 > Branch deep links will grow your app.
 
-> Convert web users to app users, enable user-to-user sharing, personalize user experiences, track users, track referrals, track campaigns, track conversions, and increase overall engagement.
+> Increase discovery of your app based on the content inside, convert web users to app users, enable user-to-user sharing, personalize user experiences, track users, track referrals, track campaigns, track conversions, and increase overall engagement.
 
 <p align="center">
   <a href="https://youtu.be/MXgLQ8QDXk8"><img src="http://i.imgur.com/NF2NEDn.gif"/></a>
