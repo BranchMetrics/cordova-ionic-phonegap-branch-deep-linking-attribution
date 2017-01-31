@@ -28,7 +28,6 @@
     var configurations = removeComments(xcodeProject.pbxXCBuildConfigurationSection())
     var config
     var buildSettings
-    var deploymentTargetIsUpdated
 
     for (config in configurations) {
       buildSettings = configurations[config].buildSettings
@@ -39,30 +38,17 @@
         var buildDeploymentTarget = buildSettings.IPHONEOS_DEPLOYMENT_TARGET.toString()
         if (compare(buildDeploymentTarget, IOS_DEPLOYMENT_TARGET) === -1) {
           buildSettings.IPHONEOS_DEPLOYMENT_TARGET = IOS_DEPLOYMENT_TARGET
-          deploymentTargetIsUpdated = true
         }
       } else {
         buildSettings.IPHONEOS_DEPLOYMENT_TARGET = IOS_DEPLOYMENT_TARGET
-        deploymentTargetIsUpdated = true
       }
     }
-
-    if (deploymentTargetIsUpdated) {
-      console.warn('IOS project now has deployment target set as: ' + IOS_DEPLOYMENT_TARGET)
-    }
-
-    console.warn('IOS project Code Sign Entitlements now set to: ' + entitlementsFile)
   }
 
   function addPbxReference (xcodeProject, entitlementsFile) {
     var fileReferenceSection = removeComments(xcodeProject.pbxFileReferenceSection())
 
-    if (isPbxReferenceAlreadySet(fileReferenceSection, entitlementsFile)) {
-      console.warn('Entitlements file is in reference section.')
-      return
-    }
-
-    console.warn('Entitlements file is not in references section, adding it')
+    if (isPbxReferenceAlreadySet(fileReferenceSection, entitlementsFile)) return
     xcodeProject.addResourceFile(path.basename(entitlementsFile))
   }
 

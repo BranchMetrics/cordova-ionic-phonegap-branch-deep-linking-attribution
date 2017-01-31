@@ -4,7 +4,7 @@
   'use strict'
   var configPrefrences = require('./lib/sdk/configXml.js')
   var iosPlist = require('./lib/ios/plist.js')
-  var iosPreferences = require('./lib/ios/preferences.js')
+  var iosCapabilities = require('./lib/ios/capabilities.js')
   var iosAssociatedDomains = require('./lib/ios/associatedDomains.js')
   var iosDevelopmentTeam = require('./lib/ios/developmentTeam.js')
   var androidManifest = require('./lib/android/androidManifest.js')
@@ -25,7 +25,7 @@
       }
       if (platform === IOS) {
         iosPlist.addBranchSettings(preferences)
-        iosPreferences.enableAssociatedDomains(preferences)
+        iosCapabilities.enableAssociatedDomains(preferences)
         iosAssociatedDomains.addAssociatedDomains(preferences)
         iosDevelopmentTeam.addDevelopmentTeam(context, preferences)
       }
