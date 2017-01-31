@@ -239,28 +239,28 @@
   //   return launchActivityIndex
   // }
 
-  function isLaunchActivity (activity) {
-    var intentFilters = activity['intent-filter']
-    var isLauncher = false
+  // function isLaunchActivity (activity) {
+  //   var intentFilters = activity['intent-filter']
+  //   var isLauncher = false
 
-    if (intentFilters == null || intentFilters.length === 0) {
-      return false
-    }
+  //   if (intentFilters == null || intentFilters.length === 0) {
+  //     return false
+  //   }
 
-    isLauncher = intentFilters.some(function (intentFilter) {
-      var action = intentFilter['action']
-      var category = intentFilter['category']
+  //   isLauncher = intentFilters.some(function (intentFilter) {
+  //     var action = intentFilter['action']
+  //     var category = intentFilter['category']
 
-      if (action == null || action.length !== 1 || category == null || category.length !== 1) {
-        return false
-      }
+  //     if (action == null || action.length !== 1 || category == null || category.length !== 1) {
+  //       return false
+  //     }
 
-      var isMainAction = action[0]['$']['android:name'] === 'android.intent.action.MAIN'
-      var isLauncherCategory = category[0]['$']['android:name'] === 'android.intent.category.LAUNCHER'
+  //     var isMainAction = action[0]['$']['android:name'] === 'android.intent.action.MAIN'
+  //     var isLauncherCategory = category[0]['$']['android:name'] === 'android.intent.category.LAUNCHER'
 
-      return isMainAction && isLauncherCategory
-    })
+  //     return isMainAction && isLauncherCategory
+  //   })
 
-    return isLauncher
-  }
+  //   return isLauncher
+  // }
 })()
