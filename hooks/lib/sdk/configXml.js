@@ -77,7 +77,7 @@
 
   // read project platform
   function getProjectPlatform (context) {
-    // pre-5.0 cordova structure
+    // try pre-5.0 cordova structure
     try {
       return context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios
     } catch (e) {
