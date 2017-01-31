@@ -44,9 +44,25 @@
   }
 
   function updateEntitlements (entitlements, preferences) {
-    entitlements[ASSOCIATED_DOMAINS] = updateAssociatedDomains(preferences)
+    var domains = []
+    var prev = entitlements[ASSOCIATED_DOMAINS]
+    var next = updateAssociatedDomains(preferences)
+
+    prev = removePreviousAssociatedDomains(prev)
+    entitlements[ASSOCIATED_DOMAINS] = domains.concat(prev, next)
 
     return entitlements
+  }
+
+  function removePreviousAssociatedDomains (domains) {
+    var output = []
+    for (var i = 0; i < domains.length; i++) {
+      var domain = domains[i]
+      if (domain.indexOf('bnc.lt') > 0 || domain.indexOf('app.link') > 0) continue
+      output.push(domain)
+    }
+
+    return output
   }
 
   function updateAssociatedDomains (preferences) {
