@@ -26,13 +26,13 @@
     dependencies = require(path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, 'package.json')).dependencies
 
     // only run once
-    if (getPackageInstalled()) {
-      return
-    }
+    if (getPackageInstalled()) return
 
     // install node modules
-    console.log('BRANCH SDK: Installing node dependencies')
     var modules = getNodeModulesToInstall(dependencies)
+    if (modules.length === 0) return deferral.promise
+
+    console.log('BRANCH SDK: Installing node dependencies')
     installNodeModules(modules, function (err) {
       if (err) {
         // handle error
