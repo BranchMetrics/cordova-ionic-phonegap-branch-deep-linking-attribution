@@ -224,20 +224,20 @@
     return without
   }
 
-  function getMainLaunchActivityIndex (activities) {
-    var launchActivityIndex = -1
+  // function getMainLaunchActivityIndex (activities) {
+  //   var launchActivityIndex = -1
 
-    activities.some(function (activity, index) {
-      if (isLaunchActivity(activity)) {
-        launchActivityIndex = index
-        return true
-      }
+  //   activities.some(function (activity, index) {
+  //     if (isLaunchActivity(activity)) {
+  //       launchActivityIndex = index
+  //       return true
+  //     }
 
-      return false
-    })
+  //     return false
+  //   })
 
-    return launchActivityIndex
-  }
+  //   return launchActivityIndex
+  // }
 
   function isLaunchActivity (activity) {
     var intentFilters = activity['intent-filter']
