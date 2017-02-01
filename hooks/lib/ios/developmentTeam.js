@@ -1,5 +1,4 @@
 // TODO: does not work
-// update the development team for Universal Links
 (function () {
   // properties
   'use strict'
@@ -13,7 +12,7 @@
     addDevelopmentTeam: addDevelopmentTeam
   }
 
-  // methods
+  // updates the development team for Universal Links
   function addDevelopmentTeam (context, preferences) {
     console.log('BRANCH SDK: Updating Development Team')
 

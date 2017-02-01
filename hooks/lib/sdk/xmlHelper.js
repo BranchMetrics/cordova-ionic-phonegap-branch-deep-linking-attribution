@@ -1,4 +1,3 @@
-// read/write from/to xml file
 (function () {
   // properties
   'use strict'
@@ -11,7 +10,7 @@
     writeJsonAsXml: writeJsonAsXml
   }
 
-  // methods
+  // read from xml file
   function readXmlAsJson (filePath) {
     var xmlData
     var xmlParser
@@ -30,6 +29,7 @@
     return parsedData
   }
 
+  // write to xml file
   function writeJsonAsXml (jsData, filePath, options) {
     var xmlBuilder = new xml2js.Builder(options)
     var changedXmlData = xmlBuilder.buildObject(jsData)

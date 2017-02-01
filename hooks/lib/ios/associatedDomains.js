@@ -1,4 +1,3 @@
-// update the associated domains from the link-domain field of the app's config.xml
 (function () {
   // properties
   'use strict'
@@ -13,7 +12,7 @@
     addAssociatedDomains: addAssociatedDomains
   }
 
-  // methods
+  // updates the associated domains from the link-domain field of the app's config.xml
   function addAssociatedDomains (preferences) {
     var file = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
     var entitlements = getEntitlements(file)
@@ -23,6 +22,7 @@
     setEntitlements(file, entitlements)
   }
 
+  // save entitlements
   function setEntitlements (file, entitlements) {
     var plistContent = plist.build(entitlements)
 
@@ -31,6 +31,7 @@
     fs.writeFileSync(file, plistContent, 'utf8')
   }
 
+  // read entitlements
   function getEntitlements (file) {
     var content
 
@@ -43,6 +44,14 @@
     return plist.parse(content)
   }
 
+  // appends Branch link domains to the Associated Domain entitlement's file
+  //    <dict>
+  //      <key>com.apple.developer.associated-domains</key>
+  //      <array>
+  //        <string>applinks:rawsr.app.link</string>
+  //        <string>applinks:rawsr-alternate.app.link</string>
+  //      </array>
+  //    </dict>
   function updateEntitlements (entitlements, preferences) {
     var domains = []
     var prev = entitlements[ASSOCIATED_DOMAINS]
@@ -54,6 +63,7 @@
     return entitlements
   }
 
+  // removed previous associated domains related to Branch (will not remove link domain changes from custom domains or custom sub domains)
   function removePreviousAssociatedDomains (domains) {
     var output = []
     for (var i = 0; i < domains.length; i++) {
@@ -65,12 +75,15 @@
     return output
   }
 
+  // determine which Branch Link Domains to append
   function updateAssociatedDomains (preferences) {
     var domainList = []
     var prefix = 'applinks:'
 
+    // add link domain to associated domain
     domainList.push(prefix + preferences.linkDomain)
 
+    // app.link link domains need -alternate associated domains as well (for Deep Views)
     if (preferences.linkDomain.indexOf('app.link') !== -1) {
       var first = preferences.linkDomain.split('.')[0]
       var second = preferences.linkDomain.split('.')[1]

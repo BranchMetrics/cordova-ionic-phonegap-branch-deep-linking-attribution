@@ -1,4 +1,3 @@
-// update the xcode preferences to allow associated domains
 (function () {
   // properties
   'use strict'
@@ -12,7 +11,7 @@
     enableAssociatedDomains: enableAssociatedDomains
   }
 
-  // methods
+  // updates the xcode preferences to allow associated domains
   function enableAssociatedDomains (preferences) {
     console.log('BRANCH SDK: Updating Xcode preferences')
 
@@ -24,6 +23,7 @@
     projectFile.write()
   }
 
+  // adds entitlement files to the xcode project
   function activateAssociativeDomains (xcodeProject, entitlementsFile) {
     var configurations = removeComments(xcodeProject.pbxXCBuildConfigurationSection())
     var config
@@ -68,6 +68,7 @@
     return isAlreadyInReferencesSection
   }
 
+  // removes comments from .pbx file
   function removeComments (obj) {
     var keys = Object.keys(obj)
     var newObj = {}

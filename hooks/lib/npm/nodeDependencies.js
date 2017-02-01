@@ -1,4 +1,3 @@
-// install the node dependencies for Branch SDK
 (function () {
   // properties
   'use strict'
@@ -17,7 +16,7 @@
     install: install
   }
 
-  // methods
+  // install the node dependencies for Branch SDK
   function install (context) {
     // set properties
     q = context.requireCordovaModule('q')

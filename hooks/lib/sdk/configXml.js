@@ -1,4 +1,3 @@
-// read branch config from config.xml
 (function () {
   // properties
   'use strict'
@@ -10,7 +9,7 @@
     read: read
   }
 
-  // methods
+  // read branch config from config.xml
   function read (context) {
     var configXml = getConfigXml(context)
     var branchXml = getBranchXml(configXml)

@@ -1,4 +1,3 @@
-// before plugin install hooks
 (function () {
   // properties
   'use strict'
@@ -7,7 +6,7 @@
   // entry
   module.exports = run
 
-  // methods
+  // before plugin install hooks
   function run (context) {
     nodeDependencies.install(context)
   }

@@ -1,4 +1,3 @@
-// injects config.xml preferences into AndroidManifest.xml file.
 (function () {
   // properties
   'use strict'
@@ -10,7 +9,7 @@
     writePreferences: writePreferences
   }
 
-  // methods
+  // injects config.xml preferences into AndroidManifest.xml file.
   function writePreferences (context, preferences) {
     var pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
     var manifest = xmlHelper.readXmlAsJson(pathToManifest)
@@ -30,6 +29,8 @@
     xmlHelper.writeJsonAsXml(manifest, pathToManifest)
   }
 
+  // adds to <application> for Branch init:
+  // <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT" />
   function updateBranchKeyMetaData (manifest, preferences) {
     var metadatas = manifest['manifest']['application'][0]['meta-data'] || []
     var androidName = 'io.branch.sdk.BranchKey'
@@ -48,6 +49,12 @@
     return manifest
   }
 
+  // adds to <application> for install referrer tracking (optional)
+  //    <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+  //       <intent-filter>
+  //           <action android:name="com.android.vending.INSTALL_REFERRER" />
+  //       </intent-filter>
+  //    </receiver>
   function updateBranchReferrerTracking (manifest) {
     var receivers = manifest['manifest']['application'][0]['receiver'] || []
     var androidName = 'io.branch.referral.InstallListener'
@@ -75,6 +82,8 @@
 
   function updateLaunchOptionToSingleTask (manifest, preferences) {
     manifest['manifest']['application'][0]['activity'][0]['$']['android:launchMode'] = 'singleTask'
+  // adds to main <activity>:
+  //    android:launchMode="singleTask"
     return manifest
   }
 
@@ -82,10 +91,18 @@
     // TODO: need to validate main activity (second [0])
     var intentFilters = manifest['manifest']['application'][0]['activity'][0]['intent-filter'] || []
 
+  // adds to main <activity> for URI Scheme
+  //    <intent-filter>
+  //        <data android:scheme="ethantest" android:host="open" />
+  //        <action android:name="android.intent.action.VIEW" />
+  //        <category android:name="android.intent.category.DEFAULT" />
+  //        <category android:name="android.intent.category.BROWSABLE" />
+  //    </intent-filter>
+    // remove
     intentFilters = removeBasedOnIntentFilter(intentFilters)
 
-    // add new
     manifest['manifest']['application'][0]['activity'][0]['intent-filter'] = intentFilters.concat([{
+    // add
       'action': [{
         '$': {
           'android:name': 'android.intent.action.VIEW'
@@ -113,11 +130,18 @@
 
   function updateBranchAppLinks (manifest, preferences) {
     var intentFilters = manifest['manifest']['application'][0]['activity'][0]['intent-filter'] || []
+  // adds to main <activity> for App Links (optional)
+  //    <intent-filter android:autoVerify="true">
+  //       <action android:name="android.intent.action.VIEW" />
+  //       <category android:name="android.intent.category.DEFAULT" />
+  //       <category android:name="android.intent.category.BROWSABLE" />
+  //       <data android:scheme="https" android:host="ethan.app.link" />
+  //       <data android:scheme="https" android:host="ethan-alternate.app.link" />
+  //    </intent-filter>
     var data = getAppLinkIntentFilterData(preferences)
 
-    // remove old (already done in updateBranchURIScheme)
-    // add new
     manifest['manifest']['application'][0]['activity'][0]['intent-filter'] = intentFilters.concat([{
+    // add new (remove old already done in updateBranchURIScheme)
       '$': {
         'android:autoVerify': 'true'
       },
@@ -141,11 +165,12 @@
     return manifest
   }
 
+  // determine the Branch link domain <data> to append to the App Link intent filter
   function getAppLinkIntentFilterData (preferences) {
     var intentFilterData = []
 
     if (preferences.linkDomain.indexOf('app.link') !== -1) {
-      // app.link
+      // app.link needs an additional -alternate link domain
       var first = preferences.linkDomain.split('.')[0]
       var rest = preferences.linkDomain.split('.').slice(2).join('.')
       var alternate = first + '-alternate' + '.' + rest
@@ -167,6 +192,7 @@
     return intentFilterData
   }
 
+  // generate the array dictionary for <data> component for the App Link intent filter
   function getAppLinkIntentFilterDictionary (linkDomain, androidPrefix) {
     var scheme = 'https'
     var output = {
@@ -183,6 +209,7 @@
     return output
   }
 
+  // remove previous Branch related Intent Filters (both URI Scheme and App Link)
   function removeBasedOnIntentFilter (items) {
     var without = []
     for (var i = 0; i < items.length; i++) {
@@ -209,6 +236,7 @@
     return without
   }
 
+  // remove previous Branch related <meta-data> and <receiver> based on android:name
   function removeBasedOnAndroidName (items, androidName) {
     var without = []
     for (var i = 0; i < items.length; i++) {
@@ -226,6 +254,7 @@
 
   // function getMainLaunchActivityIndex (activities) {
   //   var launchActivityIndex = -1
+  // get the main <activity> because Branch Intent Filters must be in the main Launch Activity
 
   //   activities.some(function (activity, index) {
   //     if (isLaunchActivity(activity)) {

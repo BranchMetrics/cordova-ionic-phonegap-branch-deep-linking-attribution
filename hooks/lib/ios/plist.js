@@ -1,4 +1,3 @@
-// update the platforms/ios/app.plist file with branch settings within app/config.xml
 (function () {
   // properties
   'use strict'
@@ -11,7 +10,7 @@
     addBranchSettings: addBranchSettings
   }
 
-  // methods
+  // updates the platforms/ios/app.plist file with branch settings within app/config.xml
   function addBranchSettings (preferences) {
     console.log('BRANCH SDK: Updating Info.plist')
 
@@ -41,6 +40,22 @@
     return fs.writeFileSync(filePath, xml, { encoding: 'utf8' })
   }
 
+  // adds Branch data to pList:
+  //    <key>CFBundleURLTypes</key>
+  //    <array>
+  //      <dict>
+  //        <key>CFBundleURLName</key>
+  //        <string>branch-cordova-sdk</string>
+  //        <key>CFBundleURLSchemes</key>
+  //        <array>
+  //          <string>enefftest</string>
+  //        </array>
+  //      </dict>
+  //    </array>
+  //    <key>branch_key</key>
+  //    <string>key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT</string>
+  //    <key>branch_app_domain</key>
+  //    <string>rawsr.app.link</string>
   function appendPlist (obj, preferences) {
     var urlType = {
       CFBundleURLName: SDK,

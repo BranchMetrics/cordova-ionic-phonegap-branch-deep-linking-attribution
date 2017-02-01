@@ -1,4 +1,3 @@
-// after prepare hooks based on platform
 (function () {
   // properties
   'use strict'
@@ -14,7 +13,7 @@
   // entry
   module.exports = run
 
-  // methods
+  // after prepare hooks based on platform
   function run (context) {
     var preferences = configPrefrences.read(context)
     var platforms = context.opts.platforms
@@ -27,7 +26,7 @@
         iosPlist.addBranchSettings(preferences)
         iosCapabilities.enableAssociatedDomains(preferences)
         iosAssociatedDomains.addAssociatedDomains(preferences)
-        iosDevelopmentTeam.addDevelopmentTeam(context, preferences)
+        iosDevelopmentTeam.addDevelopmentTeam(context, preferences) // does not work
       }
     })
   }
