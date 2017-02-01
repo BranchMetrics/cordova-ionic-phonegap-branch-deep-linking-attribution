@@ -13,17 +13,16 @@
   function writePreferences (context, preferences) {
     var pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
     var manifest = xmlHelper.readXmlAsJson(pathToManifest)
-
-    // TODO: early exit
+    var mainActivityIndex = getMainLaunchActivityIndex(manifest['manifest']['application'][0]['activity'])
 
     console.log('BRANCH SDK: Updating AndroidManifest.xml')
 
     // update manifest
     manifest = updateBranchKeyMetaData(manifest, preferences)
     manifest = updateBranchReferrerTracking(manifest)
-    manifest = updateLaunchOptionToSingleTask(manifest, preferences)
-    manifest = updateBranchURIScheme(manifest, preferences)
-    manifest = updateBranchAppLinks(manifest, preferences)
+    manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex, preferences)
+    manifest = updateBranchURIScheme(manifest, mainActivityIndex, preferences)
+    manifest = updateBranchAppLinks(manifest, mainActivityIndex, preferences)
 
     // save new version of the AndroidManifest
     xmlHelper.writeJsonAsXml(manifest, pathToManifest)
@@ -80,16 +79,12 @@
     return manifest
   }
 
-  function updateLaunchOptionToSingleTask (manifest, preferences) {
-    manifest['manifest']['application'][0]['activity'][0]['$']['android:launchMode'] = 'singleTask'
   // adds to main <activity>:
   //    android:launchMode="singleTask"
+  function updateLaunchOptionToSingleTask (manifest, mainActivityIndex, preferences) {
+    manifest['manifest']['application'][0]['activity'][mainActivityIndex]['$']['android:launchMode'] = 'singleTask'
     return manifest
   }
-
-  function updateBranchURIScheme (manifest, preferences) {
-    // TODO: need to validate main activity (second [0])
-    var intentFilters = manifest['manifest']['application'][0]['activity'][0]['intent-filter'] || []
 
   // adds to main <activity> for URI Scheme
   //    <intent-filter>
@@ -98,11 +93,14 @@
   //        <category android:name="android.intent.category.DEFAULT" />
   //        <category android:name="android.intent.category.BROWSABLE" />
   //    </intent-filter>
+  function updateBranchURIScheme (manifest, mainActivityIndex, preferences) {
+    var intentFilters = manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] || []
+
     // remove
     intentFilters = removeBasedOnIntentFilter(intentFilters)
 
-    manifest['manifest']['application'][0]['activity'][0]['intent-filter'] = intentFilters.concat([{
     // add
+    manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] = intentFilters.concat([{
       'action': [{
         '$': {
           'android:name': 'android.intent.action.VIEW'
@@ -128,8 +126,6 @@
     return manifest
   }
 
-  function updateBranchAppLinks (manifest, preferences) {
-    var intentFilters = manifest['manifest']['application'][0]['activity'][0]['intent-filter'] || []
   // adds to main <activity> for App Links (optional)
   //    <intent-filter android:autoVerify="true">
   //       <action android:name="android.intent.action.VIEW" />
@@ -138,10 +134,12 @@
   //       <data android:scheme="https" android:host="ethan.app.link" />
   //       <data android:scheme="https" android:host="ethan-alternate.app.link" />
   //    </intent-filter>
+  function updateBranchAppLinks (manifest, mainActivityIndex, preferences) {
+    var intentFilters = manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] || []
     var data = getAppLinkIntentFilterData(preferences)
 
-    manifest['manifest']['application'][0]['activity'][0]['intent-filter'] = intentFilters.concat([{
     // add new (remove old already done in updateBranchURIScheme)
+    manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] = intentFilters.concat([{
       '$': {
         'android:autoVerify': 'true'
       },
@@ -252,44 +250,45 @@
     return without
   }
 
-  // function getMainLaunchActivityIndex (activities) {
-  //   var launchActivityIndex = -1
   // get the main <activity> because Branch Intent Filters must be in the main Launch Activity
+  function getMainLaunchActivityIndex (activities) {
+    var launchActivityIndex = -1
 
-  //   activities.some(function (activity, index) {
-  //     if (isLaunchActivity(activity)) {
-  //       launchActivityIndex = index
-  //       return true
-  //     }
+    activities.some(function (activity, index) {
+      if (isLaunchActivity(activity)) {
+        launchActivityIndex = index
+        return true
+      }
 
-  //     return false
-  //   })
+      return false
+    })
 
-  //   return launchActivityIndex
-  // }
+    return launchActivityIndex
+  }
 
-  // function isLaunchActivity (activity) {
-  //   var intentFilters = activity['intent-filter']
-  //   var isLauncher = false
+  // determine if <activity> is the main activity
+  function isLaunchActivity (activity) {
+    var intentFilters = activity['intent-filter']
+    var isLauncher = false
 
-  //   if (intentFilters == null || intentFilters.length === 0) {
-  //     return false
-  //   }
+    if (intentFilters == null || intentFilters.length === 0) {
+      return false
+    }
 
-  //   isLauncher = intentFilters.some(function (intentFilter) {
-  //     var action = intentFilter['action']
-  //     var category = intentFilter['category']
+    isLauncher = intentFilters.some(function (intentFilter) {
+      var action = intentFilter['action']
+      var category = intentFilter['category']
 
-  //     if (action == null || action.length !== 1 || category == null || category.length !== 1) {
-  //       return false
-  //     }
+      if (action == null || action.length !== 1 || category == null || category.length !== 1) {
+        return false
+      }
 
-  //     var isMainAction = action[0]['$']['android:name'] === 'android.intent.action.MAIN'
-  //     var isLauncherCategory = category[0]['$']['android:name'] === 'android.intent.category.LAUNCHER'
+      var isMainAction = action[0]['$']['android:name'] === 'android.intent.action.MAIN'
+      var isLauncherCategory = category[0]['$']['android:name'] === 'android.intent.category.LAUNCHER'
 
-  //     return isMainAction && isLauncherCategory
-  //   })
+      return isMainAction && isLauncherCategory
+    })
 
-  //   return isLauncher
-  // }
+    return isLauncher
+  }
 })()
