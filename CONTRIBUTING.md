@@ -110,3 +110,8 @@ git push origin BRANCH_NAME;
 > Update version within plugin.template.xml
 > Run `gulp prerelease`
 > Merge Pull Request - code to NPM will happen automatically 
+
+
+## Hooks
+
+Don't need to `rebuild.sh`, just re-run `cordova build ios`
