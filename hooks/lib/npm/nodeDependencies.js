@@ -6,10 +6,6 @@
   var path = require('path')
   var exec = require('child_process').exec
   var installFlagName = '.installed'
-  var installFlagLocation
-  var dependencies
-  var deferral
-  var q
 
   // entry
   module.exports = {
@@ -19,13 +15,13 @@
   // install the node dependencies for Branch SDK
   function install (context) {
     // set properties
-    q = context.requireCordovaModule('q')
-    deferral = new q.defer() // eslint-disable-line
-    installFlagLocation = path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, installFlagName)
-    dependencies = require(path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, 'package.json')).dependencies
+    var q = context.requireCordovaModule('q')
+    var deferral = new q.defer() // eslint-disable-line
+    var installFlagLocation = path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, installFlagName)
+    var dependencies = require(path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, 'package.json')).dependencies
 
     // only run once
-    if (getPackageInstalled()) return
+    if (getPackageInstalled(installFlagLocation)) return
 
     // install node modules
     var modules = getNodeModulesToInstall(dependencies)
@@ -38,7 +34,7 @@
         throw new Error('BRANCH SDK: Failed to install the Branch SDK')
       } else {
         // only run once
-        setPackageInstalled()
+        setPackageInstalled(installFlagLocation)
         removeEtcDirectory()
       }
       deferral.resolve()
@@ -88,7 +84,7 @@
   }
 
   // if the Branch SDK package has already been installed
-  function getPackageInstalled () {
+  function getPackageInstalled (installFlagLocation) {
     try {
       fs.readFileSync(installFlagLocation)
       return true
@@ -98,7 +94,7 @@
   }
 
   // set that the Branch SDK package has been installed
-  function setPackageInstalled () {
+  function setPackageInstalled (installFlagLocation) {
     fs.closeSync(fs.openSync(installFlagLocation, 'w'))
   }
 
