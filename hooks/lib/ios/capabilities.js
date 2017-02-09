@@ -13,7 +13,7 @@
 
   // updates the xcode preferences to allow associated domains
   function enableAssociatedDomains (preferences) {
-    console.log('BRANCH SDK: Updating Xcode preferences')
+    console.log('BRANCH SDK: Updating iOS Xcode preferences')
 
     var entitlementsFile = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
     var projectFile = preferences.projectPlatform.parseProjectFile(path.join(preferences.projectRoot, 'platforms', 'ios'))

@@ -27,7 +27,6 @@
     var modules = getNodeModulesToInstall(dependencies)
     if (modules.length === 0) return deferral.promise
 
-    console.log('BRANCH SDK: Installing node dependencies')
     installNodeModules(modules, function (err) {
       if (err) {
         // handle error
@@ -53,7 +52,7 @@
 
     // install one at a time
     var module = modules.pop()
-    console.log('BRANCH SDK: Installing "' + module + '"')
+    console.log('BRANCH SDK: Installing node dependency ' + module)
 
     var install = 'npm install --prefix ./plugins/' + SDK + ' -D ' + module
     exec(install, function (err, stdout, stderr) {

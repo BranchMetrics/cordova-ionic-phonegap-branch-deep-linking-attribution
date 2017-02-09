@@ -17,7 +17,7 @@
     var file = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
     var entitlements = getEntitlements(file)
 
-    console.log('BRANCH SDK: Updating Associated Domains')
+    console.log('BRANCH SDK: Updating iOS associated domains')
     entitlements = updateEntitlements(entitlements, preferences)
     setEntitlements(file, entitlements)
   }

@@ -12,7 +12,7 @@
 
   // updates the platforms/ios/app.plist file with branch settings within app/config.xml
   function addBranchSettings (preferences) {
-    console.log('BRANCH SDK: Updating Info.plist')
+    console.log('BRANCH SDK: Updating iOS info.plist')
 
     var filePath = 'platforms/ios/' + preferences.bundleName + '/' + preferences.bundleName + '-Info.plist'
     var xml = readPlist(filePath)
