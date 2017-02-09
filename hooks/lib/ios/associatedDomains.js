@@ -66,6 +66,7 @@
   // removed previous associated domains related to Branch (will not remove link domain changes from custom domains or custom sub domains)
   function removePreviousAssociatedDomains (domains) {
     var output = []
+    if (!domains) return output
     for (var i = 0; i < domains.length; i++) {
       var domain = domains[i]
       if (domain.indexOf('bnc.lt') > 0 || domain.indexOf('app.link') > 0) continue
