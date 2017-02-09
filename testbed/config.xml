@@ -4,9 +4,9 @@
   <plugin name="branch-cordova-sdk" />
   <branch-config>
     <branch-key value="key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT" />
-    <ios-team-id value="PW4Q8885U7" />
     <uri-scheme value="enefftest" />
     <link-domain value="eneff.app.link" />
+    <ios-team-prod value="PW4Q8885U7" />
   </branch-config>
 
   <name>Branch Testing</name>

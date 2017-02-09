@@ -26,7 +26,7 @@
         iosPlist.addBranchSettings(preferences)
         iosCapabilities.enableAssociatedDomains(preferences)
         iosAssociatedDomains.addAssociatedDomains(preferences)
-        iosDevelopmentTeam.addDevelopmentTeam(context, preferences) // does not work
+        iosDevelopmentTeam.addDevelopmentTeam(preferences) // does not work, still needs to run through Xcode
       }
     })
   }

@@ -2,6 +2,7 @@
 testbed/platforms
 testbed/plugins
 testbed/hooks
+testbed/build.json
 node_modules
 .installed
 .gradle/

@@ -1,11 +1,12 @@
-// TODO: does not work
+// TODO: does not work. Automatic Signing of Provisioning Profile is not updating (https://pewpewthespells.com/blog/migrating_code_signing.html#automatic-signing-xcode-7)
+// TODO: users will have to bypass by always opening up Xcode
 (function () {
   // properties
   'use strict'
   var fs = require('fs')
   var path = require('path')
-  var encoding = 'utf-8'
-  var filepath = 'platforms/ios/cordova/build.xcconfig'
+
+  var fileName = 'build.json'
 
   // entry
   module.exports = {
@@ -13,32 +14,84 @@
   }
 
   // updates the development team for Universal Links
-  function addDevelopmentTeam (context, preferences) {
-    console.log('BRANCH SDK: Updating Development Team')
+  function addDevelopmentTeam (preferences) {
+    console.log('BRANCH SDK: Updating iOS development team')
 
-    if (context.opts.cordova.platforms.indexOf('ios') === -1) return
-    if (!context.opts.options) return
-    if (!context.opts.options.buildConfig) return
+    var file = path.join(preferences.projectRoot, fileName)
+    var content = getBuildJson(file)
+    content = convertStringToJson(content)
 
-    var buildType = context.opts.options.release ? 'release' : 'debug'
+    createDefaultBuildJson(content)
+    updateDevelopmentTeam(content, preferences)
 
-    var buildConfigPath = context.opts.options.buildConfig
-    if (!path.isAbsolute(buildConfigPath)) {
-      buildConfigPath = path.join(context.opts.projectRoot, context.opts.options.buildConfig)
+    content = convertJsonToString(content)
+    setBuildJson(file, content)
+  }
+
+  // json helper functions
+  function convertJsonToString (content) {
+    try {
+      // pretty-json
+      return JSON.stringify(content, null, 2)
+    } catch (err) {
+      throw new Error('Branch SDK cannot write build.json within your root directory.')
     }
-    var config = require(buildConfigPath)
+  }
 
-    if (!config.ios) return
-    if (!config.ios[buildType]) return
-    if (!config.ios[buildType].developmentTeam) return
-
-    var xcconfig = fs.readFileSync(filepath, encoding)
-
-    if (xcconfig.indexOf('DEVELOPMENT_TEAM') === -1) {
-      var content = '\nDEVELOPMENT_TEAM = ' + config.ios[buildType].developmentTeam
-
-      xcconfig += content
-      fs.writeFileSync(filepath, xcconfig, encoding)
+  function convertStringToJson (content) {
+    // handle blank file
+    content = !content ? '{}' : content
+    try {
+      return JSON.parse(content)
+    } catch (err) {
+      throw new Error('Branch SDK cannot read build.json within your root directory.')
     }
+  }
+
+  // read build.json
+  function getBuildJson (file) {
+    try {
+      return fs.readFileSync(file, 'utf8')
+    } catch (err) {
+      // handle no file
+      return '{}'
+    }
+  }
+
+  // write build.json
+  function setBuildJson (file, content) {
+    fs.writeFileSync(file, content, 'utf8')
+  }
+
+  // creates basic build.json if key-value pairs are missing
+  //    {
+  //      "ios": {
+  //        "debug": {
+  //          "developmentTeam": "FG35JLLMXX4A"
+  //        },
+  //        "release": {
+  //          "developmentTeam": "FG35JLLMXX4A"
+  //        }
+  //      }
+  //    }
+  function createDefaultBuildJson (content) {
+    if (!content.ios) {
+      content.ios = {}
+    }
+    if (!content.ios.debug) {
+      content.ios.debug = {}
+    }
+    if (!content.ios.release) {
+      content.ios.release = {}
+    }
+  }
+
+  // update build.json with developmentTeam from config.xml
+  function updateDevelopmentTeam (content, preferences) {
+    var release = preferences.iosTeamProd
+    var debug = (preferences.iosTeamDev) ? preferences.iosTeamDev : preferences.iosTeamProd
+
+    content.ios.release.developmentTeam = release
+    content.ios.debug.developmentTeam = debug
   }
 })()

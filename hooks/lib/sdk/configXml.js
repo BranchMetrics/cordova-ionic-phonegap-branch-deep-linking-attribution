@@ -51,9 +51,10 @@
     var bundleId = (configXml.widget['$'].hasOwnProperty('id')) ? configXml.widget['$']['id'] : null
     var bundleName = (configXml.widget.hasOwnProperty('name')) ? configXml.widget.name[0] : null
     var branchKey = (branchXml.hasOwnProperty('branch-key')) ? branchXml['branch-key'][0]['$']['value'] : null
-    var uriScheme = (branchXml.hasOwnProperty('uri-scheme')) ? branchXml['uri-scheme'][0]['$']['value'] : null
     var linkDomain = (branchXml.hasOwnProperty('link-domain')) ? branchXml['link-domain'][0]['$']['value'] : null
-    var iosTeamId = (branchXml.hasOwnProperty('ios-team-id')) ? branchXml['ios-team-id'][0]['$']['value'] : null
+    var uriScheme = (branchXml.hasOwnProperty('uri-scheme')) ? branchXml['uri-scheme'][0]['$']['value'] : null
+    var iosTeamProd = (branchXml.hasOwnProperty('ios-team-prod')) ? branchXml['ios-team-prod'][0]['$']['value'] : null
+    var iosTeamDev = (branchXml.hasOwnProperty('ios-team-dev')) ? branchXml['ios-team-dev'][0]['$']['value'] : null
     var androidPrefix = (branchXml.hasOwnProperty('android-prefix')) ? branchXml['android-prefix'][0]['$']['value'] : null
 
     return {
@@ -64,8 +65,9 @@
       'branchKey': branchKey,
       'uriScheme': uriScheme,
       'linkDomain': linkDomain,
-      'iosTeamId': iosTeamId,
-      'androidPrefix': androidPrefix
+      'iosTeamProd': iosTeamProd,
+      'iosTeamDev': iosTeamDev, // optional
+      'androidPrefix': androidPrefix // optional
     }
   }
 
@@ -101,8 +103,8 @@
     if (preferences.linkDomain === null) {
       throw new Error('Branch SDK plugin is missing "uri-scheme" in <branch-config> in your config.xml')
     }
-    if (preferences.iosTeamId === null) {
-      throw new Error('Branch SDK plugin is missing "ios-team-id" in <branch-config> in your config.xml')
+    if (preferences.iosTeamProd === null) {
+      throw new Error('Branch SDK plugin is missing "ios-team-prod" in <branch-config> in your config.xml')
     }
   }
 })()
