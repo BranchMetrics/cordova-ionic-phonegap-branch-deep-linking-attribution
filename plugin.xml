@@ -148,6 +148,8 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BranchView.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/NSMutableDictionary+Branch.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/NSMutableDictionary+Branch.m" />
     
     <header-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Requests/BNCServerRequest.m" />
