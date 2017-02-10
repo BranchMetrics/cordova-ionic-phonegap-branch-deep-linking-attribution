@@ -5,20 +5,21 @@ run_ios=false
 run_and=false
 run_dep=false
 run_cor=false
+script_name=$(basename "$0")
 
 # options
 usage() {
   printf "\n  invalid usage"
-  printf "\n    ./init.sh -h -> help"
-  printf "\n    ./init.sh -i -> build ios"
-  printf "\n    ./init.sh -a -> build android"
-  printf "\n    ./init.sh -d -> reset node dependencies"
-  printf "\n    ./init.sh -c -> reset cordova plugin"
+  printf "\n    ./%s -h -> help" "$script_name"
+  printf "\n    ./%s -i -> build ios" "$script_name"
+  printf "\n    ./%s -a -> build android" "$script_name"
+  printf "\n    ./%s -d -> reset node dependencies" "$script_name"
+  printf "\n    ./%s -c -> reset cordova plugin" "$script_name"
   printf "\n"
   exit 1
 }
 
-if [[ "$#" < 1 ]]; then usage; fi
+if [[ "$#" -lt 1 ]]; then usage; fi
 
 for arg in "$@"; do
   if ! [[ "$arg" =~ ^-. ]]; then usage; fi
