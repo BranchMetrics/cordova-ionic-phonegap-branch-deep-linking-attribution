@@ -9,11 +9,11 @@ run_cor=false
 # options
 usage() {
   printf "\n  invalid usage"
-  printf "\n    ./rebuild.sh -h -> help"
-  printf "\n    ./rebuild.sh -i -> build ios"
-  printf "\n    ./rebuild.sh -a -> build android"
-  printf "\n    ./rebuild.sh -d -> reset node dependencies"
-  printf "\n    ./rebuild.sh -c -> reset cordova plugin"
+  printf "\n    ./init.sh -h -> help"
+  printf "\n    ./init.sh -i -> build ios"
+  printf "\n    ./init.sh -a -> build android"
+  printf "\n    ./init.sh -d -> reset node dependencies"
+  printf "\n    ./init.sh -c -> reset cordova plugin"
   printf "\n"
   exit 1
 }
