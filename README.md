@@ -721,7 +721,7 @@
     | Twitter | ✅ | | ✅ |
     | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | 🅾️ | 
     | Slack | ✅ | | ✅ | |
-    | Chrome address bar | 🅾️ | | 🅾️ |
+    | Chrome address bar | ✅ | | ✅ |
     | Chrome web page | ✅ | | ✅ |
     | FireFox address bar | 🅾️ | | ✅ |
     | FireFox web page | ✅ | | ✅ |
