@@ -85,7 +85,7 @@
       <branch-config>
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
         <uri-scheme value="cordovatestbed" />
-        <link-domain value="testbed.app.link" />
+        <link-domain value="cordova.app.link" />
         <ios-team-prod value="PW4Q8885U7" />
       </branch-config>
     ```
@@ -99,7 +99,7 @@
       <branch-config>
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
         <uri-scheme value="cordovatestbed" />
-        <link-domain value="testbed.app.link" />
+        <link-domain value="cordova.app.link" />
         <ios-team-prod value="PW4Q8885U7" />
       </branch-config>
     ```
@@ -210,7 +210,7 @@
 
 - #### Test Deep Link iOS
 
-  - Wait 15 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  - Wait 30 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
