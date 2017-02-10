@@ -10,9 +10,9 @@
 
 > Hyperlinks can navigate to your website, but not to your app.
 
-> Branch deep links allow users to install, open, and navigate to content inside your app.
+> Branch fixes this problem  with deep links.
 
-> Branch deep links will grow your app.
+> Branch deep links will grow your app by allowing users to install, open, and navigate to content inside your app.
 
 > Increase discovery of your app based on the content inside, convert web users to app users, enable user-to-user sharing, personalize user experiences, track users, track referrals, track campaigns, track conversions, and increase overall engagement.
 
@@ -25,7 +25,6 @@
 
 - [Getting Started](#getting-started)
   - [Configure Branch](#configure-branch)
-  - [Install Branch](#install-branch)
   - [Configure App](#configure-app)
   - [Initialize Branch](#initialize-branch)
   - [Test Deep Link iOS](#test-deep-link-ios)
@@ -44,12 +43,10 @@
 - [Troubleshooting](#troubleshooting)
   - [Testing: Key Points](#testing-key-points) 
   - [Testing: Sample Testing App](#testing-sample-testing-app)
-  - [Testing: Sample Integration App](#testing-sample-integration-app)
   - [Testing: Show Console Logs](#testing-show-console-logs)
   - [Testing: Supported Platforms](#testing-supported-platforms)
   - [Testing: Simulating an Install](#testing-simulating-an-install)
-  - [Link Domain: Custom](#link-domain-custom)
-  - [Link Domain: Bnc.lt](#link-domain-bnclt)
+  - [Testing: Optional App Config](#testing-optional-app-config)
   - [Link Data: Universal Object Properties](#link-data-universal-object-properties)
   - [Link Data: Deep Link Properties](#link-data-deep-link-properties)
   - [Link Data: Convert to Ionic/Angular](#link-data-convert-to-ionicangular)
@@ -74,45 +71,44 @@
 
   - Complete your [Branch Dashboard](https://dashboard.branch.io/settings/link)
   
-    ![image](http://i.imgur.com/tkEolFM.png)
-
-- #### Install Branch
-
-  - Cordova and PhoneGap and Ionic
-    ```sh
-    # terminal
-    cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq --variable URI_SCHEME=branchcordova;
-    ```
-
-  - Change `key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq` and `branchcordova` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+    ![image](http://i.imgur.com/mxuTBWu.png)
+    ![image](http://i.imgur.com/ozjylCI.png)
 
 - #### Configure App
 
   - Cordova and Ionic
     ```xml
     <!-- sample config.xml -->
-    <widget id="com.eneff.branch.cordova" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <widget id="com.eneff.branch.cordova_testbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+      <!-- Branch -->
+      <plugin name="branch-cordova-sdk" />
       <branch-config>
-        <ios-team-id value="PW4Q8885U7"/>
-        <host name="2d0s.app.link" scheme="https" />
-        <host name="2d0s-alternate.app.link" scheme="https" />
+        <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
+        <uri-scheme value="cordovatestbed" />
+        <link-domain value="testbed.app.link" />
+        <ios-team-prod value="PW4Q8885U7" />
       </branch-config>
-      <preference name="AndroidLaunchMode" value="singleTask" />
     ```
 
   - PhoneGap
     ```xml
     <!-- sample config.xml -->
-    <widget id="com.eneff.branch.cordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <widget id="com.eneff.branch.cordova_testbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+      <!-- Branch -->
+      <plugin name="branch-cordova-sdk" />
       <branch-config>
-        <ios-team-id value="PW4Q8885U7"/>
-        <host name="2d0s.app.link" scheme="https" />
-        <host name="2d0s-alternate.app.link" scheme="https" />
+        <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
+        <uri-scheme value="cordovatestbed" />
+        <link-domain value="testbed.app.link" />
+        <ios-team-prod value="PW4Q8885U7" />
       </branch-config>
-      <preference name="AndroidLaunchMode" value="singleTask" />
     ```
 
-  - Change `com.eneff.branch.cordova`, `PW4Q8885U7`, `2d0s.app.link`, and `2d0s-alternate.app.link` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)    
+  - Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)    
+    - `com.eneff.branch.cordova_testbed`
+    - `cordovatestbed`
+    - `PW4Q8885U7`
+    - `testbed.app.link`
 
 - #### Initialize Branch
 
@@ -160,11 +156,21 @@
           StatusBar.styleDefault();
         }
 
-        // Branch initialization
-        Branch.initSession(function(data) {
-          // read deep link data on click
-          alert('Deep Link Data: ' + JSON.stringify(data));
+        // Branch
+        $ionicPlatform.on('deviceready', function(){
+          branchInit();
         });
+        $ionicPlatform.on('resume', function(){
+          branchInit();
+        });
+
+        function branchInit() {
+          // Branch initialization
+          Branch.initSession(function(data) {
+            // read deep link data on click
+            alert('Deep Link Data: ' + JSON.stringify(data));
+          });
+        }
       });
     })
     // ...
@@ -212,15 +218,15 @@
 
   - Compile your app *(`cordova build ios` `phonegap build ios` `ionic build ios`)*
 
-  - Open the app in `Xcode` and set your Provisioning Profile `Development Team`
+  - Open the app in `Xcode`  *(need to set your Provisioning Profile)*
 
-  - Launch your app to `device` *(not Simulator or TestFlight)*
+  - Launch your app to a `device` *(not Simulator or TestFlight)*
 
   - Paste deep link in Apple Notes
 
   - Long press on the deep link *(not 3D Touch)*
 
-  - Click `Open in "APP_NAME"` to open app *([example](http://i.imgur.com/VJVICXd.png))*
+  - Click `Open in "APP_NAME"` to open your app *([example](http://i.imgur.com/VJVICXd.png))*
 
 - #### Test Deep Link Android
 
@@ -232,11 +238,11 @@
 
   - Compile your app *(`cordova build android` `phonegap build android` `ionic build android`)*
 
-  - Launch your app to `device` *(not Simulator or Genymotion)*
+  - Launch your app to a `device` *(not Simulator or Genymotion)*
 
   - Paste deep link in Google Hangouts
 
-  - Tap on the deep link to open app
+  - Click on the deep link to open your app
 
 ## Features
 
@@ -266,7 +272,7 @@
 
 - #### Create Content Reference
 
-  - The **Branch Universal Object** encapsulates the thing you want to share (content or user)
+  - The `Branch Universal Object` encapsulates the thing you want to share (content or user)
 
   - Link Data: [Universal Object Properties](#link-data-universal-object-properties)
 
@@ -574,97 +580,15 @@
   
   - Always use the `Branch.initSession(function(data) {})` to read Deep Link data
 
-  - Always test on `device` (`simulator` `browser` `genymotion` will break)
+  - Always test on `device` (`simulator` `browser` `genymotion` will not work)
 
   - You must launch the app through `Xcode` for iOS
   
-  - Other deep link plugins (ex `cordova-universal-links-plugin`) will interferer with Branch
+  - Other deep link plugins (e.g. `cordova-universal-links-plugin`) will interferer with Branch
 
 - #### Testing: Sample Testing App
 
   - [Branch Testing App](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/testbed)
-
-- #### Testing: Sample Integration App
-
-  - Ionic 1
-    
-    - **Install**
-    
-    ```bash
-    npm install -g cordova ionic;
-    ionic start t3 tabs;
-    cd t3;
-    ionic platform add ios;
-    ionic platform add android;
-    ionic plugin remove io.branch.sdk;
-    # values should be from your Branch Dashboard https://dashboard.branch.io/settings/link
-    ionic plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_jnBhaHwt5K8xtn4g4hblHoleqsocI6C2 --variable URI_SCHEME=branchionic;
-    ```
-
-    - **Update config.xml**
-    
-    ```xml
-    <!-- values should be from your Branch Dashboard https://dashboard.branch.io/settings/link -->
-    <widget id="com.eneff.branch.ionic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-      <branch-config>
-        <ios-team-id value="PW4Q8885U7"/>
-        <host name="cluv.app.link" scheme="https"/>
-        <host name="cluv-alternate.app.link" scheme="https"/>
-      </branch-config>
-    ```  
-
-    - **update app.js**
-    
-    ```js
-    // global function
-    function DeepLinkHandler(data) {
-      if (data) {
-        alert('Data Link handler response: ' + JSON.stringify(data));
-      }
-    }
-
-    angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
-
-    .run(function($ionicPlatform) {
-      $ionicPlatform.ready(function() {
-        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-          cordova.plugins.Keyboard.disableScroll(true);
-        }
-        if (window.StatusBar) {
-          StatusBar.styleDefault();
-        }
-
-        // Branch
-        $ionicPlatform.on('deviceready', function(){
-          Branch.setDebug(true);
-          Branch.initSession();
-        });
-      });
-    })
-
-    // ...
-    ```
-
-    - **Delete app off device**
-
-    - **Compile ionic**
-    
-    ```bash
-    ionic build ios;
-    ```
-
-    - **Run on device through xcode**
-    
-    ```bash
-    open -a Xcode platforms/ios/t3.xcodeproj;
-    ```
-
-    - **Click on a deep link in iMessage to open the app**
-    
-       - For example, the deep link [https://cluv.app.link/6TOiVlCqXx](https://cluv.app.link/6TOiVlCqXx) can be created from your [Branch Dashboard](https://dashboard.branch.io/marketing)
-
-      - ![image](http://i.imgur.com/YzeE14X.gif)
 
 - #### Testing: Show Console Logs
 
@@ -740,7 +664,7 @@
 
   - Delete app
 
-  - *[iOS only]* iPhone -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
+  - `[iOS only]` iPhone -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
 
   - Click on deep link *(will navigate to fallback url because app is not installed)*
 
@@ -750,34 +674,22 @@
 
   - Read from `Branch.initSession(data)` for `+is_first_session = true`
 
-- #### Link Domain: Custom
+- #### Testing: Optional App Config 
 
-  - Cordova and PhoneGap and Ionic
-  
-    ```xml
-    <!-- sample config.xml -->
+  ```xml
+  <!-- sample config.xml -->
+  <widget id="com.eneff.branch.example" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <!-- Branch -->
+    <plugin name="branch-cordova-sdk" spec="~2.4.2" /> <!-- optional spec -->
     <branch-config>
-      <ios-team-id value="PW4Q8885U7"/>
-      <host name="custom.domain.com" scheme="https" />
+      <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
+      <uri-scheme value="cordovatestbed" />
+      <link-domain value="testbed.app.link" />
+      <ios-team-prod value="PW4Q8885U7" />
+      <ios-team-test value="FG35JLLMXX4A" /> <!-- optional -->
+      <android-prefix value="/WSuf" /> <!-- optional (bnc.lt) -->
     </branch-config>
-    ```
-
-  - Change `PW4Q8885U7` and `custom.domain.com` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
-- #### Link Domain: Bnc.lt
-
-  - Cordova and PhoneGap and Ionic
-  
-    ```xml
-    <!-- sample config.xml -->
-    <branch-config>
-      <ios-team-id value="PW4Q8885U7"/>
-      <android-prefix value="/WSuf" />
-      <host name="bnc.lt" scheme="https" />
-    </branch-config>
-    ```
-
-  - Change `PW4Q8885U7` and `/WSuf` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  ```
 
 - #### Link Data: Universal Object Properties
 
@@ -995,34 +907,6 @@
   - [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
   
   - [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
-
-- #### Compiling: Updating the Branch SDK
-
-    ```bash
-    # update cordova
-    npm install -g cordova;
-
-    # remove old Branch SDK cache
-    cordova platform remove ios;
-    cordova platform remove android;
-    cordova platform remove browser;
-
-    # add platforms back
-    cordova platform add ios;
-    cordova platform add android;
-    
-    # update Branch SDK
-    cordova plugin remove io.branch.sdk;
-    cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=xxxx --variable URI_SCHEME=xxxx;
-
-    # compile platform code
-    cordova build ios;
-    cordova build android;
-    ```
-
-  - Change `xxxx`, and `xxxx` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
-  - `cordova plugin add branch-cordova-sdk` can sometimes miss installing dependencies if you run more than 1 command at a time
 
 - #### Compiling: Cordova Dependencies
 
