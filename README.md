@@ -202,15 +202,15 @@
         platform.ready().then(() => {
           StatusBar.styleDefault();
           Splashscreen.hide();
-          BranchInit();
+          branchInit();
         });
 
         platform.resume.subscribe(() => {
-          BranchInit();
+          branchInit();
         });
 
         // Branch initialization
-        function BranchInit() {
+        const branchInit = () => {
           // only on devices
           if (platform.is('core')) { return }
           Branch.initSession(data => {
