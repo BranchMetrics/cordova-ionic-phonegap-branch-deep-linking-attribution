@@ -157,10 +157,11 @@
         }
 
         // Branch
-        $ionicPlatform.on('deviceready', function(){
+        $ionicPlatform.on('deviceready', function() {
           branchInit();
         });
-        $ionicPlatform.on('resume', function(){
+
+        $ionicPlatform.on('resume', function() {
           branchInit();
         });
 
@@ -182,6 +183,7 @@
     import { Component } from '@angular/core';
     import { Platform } from 'ionic-angular';
     import { StatusBar, Splashscreen } from 'ionic-native';
+
     import { TabsPage } from '../pages/tabs/tabs';
 
     // Branch import
@@ -197,13 +199,22 @@
         platform.ready().then(() => {
           StatusBar.styleDefault();
           Splashscreen.hide();
+          branchInit();
+        });
 
-          // Branch initialization
-          Branch.initSession(function(data) {
+        platform.resume.subscribe(() => {
+          branchInit();
+        });
+
+        // Branch initialization
+        const branchInit = () => {
+          // only on devices
+          if (platform.is('core')) { return }
+          Branch.initSession(data => {
             // read deep link data on click
             alert('Deep Link Data: ' + JSON.stringify(data));
           });
-        });
+        }
       }
     }
     ```
@@ -723,7 +734,7 @@
     | stage | | Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter
     | tags | | This is a free form entry with unlimited values `["string"]`. Use it to organize your link data with labels that don’t fit within the bounds of the above
     | alias | | Specify a link alias in place of the standard encoded short URL e.g. `yourdomain.com/youralias`. Link aliases are unique, immutable objects that cannot be deleted. You cannot change the alias of existing links. Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight
-    | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing)
+    | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make the link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing) while adding `$marketing_title` to `data`.
 
   - Properties
 
@@ -765,6 +776,7 @@
       | $android_redirect_timeout | `750` | Control the timeout that the clientside JS waits after trying to open up the app before redirecting to the Play Store. Specified in milliseconds
       | $one_time_use | `false` | Set to `true` to limit deep linking behavior of the generated link to a single use. Can also be set using type
       | $custom_sms_text | | Text for SMS link sent for desktop clicks to this link. Must contain `{{ link }}` Value of Text me the app page in Settings
+      | $marketing_title | | The Marketing Title for the deep link in the [Marketing Dashboard](https://dashboard.branch.io/marketing) 
 
     - Content
 
