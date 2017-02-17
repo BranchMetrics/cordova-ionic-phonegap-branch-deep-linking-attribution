@@ -185,10 +185,11 @@ function BranchDeepLink () {
     $ipad_url: 'http://www.example.com/ipad',
     $deeplink_path: 'content/123',
     $match_duration: 2000,
-    more_custom: 'data',
-    even_more_custom: true,
-    this_is_custom: 41231,
-    this_is_date: Date.now()
+    custom_string: 'data',
+    custom_integer: Date.now(),
+    custom_boolean: true,
+    custom_array: [1, 2, 3, 4, 5],
+    custom_object: { 'random': 'dictionary' }
   }
 
   // needs a universal object
@@ -222,9 +223,11 @@ function BranchShareSheet () {
   // optional fields
   var properties = {
     $desktop_url: 'http://www.example.com/desktop',
-    more_custom: 'data',
-    even_more_custom: true,
-    this_is_custom: 41231
+    custom_string: 'data',
+    custom_integer: Date.now(),
+    custom_boolean: true,
+    custom_array: [1, 2, 3, 4, 5],
+    custom_object: { 'random': 'dictionary' }
   }
 
   var message = 'Check out this link'
