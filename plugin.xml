@@ -48,6 +48,7 @@ SOFTWARE.
     <preference name="URI_SCHEME" />
 
     <!-- Hooks -->
+    <hook src="hooks/beforeCompileHook.js" type="before_compile" />
     <hook src="hooks/afterPrepareHook.js" type="after_prepare" />
     <hook src="hooks/beforePluginInstallHook.js" type="before_prepare" />
 
