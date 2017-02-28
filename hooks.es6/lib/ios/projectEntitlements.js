@@ -29,14 +29,15 @@ Script only generates content. File it self is included in the xcode project in 
    *
    * @param {Object} cordovaContext - cordova context object
    * @param {Object} pluginPreferences - plugin preferences from config.xml; already parsed
+   * @param {String} buildType - optional value to control which entitlement file to update
    */
-  function generateEntitlements(cordovaContext, pluginPreferences) {
+  function generateEntitlements(cordovaContext, pluginPreferences, buildType) {
     context = cordovaContext;
 
-    var currentEntitlements = getEntitlementsFileContent(),
+    var currentEntitlements = getEntitlementsFileContent(buildType),
       newEntitlements = injectPreferences(currentEntitlements, pluginPreferences);
 
-    saveContentToEntitlementsFile(newEntitlements);
+    saveContentToEntitlementsFile(newEntitlements, buildType);
   }
 
   // endregion
@@ -47,8 +48,9 @@ Script only generates content. File it self is included in the xcode project in 
    * Save data to entitlements file.
    *
    * @param {Object} content - data to save; JSON object that will be transformed into xml
+   * @param {String} buildType - optional value to control which entitlement file to update
    */
-  function saveContentToEntitlementsFile(content) {
+  function saveContentToEntitlementsFile(content, buildType) {
     var plistContent = plist.build(content),
       filePath = pathToEntitlementsFile();
 
@@ -57,15 +59,23 @@ Script only generates content. File it self is included in the xcode project in 
 
     // save it's content
     fs.writeFileSync(filePath, plistContent, 'utf8');
+
+    if(buildType) {
+      filePath = pathToEntitlementsFile(buildType);
+      mkpath.sync(path.dirname(filePath));
+      // save it's content
+      fs.writeFileSync(filePath, plistContent, 'utf8');
+    }
+
   }
 
   /**
    * Read data from existing entitlements file. If none exist - default value is returned
-   *
+   * @param {String} buildType - optional value to control which entitlement file to update
    * @return {String} entitlements file content
    */
-  function getEntitlementsFileContent() {
-    var pathToFile = pathToEntitlementsFile(),
+  function getEntitlementsFileContent(buildType) {
+    var pathToFile = pathToEntitlementsFile(buildType),
       content;
 
     try {
@@ -137,15 +147,20 @@ Script only generates content. File it self is included in the xcode project in 
 
   /**
    * Path to entitlements file.
-   *
+   * @param {String} buildType - optional value to control which entitlement file to update
    * @return {String} absolute path to entitlements file
    */
-  function pathToEntitlementsFile() {
-    if (entitlementsFilePath === undefined) {
-      entitlementsFilePath = path.join(getProjectRoot(), 'platforms', 'ios', getProjectName(), 'Resources', getProjectName() + '.entitlements');
-    }
+  function pathToEntitlementsFile(buildType) {
+    if (buildType) {
+      var validTypes = ['Debug', 'Release'];
+      if(validTypes.indexOf(buildType) === -1) {
+        throw Error('pathToEntitlementsFile invalid build type specified: ' + buildType)
+      }
+      return path.join(getProjectRoot(), 'platforms', 'ios', getProjectName(), 'Entitlements-' + buildType + '.plist');
 
-    return entitlementsFilePath;
+    } else {
+      return path.join(getProjectRoot(), 'platforms', 'ios', getProjectName(), 'Resources', getProjectName() + '.entitlements');
+    }
   }
 
   /**
