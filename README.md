@@ -227,11 +227,7 @@
 
   - Delete your app from the device *(resets the Apple AASA scraping)*
 
-  - Compile your app *(`cordova build ios` `phonegap build ios` `ionic build ios`)*
-
-  - Open the app in `Xcode`  *(need to set your Provisioning Profile)*
-
-  - Launch your app to a `device` *(not Simulator or TestFlight)*
+  - Compile your app *(`cordova run ios` `phonegap run ios` `ionic run ios`)*
 
   - Paste deep link in Apple Notes
 
@@ -247,9 +243,7 @@
 
   - Delete your app from the device
 
-  - Compile your app *(`cordova build android` `phonegap build android` `ionic build android`)*
-
-  - Launch your app to a `device` *(not Simulator or Genymotion)*
+  - Compile your app *(`cordova run android` `phonegap run android` `ionic run android`)*
 
   - Paste deep link in Google Hangouts
 

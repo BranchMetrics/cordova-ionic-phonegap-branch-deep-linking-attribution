@@ -5,6 +5,7 @@
   var fs = require('fs')
   var plist = require('plist')
   var mkpath = require('mkpath')
+  var BUILD_TYPES = ['Debug', 'Release']
   var ASSOCIATED_DOMAINS = 'com.apple.developer.associated-domains'
 
   // entry
@@ -14,12 +15,31 @@
 
   // updates the associated domains from the link-domain field of the app's config.xml
   function addAssociatedDomains (preferences) {
-    var file = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
-    var entitlements = getEntitlements(file)
-
     console.log('BRANCH SDK: Updating iOS associated domains')
-    entitlements = updateEntitlements(entitlements, preferences)
-    setEntitlements(file, entitlements)
+
+    var files = getEntitlementFiles()
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i]
+      var entitlements = getEntitlements(file)
+
+      entitlements = updateEntitlements(entitlements, preferences)
+      setEntitlements(file, entitlements)
+    }
+  }
+
+  // get the xcode .entitlements and provisioning profile .plist
+  function getEntitlementFiles() {
+    var files = []
+    var entitlements = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
+    files.push(entitlements)
+
+    for (var i = 0; i < BUILD_TYPES.length; i++) {
+      var buildType = BUILD_TYPES[i]
+      var plist = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Entitlements-' + buildType + '.plist')
+      files.push(plist)
+    }
+
+    return files
   }
 
   // save entitlements

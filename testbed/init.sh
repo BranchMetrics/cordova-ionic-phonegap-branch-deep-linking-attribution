@@ -78,7 +78,7 @@ main() {
 
   # run
   if [[ "$run_ios" == "true" ]]; then
-    cordova build ios && open -a Xcode platforms/ios/Branch\ Testing.xcworkspace
+    cordova run ios --device
   fi
   if [[ "$run_and" == "true" ]]; then
     cordova run android
