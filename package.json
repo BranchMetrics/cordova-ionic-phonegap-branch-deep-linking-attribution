@@ -54,6 +54,7 @@
     "node-version-compare": "^1.0.1",
     "plist": "^1.2.0",
     "semantic-release": "^4.3.5",
-    "validate-commit-msg": "^2.8.2"
+    "validate-commit-msg": "^2.8.2",
+    "xml2js": "^0.4.17"
   }
 }
