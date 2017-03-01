@@ -209,7 +209,7 @@
         // Branch initialization
         const branchInit = () => {
           // only on devices
-          if (platform.is('core')) { return }
+          if (!platform.is('cordova')) { return }
           Branch.initSession(data => {
             // read deep link data on click
             alert('Deep Link Data: ' + JSON.stringify(data));
