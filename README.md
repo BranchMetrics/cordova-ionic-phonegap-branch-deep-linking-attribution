@@ -70,9 +70,9 @@
 - #### Configure Branch
 
   - Complete your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-  
-    ![image](http://i.imgur.com/mxuTBWu.png)
-    ![image](http://i.imgur.com/ozjylCI.png)
+
+    ![image](http://i.imgur.com/wazVu3U.png)
+    ![image](http://i.imgur.com/9PEylbS.png)
 
 - #### Configure App
 
