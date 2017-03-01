@@ -41,7 +41,7 @@
   - [Track Event](#track-event)
   - [Handle Referrals](#handle-referrals)
 - [Troubleshooting](#troubleshooting)
-  - [Testing: Key Points](#testing-key-points) 
+  - [Testing: Key Points](#testing-key-points)
   - [Testing: Sample Testing App](#testing-sample-testing-app)
   - [Testing: Show Console Logs](#testing-show-console-logs)
   - [Testing: Supported Platforms](#testing-supported-platforms)
@@ -51,7 +51,7 @@
   - [Link Data: Deep Link Properties](#link-data-deep-link-properties)
   - [Link Data: Convert to Ionic/Angular](#link-data-convert-to-ionicangular)
   - [Link Data: Global Listener Warning](#link-data-global-listener-warning)
-  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins) 
+  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
   - [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
   - [Compiling: Visual Studio TACO](#compiling-visual-studio-taco)
@@ -105,7 +105,7 @@
       </branch-config>
     ```
 
-  - Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)    
+  - Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)
     - `com.eneff.branch.cordova_testbed`
     - `cordovatestbed`
     - `PW4Q8885U7`
@@ -255,7 +255,7 @@
 - #### Initialize Branch Features
 
   - Loads Branch into your app
-  
+
   - Must be called on `deviceready` and `resume`
 
     ```js
@@ -475,7 +475,7 @@
       alert('Error: ' + JSON.stringify(err))
     })
     ```
- 
+
     ```js
     Branch.logout().then(function (res) {
       alert('Response: ' + JSON.stringify(res))
@@ -489,7 +489,7 @@
   - Registers custom events
 
   - Must [Track User](#track-user) before [Track Event](#track-event) to associate events with a user
-  
+
   - Event names `open`, `install`, and `close` are restricted by Branch
 
     ```js
@@ -516,19 +516,19 @@
   - Referral points are obtained from events triggered by users from rules created on the [Branch Dashboard](https://dashboard.branch.io/referrals/rules)
 
   - Get credits
-  
+
     - Referrer is [tracked](#track-user)
-    
+
     - Referrer [creates a deep link](#create-deep-link)
-    
+
     - Referrer [shares the deep Link](#share-deep-link)
-    
+
     - Referee clicks on deep link
-    
+
     - Referee triggers a [custom event](#track-event)
-    
+
     - Catch the event in your Branch Dashboard as a [rule](https://dashboard.branch.io/referrals/rules)
-    
+
     - Referrer gets referral points
 
   - Spend credits
@@ -586,13 +586,13 @@
 - #### Testing: Key Points
 
   - Use the Branch `key_live`
-  
+
   - Always use the `Branch.initSession(function(data) {})` to read Deep Link data
 
   - Always test on `device` (`simulator` `browser` `genymotion` will not work)
 
   - You must launch the app through `Xcode` for iOS
-  
+
   - Other deep link plugins (e.g. `cordova-universal-links-plugin`) will interferer with Branch
 
 - #### Testing: Sample Testing App
@@ -602,7 +602,7 @@
 - #### Testing: Show Console Logs
 
   - iOS Simulator
-  
+
     - `cordova run ios;`
 
     - Safari -> Preferences -> Advance -> Show Develop menu in menu bar
@@ -614,7 +614,7 @@
     - *May need to open Xcode and update provisioning profile*
 
   - iOS Xcode
-  
+
     - `cordova plugin add cordova-plugin-console;`
 
     - `cordova build ios;`
@@ -628,7 +628,7 @@
     - Xcode -> View -> Debug Area -> Activate Console
 
   - Android Device
-  
+
     - Plug device in
 
     - `cordova run android;`
@@ -636,7 +636,7 @@
     - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
 
   - Android Genymotion
-  
+
     - Genymotion -> Start
 
     - `cordova run android;`
@@ -647,12 +647,12 @@
 
   - Apps which support Branch deep links
 
-    | | iOS | Details | Android | Details 
+    | | iOS | Details | Android | Details
     | --- | :-: | --- | :-: | ---
-    | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | 
+    | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
     | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | Works except the `app.link` domain is not click-able |
     | Twitter | ✅ | | ✅ |
-    | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | 🅾️ | 
+    | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | 🅾️ |
     | Slack | ✅ | | ✅ | |
     | Chrome address bar | ✅ | | ✅ |
     | Chrome web page | ✅ | | ✅ |
@@ -668,7 +668,7 @@
     | Gmail | ✅ | | ✅ |
 
 - #### Testing: Simulating an Install
-  
+
   - Add `Branch.setDebug(true);` before `Branch.initSession();`
 
   - Delete app
@@ -679,11 +679,11 @@
 
   - Install the app
 
-  - Open the app 
+  - Open the app
 
   - Read from `Branch.initSession(data)` for `+is_first_session = true`
 
-- #### Testing: Optional App Config 
+- #### Testing: Optional App Config
 
   ```xml
   <!-- sample config.xml -->
@@ -774,7 +774,7 @@
       | $android_redirect_timeout | `750` | Control the timeout that the clientside JS waits after trying to open up the app before redirecting to the Play Store. Specified in milliseconds
       | $one_time_use | `false` | Set to `true` to limit deep linking behavior of the generated link to a single use. Can also be set using type
       | $custom_sms_text | | Text for SMS link sent for desktop clicks to this link. Must contain `{{ link }}` Value of Text me the app page in Settings
-      | $marketing_title | | The Marketing Title for the deep link in the [Marketing Dashboard](https://dashboard.branch.io/marketing) 
+      | $marketing_title | | The Marketing Title for the deep link in the [Marketing Dashboard](https://dashboard.branch.io/marketing)
 
     - Content
 
@@ -907,21 +907,21 @@
   - Use `Branch.disableGlobalListenersWarnings();` to turn off the warning errors generated from `DeepLinkHandler` and `NonBranchLinkHandler`
 
 - #### Compiling: Incompatible Plugins
-  
+
   - The following plugins will not work with the Branch SDK
-  
+
   - [PhoneGap NFC Plugin](https://github.com/chariotsolutions/phonegap-nfc)
-  
+
   - [Custom URL scheme](https://github.com/EddyVerbruggen/Custom-URL-scheme)
-  
+
   - [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
-  
+
   - [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
 
 - #### Compiling: Cordova Dependencies
 
   - Node
-  
+
     ```sh
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)";
     brew update;
@@ -982,7 +982,7 @@
   - Branch does not depend on the `android-support-v4` file, but other Cordova plugins could cause an issue
 
   - Add `multiDexEnabled true` inside defaultConfig tag in `build.gradle`
-  
+
     ```sh
     defaultConfig {
       multiDexEnabled true
@@ -994,7 +994,7 @@
   - Run `./gradlew clean` in the Android directory
 
   - Run `android-support-v4` file for compiling
-  
+
     ```sh
     compile ("com.google.android.gms:play-services-ads:9.+") {
       exclude module: "support-v4"
@@ -1006,7 +1006,7 @@
   - Gradle build cannot find `io.branch.sdk.android:library:2.+` dependency
 
   - Add into your `build.gradle` file
- 
+
     ```sh
     compile "io.branch.sdk.android:library:2.+"
     ```
@@ -1066,31 +1066,31 @@
 - #### SDK Development
 
   - [Changelog](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/CHANGELOG.md)
-  
+
   - [Contributing](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/DEVELOPING.md)
-  
+
 - #### Bulk Link Creation
 
  - [HTTP API](https://github.com/BranchMetrics/branch-deep-linking-public-api)
- 
+
  - [Marketing Dashboard](https://dashboard.branch.io/marketing)
 
 - #### Analytical Data
 
   - [Summary Dashboard](https://dashboard.branch.io/)
-  
+
   - [Export Button](https://dashboard.branch.io/liveview/links)
-  
+
   - [Export API](https://dev.branch.io/methods-endpoints/data-export-api/guide/)
-  
+
   - [Webhooks](https://dev.branch.io/getting-started/webhooks/guide/)
 
 - #### Webpage Features
 
   - [Text Me The App](https://github.com/BranchMetrics/web-branch-deep-linking#sendsmsphone-linkdata-options-callback)
-  
+
   - [Smart Banner](https://github.com/BranchMetrics/web-branch-deep-linking#banneroptions-data)
-  
+
   - [DeepView](https://github.com/BranchMetrics/web-branch-deep-linking#deepview)
 
 - #### Premium Features
@@ -1104,5 +1104,5 @@
 - #### Support
 
   - [Documentation](https://dev.branch.io/)
-  
+
   - [Contact](https://support.branch.io/support/tickets/new)
