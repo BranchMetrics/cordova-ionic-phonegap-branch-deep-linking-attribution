@@ -57,6 +57,7 @@
   - [Compiling: Visual Studio TACO](#compiling-visual-studio-taco)
   - [Compiling: Multiple support-lib v4s](#compiling-multiple-support-lib-v4s)
   - [Compiling: Missing Android Dependency](#compiling-missing-android-dependency)
+  - [Compiling: Errors](#compiling-errors)
 - [Additional](#additional)
   - [SDK Development](#sdk-development)
   - [Bulk Link Creation](#bulk-link-creation)
@@ -1009,6 +1010,56 @@
     ```sh
     compile "io.branch.sdk.android:library:2.+"
     ```
+
+- #### Compiling: Errors
+
+  - error
+
+    ```sh
+    ORIGINAL EXCEPTION: Branch is not defined
+    ```
+
+    ```sh
+    ReferenceError: Branch is not defined
+    ```
+
+    - Branch opens and installs your app. You cannot simulate Branch in the desktop browser
+
+      ```js
+      // Ionic 2 - running on browser instead of device
+      if (!platform.is('cordova')) { return }
+      Branch.userCompletedAction('did_this')
+      ```
+
+      ```js
+      // Ionic 2 - missing Branch import
+      declare var Branch
+      ```
+
+  - error
+
+    ```sh
+    ** ARCHIVE FAILED **
+
+    The following build commands failed:
+      Check dependencies
+    (1 failure)
+    Error: Error code 65 for command: xcodebuild with args: -xcconfig,/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/cordova/build-debug.xcconfig,-workspace,Branch Testing.xcworkspace,-scheme,Branch Testing,-configuration,Debug,-destination,generic/platform=iOS,-archivePath,Branch Testing.xcarchive,archive,CONFIGURATION_BUILD_DIR=/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/build/device,SHARED_PRECOMPS_DIR=/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/build/sharedpch
+    ```
+
+      - Open app in `Xcode` and launch from there (to select a `Provisioning Profile`)
+
+  - error
+
+    ```sh
+    An invalid value 'XC com eneff branch cordova_testbed' was provided for the parameter 'appIdName'.
+    ```
+
+    ```sh
+    No profiles for 'com.eneff.branch.cordova_testbed' were found
+    ```
+
+      - Don't use `cordova`, `hyphens`, or `underscores` in your bundle id (widget id)
 
 ## Additional
 
