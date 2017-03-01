@@ -73,11 +73,12 @@ SOFTWARE.
       </feature>
     </config-file>
 
-    <framework src="SafariServices.framework"/>
-    <framework src="AdSupport.framework"/>
-    <framework src="CoreTelephony.framework"/>
-    <framework src="CoreSpotlight.framework"/>
-    <framework src="MobileCoreServices.framework"/>
+    <framework src="iAd.framework" />
+    <framework src="SafariServices.framework" />
+    <framework src="AdSupport.framework" />
+    <framework src="CoreTelephony.framework" />
+    <framework src="CoreSpotlight.framework" />
+    <framework src="MobileCoreServices.framework" />
 
     <header-file src="src/ios/BranchNPM.h" />
     <header-file src="src/ios/BranchSDK.h" />
