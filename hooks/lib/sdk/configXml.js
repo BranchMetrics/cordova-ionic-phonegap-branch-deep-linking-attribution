@@ -99,14 +99,21 @@
     if (preferences.branchKey === null) {
       throw new Error('BRANCH SDK: Missing "branch-key" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
     }
-    if (preferences.uriScheme === null) {
-      throw new Error('BRANCH SDK: Missing "uri-scheme" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
+    if (preferences.uriScheme === null || !/^[a-zA-Z0-9-.]*$/.test(preferences.uriScheme)) {
+      throw new Error('BRANCH SDK: Invalid "uri-scheme" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
-    if (preferences.linkDomain === null) {
-      throw new Error('BRANCH SDK: Missing "uri-scheme" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
+    if (preferences.linkDomain === null || !/^(?!.*?www).*([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/.test(preferences.linkDomain)) {
+      throw new Error('BRANCH SDK: Invalid "link-domain" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
-    if (preferences.iosTeamProd === null) {
-      throw new Error('BRANCH SDK: Missing "ios-team-prod" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
+    if (preferences.iosTeamRelease === null || !/^[a-zA-Z0-9]{10}$/.test(preferences.iosTeamRelease)) {
+      throw new Error('BRANCH SDK: Invalid "ios-team-release" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
+    }
+    if (preferences.iosTeamDebug !== null && !/^[a-zA-Z0-9]{10}$/.test(preferences.iosTeamDebug)) {
+      throw new Error('BRANCH SDK: Invalid "ios-team-debug" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
+    }
+    if (preferences.androidPrefix !== null && !/^[/].[a-zA-Z0-9]{3}$/.test(preferences.androidPrefix)) {
+      throw new Error('BRANCH SDK: Invalid "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
+    }
     if (!(preferences.androidTestMode === 'true' || preferences.androidTestMode === 'false')) {
       throw new Error('BRANCH SDK: Invalid "android-testmode" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
