@@ -27,7 +27,7 @@
     var configXml = xmlHelper.readXmlAsJson(pathToConfigXml)
 
     if (configXml == null) {
-      throw new Error('config.xml not found! Please, check that it exist in your project\'s root directory.')
+      throw new Error('BRANCH SDK: A config.xml is not found in project\'s root directory. https://goo.gl/GijGKP')
     }
 
     return configXml
@@ -38,7 +38,7 @@
     var branchConfig = configXml.widget['branch-config']
 
     if (branchConfig == null || branchConfig.length === 0) {
-      throw new Error('<branch-config> tag is not set in the config.xml. The Branch SDK is not properly installed.')
+      throw new Error('BRANCH SDK: <branch-config> tag is not set in the config.xml. https://goo.gl/GijGKP')
     }
 
     return branchConfig[0]
@@ -89,22 +89,22 @@
   // validate <branch-config> properties within config.xml
   function validateBranchPreferences (preferences) {
     if (preferences.bundleId === null) {
-      throw new Error('Branch SDK plugin is missing "widget id" in your config.xml')
+      throw new Error('BRANCH SDK: Missing "widget id" in your config.xml. https://goo.gl/GijGKP')
     }
     if (preferences.bundleName === null) {
-      throw new Error('Branch SDK plugin is missing "name" in your config.xml')
+      throw new Error('BRANCH SDK: Missing "name" in your config.xml. https://goo.gl/GijGKP')
     }
     if (preferences.branchKey === null) {
-      throw new Error('Branch SDK plugin is missing "branch-key" in <branch-config> in your config.xml')
+      throw new Error('BRANCH SDK: Missing "branch-key" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
     }
     if (preferences.uriScheme === null) {
-      throw new Error('Branch SDK plugin is missing "uri-scheme" in <branch-config> in your config.xml')
+      throw new Error('BRANCH SDK: Missing "uri-scheme" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
     }
     if (preferences.linkDomain === null) {
-      throw new Error('Branch SDK plugin is missing "uri-scheme" in <branch-config> in your config.xml')
+      throw new Error('BRANCH SDK: Missing "uri-scheme" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
     }
     if (preferences.iosTeamProd === null) {
-      throw new Error('Branch SDK plugin is missing "ios-team-prod" in <branch-config> in your config.xml')
+      throw new Error('BRANCH SDK: Missing "ios-team-prod" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
     }
   }
 })()

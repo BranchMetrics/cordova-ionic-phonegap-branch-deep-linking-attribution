@@ -34,7 +34,7 @@
       // pretty-json
       return JSON.stringify(content, null, 2)
     } catch (err) {
-      throw new Error('Branch SDK cannot write build.json within your root directory.')
+      throw new Error('BRANCH SDK: Cannot write build.json within your root directory. https://goo.gl/GijGKP')
     }
   }
 
@@ -44,7 +44,7 @@
     try {
       return JSON.parse(content)
     } catch (err) {
-      throw new Error('Branch SDK cannot read build.json within your root directory.')
+      throw new Error('BRANCH SDK: Cannot read build.json within your root directory. https://goo.gl/GijGKP')
     }
   }
 
