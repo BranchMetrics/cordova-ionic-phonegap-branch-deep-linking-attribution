@@ -728,7 +728,7 @@
     | stage | | Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter
     | tags | | This is a free form entry with unlimited values `["string"]`. Use it to organize your link data with labels that don’t fit within the bounds of the above
     | alias | | Specify a link alias in place of the standard encoded short URL e.g. `yourdomain.com/youralias`. Link aliases are unique, immutable objects that cannot be deleted. You cannot change the alias of existing links. Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight
-    | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make the link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing) while adding `$marketing_title` to `data`. Must be an `int`
+    | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make the link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing) while adding `$marketing_title` to `data`. Must be an `int`. Does not work with the Cordova SDK (limitation of native SDKs)
 
   - Properties
 
