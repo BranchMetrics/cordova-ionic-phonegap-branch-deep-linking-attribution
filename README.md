@@ -80,7 +80,7 @@
   - Cordova and Ionic
     ```xml
     <!-- sample config.xml -->
-    <widget id="com.eneff.branch.cordova_testbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <widget id="com.eneff.branch.cordovatestbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
       <!-- Branch -->
       <plugin name="branch-cordova-sdk" />
       <branch-config>
@@ -94,7 +94,7 @@
   - PhoneGap
     ```xml
     <!-- sample config.xml -->
-    <widget id="com.eneff.branch.cordova_testbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <widget id="com.eneff.branch.cordovatestbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
       <!-- Branch -->
       <plugin name="branch-cordova-sdk" />
       <branch-config>
@@ -106,7 +106,7 @@
     ```
 
   - Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-    - `com.eneff.branch.cordova_testbed`
+    - `com.eneff.branch.cordovatestbed`
     - `cordovatestbed`
     - `PW4Q8885U7`
     - `testbed.app.link`
