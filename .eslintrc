@@ -1,0 +1,17 @@
+{
+  "parser": "babel-eslint",
+  "env": { "browser": true },
+  "rules": {
+  	"quotes": 0,
+  	"strict": 0,
+  	"no-underscore-dangle": 0,
+  	"eqeqeq": 0,
+  	"camelcase": 0,
+  	"consistent-return": 0,
+  	"new-cap": 0
+  },
+  "globals": {
+    "module": true,
+    "require": false
+  }
+}

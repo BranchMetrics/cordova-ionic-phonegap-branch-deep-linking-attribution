@@ -1,0 +1,3 @@
+dependencies {
+	compile ('io.branch.sdk.android:library:2.+')
+}
