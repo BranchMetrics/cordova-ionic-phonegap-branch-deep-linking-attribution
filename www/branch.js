@@ -373,7 +373,13 @@ Branch.prototype.createBranchUniversalObject = function (options) {
        * List item on Spotlight (iOS Only).
        */
       obj.listOnSpotlight = function () {
-        return execute('listOnSpotlight', [obj.instanceId])
+        if (deviceVendor.indexOf('Apple') < 0) {
+          return execute('listOnSpotlight', [obj.instanceId])
+        } else {
+          return new Promise(function (resolve, reject) {
+            reject('iOS Spotlight only')
+          })
+        }
       }
 
       resolve(obj)
