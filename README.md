@@ -87,7 +87,7 @@
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
         <uri-scheme value="cordovatestbed" />
         <link-domain value="cordova.app.link" />
-        <ios-team-prod value="PW4Q8885U7" />
+        <ios-team-release value="PW4Q8885U7" />
       </branch-config>
     ```
 
@@ -690,9 +690,9 @@
       <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
       <uri-scheme value="cordovatestbed" />
       <link-domain value="testbed.app.link" />
-      <ios-team-prod value="PW4Q8885U7" />
-      <ios-team-test value="FG35JLLMXX4A" /> <!-- optional -->
-      <android-prefix value="/WSuf" /> <!-- optional (bnc.lt) -->
+      <ios-team-release value="PW4Q8885U7" />
+      <ios-team-debug value="FG35JLLMXX" /> <!-- optional -->
+      <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt) -->
       <android-testmode value="true" /> <!-- optional (simulate installs) -->
     </branch-config>
   ```

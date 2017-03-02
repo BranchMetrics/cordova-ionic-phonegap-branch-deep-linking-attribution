@@ -88,8 +88,8 @@
 
   // update build.json with developmentTeam from config.xml
   function updateDevelopmentTeam (content, preferences) {
-    var release = preferences.iosTeamProd
-    var debug = (preferences.iosTeamDev) ? preferences.iosTeamDev : preferences.iosTeamProd
+    var release = preferences.iosTeamRelease
+    var debug = (preferences.iosTeamDebug) ? preferences.iosTeamDebug : preferences.iosTeamRelease
 
     content.ios.release.developmentTeam = release
     content.ios.debug.developmentTeam = debug

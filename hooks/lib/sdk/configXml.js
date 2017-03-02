@@ -53,8 +53,8 @@
     var branchKey = (branchXml.hasOwnProperty('branch-key')) ? branchXml['branch-key'][0]['$']['value'] : null
     var linkDomain = (branchXml.hasOwnProperty('link-domain')) ? branchXml['link-domain'][0]['$']['value'] : null
     var uriScheme = (branchXml.hasOwnProperty('uri-scheme')) ? branchXml['uri-scheme'][0]['$']['value'] : null
-    var iosTeamProd = (branchXml.hasOwnProperty('ios-team-prod')) ? branchXml['ios-team-prod'][0]['$']['value'] : null
-    var iosTeamDev = (branchXml.hasOwnProperty('ios-team-dev')) ? branchXml['ios-team-dev'][0]['$']['value'] : null
+    var iosTeamRelease = (branchXml.hasOwnProperty('ios-team-release')) ? branchXml['ios-team-release'][0]['$']['value'] : null
+    var iosTeamDebug = (branchXml.hasOwnProperty('ios-team-debug')) ? branchXml['ios-team-debug'][0]['$']['value'] : null
     var androidPrefix = (branchXml.hasOwnProperty('android-prefix')) ? branchXml['android-prefix'][0]['$']['value'] : null
     var androidTestMode = (branchXml.hasOwnProperty('android-testmode')) ? branchXml['android-testmode'][0]['$']['value'] : 'false'
 
@@ -66,9 +66,9 @@
       'branchKey': branchKey,
       'uriScheme': uriScheme,
       'linkDomain': linkDomain,
-      'iosTeamProd': iosTeamProd,
-      'iosTeamDev': iosTeamDev, // optional
-      'androidPrefix': androidPrefix // optional
+      'iosTeamRelease': iosTeamRelease,
+      'iosTeamDebug': iosTeamDebug, // optional
+      'androidPrefix': androidPrefix, // optional
       'androidTestMode': androidTestMode // optional
     }
   }
