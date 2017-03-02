@@ -18,7 +18,7 @@
     console.log('BRANCH SDK: Updating AndroidManifest.xml')
 
     // update manifest
-    manifest = updateBranchKeyMetaData(manifest, preferences)
+    manifest = updateBranchMetaData(manifest, preferences)
     manifest = updateBranchReferrerTracking(manifest)
     manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex, preferences)
     manifest = updateBranchURIScheme(manifest, mainActivityIndex, preferences)
@@ -28,22 +28,32 @@
     xmlHelper.writeJsonAsXml(manifest, pathToManifest)
   }
 
-  // adds to <application> for Branch init:
+  // adds to <application> for Branch init and testmode:
   // <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT" />
-  function updateBranchKeyMetaData (manifest, preferences) {
+  // <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+  function updateBranchMetaData (manifest, preferences) {
     var metadatas = manifest['manifest']['application'][0]['meta-data'] || []
-    var androidName = 'io.branch.sdk.BranchKey'
+    var metadata = []
+    var keys = ['io.branch.sdk.BranchKey', 'io.branch.sdk.TestMode']
+    var vals = [preferences.branchKey, preferences.androidTestMode]
 
     // remove old
-    metadatas = removeBasedOnAndroidName(metadatas, androidName)
+    for (var i = 0; i < keys.length; i++) {
+      metadatas = removeBasedOnAndroidName(metadatas, keys[i])
+    }
 
     // add new
-    manifest['manifest']['application'][0]['meta-data'] = metadatas.concat([{
-      '$': {
-        'android:name': androidName,
-        'android:value': preferences.branchKey
-      }
-    }])
+    for (i = 0; i < keys.length; i++) {
+      var key = keys[i]
+      var val = vals[i]
+      metadata.push({
+        '$': {
+          'android:name': key,
+          'android:value': val
+        }
+      })
+    }
+    manifest['manifest']['application'][0]['meta-data'] = metadatas.concat(metadata)
 
     return manifest
   }

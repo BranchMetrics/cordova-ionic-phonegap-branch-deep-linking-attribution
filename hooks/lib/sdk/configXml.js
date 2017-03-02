@@ -56,6 +56,7 @@
     var iosTeamProd = (branchXml.hasOwnProperty('ios-team-prod')) ? branchXml['ios-team-prod'][0]['$']['value'] : null
     var iosTeamDev = (branchXml.hasOwnProperty('ios-team-dev')) ? branchXml['ios-team-dev'][0]['$']['value'] : null
     var androidPrefix = (branchXml.hasOwnProperty('android-prefix')) ? branchXml['android-prefix'][0]['$']['value'] : null
+    var androidTestMode = (branchXml.hasOwnProperty('android-testmode')) ? branchXml['android-testmode'][0]['$']['value'] : 'false'
 
     return {
       'projectRoot': projectRoot,
@@ -68,6 +69,7 @@
       'iosTeamProd': iosTeamProd,
       'iosTeamDev': iosTeamDev, // optional
       'androidPrefix': androidPrefix // optional
+      'androidTestMode': androidTestMode // optional
     }
   }
 
@@ -105,6 +107,8 @@
     }
     if (preferences.iosTeamProd === null) {
       throw new Error('BRANCH SDK: Missing "ios-team-prod" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
+    if (!(preferences.androidTestMode === 'true' || preferences.androidTestMode === 'false')) {
+      throw new Error('BRANCH SDK: Invalid "android-testmode" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
   }
 })()

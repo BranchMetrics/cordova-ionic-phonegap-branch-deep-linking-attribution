@@ -693,6 +693,7 @@
       <ios-team-prod value="PW4Q8885U7" />
       <ios-team-test value="FG35JLLMXX4A" /> <!-- optional -->
       <android-prefix value="/WSuf" /> <!-- optional (bnc.lt) -->
+      <android-testmode value="true" /> <!-- optional (simulate installs) -->
     </branch-config>
   ```
 
