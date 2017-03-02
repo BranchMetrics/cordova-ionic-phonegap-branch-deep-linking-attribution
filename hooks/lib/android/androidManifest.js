@@ -218,7 +218,7 @@
 
         if (actions.length === 1 && actions[0]['$'].hasOwnProperty('android:name') && actions[0]['$']['android:name'] === 'android.intent.action.VIEW' && categories.length === 2 && categories[0]['$'].hasOwnProperty('android:name') && (categories[0]['$']['android:name'] === 'android.intent.category.DEFAULT' || categories[0]['$']['android:name'] === 'android.intent.category.BROWSABLE') && categories[1]['$'].hasOwnProperty('android:name') && (categories[1]['$']['android:name'] === 'android.intent.category.DEFAULT' || categories[1]['$']['android:name'] === 'android.intent.category.BROWSABLE') && data.length > 0 && data.length < 3) {
           // URI Scheme
-          if (data[0]['$'].hasOwnProperty('android:scheme') && data[0]['$'].hasOwnProperty('android:host') && data[0]['$']['android:host'] === 'open' && !item.hasOwnProperty('$')) {
+          if (data[0]['$'].hasOwnProperty('android:scheme') && !item.hasOwnProperty('$')) {
             continue
           }
 
