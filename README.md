@@ -222,8 +222,6 @@
 
 - #### Test Deep Link iOS
 
-  - Wait 15 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
   - Delete your app from the device *(resets the Apple AASA scraping)*
@@ -237,8 +235,6 @@
   - Click `Open in "APP_NAME"` to open your app *([example](http://i.imgur.com/VJVICXd.png))*
 
 - #### Test Deep Link Android
-
-  - Wait 15 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
