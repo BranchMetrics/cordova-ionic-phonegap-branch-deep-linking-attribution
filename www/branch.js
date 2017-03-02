@@ -33,50 +33,31 @@ Branch.prototype.disableGlobalListenersWarnings = function () {
   disableGlobalListenersWarnings = true
 }
 
-var branchLinkListener = null
+Branch.prototype.initSession = function (deepLinkDataListener) {
+  // private method to filter out +clicked_branch_link = false in deep link callback
+  var deepLinkDataParser = function (deepLinkData) {
+    var isBranchLink = '+clicked_branch_link'
+    var isNonBranchLink = '+non_branch_link'
 
-function onBranchLinkStub (data) {
-  branchLinkListener(data)
-}
+    // +clicked_branch_link' = true || +non_branch_link
+    if ((deepLinkData.hasOwnProperty(isBranchLink) && deepLinkData[isBranchLink] === true) || (deepLinkData.hasOwnProperty(isNonBranchLink))) {
+      // to Branch.initSession(function(data) {})
+      deepLinkDataListener(deepLinkData)
+    }
+  }
 
-Branch.prototype.initSession = function (onBranchLinkHook) {
-  if (!onBranchLinkHook && !disableGlobalListenersWarnings) {
-    console.log('WARNING: branch link hook is not being passed to initSession. ' + 'Falling back to global DeepLinkHandler method. See https://goo.gl/GijGKP for details.')
+  if (!disableGlobalListenersWarnings && !deepLinkDataListener && !window.DeepLinkHandler) {
+    // missing deep link data return
+    console.warn('BRANCH SDK: No callback in initSession and no global DeepLinkHandler method. No Branch deep link data will be returned. https://goo.gl/GijGKP')
+  } else if (!disableGlobalListenersWarnings && window.DeepLinkHandler !== undefined && window.DeepLinkHandler.toString() !== deepLinkDataParser.toString()) {
+    // deprecated 3.0.0: open and non deep link data will pass into DeepLinkHandler
+    console.warn('BRANCH SDK: Your DeepLinkHandler has changed. It will now pass non-Branch data. https://goo.gl/GijGKP')
   } else {
-    var currentHook = window.DeepLinkHandler
-    if (currentHook !== undefined && currentHook !== onBranchLinkStub) {
-      if (!disableGlobalListenersWarnings) {
-        console.log('WARNING: you are calling initSession with a branch link hook when an ' + 'existing global DeepLinkHandler is defined. The global ' + 'DeepLinkHandler will be overwritten. See https://goo.gl/GijGKP ' + 'for details.')
-      }
-    }
-    if (onBranchLinkHook) {
-      branchLinkListener = onBranchLinkHook
-      window.DeepLinkHandler = onBranchLinkStub
-    }
+    // from iOS and Android SDKs to JavaScript
+    window.DeepLinkHandler = deepLinkDataParser
   }
 
   return execute('initSession')
-}
-
-var nonBranchLinkListener = null
-
-function onNonBranchLinkStub (data) {
-  nonBranchLinkListener(data)
-}
-
-Branch.prototype.onNonBranchLink = function (newHook) {
-  if (!newHook) {
-    throw new Error('non branch link hook is falsy, expected a function, not: "' + newHook + '"')
-  }
-
-  var currentHook = window.NonBranchLinkHandler
-  if (currentHook !== undefined && currentHook !== onNonBranchLinkStub && currentHook !== defaultNonBranchLinkHandler) {
-    if (!disableGlobalListenersWarnings) {
-      console.log('WARNING: you are calling onNonBranchLink when an ' + 'existing global NonBranchLinkHandler is defined. The global ' + 'NonBranchLinkHandler will be overwritten. See https://goo.gl/GijGKP ' + 'for details.')
-    }
-  }
-  nonBranchLinkListener = newHook
-  window.NonBranchLinkHandler = onNonBranchLinkStub
 }
 
 Branch.prototype.setMixpanelToken = function (token) {
@@ -208,8 +189,5 @@ Branch.prototype.redeemRewards = function (value, bucket) {
 Branch.prototype.creditHistory = function () {
   return execute('getCreditHistory')
 }
-
-var defaultNonBranchLinkHandler = function defaultNonBranchLinkHandler (response) {}
-window.NonBranchLinkHandler = typeof NonBranchLinkHandler === 'undefined' ? defaultNonBranchLinkHandler : window.NonBranchLinkHandler
 
 module.exports = new Branch()

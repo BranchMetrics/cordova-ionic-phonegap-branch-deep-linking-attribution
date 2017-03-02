@@ -40,15 +40,6 @@ function BranchInit (isDebug) {
   }).catch(function (err) {
     console.error(err)
   })
-
-  // optional
-  Branch.onNonBranchLink(function NonBranchLinkHandler (data) {
-    console.log('Trigger NonBranchLinkData()')
-
-    if (data) {
-      alert(JSON.stringify(data))
-    }
-  })
 }
 
 function BranchEvent () {
@@ -272,6 +263,18 @@ function BranchSpotlight () {
   })
 }
 
+function BranchReferralsReward () {
+  console.log('Trigger BranchReferralsReward()')
+
+  Branch.userCompletedAction('add5credits').then(function (res) {
+    console.log(res)
+    alert('Response: ' + JSON.stringify(res))
+  }).catch(function (err) {
+    console.error(err)
+    alert('Error: ' + JSON.stringify(err))
+  })
+}
+
 function BranchReferralsLoad () {
   console.log('Trigger BranchReferralsLoad()')
 
@@ -287,7 +290,7 @@ function BranchReferralsLoad () {
 function BranchReferralsRedeem () {
   console.log('Trigger BranchReferralsRedeem()')
 
-  var amount = 100
+  var amount = 10
   Branch.redeemRewards(amount).then(function (res) {
     console.log(res)
     alert('Response: ' + JSON.stringify(res))

@@ -477,7 +477,7 @@ public class BranchSDK extends CordovaPlugin {
 
         // Add and iterate control parameters properties
         Iterator<?> keys = controlParams.keys();
-        
+
         while (keys.hasNext()) {
             String key = keys.next().toString();
 
@@ -660,25 +660,8 @@ public class BranchSDK extends CordovaPlugin {
 
             if (error == null && referringParams != null) {
 
-                // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
-                // params will be empty if no data found.
-                try {
-                    if (referringParams.has("+clicked_branch_link") && referringParams.getBoolean("+clicked_branch_link")) {
-                        out = String.format("DeepLinkHandler(%s)", referringParams.toString());
-                        webView.sendJavascript(out);
-                    } else if (deepLinkUrl != null) {
-                        JSONObject message = new JSONObject();
-
-                        message.put("error", "Not a Branch link!");
-                        message.put("url", deepLinkUrl);
-
-                        out = String.format("NonBranchLinkHandler(%s)", message.toString());
-                        webView.sendJavascript(out);
-                    }
-                    deepLinkUrl = null;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                out = String.format("DeepLinkHandler(%s)", referringParams.toString());
+                webView.sendJavascript(out);
 
                 if (this._callbackContext != null) {
                     this._callbackContext.success(referringParams);
