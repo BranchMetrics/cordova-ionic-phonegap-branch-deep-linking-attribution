@@ -1,117 +1,166 @@
-// import
-var gulp = require('gulp')
-var fs = require('fs')
-var standard = require('gulp-standard')
+var gulp = require('gulp');
+var fs = require('fs');
+var sourcemaps = require('gulp-sourcemaps');
+var babel = require('gulp-babel');
+var eslint = require('gulp-eslint');
+var jscs = require('gulp-jscs');
 
-// primary tasks
-gulp.task('dev', ['setupDev', 'lint'])
-gulp.task('prod', ['setupNpm', 'lint'])
-gulp.task('lint', ['standard'])
+gulp.task('prerelease', [ 'setupNpm', 'babel', 'lint' ]);
 
-// --------------------------------------------------
-// Linting
-// --------------------------------------------------
-gulp.task('standard', function () {
-  // standard format for javascript
-  var javascript = [
-    './hooks/**/*.js',
-    './testbed/www/js/**/*.js',
-    './gulpfile.js',
-    './www/branch.js'
-  ]
-
-  return gulp.src(javascript)
-  .pipe(standard())
-  .pipe(standard.reporter('default', {
-    breakOnError: true,
-    quiet: true
-  }))
+// -----------------------------------------------------------------------------
+// setup for development use
+gulp.task('setupDev', () => {
+  getDevPluginXML();
+  setIosNpmOrDev('dev');
 })
 
-// --------------------------------------------------
-// Setup
-// --------------------------------------------------
-gulp.task('setupDev', function () {
-  // setup for development use
-  getDevPluginXML()
-  setIosNpmOrDev('dev')
-})
+// setup for npm deployment
+gulp.task('setupNpm', () => {
+  genNpmPluginXML();
+  setIosNpmOrDev('npm');
+});
 
-gulp.task('setupNpm', function () {
-  // setup for npm deployment
-  genNpmPluginXML()
-  setIosNpmOrDev('npm')
-})
+// generate plugin.xml for use as a cordova plugin
+// here we explode the contents of the frameworks
+function genNpmPluginXML() {
+  var xml = fs.readFileSync('plugin.template.xml', 'utf-8');
 
-// TODO: does not work. need to revise and update package.json -> semantic-release
-gulp.task('update-plugin-xml-version', function () {
-  // first match only!
-  var PLUGIN_XML_VERSION_REGEX = /^\s*version=\"[\d\.]*\"\>$/m // eslint-disable-line
-  var versionNumber = require('./package.json').version
+  var files = [];
+  var root = 'src/ios/dependencies/';
+  files = files.concat(emitFiles(root + 'Fabric/'));
+  files = files.concat(emitFiles(root + 'Branch-SDK/'));
+  files = files.concat(emitFiles(root + 'Branch-SDK/Requests/'));
 
+  var newLineIndent = '\n        ';
+  xml = xml.replace('<!--[Branch Framework Reference]-->', newLineIndent +
+    files.join(newLineIndent));
+
+  fs.writeFileSync('plugin.xml', xml);
+};
+// first match only!
+var PLUGIN_XML_VERSION_REGEX = /^\s*version=\"[\d\.]*\"\>$/m;
+gulp.task('update-plugin-xml-version', () => {
+  var versionNumber = require('./package.json').version;
   // this will break if plugin.xml is not formatted exactly as we expect
   // so you might end up needing to fix the regex
-  for (var target of [ '.xml', '.template.xml' ]) {
-    var pluginXML = fs.readFileSync('plugin' + target, 'utf8')
-    var newVersionXML = `    version="${versionNumber}">`
-    pluginXML = pluginXML.replace(PLUGIN_XML_VERSION_REGEX, newVersionXML)
-    fs.writeFileSync('plugin' + target, pluginXML)
+  for (target of [ '.xml', '.template.xml' ]) {
+    var pluginXML = fs.readFileSync('plugin' + target, 'utf8');
+    var newVersionXML = `        version="${versionNumber}">`;
+    pluginXML = pluginXML.replace(PLUGIN_XML_VERSION_REGEX, newVersionXML);
+    fs.writeFileSync('plugin' + target, pluginXML);
   }
-})
 
-function getDevPluginXML () {
-  // generate plugin.xml for local development
-  // here we reference the frameworks instead of all the files directly
-  var xml = fs.readFileSync('plugin.template.xml', 'utf-8')
+});
+// generate plugin.xml for local development
+// here we reference the frameworks instead of all the files directly
+function getDevPluginXML() {
+  var xml = fs.readFileSync('plugin.template.xml', 'utf-8');
 
-  xml = xml.replace('<!--[Branch Framework Reference]-->', '<framework custom="true" src="src/ios/dependencies/Branch.framework" />')
+  xml = xml.replace('<!--[Branch Framework Reference]-->',
+    '<framework custom="true" src="src/ios/dependencies/Branch.framework" />');
 
-  fs.writeFileSync('plugin.xml', xml)
-}
+  fs.writeFileSync('plugin.xml', xml);
+};
 
-function genNpmPluginXML () {
-  // generate plugin.xml for use as a Cordova plugin
-  // here we explode the contents of the frameworks
-  var xml = fs.readFileSync('plugin.template.xml', 'utf-8')
-  var files = []
-  var head = 'src/ios/dependencies/'
-  var newLineIndent = '\n    '
-
-  files = files.concat(emitFiles(head + 'Fabric/'))
-  files = files.concat(emitFiles(head + 'Branch-SDK/'))
-  files = files.concat(emitFiles(head + 'Branch-SDK/Requests/'))
-
-  xml = xml.replace('<!--[Branch Framework Reference]-->', newLineIndent + files.join(newLineIndent))
-
-  fs.writeFileSync('plugin.xml', xml)
-}
-
-function setIosNpmOrDev (npmOrDev) {
-  var content
+function setIosNpmOrDev(npmOrDev) {
   if (npmOrDev === 'npm') {
-    content = '#define BRANCH_NPM true'
-  } else if (npmOrDev === 'dev') {
-    content = '//empty'
-  } else {
-    throw new Error('expected deployed|local, not ' + npmOrDev)
+    content = '#define BRANCH_NPM true';
   }
-  fs.writeFileSync('src/ios/BranchNPM.h', content + '\n')
+  else if (npmOrDev === 'dev') {
+    content = '//empty';
+  }
+  else {
+    throw new Error('expected deployed|local, not ' + deployedOrLocal);
+  }
+  fs.writeFileSync('src/ios/BranchNPM.h', content + '\n');
 }
 
-function emitFiles (path) {
-  // emit array of Cordova file references for all .h/.m files in path
-  var ret = []
-  for (var filename of fs.readdirSync(path)) {
-    var fileType = null
+// emit array of cordova file references for all .h/.m files in path
+function emitFiles(path) {
+  var ret = [];
+  for (filename of fs.readdirSync(path)) {
+    var fileType = null;
     if (filename.match(/\.m$/)) {
-      fileType = 'source'
-    } else if (filename.match(/\.h$/) || filename.match(/\.pch$/)) {
-      fileType = 'header'
+      fileType = 'source';
+    }
+    else if (filename.match(/\.h$/) || filename.match(/\.pch$/)) {
+      fileType = 'header';
     }
     if (fileType) {
-      ret.push('<' + fileType + '-file src="' + path + filename + '" />')
+      ret.push('<' + fileType + '-file src="' + path + filename + '" />');
     }
   }
-  ret.push('')
-  return ret
+  ret.push('');
+  return ret;
 }
+
+// -----------------------------------------------------------------------------
+// copy resources and compile es6 from corresponding directories
+babelTasks = []; // list of all babel tasks so we can build all of them
+function babelize(taskName, dir) {
+  babelTasks.push(taskName + '-babel');
+  if (!dir) {
+    dir = taskName;
+  }
+  var srcDir = dir + '.es6/';
+  var srcPattern = dir + '.es6/**/*.js'
+  var destDir = dir + '/';
+  gulp.task(taskName + '-copy', () => {
+    return gulp.src(srcDir + '**/*.*').pipe(gulp.dest(destDir));
+  });
+  gulp.task(taskName + '-babel', [ taskName + '-copy' ], () => {
+    return gulp.src(srcPattern)
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: [ 'es2015', 'stage-2' ]
+    }))
+    .pipe(gulp.dest(destDir));
+  });
+}
+
+babelize('hooks');
+babelize('www');
+babelize('tests');
+babelize('testbed', 'testbed/www/js');
+gulp.task('babel', babelTasks);
+
+// -----------------------------------------------------------------------------
+// linting
+
+gulp.task('lint', [ 'eslint', 'jscs-lint' ]);
+
+var srcs = [
+'hooks.es6/**/*.js',
+'www.es6/**/*.js',
+'gulpfile.js',
+'tests.es6/**/*.js',
+'testbed/www/js.es6/**/*.js',
+'!node_modules/**',
+'!testbed/platforms/**',
+'!testbed/plugins/**',
+'!tests-harness/platforms/**',
+'!tests-harness/plugins/**'
+];
+
+gulp.task('eslint', () => {
+  return gulp.src(srcs)
+  .pipe(eslint())
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError());
+});
+
+function jscsTask(fix) {
+  var ret = gulp.src(srcs)
+  .pipe(jscs({
+    fix: fix
+  }))
+  .pipe(jscs.reporter())
+  .pipe(jscs.reporter('fail'));
+  if (fix) {
+    ret.pipe(gulp.dest('.'));
+  }
+  return ret;
+}
+
+gulp.task('jscs-fix', jscsTask.bind(null, true));
+gulp.task('jscs-lint', jscsTask.bind(null, false));

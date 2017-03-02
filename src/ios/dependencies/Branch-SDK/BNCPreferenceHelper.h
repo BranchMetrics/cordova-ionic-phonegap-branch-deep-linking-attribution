@@ -31,7 +31,6 @@
 @property (assign, nonatomic) BOOL shouldWaitForInit;
 @property (assign, nonatomic) BOOL suppressWarningLogs;
 @property (assign, nonatomic) BOOL checkedFacebookAppLinks;
-@property (assign, nonatomic) BOOL checkedAppleSearchAdAttribution;
 @property (assign, nonatomic) NSInteger retryCount;
 @property (assign, nonatomic) NSTimeInterval retryInterval;
 @property (assign, nonatomic) NSTimeInterval timeout;

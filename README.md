@@ -10,9 +10,9 @@
 
 > Hyperlinks can navigate to your website, but not to your app.
 
-> Branch fixes this problem  with deep links.
+> Branch deep links allow users to install, open, and navigate to content inside your app.
 
-> Branch deep links will grow your app by allowing users to install, open, and navigate to content inside your app.
+> Branch deep links will grow your app.
 
 > Increase discovery of your app based on the content inside, convert web users to app users, enable user-to-user sharing, personalize user experiences, track users, track referrals, track campaigns, track conversions, and increase overall engagement.
 
@@ -25,6 +25,7 @@
 
 - [Getting Started](#getting-started)
   - [Configure Branch](#configure-branch)
+  - [Install Branch](#install-branch)
   - [Configure App](#configure-app)
   - [Initialize Branch](#initialize-branch)
   - [Test Deep Link iOS](#test-deep-link-ios)
@@ -41,23 +42,24 @@
   - [Track Event](#track-event)
   - [Handle Referrals](#handle-referrals)
 - [Troubleshooting](#troubleshooting)
-  - [Testing: Key Points](#testing-key-points)
+  - [Testing: Key Points](#testing-key-points) 
   - [Testing: Sample Testing App](#testing-sample-testing-app)
+  - [Testing: Sample Integration App](#testing-sample-integration-app)
   - [Testing: Show Console Logs](#testing-show-console-logs)
   - [Testing: Supported Platforms](#testing-supported-platforms)
   - [Testing: Simulating an Install](#testing-simulating-an-install)
-  - [Testing: Optional App Config](#testing-optional-app-config)
+  - [Link Domain: Custom](#link-domain-custom)
+  - [Link Domain: Bnc.lt](#link-domain-bnclt)
   - [Link Data: Universal Object Properties](#link-data-universal-object-properties)
   - [Link Data: Deep Link Properties](#link-data-deep-link-properties)
   - [Link Data: Convert to Ionic/Angular](#link-data-convert-to-ionicangular)
   - [Link Data: Global Listener Warning](#link-data-global-listener-warning)
-  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
+  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins) 
   - [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
   - [Compiling: Visual Studio TACO](#compiling-visual-studio-taco)
   - [Compiling: Multiple support-lib v4s](#compiling-multiple-support-lib-v4s)
   - [Compiling: Missing Android Dependency](#compiling-missing-android-dependency)
-  - [Compiling: Errors](#compiling-errors)
 - [Additional](#additional)
   - [SDK Development](#sdk-development)
   - [Bulk Link Creation](#bulk-link-creation)
@@ -71,45 +73,46 @@
 - #### Configure Branch
 
   - Complete your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  
+    ![image](http://i.imgur.com/tkEolFM.png)
 
-    ![image](http://i.imgur.com/wazVu3U.png)
-    ![image](http://i.imgur.com/9PEylbS.png)
+- #### Install Branch
+
+  - Cordova and PhoneGap and Ionic
+    ```sh
+    # terminal
+    cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq --variable URI_SCHEME=branchcordova;
+    ```
+
+  - Change `key_live_hiuejxqEdbHR8Tc1L92nmiijrse9OBpq` and `branchcordova` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
 - #### Configure App
 
   - Cordova and Ionic
     ```xml
     <!-- sample config.xml -->
-    <widget id="com.eneff.branch.cordova_testbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-      <!-- Branch -->
-      <plugin name="branch-cordova-sdk" />
+    <widget id="com.eneff.branch.cordova" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
       <branch-config>
-        <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
-        <uri-scheme value="cordovatestbed" />
-        <link-domain value="cordova.app.link" />
-        <ios-team-release value="PW4Q8885U7" />
+        <ios-team-id value="PW4Q8885U7"/>
+        <host name="2d0s.app.link" scheme="https" />
+        <host name="2d0s-alternate.app.link" scheme="https" />
       </branch-config>
+      <preference name="AndroidLaunchMode" value="singleTask" />
     ```
 
   - PhoneGap
     ```xml
     <!-- sample config.xml -->
-    <widget id="com.eneff.branch.cordova_testbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-      <!-- Branch -->
-      <plugin name="branch-cordova-sdk" />
+    <widget id="com.eneff.branch.cordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
       <branch-config>
-        <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
-        <uri-scheme value="cordovatestbed" />
-        <link-domain value="cordova.app.link" />
-        <ios-team-prod value="PW4Q8885U7" />
+        <ios-team-id value="PW4Q8885U7"/>
+        <host name="2d0s.app.link" scheme="https" />
+        <host name="2d0s-alternate.app.link" scheme="https" />
       </branch-config>
+      <preference name="AndroidLaunchMode" value="singleTask" />
     ```
 
-  - Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-    - `com.eneff.branch.cordova_testbed`
-    - `cordovatestbed`
-    - `PW4Q8885U7`
-    - `testbed.app.link`
+  - Change `com.eneff.branch.cordova`, `PW4Q8885U7`, `2d0s.app.link`, and `2d0s-alternate.app.link` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)    
 
 - #### Initialize Branch
 
@@ -158,11 +161,10 @@
         }
 
         // Branch
-        $ionicPlatform.on('deviceready', function() {
+        $ionicPlatform.on('deviceready', function(){
           branchInit();
         });
-
-        $ionicPlatform.on('resume', function() {
+        $ionicPlatform.on('resume', function(){
           branchInit();
         });
 
@@ -210,7 +212,7 @@
         // Branch initialization
         const branchInit = () => {
           // only on devices
-          if (!platform.is('cordova')) { return }
+          if (platform.is('core')) { return }
           Branch.initSession(data => {
             // read deep link data on click
             alert('Deep Link Data: ' + JSON.stringify(data));
@@ -222,36 +224,46 @@
 
 - #### Test Deep Link iOS
 
+  - Wait 15 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
+
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
   - Delete your app from the device *(resets the Apple AASA scraping)*
 
-  - Compile your app *(`cordova run ios` `phonegap run ios` `ionic run ios`)*
+  - Compile your app *(`cordova build ios` `phonegap build ios` `ionic build ios`)*
 
-  - Paste deep link in `Apple Notes`
+  - Open the app in `Xcode` and set your Provisioning Profile `Development Team`
+
+  - Launch your app to `device` *(not Simulator or TestFlight)*
+
+  - Paste deep link in Apple Notes
 
   - Long press on the deep link *(not 3D Touch)*
 
-  - Click `Open in "APP_NAME"` to open your app *([example](http://i.imgur.com/VJVICXd.png))*
+  - Click `Open in "APP_NAME"` to open app *([example](http://i.imgur.com/VJVICXd.png))*
 
 - #### Test Deep Link Android
+
+  - Wait 15 minutes after saving changes on the [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
   - Delete your app from the device
 
-  - Compile your app *(`cordova run android` `phonegap run android` `ionic run android`)*
+  - Compile your app *(`cordova build android` `phonegap build android` `ionic build android`)*
 
-  - Paste deep link in `Google Hangouts`
+  - Launch your app to `device` *(not Simulator or Genymotion)*
 
-  - Click on the deep link to open your app
+  - Paste deep link in Google Hangouts
+
+  - Tap on the deep link to open app
 
 ## Features
 
 - #### Initialize Branch Features
 
   - Loads Branch into your app
-
+  
   - Must be called on `deviceready` and `resume`
 
     ```js
@@ -274,7 +286,7 @@
 
 - #### Create Content Reference
 
-  - The `Branch Universal Object` encapsulates the thing you want to share (content or user)
+  - The **Branch Universal Object** encapsulates the thing you want to share (content or user)
 
   - Link Data: [Universal Object Properties](#link-data-universal-object-properties)
 
@@ -332,11 +344,10 @@
       $ipad_url: 'http://www.example.com/ipad',
       $deeplink_path: 'content/123',
       $match_duration: 2000,
-      custom_string: 'data',
-      custom_integer: Date.now(),
-      custom_boolean: true,
-      custom_array: [1, 2, 3, 4, 5],
-      custom_object: { 'random': 'dictionary' }
+      more_custom: 'data',
+      even_more_custom: true,
+      this_is_custom: 41231,
+      this_is_date: Date.now()
     }
 
     branchUniversalObj.generateShortUrl(analytics, properties).then(function (res) {
@@ -367,11 +378,9 @@
     // optional fields
     var properties = {
       $desktop_url: 'http://www.example.com/desktop',
-      custom_string: 'data',
-      custom_integer: Date.now(),
-      custom_boolean: true,
-      custom_array: [1, 2, 3, 4, 5],
-      custom_object: { 'random': 'dictionary' }
+      more_custom: 'data',
+      even_more_custom: true,
+      this_is_custom: 41231
     }
 
     var message = 'Check out this link'
@@ -471,7 +480,7 @@
       alert('Error: ' + JSON.stringify(err))
     })
     ```
-
+ 
     ```js
     Branch.logout().then(function (res) {
       alert('Response: ' + JSON.stringify(res))
@@ -485,7 +494,7 @@
   - Registers custom events
 
   - Must [Track User](#track-user) before [Track Event](#track-event) to associate events with a user
-
+  
   - Event names `open`, `install`, and `close` are restricted by Branch
 
     ```js
@@ -512,19 +521,19 @@
   - Referral points are obtained from events triggered by users from rules created on the [Branch Dashboard](https://dashboard.branch.io/referrals/rules)
 
   - Get credits
-
+  
     - Referrer is [tracked](#track-user)
-
+    
     - Referrer [creates a deep link](#create-deep-link)
-
+    
     - Referrer [shares the deep Link](#share-deep-link)
-
+    
     - Referee clicks on deep link
-
+    
     - Referee triggers a [custom event](#track-event)
-
+    
     - Catch the event in your Branch Dashboard as a [rule](https://dashboard.branch.io/referrals/rules)
-
+    
     - Referrer gets referral points
 
   - Spend credits
@@ -582,23 +591,105 @@
 - #### Testing: Key Points
 
   - Use the Branch `key_live`
-
+  
   - Always use the `Branch.initSession(function(data) {})` to read Deep Link data
 
-  - Always test on `device` (`simulator` `browser` `genymotion` will not work)
+  - Always test on `device` (`simulator` `browser` `genymotion` will break)
 
   - You must launch the app through `Xcode` for iOS
-
-  - Other deep link plugins (e.g. `cordova-universal-links-plugin`) will interferer with Branch
+  
+  - Other deep link plugins (ex `cordova-universal-links-plugin`) will interferer with Branch
 
 - #### Testing: Sample Testing App
 
   - [Branch Testing App](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/testbed)
 
+- #### Testing: Sample Integration App
+
+  - Ionic 1
+    
+    - **Install**
+    
+    ```bash
+    npm install -g cordova ionic;
+    ionic start t3 tabs;
+    cd t3;
+    ionic platform add ios;
+    ionic platform add android;
+    ionic plugin remove io.branch.sdk;
+    # values should be from your Branch Dashboard https://dashboard.branch.io/settings/link
+    ionic plugin add https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git --variable BRANCH_KEY=key_live_jnBhaHwt5K8xtn4g4hblHoleqsocI6C2 --variable URI_SCHEME=branchionic;
+    ```
+
+    - **Update config.xml**
+    
+    ```xml
+    <!-- values should be from your Branch Dashboard https://dashboard.branch.io/settings/link -->
+    <widget id="com.eneff.branch.ionic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+      <branch-config>
+        <ios-team-id value="PW4Q8885U7"/>
+        <host name="cluv.app.link" scheme="https"/>
+        <host name="cluv-alternate.app.link" scheme="https"/>
+      </branch-config>
+    ```  
+
+    - **update app.js**
+    
+    ```js
+    // global function
+    function DeepLinkHandler(data) {
+      if (data) {
+        alert('Data Link handler response: ' + JSON.stringify(data));
+      }
+    }
+
+    angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+
+    .run(function($ionicPlatform) {
+      $ionicPlatform.ready(function() {
+        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+          cordova.plugins.Keyboard.disableScroll(true);
+        }
+        if (window.StatusBar) {
+          StatusBar.styleDefault();
+        }
+
+        // Branch
+        $ionicPlatform.on('deviceready', function(){
+          Branch.setDebug(true);
+          Branch.initSession();
+        });
+      });
+    })
+
+    // ...
+    ```
+
+    - **Delete app off device**
+
+    - **Compile ionic**
+    
+    ```bash
+    ionic build ios;
+    ```
+
+    - **Run on device through xcode**
+    
+    ```bash
+    open -a Xcode platforms/ios/t3.xcodeproj;
+    ```
+
+    - **Click on a deep link in iMessage to open the app**
+    
+       - For example, the deep link [https://cluv.app.link/6TOiVlCqXx](https://cluv.app.link/6TOiVlCqXx) can be created from your [Branch Dashboard](https://dashboard.branch.io/marketing)
+
+      - ![image](http://i.imgur.com/YzeE14X.gif)
+
 - #### Testing: Show Console Logs
 
   - iOS Simulator
-
+  
     - `cordova run ios;`
 
     - Safari -> Preferences -> Advance -> Show Develop menu in menu bar
@@ -610,7 +701,7 @@
     - *May need to open Xcode and update provisioning profile*
 
   - iOS Xcode
-
+  
     - `cordova plugin add cordova-plugin-console;`
 
     - `cordova build ios;`
@@ -624,7 +715,7 @@
     - Xcode -> View -> Debug Area -> Activate Console
 
   - Android Device
-
+  
     - Plug device in
 
     - `cordova run android;`
@@ -632,7 +723,7 @@
     - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
 
   - Android Genymotion
-
+  
     - Genymotion -> Start
 
     - `cordova run android;`
@@ -643,12 +734,12 @@
 
   - Apps which support Branch deep links
 
-    | | iOS | Details | Android | Details
+    | | iOS | Details | Android | Details 
     | --- | :-: | --- | :-: | ---
-    | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
+    | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | 
     | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | Works except the `app.link` domain is not click-able |
     | Twitter | ✅ | | ✅ |
-    | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | 🅾️ |
+    | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | 🅾️ | 
     | Slack | ✅ | | ✅ | |
     | Chrome address bar | ✅ | | ✅ |
     | Chrome web page | ✅ | | ✅ |
@@ -664,38 +755,49 @@
     | Gmail | ✅ | | ✅ |
 
 - #### Testing: Simulating an Install
-
+  
   - Add `Branch.setDebug(true);` before `Branch.initSession();`
 
   - Delete app
 
-  - `[iOS only]` iPhone -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
+  - *[iOS only]* iPhone -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
 
   - Click on deep link *(will navigate to fallback url because app is not installed)*
 
   - Install the app
 
-  - Open the app
+  - Open the app 
 
   - Read from `Branch.initSession(data)` for `+is_first_session = true`
 
-- #### Testing: Optional App Config
+- #### Link Domain: Custom
 
-  ```xml
-  <!-- sample config.xml -->
-  <widget id="com.eneff.branch.example" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <!-- Branch -->
-    <plugin name="branch-cordova-sdk" spec="~2.4.2" /> <!-- optional spec -->
+  - Cordova and PhoneGap and Ionic
+  
+    ```xml
+    <!-- sample config.xml -->
     <branch-config>
-      <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
-      <uri-scheme value="cordovatestbed" />
-      <link-domain value="testbed.app.link" />
-      <ios-team-release value="PW4Q8885U7" />
-      <ios-team-debug value="FG35JLLMXX" /> <!-- optional -->
-      <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt) -->
-      <android-testmode value="true" /> <!-- optional (simulate installs) -->
+      <ios-team-id value="PW4Q8885U7"/>
+      <host name="custom.domain.com" scheme="https" />
     </branch-config>
-  ```
+    ```
+
+  - Change `PW4Q8885U7` and `custom.domain.com` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+
+- #### Link Domain: Bnc.lt
+
+  - Cordova and PhoneGap and Ionic
+  
+    ```xml
+    <!-- sample config.xml -->
+    <branch-config>
+      <ios-team-id value="PW4Q8885U7"/>
+      <android-prefix value="/WSuf" />
+      <host name="bnc.lt" scheme="https" />
+    </branch-config>
+    ```
+
+  - Change `PW4Q8885U7` and `/WSuf` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
 - #### Link Data: Universal Object Properties
 
@@ -729,7 +831,7 @@
     | stage | | Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter
     | tags | | This is a free form entry with unlimited values `["string"]`. Use it to organize your link data with labels that don’t fit within the bounds of the above
     | alias | | Specify a link alias in place of the standard encoded short URL e.g. `yourdomain.com/youralias`. Link aliases are unique, immutable objects that cannot be deleted. You cannot change the alias of existing links. Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight
-    | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make the link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing) while adding `$marketing_title` to `data`. Must be an `int`. Does not work with the Cordova SDK (limitation of native SDKs)
+    | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make the link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing) while adding `$marketing_title` to `data`.
 
   - Properties
 
@@ -771,7 +873,7 @@
       | $android_redirect_timeout | `750` | Control the timeout that the clientside JS waits after trying to open up the app before redirecting to the Play Store. Specified in milliseconds
       | $one_time_use | `false` | Set to `true` to limit deep linking behavior of the generated link to a single use. Can also be set using type
       | $custom_sms_text | | Text for SMS link sent for desktop clicks to this link. Must contain `{{ link }}` Value of Text me the app page in Settings
-      | $marketing_title | | The Marketing Title for the deep link in the [Marketing Dashboard](https://dashboard.branch.io/marketing)
+      | $marketing_title | | The Marketing Title for the deep link in the [Marketing Dashboard](https://dashboard.branch.io/marketing) 
 
     - Content
 
@@ -904,21 +1006,49 @@
   - Use `Branch.disableGlobalListenersWarnings();` to turn off the warning errors generated from `DeepLinkHandler` and `NonBranchLinkHandler`
 
 - #### Compiling: Incompatible Plugins
-
+  
   - The following plugins will not work with the Branch SDK
-
+  
   - [PhoneGap NFC Plugin](https://github.com/chariotsolutions/phonegap-nfc)
-
+  
   - [Custom URL scheme](https://github.com/EddyVerbruggen/Custom-URL-scheme)
-
+  
   - [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
-
+  
   - [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
+
+- #### Compiling: Updating the Branch SDK
+
+    ```bash
+    # update cordova
+    npm install -g cordova;
+
+    # remove old Branch SDK cache
+    cordova platform remove ios;
+    cordova platform remove android;
+    cordova platform remove browser;
+
+    # add platforms back
+    cordova platform add ios;
+    cordova platform add android;
+    
+    # update Branch SDK
+    cordova plugin remove io.branch.sdk;
+    cordova plugin add branch-cordova-sdk --variable BRANCH_KEY=xxxx --variable URI_SCHEME=xxxx;
+
+    # compile platform code
+    cordova build ios;
+    cordova build android;
+    ```
+
+  - Change `xxxx`, and `xxxx` to the values in your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+
+  - `cordova plugin add branch-cordova-sdk` can sometimes miss installing dependencies if you run more than 1 command at a time
 
 - #### Compiling: Cordova Dependencies
 
   - Node
-
+  
     ```sh
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)";
     brew update;
@@ -979,7 +1109,7 @@
   - Branch does not depend on the `android-support-v4` file, but other Cordova plugins could cause an issue
 
   - Add `multiDexEnabled true` inside defaultConfig tag in `build.gradle`
-
+  
     ```sh
     defaultConfig {
       multiDexEnabled true
@@ -991,7 +1121,7 @@
   - Run `./gradlew clean` in the Android directory
 
   - Run `android-support-v4` file for compiling
-
+  
     ```sh
     compile ("com.google.android.gms:play-services-ads:9.+") {
       exclude module: "support-v4"
@@ -1003,91 +1133,41 @@
   - Gradle build cannot find `io.branch.sdk.android:library:2.+` dependency
 
   - Add into your `build.gradle` file
-
+ 
     ```sh
     compile "io.branch.sdk.android:library:2.+"
     ```
-
-- #### Compiling: Errors
-
-  - error
-
-    ```sh
-    ORIGINAL EXCEPTION: Branch is not defined
-    ```
-
-    ```sh
-    ReferenceError: Branch is not defined
-    ```
-
-    - Branch opens and installs your app. You cannot simulate Branch in the desktop browser
-
-      ```js
-      // Ionic 2 - running on browser instead of device
-      if (!platform.is('cordova')) { return }
-      Branch.userCompletedAction('did_this')
-      ```
-
-      ```js
-      // Ionic 2 - missing Branch import
-      declare var Branch
-      ```
-
-  - error
-
-    ```sh
-    ** ARCHIVE FAILED **
-
-    The following build commands failed:
-      Check dependencies
-    (1 failure)
-    Error: Error code 65 for command: xcodebuild with args: -xcconfig,/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/cordova/build-debug.xcconfig,-workspace,Branch Testing.xcworkspace,-scheme,Branch Testing,-configuration,Debug,-destination,generic/platform=iOS,-archivePath,Branch Testing.xcarchive,archive,CONFIGURATION_BUILD_DIR=/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/build/device,SHARED_PRECOMPS_DIR=/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/build/sharedpch
-    ```
-
-      - Open app in `Xcode` and launch from there (to select a `Provisioning Profile`)
-
-  - error
-
-    ```sh
-    An invalid value 'XC com eneff branch cordova_testbed' was provided for the parameter 'appIdName'.
-    ```
-
-    ```sh
-    No profiles for 'com.eneff.branch.cordova_testbed' were found
-    ```
-
-      - Don't use `cordova`, `hyphens`, or `underscores` in your bundle id (widget id)
 
 ## Additional
 
 - #### SDK Development
 
   - [Changelog](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/CHANGELOG.md)
-
+  
   - [Contributing](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/DEVELOPING.md)
-
+  
 - #### Bulk Link Creation
 
  - [HTTP API](https://github.com/BranchMetrics/branch-deep-linking-public-api)
-
+ 
  - [Marketing Dashboard](https://dashboard.branch.io/marketing)
 
 - #### Analytical Data
 
   - [Summary Dashboard](https://dashboard.branch.io/)
-
+  
   - [Export Button](https://dashboard.branch.io/liveview/links)
-
+  
   - [Export API](https://dev.branch.io/methods-endpoints/data-export-api/guide/)
-
+  
   - [Webhooks](https://dev.branch.io/getting-started/webhooks/guide/)
 
 - #### Webpage Features
 
   - [Text Me The App](https://github.com/BranchMetrics/web-branch-deep-linking#sendsmsphone-linkdata-options-callback)
-
+  
   - [Smart Banner](https://github.com/BranchMetrics/web-branch-deep-linking#banneroptions-data)
-
+  
   - [DeepView](https://github.com/BranchMetrics/web-branch-deep-linking#deepview)
 
 - #### Premium Features
@@ -1101,5 +1181,5 @@
 - #### Support
 
   - [Documentation](https://dev.branch.io/)
-
+  
   - [Contact](https://support.branch.io/support/tickets/new)

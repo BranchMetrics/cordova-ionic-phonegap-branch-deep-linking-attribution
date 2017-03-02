@@ -11,7 +11,7 @@
 
 @interface BranchOpenRequest : BNCServerRequest
 
-@property (copy) callbackWithStatus callback;
+@property (copy, nonatomic) callbackWithStatus callback;
 
 - (id)initWithCallback:(callbackWithStatus)callback;
 - (id)initWithCallback:(callbackWithStatus)callback isInstall:(BOOL)isInstall;

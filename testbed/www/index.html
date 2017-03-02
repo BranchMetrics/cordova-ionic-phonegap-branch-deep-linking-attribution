@@ -1,90 +1,75 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="msapplication-tap-highlight" content="no">
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-  <link rel="stylesheet" type="text/css" href="css/index.css">
-  <title>Branch Testing</title>
-</head>
-<body>
-  <div>
-    <fieldset>
-      <legend>Branch Universal Object</legend>
-      <div>
-        <button onclick="BranchUniversalObject()">Create</button>
-      </div>
-    </fieldset>
-  </div>
-  <div>
-    <fieldset>
-      <legend>Branch Deep Link</legend>
-      <div>
-        <input id="alias" name="alias" type="text" placeholder="Enter an alias">
-      </div>
-      <div>
-        <button onclick="BranchDeepLink()">Create</button>
-        <button onclick="BranchShareSheet()">Share</button>
-      </div>
-      <div>
-        <input type="text" id="generated-url" placeholder="Deep Link" readonly>
-      </div>
-    </fieldset>
-  </div>
-  <div>
-    <fieldset>
-      <legend>Branch Deep Link Data</legend>
-      <div>
-        <button onclick="BranchFirstData()">First</button>
-        <button onclick="BranchLatestData()">Latest</button>
-      </div>
-    </fieldset>
-  </div>
-  <div>
-    <fieldset>
-      <legend>Branch Content</legend>
-      <div>
-        <button onclick="BranchView()">Create</button>
-        <button onclick="BranchSpotlight()">Share</button>
-      </div>
-    </fieldset>
-  </div>
-  <div>
-    <fieldset>
-      <legend>Branch User</legend>
-      <div>
-        <input type="text" id="identity" name="identity" placeholder="User Id">
-      </div>
-      <div>
-        <button onclick="BranchUser()">Login</button>
-        <button onclick="BranchLogout()">Logout</button>
-      </div>
-    </fieldset>
-  </div>
-  <div>
-    <fieldset>
-      <legend>Branch Event</legend>
-      <div>
-        <input type="text" id="custom-action" name="custom-action" placeholder="Event Name">
-        <button onclick="BranchEvent()">Create</button>
-      </div>
-    </fieldset>
-  </div>
-  <div>
-    <fieldset>
-      <legend>Branch Referral</legend>
-      <div>
-        <button onclick="BranchReferralsReward()">Reward</button>
-        <button onclick="BranchReferralsLoad()">Load</button>
-      </div>
-      <div>
-        <button onclick="BranchReferralsRedeem()">Redeem</button>
-        <button onclick="BranchReferralsHistory()">History</button>
-      </div>
-    </fieldset>
-  </div>
-  <script type="text/javascript" src="cordova.js"></script>
-  <script type="text/javascript" src="js/index.js"></script>
-</body>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>Branch Testing</title>
+    </head>
+    <body>
+        <div>
+            <fieldset>
+                <legend>Branch Data</legend>
+                <div>
+                    <button onclick="BranchFirstData()">Get First Referring Params</button>
+                    <button onclick="BranchLatestData()">Get Latest Referring Params</button>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Branch Universal Object</legend>
+                <div>
+                    <button onclick="BranchUniversalObject()">Generate Branch Universal Object</button>
+                    <button onclick="BranchShareSheet()">Share Sheet</button>
+                </div>
+                <div>
+                    <button onclick="BranchView()">Register View</button>
+                    <button onclick="BranchSpotlight()">List On Spotlight</button>
+                </div>
+                <div>
+                    <input id="alias" name="alias" type="text" placeholder="Enter an alias">
+                    <button onclick="BranchDeepLink()">Generate Deep Link</button>
+                </div>
+                <div>
+                    <input type="text" class="padding-vertical" id="generated-url" placeholder="Deep Link" readonly>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>
+                <legend>User Identity</legend>
+                <div>
+                    <input type="text" id="identity" name="identity" placeholder="User Id">
+                    <button onclick="BranchUser()">Set User Identity</button>
+                </div>
+                <div>
+                    <button onclick="BranchLogout()">Logout</button>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Events</legend>
+                <div>
+                    <input type="text" id="custom-action" name="custom-action" placeholder="Event Name">
+                    <button onclick="BranchEvent()">Generate Event</button>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Referrals</legend>
+                <div>
+                    <button onclick="BranchReferralsLoad()">Load Rewards</button>
+                    <button onclick="BranchReferralsRedeem()">Redeem Reward</button>
+                    <button onclick="BranchReferralsHistory()">Credit History</button>
+                </div>
+            </fieldset>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
 </html>
