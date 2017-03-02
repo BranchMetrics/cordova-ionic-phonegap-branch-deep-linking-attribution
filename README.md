@@ -228,7 +228,7 @@
 
   - Compile your app *(`cordova run ios` `phonegap run ios` `ionic run ios`)*
 
-  - Paste deep link in Apple Notes
+  - Paste deep link in `Apple Notes`
 
   - Long press on the deep link *(not 3D Touch)*
 
@@ -242,7 +242,7 @@
 
   - Compile your app *(`cordova run android` `phonegap run android` `ionic run android`)*
 
-  - Paste deep link in Google Hangouts
+  - Paste deep link in `Google Hangouts`
 
   - Click on the deep link to open your app
 
