@@ -30,7 +30,7 @@
     installNodeModules(modules, function (err) {
       if (err) {
         // handle error
-        throw new Error('BRANCH SDK: Failed to install the Branch SDK. https://goo.gl/GijGKP')
+        throw new Error('BRANCH SDK: Failed to install the Branch SDK. Docs https://goo.gl/GijGKP')
       } else {
         // only run once
         setPackageInstalled(installFlagLocation)
@@ -59,7 +59,7 @@
       // handle error
       if (err) {
         callback(true)
-        throw new Error('BRANCH SDK: Failed to install Branch node dependency ' + module + '. https://goo.gl/GijGKP')
+        throw new Error('BRANCH SDK: Failed to install Branch node dependency ' + module + '. Docs https://goo.gl/GijGKP')
       } else {
         // next module
         installNodeModules(modules, callback)

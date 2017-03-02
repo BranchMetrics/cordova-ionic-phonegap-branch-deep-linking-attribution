@@ -27,7 +27,7 @@
     var configXml = xmlHelper.readXmlAsJson(pathToConfigXml)
 
     if (configXml == null) {
-      throw new Error('BRANCH SDK: A config.xml is not found in project\'s root directory. https://goo.gl/GijGKP')
+      throw new Error('BRANCH SDK: A config.xml is not found in project\'s root directory. Docs https://goo.gl/GijGKP')
     }
 
     return configXml
@@ -38,7 +38,7 @@
     var branchConfig = configXml.widget['branch-config']
 
     if (branchConfig == null || branchConfig.length === 0) {
-      throw new Error('BRANCH SDK: <branch-config> tag is not set in the config.xml. https://goo.gl/GijGKP')
+      throw new Error('BRANCH SDK: <branch-config> tag is not set in the config.xml. Docs https://goo.gl/GijGKP')
     }
 
     return branchConfig[0]
@@ -91,13 +91,13 @@
   // validate <branch-config> properties within config.xml
   function validateBranchPreferences (preferences) {
     if (preferences.bundleId === null) {
-      throw new Error('BRANCH SDK: Missing "widget id" in your config.xml. https://goo.gl/GijGKP')
+      throw new Error('BRANCH SDK: Invalid "widget id" in your config.xml. Docs https://goo.gl/GijGKP')
     }
     if (preferences.bundleName === null) {
-      throw new Error('BRANCH SDK: Missing "name" in your config.xml. https://goo.gl/GijGKP')
+      throw new Error('BRANCH SDK: Invalid "name" in your config.xml. Docs https://goo.gl/GijGKP')
     }
     if (preferences.branchKey === null) {
-      throw new Error('BRANCH SDK: Missing "branch-key" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
+      throw new Error('BRANCH SDK: Invalid "branch-key" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
     if (preferences.uriScheme === null || !/^[a-zA-Z0-9-.]*$/.test(preferences.uriScheme)) {
       throw new Error('BRANCH SDK: Invalid "uri-scheme" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')

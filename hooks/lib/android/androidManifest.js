@@ -187,7 +187,7 @@
     } else if (preferences.linkDomain.indexOf('bnc.lt') !== -1) {
       // bnc.lt
       if (preferences.androidPrefix == null) {
-        throw new Error('BRANCH SDK: Missing "android-prefix" in <branch-config> in your config.xml. https://goo.gl/GijGKP')
+        throw new Error('BRANCH SDK: Missing "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
       }
 
       intentFilterData.push(getAppLinkIntentFilterDictionary(preferences.linkDomain, preferences.androidPrefix))

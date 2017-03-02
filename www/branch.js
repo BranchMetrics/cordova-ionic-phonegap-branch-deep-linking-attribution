@@ -48,10 +48,10 @@ Branch.prototype.initSession = function (deepLinkDataListener) {
 
   if (!disableGlobalListenersWarnings && !deepLinkDataListener && !window.DeepLinkHandler) {
     // missing deep link data return
-    console.warn('BRANCH SDK: No callback in initSession and no global DeepLinkHandler method. No Branch deep link data will be returned. https://goo.gl/GijGKP')
+    console.warn('BRANCH SDK: No callback in initSession and no global DeepLinkHandler method. No Branch deep link data will be returned. Docs https://goo.gl/GijGKP')
   } else if (!disableGlobalListenersWarnings && window.DeepLinkHandler !== undefined && window.DeepLinkHandler.toString() !== deepLinkDataParser.toString()) {
     // deprecated 3.0.0: open and non deep link data will pass into DeepLinkHandler
-    console.warn('BRANCH SDK: Your DeepLinkHandler has changed. It will now pass non-Branch data. https://goo.gl/GijGKP')
+    console.warn('BRANCH SDK: Your DeepLinkHandler has changed. It will now pass non-Branch data. Docs https://goo.gl/GijGKP')
   } else {
     // from iOS and Android SDKs to JavaScript
     window.DeepLinkHandler = deepLinkDataParser
