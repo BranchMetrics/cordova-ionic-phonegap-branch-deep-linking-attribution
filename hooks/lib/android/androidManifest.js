@@ -88,7 +88,7 @@
 
   // adds to main <activity> for URI Scheme
   //    <intent-filter>
-  //        <data android:scheme="ethantest" android:host="open" />
+  //        <data android:scheme="ethantest" />
   //        <action android:name="android.intent.action.VIEW" />
   //        <category android:name="android.intent.category.DEFAULT" />
   //        <category android:name="android.intent.category.BROWSABLE" />
@@ -117,8 +117,7 @@
       }],
       'data': [{
         '$': {
-          'android:scheme': preferences.uriScheme,
-          'android:host': 'open'
+          'android:scheme': preferences.uriScheme
         }
       }]
     }])
