@@ -17,7 +17,7 @@
   function addAssociatedDomains (preferences) {
     console.log('BRANCH SDK: Updating iOS associated domains')
 
-    var files = getEntitlementFiles()
+    var files = getEntitlementFiles(preferences)
     for (var i = 0; i < files.length; i++) {
       var file = files[i]
       var entitlements = getEntitlements(file)
@@ -28,7 +28,7 @@
   }
 
   // get the xcode .entitlements and provisioning profile .plist
-  function getEntitlementFiles() {
+  function getEntitlementFiles (preferences) {
     var files = []
     var entitlements = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
     files.push(entitlements)
