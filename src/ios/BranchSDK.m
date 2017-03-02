@@ -20,8 +20,6 @@
 - (void)pluginInitialize
 {
     self.branchUniversalObjArray = [[NSMutableArray alloc] init];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postUnhandledURL:) name:@"BSDKPostUnhandledURL" object:nil];
 }
 
 #pragma mark - Private APIs
@@ -86,15 +84,11 @@
 
     [branch initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
 
-        BOOL isFromBranchLink = NO;
         NSString *resultString = nil;
         CDVPluginResult *pluginResult = nil;
 
-        // NOTE: For Universal Links. Using clicked_branch_link key as condition at the moment to identify if block is run due to Universal Links.
-        isFromBranchLink = [[params objectForKey:@"+clicked_branch_link"] boolValue];
-
         if (!error) {
-            if (params != nil && [params count] > 0 && isFromBranchLink) {
+            if (params != nil && [params count] > 0) {
 
                 NSError *err;
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&err];
@@ -112,8 +106,6 @@
                     resultString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
                     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
                 }
-            } else {
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:FALSE];
             }
         }
         else {
@@ -129,13 +121,8 @@
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:resultString];
         }
 
-        if (isFromBranchLink) {
-            [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
-        }
-        else if (self.deepLinkUrl) {
-            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"BSDKPostUnhandledURL" object:self.deepLinkUrl]];
-        }
-        self.deepLinkUrl = nil;
+        // assigns data to DeepLinkHandler within branch.js
+        [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
 
         if (command != nil) {
             [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
@@ -208,7 +195,6 @@
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         }
         else {
-
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
         }
 
@@ -609,31 +595,6 @@
         }
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
-}
-
-#pragma mark - Private Methods
-- (void)postUnhandledURL:(NSNotification *)notification {
-    // We create a JSON string result, because we're unable to handle the url. We will include the url in the return string.
-    NSError *error;
-    NSString *urlString;
-
-//    if ([notification.object respondsToSelector:@selector(absoluteString:)]) {
-    SEL selector = NSSelectorFromString(@"absoluteString:");
-    if ([notification.object respondsToSelector:selector]) {
-        urlString = [notification.object absoluteString];
-    } else {
-        urlString = notification.object;
-    }
-
-    if ([urlString isKindOfClass:[NSString class]]) {
-        NSDictionary *returnDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Not a Branch link!", @"error", urlString, @"url", nil];
-        NSData* returnJSON = [NSJSONSerialization dataWithJSONObject:returnDict
-                                                             options:NSJSONWritingPrettyPrinted
-                                                               error:&error];
-
-        NSString *resultString = [[NSString alloc] initWithData:returnJSON encoding:NSUTF8StringEncoding];
-        [self.commandDelegate evalJs:[NSString stringWithFormat:@"NonBranchLinkHandler(%@)", resultString]];
-    }
 }
 
 #pragma mark - URL Methods (not fully implemented YET!)

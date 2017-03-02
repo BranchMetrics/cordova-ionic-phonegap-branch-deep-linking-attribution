@@ -1,32 +1,117 @@
-# Development Conventions
+# Developing the SDK Locally
+*Questions? [Contact us](https://support.branch.io/support/tickets/new)*
 
-This document outlines our development processes.
+1. [Dependencies](#dependencies)
+1. [SDK](#sdk)
+1. [Develop](#develop)
+1. [Validate](#validate)
+1. [Test](#test)
+1. [Submit](#submit)
 
-## ES6
+#
 
-Source code for all .js files in this project is written in es6 and then compiled via babel to es5. Unfortunately, for legacy reasons, the es5 needs to be stored in version control. As such, if you want to change a js file, edit the version in the corresponding .es6 directory, compile it with the `gulp babel` command, and then commit it as well as the resulting .js file.
+### Dependencies
 
-## Pull Requests
+> Homebrew
 
-All changes to this project should be made in the form of pull requests against master. Use snake-case prefixed by 'feat/' or 'fix/' for features/fixes. Feel free to use any of the commit types listed [here](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#type) as well. Note that when pull requests are merged in they will be automatically released to npm by (Travis CI)[https://travis-ci.org/] and (semantic-release)[https://github.com/semantic-release/semantic-release] so make sure to fully test.
-
-## Commit Messages
-
-Please format your commit messages to match [Angular's Conventions](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#-git-commit-guidelines). These messages are parsed using semantic release to determine version numbers so it is important that you stick to them exactly. We recommend using the `npm run commit` script installed in this project to draft conformant messages.
-
-## Linting
-
-The style of all js files in this project are strictly checked using [jscs](http://jscs.info/) and [eslint](http://eslint.org/) before any pull request/release is made. You can manually check your local clone using the `gulp lint` command (don't forget to `npm install -g gulp` if you haven't already). Many problems can be automatically fixed by `gulp jscs-fix`. Don't forget to commit before running jscs-fix in case you end up needing to back out changes.
-
-## Testing
-
-See [tests-harness/README.md](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/tests-harness/README.md) for details on how to run this project's test suite. Please run the test suite before merging any branches.
-
-## Updating IOS dependencies
-
-This project depends on [ios-branch-deep-linking](https://github.com/BranchMetrics/ios-branch-deep-linking). To upgrade that dependency a [release](https://github.com/BranchMetrics/ios-branch-deep-linking/releases) of it run the following script:
-
-```shell
-# <tag> is the name of the release. e,g, '0.12.5'
-$ src/ios/dependencies/update.sh <tag>
+```sh
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)";
+brew update;
+brew doctor;
+export PATH="/usr/local/bin:$PATH";
 ```
+
+> Node
+
+```sh
+brew install node;
+```  
+
+> Gulp
+
+```sh
+npm install -g gulp-cli;
+```  
+
+### SDK
+
+> Local
+
+```sh
+git clone git@github.com:BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git;
+cd cordova-ionic-phonegap-branch-deep-linking;
+rm -rf node_modules;
+npm install --save-dev;
+```
+
+### Develop
+
+> Build
+
+```sh
+gulp prerelease;
+```
+  
+> **[optional]** Update [iOS SDK](https://github.com/BranchMetrics/ios-branch-deep-linking/tags) (will need to update `plugin.xml` dependencies if new iOS files)
+
+```sh
+./src/ios/dependencies/update.sh 0.12.20;
+```
+
+### Test
+
+> Modify `BRANCH_KEY` and `URI_SCHEME` and `config.xml` to values in [Branch Dashboard](https://dashboard.branch.io/settings/link)
+
+```sh
+gulp prerelease; cd testbed; npm install -g cordova; cordova platform remove ios; cordova platform remove android; cordova platform remove browser; cordova platform add ios; cordova platform add android; cordova plugin remove branch-cordova-sdk; cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
+
+gulp prod;
+cd testbed;
+npm uninstall mkpath node-version-compare plist xml2js;
+rm -rf ../.installed;
+rm -rf ./plugins;
+rm -rf ./platforms;
+cordova platform add ios;
+cordova plugin add ../;
+cordova build ios --developmentTeam="PW4Q8885U7";
+open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
+
+```
+  
+> Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)
+
+```sh
+cordova build ios --developmentTeam="PW4Q8885U7"; open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
+```
+
+```sh
+cordova build android; cordova run android;
+chrome://inspect/#devices
+```
+
+> Test harnesses `TODO`
+
+### Submit
+
+> **Required** [Semantic Release](https://github.com/semantic-release/semantic-release) comments `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `revert`
+
+> Submit code with a [pull request](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking)
+ 
+```sh
+git checkout -b BRANCH_NAME;
+git add FILE_NAME;
+npm run commit;
+git push origin BRANCH_NAME;
+```
+
+### Publish
+
+> Update `CHANGELOG.md`
+> Update version within plugin.template.xml
+> Run `gulp prerelease`
+> Merge Pull Request - code to NPM will happen automatically 
+
+
+## Hooks
+
+Don't need to `rebuild.sh`, just re-run `cordova build ios`

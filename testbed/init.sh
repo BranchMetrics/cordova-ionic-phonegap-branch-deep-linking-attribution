@@ -1,8 +1,89 @@
 #!/bin/bash
-cordova platform add ios android
 
-cordova plugin add ../ --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=testbed
+# properties
+run_ios=false
+run_and=false
+run_dep=false
+run_cor=false
+script_name=$(basename "$0")
 
-# Include this plugin if you want to run a unit-test for the plugin
-# cordova plugin add http://git-wip-us.apache.org/repos/asf/cordova-plugin-test-framework.git
-# cordova plugin add ../ --link --variable BRANCH_KEY=key_live_fnmRM1FXtu11t6e4LU8WsldpvDcA0bzv --variable URI_SCHEME=testbed
+# options
+usage() {
+  printf "\n  invalid usage"
+  printf "\n    ./%s -h -> help" "$script_name"
+  printf "\n    ./%s -i -> build ios" "$script_name"
+  printf "\n    ./%s -a -> build android" "$script_name"
+  printf "\n    ./%s -d -> reset node dependencies" "$script_name"
+  printf "\n    ./%s -c -> reset cordova plugin" "$script_name"
+  printf "\n"
+  exit 1
+}
+
+options() {
+  if [[ "$#" -lt 1 ]]; then usage; fi
+
+  for arg in "$@"; do
+    if ! [[ "$arg" =~ ^-. ]]; then usage; fi
+  done
+
+  while getopts ":hiadc" opt; do
+    case $opt in
+      h)
+        usage
+        ;;
+      i)
+        run_ios=true
+        ;;
+      a)
+        run_and=true
+        ;;
+      d)
+        run_dep=true
+        ;;
+      c)
+        run_cor=true
+        ;;
+      *)
+        usage
+        ;;
+    esac
+  done
+}
+
+main() {
+  # validate
+  gulp prod
+
+  # clean
+  if [[ "$run_cor" == "true" ]]; then
+    npm install -g cordova
+  fi
+  if [[ "$run_dep" == "true" ]]; then
+    npm uninstall mkpath node-version-compare plist xml2js
+  fi
+  rm -rf ../.installed
+  rm -rf ./plugins
+  rm -rf ./platforms
+
+  # build (platforms added before plugin because before_plugin_install does not work on file reference)
+  if [[ "$run_ios" == "true" ]]; then
+    cordova platform add ios
+  fi
+  if [[ "$run_and" == "true" ]]; then
+    cordova platform add android
+  fi
+
+  # plugin
+  cordova plugin add ../
+
+  # run
+  if [[ "$run_ios" == "true" ]]; then
+    cordova run ios --device
+  fi
+  if [[ "$run_and" == "true" ]]; then
+    cordova run android
+  fi
+}
+
+options "$@"
+main

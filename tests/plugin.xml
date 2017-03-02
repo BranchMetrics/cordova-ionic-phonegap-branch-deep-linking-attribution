@@ -25,7 +25,7 @@ SOFTWARE.
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 		xmlns:rim="http://www.blackberry.com/ns/widgets"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        id="io.branch.sdk-tests"
+        id="branch-cordova-sdk-tests"
         version="2.0.2">
 
     <name>branch-cordova-sdk-tests</name>
