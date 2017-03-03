@@ -47,8 +47,8 @@ SOFTWARE.
   </engines>
 
   <!-- Hooks -->
-  <hook src="hooks/beforePluginInstall.js" type="before_plugin_install" />
-  <hook src="hooks/afterPrepare.js" type="after_prepare" />
+  <hook src="src/scripts/beforePluginInstall.js" type="before_plugin_install" />
+  <hook src="src/scripts/afterPrepare.js" type="after_prepare" />
 
   <!-- JavaScript -->
   <js-module src="www/branch.js" name="Branch">

@@ -14,10 +14,9 @@ gulp.task('lint', ['standard'])
 gulp.task('standard', function () {
   // standard format for javascript
   var javascript = [
-    './hooks/**/*.js',
+    './src/**/*.js',
     './testbed/www/js/**/*.js',
-    './gulpfile.js',
-    './www/branch.js'
+    './gulpfile.js'
   ]
 
   return gulp.src(javascript)
