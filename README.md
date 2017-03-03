@@ -217,7 +217,7 @@
 
   - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
-  - Delete your app from the device *(resets the Apple AASA scraping)*
+  - Delete your app from the device
 
   - Compile your app *(`cordova run ios` `phonegap run ios` `ionic run ios`)*
 
