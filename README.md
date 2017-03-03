@@ -42,21 +42,15 @@
   - [Handle Referrals](#handle-referrals)
 - [Troubleshooting](#troubleshooting)
   - [Testing: Key Points](#testing-key-points)
+  - [Testing: Optional App Config](#testing-optional-app-config)
   - [Testing: Sample Testing App](#testing-sample-testing-app)
   - [Testing: Show Console Logs](#testing-show-console-logs)
   - [Testing: Supported Platforms](#testing-supported-platforms)
   - [Testing: Simulating an Install](#testing-simulating-an-install)
-  - [Testing: Optional App Config](#testing-optional-app-config)
   - [Link Data: Universal Object Properties](#link-data-universal-object-properties)
   - [Link Data: Deep Link Properties](#link-data-deep-link-properties)
-  - [Link Data: Convert to Ionic/Angular](#link-data-convert-to-ionicangular)
-  - [Link Data: Global Listener Warning](#link-data-global-listener-warning)
-  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
-  - [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
-  - [Compiling: Visual Studio TACO](#compiling-visual-studio-taco)
-  - [Compiling: Multiple support-lib v4s](#compiling-multiple-support-lib-v4s)
-  - [Compiling: Missing Android Dependency](#compiling-missing-android-dependency)
+  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
   - [Compiling: Errors](#compiling-errors)
 - [Additional](#additional)
   - [SDK Development](#sdk-development)
@@ -64,7 +58,6 @@
   - [Analytical Data](#analytical-data)
   - [Webpage Features](#webpage-features)
   - [Premium Features](#premium-feature)
-  - [Support](#support)
 
 ## Getting Started
 
@@ -80,12 +73,12 @@
   - Cordova and Ionic
     ```xml
     <!-- sample config.xml -->
-    <widget id="com.eneff.branch.cordova_testbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <widget id="com.eneff.branch.cordovatestbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
       <!-- Branch -->
       <plugin name="branch-cordova-sdk" />
       <branch-config>
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
-        <uri-scheme value="cordovatestbed" />
+        <uri-scheme value="branchcordova" />
         <link-domain value="cordova.app.link" />
         <ios-team-release value="PW4Q8885U7" />
       </branch-config>
@@ -94,22 +87,22 @@
   - PhoneGap
     ```xml
     <!-- sample config.xml -->
-    <widget id="com.eneff.branch.cordova_testbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <widget id="com.eneff.branch.cordovatestbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
       <!-- Branch -->
       <plugin name="branch-cordova-sdk" />
       <branch-config>
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
-        <uri-scheme value="cordovatestbed" />
+        <uri-scheme value="branchcordova" />
         <link-domain value="cordova.app.link" />
         <ios-team-prod value="PW4Q8885U7" />
       </branch-config>
     ```
 
   - Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-    - `com.eneff.branch.cordova_testbed`
-    - `cordovatestbed`
+    - `com.eneff.branch.cordovatestbed`
+    - `branchcordova`
     - `PW4Q8885U7`
-    - `testbed.app.link`
+    - `cordova.app.link`
 
 - #### Initialize Branch
 
@@ -583,13 +576,28 @@
 
   - Use the Branch `key_live`
 
-  - Always use the `Branch.initSession(function(data) {})` to read Deep Link data
+  - Use `Branch.initSession(function(data) {})` to read Deep Link data
 
-  - Always test on `device` (`simulator` `browser` `genymotion` will not work)
+  - Test on a `device` *(`simulator`, `browser`, and `genymotion` cause issues)*
+  - [Incompatible Plugins](#compiling-incompatible-plugins)
 
-  - You must launch the app through `Xcode` for iOS
+- #### Testing: Optional App Config
 
-  - Other deep link plugins (e.g. `cordova-universal-links-plugin`) will interferer with Branch
+  ```xml
+  <!-- sample config.xml -->
+  <widget id="com.eneff.branch.cordovatestbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <!-- Branch -->
+    <plugin name="branch-cordova-sdk" spec="~2.4.2" /> <!-- optional spec -->
+    <branch-config>
+      <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
+      <uri-scheme value="branchcordova" />
+      <link-domain value="cordova.app.link" />
+      <ios-team-release value="PW4Q8885U7" />
+      <ios-team-debug value="FG35JLLMXX" /> <!-- optional -->
+      <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt) -->
+      <android-testmode value="true" /> <!-- optional (simulate installs) -->
+    </branch-config>
+  ```
 
 - #### Testing: Sample Testing App
 
@@ -678,24 +686,6 @@
   - Open the app
 
   - Read from `Branch.initSession(data)` for `+is_first_session = true`
-
-- #### Testing: Optional App Config
-
-  ```xml
-  <!-- sample config.xml -->
-  <widget id="com.eneff.branch.example" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <!-- Branch -->
-    <plugin name="branch-cordova-sdk" spec="~2.4.2" /> <!-- optional spec -->
-    <branch-config>
-      <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
-      <uri-scheme value="cordovatestbed" />
-      <link-domain value="testbed.app.link" />
-      <ios-team-release value="PW4Q8885U7" />
-      <ios-team-debug value="FG35JLLMXX" /> <!-- optional -->
-      <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt) -->
-      <android-testmode value="true" /> <!-- optional (simulate installs) -->
-    </branch-config>
-  ```
 
 - #### Link Data: Universal Object Properties
 
@@ -820,101 +810,6 @@
       | $twitter_player_width | | Set the player’s width in pixels
       | $twitter_player_height | | Set the player’s height in pixels
 
-- #### Link Data: Convert to Ionic/Angular
-
-  - Convert Branch deep link data from `DeepLinkHandler` into Ionic and Angular
-
-  - Listen to Branch data, and save it into an Angular `DeepLink`
-
-    ```js
-    // must be a global function
-    function DeepLinkHandler(data) {
-      if (data) {
-        // access the angular Factory('DeepLink')
-        angular.element(document.querySelector('[ng-app]')).injector().get('DeepLink').set(data);
-        console.log('Data Link handler response: ' + JSON.stringify(data));
-      }
-    }
-    ```
-
-  - Create a `DeepLink` factory
-
-    ```js
-    angular.module('starter.services', [])
-    .factory('DeepLink', function($window, $timeout) {
-      var data = {};
-
-      return {
-        get: function() {
-          return data;
-        },
-        set: function(json) {
-          // use the angular version of timeout
-          $timeout(function() {
-            // set the data
-            data = json;
-            // navigate example
-            $window.location = '#/tab/chats/3';
-          }, 0);
-        }
-      };
-    });
-    ```
-
-  - Access `DeepLink` factory
-
-    ```js
-    angular.module('starter.controllers', [])
-
-    .controller('DashCtrl', function($scope, DeepLink) {
-      $scope.content = {}
-      $scope.buttonPressed = function() {
-        // put branch data into a label that has ng-model content.data
-        $scope.content.data = JSON.stringify(DeepLink.get());
-      };
-    })
-    ```
-
-- #### Link Data: Global Listener Warning
-
-  - After Branch SDK `2.4.0`, deep link data is handled within `Branch.initSession(DeepLinkDataFunction);`
-
-    - Listener *[depreciated in 2.4.0]*
-      ```html
-      <!-- sample index.html -->
-          <script>
-            // required
-            function DeepLinkHandler(data) {
-              if (data) {
-                alert('Data Link Data Response: ' + JSON.stringify(data));
-              }
-            }
-
-            // optional
-            function NonBranchLinkHandler(data) {
-              if (data) {
-                alert('Non-Branch Link Detected: ' + JSON.stringify(data));
-              }
-            }
-          </script>
-        </body>
-      </html>
-      ```
-
-  - Use `Branch.disableGlobalListenersWarnings();` to turn off the warning errors generated from `DeepLinkHandler` and `NonBranchLinkHandler`
-
-- #### Compiling: Incompatible Plugins
-
-  - The following plugins will not work with the Branch SDK
-
-  - [PhoneGap NFC Plugin](https://github.com/chariotsolutions/phonegap-nfc)
-
-  - [Custom URL scheme](https://github.com/EddyVerbruggen/Custom-URL-scheme)
-
-  - [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
-
-  - [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
-
 - #### Compiling: Cordova Dependencies
 
   - Node
@@ -970,43 +865,17 @@
 
     - Genymotion -> Add virtual device -> Google Nexus 6P - 6.0.0 - API 23 -> Next
 
-- #### Compiling: Visual Studio TACO
+- #### Compiling: Incompatible Plugins
 
-  - Download the latest [source code](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases) and import the Branch SDK locally
+  - The following plugins will not work with the Branch SDK
 
-- #### Compiling: Multiple support-lib v4s
+  - [PhoneGap NFC Plugin](https://github.com/chariotsolutions/phonegap-nfc)
 
-  - Branch does not depend on the `android-support-v4` file, but other Cordova plugins could cause an issue
+  - [Custom URL scheme](https://github.com/EddyVerbruggen/Custom-URL-scheme)
 
-  - Add `multiDexEnabled true` inside defaultConfig tag in `build.gradle`
+  - [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
 
-    ```sh
-    defaultConfig {
-      multiDexEnabled true
-    }
-    ```
-
-  - Remove the `android-support-v4.jar` in Android `libs` directory
-
-  - Run `./gradlew clean` in the Android directory
-
-  - Run `android-support-v4` file for compiling
-
-    ```sh
-    compile ("com.google.android.gms:play-services-ads:9.+") {
-      exclude module: "support-v4"
-    }
-    ```
-
-- #### Compiling: Missing Android Dependency
-
-  - Gradle build cannot find `io.branch.sdk.android:library:2.+` dependency
-
-  - Add into your `build.gradle` file
-
-    ```sh
-    compile "io.branch.sdk.android:library:2.+"
-    ```
+  - [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
 
 - #### Compiling: Errors
 
@@ -1097,9 +966,3 @@
   - [Deep Link Emails](https://dev.branch.io/premium-solutions/)
 
   - [Data Integrations](https://dev.branch.io/premium-solutions/)
-
-- #### Support
-
-  - [Documentation](https://dev.branch.io/)
-
-  - [Contact](https://support.branch.io/support/tickets/new)
