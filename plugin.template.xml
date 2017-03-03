@@ -51,7 +51,7 @@ SOFTWARE.
   <hook src="src/scripts/afterPrepare.js" type="after_prepare" />
 
   <!-- JavaScript -->
-  <js-module src="www/branch.js" name="Branch">
+  <js-module src="src/branch.js" name="Branch">
     <clobbers target="Branch" />
   </js-module>
 
