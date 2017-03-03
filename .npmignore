@@ -5,3 +5,4 @@ testbed/
 plugin.template.xml
 gulpfile.js
 CONTRIBUTING.md
+travis_after_all.py
