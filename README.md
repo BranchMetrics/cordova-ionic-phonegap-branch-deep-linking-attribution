@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://branch.io"><img src="http://i.imgur.com/Y5EPQTo.png" alt="Branch for Cordova/PhoneGap/Ionic" width="600"></a>
+  <a href="https://branch.io"><img src="http://i.imgur.com/Y5EPQTo.png" alt="Branch for Cordova/PhoneGap/Ionic" width="500"></a>
 </h1>
 <p align="center">
   <a href="https://travis-ci.org/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking"><img src="https://img.shields.io/travis/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/master.svg" alt="Travis"></a>
