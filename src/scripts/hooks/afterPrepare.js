@@ -1,12 +1,12 @@
 (function () {
   // properties
   'use strict'
-  var configPrefrences = require('./lib/sdk/configXml.js')
-  var iosPlist = require('./lib/ios/plist.js')
-  var iosCapabilities = require('./lib/ios/capabilities.js')
-  var iosAssociatedDomains = require('./lib/ios/associatedDomains.js')
-  var iosDevelopmentTeam = require('./lib/ios/developmentTeam.js')
-  var androidManifest = require('./lib/android/androidManifest.js')
+  var configPrefrences = require('../sdk/configXml.js')
+  var iosPlist = require('../ios/plist.js')
+  var iosCapabilities = require('../ios/capabilities.js')
+  var iosAssociatedDomains = require('../ios/associatedDomains.js')
+  var iosDevelopmentTeam = require('../ios/developmentTeam.js')
+  var androidManifest = require('../android/androidManifest.js')
   var IOS = 'ios'
   var ANDROID = 'android'
 

@@ -2,7 +2,7 @@
   // properties
   'use strict'
   var path = require('path')
-  var xmlHelper = require('./xmlHelper.js')
+  var xmlHelper = require('../lib/xmlHelper.js')
 
   // entry
   module.exports = {

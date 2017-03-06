@@ -11,35 +11,37 @@
   }
 
   // read from xml file
-  function readXmlAsJson (filePath) {
+  function readXmlAsJson (file) {
     var xmlData
     var xmlParser
     var parsedData
 
     try {
-      xmlData = fs.readFileSync(filePath)
+      xmlData = fs.readFileSync(file)
       xmlParser = new xml2js.Parser()
       xmlParser.parseString(xmlData, function (err, data) {
         if (!err && data) {
           parsedData = data
         }
       })
-    } catch (err) {}
+    } catch (err) {
+      throw new Error('BRANCH SDK: Cannot write file ' + file)
+    }
 
     return parsedData
   }
 
   // write to xml file
-  function writeJsonAsXml (jsData, filePath, options) {
+  function writeJsonAsXml (file, content, options) {
     var xmlBuilder = new xml2js.Builder(options)
-    var changedXmlData = xmlBuilder.buildObject(jsData)
+    var changedXmlData = xmlBuilder.buildObject(content)
     var isSaved = true
 
     try {
-      fs.writeFileSync(filePath, changedXmlData)
+      fs.writeFileSync(file, changedXmlData)
     } catch (err) {
-      console.error(err)
       isSaved = false
+      throw new Error('BRANCH SDK: Cannot write file ' + file)
     }
 
     return isSaved
