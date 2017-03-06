@@ -42,22 +42,6 @@ gulp.task('setupNpm', function () {
   setIosNpmOrDev('npm')
 })
 
-// TODO: does not work. need to revise and update package.json -> semantic-release
-gulp.task('update-plugin-xml-version', function () {
-  // first match only!
-  var PLUGIN_XML_VERSION_REGEX = /^\s*version=\"[\d\.]*\"\>$/m // eslint-disable-line
-  var versionNumber = require('./package.json').version
-
-  // this will break if plugin.xml is not formatted exactly as we expect
-  // so you might end up needing to fix the regex
-  for (var target of [ '.xml', '.template.xml' ]) {
-    var pluginXML = fs.readFileSync('plugin' + target, 'utf8')
-    var newVersionXML = `    version="${versionNumber}">`
-    pluginXML = pluginXML.replace(PLUGIN_XML_VERSION_REGEX, newVersionXML)
-    fs.writeFileSync('plugin' + target, pluginXML)
-  }
-})
-
 function getDevPluginXML () {
   // generate plugin.xml for local development
   // here we reference the frameworks instead of all the files directly
