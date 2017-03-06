@@ -2,7 +2,7 @@
   // properties
   'use strict'
   var path = require('path')
-  var xmlHelper = require('../sdk/xmlHelper.js')
+  var xmlHelper = require('../lib/xmlHelper.js')
 
   // entry
   module.exports = {
@@ -25,7 +25,7 @@
     manifest = updateBranchAppLinks(manifest, mainActivityIndex, preferences)
 
     // save new version of the AndroidManifest
-    xmlHelper.writeJsonAsXml(manifest, pathToManifest)
+    xmlHelper.writeJsonAsXml(pathToManifest, manifest)
   }
 
   // adds to <application> for Branch init and testmode:
