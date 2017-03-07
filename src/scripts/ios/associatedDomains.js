@@ -30,12 +30,12 @@
   // get the xcode .entitlements and provisioning profile .plist
   function getEntitlementFiles (preferences) {
     var files = []
-    var entitlements = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Resources', preferences.bundleName + '.entitlements')
+    var entitlements = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.projectName, 'Resources', preferences.projectName + '.entitlements')
     files.push(entitlements)
 
     for (var i = 0; i < BUILD_TYPES.length; i++) {
       var buildType = BUILD_TYPES[i]
-      var plist = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.bundleName, 'Entitlements-' + buildType + '.plist')
+      var plist = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.projectName, 'Entitlements-' + buildType + '.plist')
       files.push(plist)
     }
 

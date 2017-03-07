@@ -62,7 +62,6 @@
       'projectRoot': projectRoot,
       'projectPlatform': projectPlatform,
       'bundleId': bundleId,
-      'bundleName': bundleName,
       'branchKey': branchKey,
       'uriScheme': uriScheme,
       'linkDomain': linkDomain,
@@ -70,12 +69,17 @@
       'iosTeamDebug': iosTeamDebug, // optional
       'androidPrefix': androidPrefix, // optional
       'androidTestMode': androidTestMode // optional
+      'projectName': getProjectName(configXml),
     }
   }
 
   // read app project location
   function getProjectRoot (context) {
     return context.opts.projectRoot
+  // read project name from config.xml
+  function getProjectName (configXml) {
+    return (configXml.widget.hasOwnProperty('name')) ? configXml.widget.name[0] : null
+  }
   }
 
   // read project platform
@@ -93,7 +97,7 @@
     if (preferences.bundleId === null) {
       throw new Error('BRANCH SDK: Invalid "widget id" in your config.xml. Docs https://goo.gl/GijGKP')
     }
-    if (preferences.bundleName === null) {
+    if (preferences.projectName === null) {
       throw new Error('BRANCH SDK: Invalid "name" in your config.xml. Docs https://goo.gl/GijGKP')
     }
     if (preferences.branchKey === null) {
