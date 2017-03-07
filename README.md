@@ -452,8 +452,6 @@
 
   - Sets the identity of a user (email, ID, UUID, etc) for events, deep links, and referrals
 
-  - Must be a `string`
-
     ```js
     var userId = '123456'
     Branch.setIdentity(userId).then(function (res) {

@@ -81,7 +81,7 @@ Branch.prototype.getLatestReferringParams = function () {
 
 Branch.prototype.setIdentity = function (identity) {
   if (identity) {
-    return execute('setIdentity', [identity])
+    return execute('setIdentity', [String(identity)])
   } else {
     return new Promise(function (resolve, reject) {
       reject('Please set an identity')
