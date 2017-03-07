@@ -153,7 +153,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
       }
 
       obj.listOnSpotlight = function () {
-        if (deviceVendor.indexOf('Apple') < 0) {
+        if (!(deviceVendor.indexOf('Apple') < 0)) {
           return execute('listOnSpotlight', [obj.instanceId])
         } else {
           return new Promise(function (resolve, reject) {
