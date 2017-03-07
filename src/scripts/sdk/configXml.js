@@ -60,7 +60,6 @@
 
     return {
       'projectRoot': projectRoot,
-      'projectPlatform': projectPlatform,
       'bundleId': bundleId,
       'branchKey': branchKey,
       'uriScheme': uriScheme,
@@ -70,6 +69,7 @@
       'androidPrefix': androidPrefix, // optional
       'androidTestMode': androidTestMode // optional
       'projectName': getProjectName(configXml),
+      'iosProjectModule': getProjectModule(context),
     }
   }
 
@@ -82,8 +82,8 @@
   }
   }
 
-  // read project platform
-  function getProjectPlatform (context) {
+  // read iOS project module from cordova context
+  function getProjectModule (context) {
     // try pre-5.0 cordova structure
     try {
       return context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios
