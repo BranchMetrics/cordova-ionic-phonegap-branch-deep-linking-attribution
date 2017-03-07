@@ -24,7 +24,7 @@
   }
 
   function commitChanges (git, version) {
-    git += 'git commit -m "chore: updated npm version to '+ version + '" && git push'
+    git += 'git commit -m "chore: updated npm version to ' + version + '" && git push'
     exec(git, function (err, stdout, stderr) {
       if (err) {
         throw new Error('BRANCH SDK: Failed commit git changes to npm version. Docs https://goo.gl/GijGKP')
