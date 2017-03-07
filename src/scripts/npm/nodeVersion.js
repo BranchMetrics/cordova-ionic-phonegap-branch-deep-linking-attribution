@@ -1,5 +1,6 @@
 (function () {
   var path = require('path')
+  var exec = require('child_process').exec
   var fileHelper = require('../lib/fileHelper.js')
   var FILES = ['package.json', 'plugin.xml', 'plugin.template.xml']
 
@@ -9,14 +10,26 @@
   function updateNpmVersion (pluginConfig, config, callback) {
     var files = readFilePaths(FILES)
     var version = config.nextRelease.version
+    var git = ''
 
     for (var i = 0; i < files.length; i++) {
       var file = files[i]
       var content = readContent(file)
 
+      git += 'git add ' + file + ' && '
       content = updateVersion(file, content, version)
       saveContent(file, content)
     }
+    commitChanges(git, version)
+  }
+
+  function commitChanges (git, version) {
+    git += 'git commit -m "chore: updated npm version to '+ version + '" && git push'
+    exec(git, function (err, stdout, stderr) {
+      if (err) {
+        throw new Error('BRANCH SDK: Failed commit git changes to npm version. Docs https://goo.gl/GijGKP')
+      }
+    })
   }
 
   function readContent (file) {
