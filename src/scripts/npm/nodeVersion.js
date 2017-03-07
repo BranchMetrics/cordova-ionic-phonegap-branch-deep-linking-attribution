@@ -15,7 +15,12 @@
     for (var i = 0; i < files.length; i++) {
       var file = files[i]
       var content = readContent(file)
+      var updated = updateVersion(file, content, version)
 
+      // early exit (made no changes)
+      if (content === updated) return
+
+      // save
       git += 'git add ' + file + ' && '
       content = updateVersion(file, content, version)
       saveContent(file, content)
