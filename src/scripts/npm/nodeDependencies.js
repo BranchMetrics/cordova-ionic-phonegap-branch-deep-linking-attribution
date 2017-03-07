@@ -16,7 +16,7 @@
   function install (context) {
     // set properties
     var q = context.requireCordovaModule('q')
-    var deferral = new q.defer() // eslint-disable-line
+    var async = new q.defer() // eslint-disable-line
     var installFlagLocation = path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, installFlagName)
     var dependencies = require(path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, 'package.json')).dependencies
 
@@ -25,7 +25,7 @@
 
     // install node modules
     var modules = getNodeModulesToInstall(dependencies)
-    if (modules.length === 0) return deferral.promise
+    if (modules.length === 0) return async.promise
 
     installNodeModules(modules, function (err) {
       if (err) {
@@ -36,11 +36,11 @@
         setPackageInstalled(installFlagLocation)
         removeEtcDirectory()
       }
-      deferral.resolve()
+      async.resolve()
     })
 
     // wait until callbacks from the all the npm install complete
-    return deferral.promise
+    return async.promise
   }
 
   // installs the node modules via npm install one at a time
