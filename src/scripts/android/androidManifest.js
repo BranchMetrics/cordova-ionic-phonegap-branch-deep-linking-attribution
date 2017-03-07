@@ -35,7 +35,7 @@
     var metadatas = manifest['manifest']['application'][0]['meta-data'] || []
     var metadata = []
     var keys = ['io.branch.sdk.BranchKey', 'io.branch.sdk.TestMode']
-    var vals = [preferences.branchKey, preferences.androidTestMode]
+    var vals = [preferences.branchKey, preferences.androidTestMode || 'false']
 
     // remove old
     for (var i = 0; i < keys.length; i++) {

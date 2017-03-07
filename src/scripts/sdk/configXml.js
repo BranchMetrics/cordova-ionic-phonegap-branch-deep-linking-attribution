@@ -11,7 +11,8 @@
 
   // read branch config from config.xml
   function read (context) {
-    var configXml = getConfigXml(context)
+    var projectRoot = getProjectRoot(context)
+    var configXml = getConfigXml(projectRoot)
     var branchXml = getBranchXml(configXml)
     var branchPreferences = getBranchPreferences(context, configXml, branchXml)
 
@@ -21,8 +22,7 @@
   }
 
   // read config.xml
-  function getConfigXml (context) {
-    var projectRoot = getProjectRoot(context)
+  function getConfigXml (projectRoot) {
     var pathToConfigXml = path.join(projectRoot, 'config.xml')
     var configXml = xmlHelper.readXmlAsJson(pathToConfigXml)
 
@@ -46,40 +46,53 @@
 
   // read <branch-config> properties within config.xml
   function getBranchPreferences (context, configXml, branchXml) {
-    var projectRoot = getProjectRoot(context)
-    var projectPlatform = getProjectPlatform(context)
-    var bundleId = (configXml.widget['$'].hasOwnProperty('id')) ? configXml.widget['$']['id'] : null
-    var bundleName = (configXml.widget.hasOwnProperty('name')) ? configXml.widget.name[0] : null
-    var branchKey = (branchXml.hasOwnProperty('branch-key')) ? branchXml['branch-key'][0]['$']['value'] : null
-    var linkDomain = (branchXml.hasOwnProperty('link-domain')) ? branchXml['link-domain'][0]['$']['value'] : null
-    var uriScheme = (branchXml.hasOwnProperty('uri-scheme')) ? branchXml['uri-scheme'][0]['$']['value'] : null
-    var iosTeamRelease = (branchXml.hasOwnProperty('ios-team-release')) ? branchXml['ios-team-release'][0]['$']['value'] : null
-    var iosTeamDebug = (branchXml.hasOwnProperty('ios-team-debug')) ? branchXml['ios-team-debug'][0]['$']['value'] : null
-    var androidPrefix = (branchXml.hasOwnProperty('android-prefix')) ? branchXml['android-prefix'][0]['$']['value'] : null
-    var androidTestMode = (branchXml.hasOwnProperty('android-testmode')) ? branchXml['android-testmode'][0]['$']['value'] : 'false'
-
     return {
-      'projectRoot': projectRoot,
-      'projectPlatform': projectPlatform,
-      'bundleId': bundleId,
-      'bundleName': bundleName,
-      'branchKey': branchKey,
-      'uriScheme': uriScheme,
-      'linkDomain': linkDomain,
-      'iosTeamRelease': iosTeamRelease,
-      'iosTeamDebug': iosTeamDebug, // optional
-      'androidPrefix': androidPrefix, // optional
-      'androidTestMode': androidTestMode // optional
+      'projectRoot': getProjectRoot(context),
+      'projectName': getProjectName(configXml),
+      'branchKey': getBranchValue(branchXml, 'branch-key'),
+      'linkDomain': getBranchValue(branchXml, 'link-domain'),
+      'uriScheme': getBranchValue(branchXml, 'uri-scheme'),
+      'iosBundleId': getBundleId(configXml, 'ios'),
+      'iosProjectModule': getProjectModule(context),
+      'iosTeamRelease': getBranchValue(branchXml, 'ios-team-release'),
+      'iosTeamDebug': getBranchValue(branchXml, 'ios-team-debug'), // optional
+      'androidBundleId': getBundleId(configXml, 'android'), // optional
+      'androidPrefix': getBranchValue(branchXml, 'android-prefix'), // optional
+      'androidTestMode': getBranchValue(branchXml, 'android-testmode') // optional
     }
   }
 
-  // read app project location
+  // read project root from cordova context
   function getProjectRoot (context) {
-    return context.opts.projectRoot
+    return context.opts.projectRoot || null
   }
 
-  // read project platform
-  function getProjectPlatform (context) {
+  // read project name from config.xml
+  function getProjectName (configXml) {
+    return (configXml.widget.hasOwnProperty('name')) ? configXml.widget.name[0] : null
+  }
+
+  // read branch value from <branch-config>
+  function getBranchValue (branchXml, key) {
+    return (branchXml.hasOwnProperty(key)) ? branchXml[key][0]['$']['value'] : null
+  }
+
+  // read bundle id from config.xml (optional values override widget-id)
+  function getBundleId (configXml, platform) {
+    var output = null
+    var key = platform === 'ios' ? 'ios-CFBundleIdentifier' : 'android-packageName'
+
+    if (configXml.widget['$'].hasOwnProperty(key)) {
+      output = configXml.widget['$'][key]
+    } else if (configXml.widget['$'].hasOwnProperty('id')) {
+      output = configXml.widget['$']['id']
+    }
+
+    return output
+  }
+
+  // read iOS project module from cordova context
+  function getProjectModule (context) {
     // try pre-5.0 cordova structure
     try {
       return context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios
@@ -90,10 +103,13 @@
 
   // validate <branch-config> properties within config.xml
   function validateBranchPreferences (preferences) {
-    if (preferences.bundleId === null) {
-      throw new Error('BRANCH SDK: Invalid "widget id" in your config.xml. Docs https://goo.gl/GijGKP')
+    if (preferences.projectRoot === null) {
+      throw new Error('BRANCH SDK: Invalid "root" in your config.xml. Docs https://goo.gl/GijGKP')
     }
-    if (preferences.bundleName === null) {
+    if (preferences.projectPlatform === null) {
+      throw new Error('BRANCH SDK: Invalid "platform" in your config.xml. Docs https://goo.gl/GijGKP')
+    }
+    if (preferences.projectName === null) {
       throw new Error('BRANCH SDK: Invalid "name" in your config.xml. Docs https://goo.gl/GijGKP')
     }
     if (preferences.branchKey === null) {
@@ -105,16 +121,22 @@
     if (preferences.linkDomain === null || !/^(?!.*?www).*([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/.test(preferences.linkDomain)) {
       throw new Error('BRANCH SDK: Invalid "link-domain" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
+    if (preferences.iosBundleId === null || !/^[a-zA-Z0-9.]*$/.test(preferences.iosBundleId)) {
+      throw new Error('BRANCH SDK: Invalid "id" or "ios-CFBundleIdentifier" in <widget> in your config.xml. Docs https://goo.gl/GijGKP')
+    }
     if (preferences.iosTeamRelease === null || !/^[a-zA-Z0-9]{10}$/.test(preferences.iosTeamRelease)) {
       throw new Error('BRANCH SDK: Invalid "ios-team-release" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
     if (preferences.iosTeamDebug !== null && !/^[a-zA-Z0-9]{10}$/.test(preferences.iosTeamDebug)) {
       throw new Error('BRANCH SDK: Invalid "ios-team-debug" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
+    if (preferences.androidBundleId !== null && !/^[a-zA-Z0-9.]*$/.test(preferences.androidBundleId)) {
+      throw new Error('BRANCH SDK: Invalid "id" or "android-packageName" in <widget> in your config.xml. Docs https://goo.gl/GijGKP')
+    }
     if (preferences.androidPrefix !== null && !/^[/].[a-zA-Z0-9]{3}$/.test(preferences.androidPrefix)) {
       throw new Error('BRANCH SDK: Invalid "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
-    if (!(preferences.androidTestMode === 'true' || preferences.androidTestMode === 'false')) {
+    if (!(preferences.androidTestMode === 'true' || preferences.androidTestMode === 'false' || preferences.androidTestMode === null)) {
       throw new Error('BRANCH SDK: Invalid "android-testmode" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
   }

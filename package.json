@@ -2,7 +2,7 @@
   "name": "branch-cordova-sdk",
   "description": "Branch Metrics Cordova SDK",
   "main": "www/branch.js",
-  "version": "2.5.3",
+  "version": "2.5.5",
   "homepage": "https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking",
   "repository": {
     "type": "git",
@@ -37,8 +37,9 @@
   },
   "scripts": {
     "commitmsg": "validate-commit-msg",
+    "postcommit": "semantic-release pre --verifyRelease='./src/scripts/npm/nodeVersion'",
     "prerelease": "gulp prod",
-    "semantic-release": "semantic-release pre --verifyRelease='./src/scripts/npm/nodeVersion' && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
     "mkpath": "^1.0.0",
@@ -53,7 +54,7 @@
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
     "plist": "^1.2.0",
-    "semantic-release": "^4.3.5",
+    "semantic-release": "^6.3.6",
     "validate-commit-msg": "^2.8.2",
     "xml2js": "^0.4.17"
   }
