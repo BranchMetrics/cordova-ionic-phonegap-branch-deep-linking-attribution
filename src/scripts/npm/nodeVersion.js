@@ -13,6 +13,7 @@
     var git = ''
 
     for (var i = 0; i < files.length; i++) {
+      // update
       var file = files[i]
       var content = readContent(file)
       var updated = updateVersion(file, content, version)
@@ -22,25 +23,25 @@
 
       // save
       git += 'git add ' + file + ' && '
-      content = updateVersion(file, content, version)
-      saveContent(file, content)
+      saveContent(file, updated)
     }
     commitChanges(git, version)
   }
 
-  function commitChanges (git, version) {
-    git += 'git commit -m "chore: updated npm version to ' + version + '" && git push'
-    exec(git, function (err, stdout, stderr) {
-      if (err) {
-        throw new Error('BRANCH SDK: Failed commit git changes to npm version. Docs https://goo.gl/GijGKP')
-      }
-    })
-  }
-
+  // handle content
   function readContent (file) {
     return isFileXml(file) ? fileHelper.readFile(file) : JSON.parse(fileHelper.readFile(file))
   }
 
+  function saveContent (file, content) {
+    return isFileXml(file) ? fileHelper.writeFile(file, content) : fileHelper.writeFile(file, JSON.stringify(content, null, 2))
+  }
+
+  function isFileXml (file) {
+    return file.indexOf('xml') > 0
+  }
+
+  // update content based on xml or json
   function updateVersion (file, content, version) {
     var prev = /id="branch-cordova-sdk"[\s]*version="\d+\.\d+\.\d+"/mgi
     var next = 'id="branch-cordova-sdk"\n  version="' + version + '"'
@@ -57,14 +58,7 @@
     return content
   }
 
-  function saveContent (file, content) {
-    return isFileXml(file) ? fileHelper.writeFile(file, content) : fileHelper.writeFile(file, JSON.stringify(content, null, 2))
-  }
-
-  function isFileXml (file) {
-    return file.indexOf('xml') > 0
-  }
-
+  // get the absolute path of the files within the root directory
   function readFilePaths (files) {
     var locations = []
     for (var i = 0; i < files.length; i++) {
@@ -73,5 +67,15 @@
       locations.push(location)
     }
     return locations
+  }
+
+  // push file code changes to github
+  function commitChanges (git, version) {
+    git += 'git commit -m "chore: updated npm version to ' + version + '" && git push'
+    exec(git, function (err, stdout, stderr) {
+      if (err) {
+        throw new Error('BRANCH SDK: Failed commit git changes to npm version. Docs https://goo.gl/GijGKP')
+      }
+    })
   }
 })()
