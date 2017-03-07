@@ -5,7 +5,7 @@
   var fs = require('fs')
   var path = require('path')
   var exec = require('child_process').exec
-  var installFlagName = '.installed'
+  var INSTALLFLAGNAME = '.installed'
 
   // entry
   module.exports = {
@@ -17,7 +17,7 @@
     // set properties
     var q = context.requireCordovaModule('q')
     var async = new q.defer() // eslint-disable-line
-    var installFlagLocation = path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, installFlagName)
+    var installFlagLocation = path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, INSTALLFLAGNAME)
     var dependencies = require(path.join(context.opts.projectRoot, 'plugins', context.opts.plugin.id, 'package.json')).dependencies
 
     // only run once
