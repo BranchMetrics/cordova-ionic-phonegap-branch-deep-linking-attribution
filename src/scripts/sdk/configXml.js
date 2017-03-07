@@ -136,7 +136,7 @@
     if (preferences.androidPrefix !== null && !/^[/].[a-zA-Z0-9]{3}$/.test(preferences.androidPrefix)) {
       throw new Error('BRANCH SDK: Invalid "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
-    if (!(preferences.androidTestMode === 'true' || preferences.androidTestMode === 'false' ||  preferences.androidTestMode === null)) {
+    if (!(preferences.androidTestMode === 'true' || preferences.androidTestMode === 'false' || preferences.androidTestMode === null)) {
       throw new Error('BRANCH SDK: Invalid "android-testmode" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
   }
