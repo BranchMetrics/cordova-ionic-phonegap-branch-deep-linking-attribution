@@ -49,7 +49,6 @@ rm -rf "${path:?}"/*
 
 # copy in new dependencies
 mv "$tag_extract/Branch-SDK/Branch-SDK" "$path"
-mv "$tag_extract/Branch.framework" "$path"
 mv "$tag_extract/Branch-SDK/Fabric" "$path"
 
 # clean up extract
