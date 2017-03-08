@@ -15,9 +15,8 @@
 
   // updates the associated domains from the link-domain field of the app's config.xml
   function addAssociatedDomains (preferences) {
-    console.log('BRANCH SDK: Updating iOS associated domains')
-
     var files = getEntitlementFiles(preferences)
+
     for (var i = 0; i < files.length; i++) {
       var file = files[i]
       var entitlements = getEntitlements(file)

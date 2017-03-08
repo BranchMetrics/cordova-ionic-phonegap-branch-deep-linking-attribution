@@ -15,8 +15,6 @@
     var manifest = xmlHelper.readXmlAsJson(pathToManifest)
     var mainActivityIndex = getMainLaunchActivityIndex(manifest['manifest']['application'][0]['activity'])
 
-    console.log('BRANCH SDK: Updating AndroidManifest.xml')
-
     // update manifest
     manifest = updateBranchMetaData(manifest, preferences)
     manifest = updateBranchReferrerTracking(manifest)
