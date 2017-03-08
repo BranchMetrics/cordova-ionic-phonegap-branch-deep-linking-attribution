@@ -52,11 +52,10 @@ npm install --save-dev;
 gulp prerelease;
 ```
   
-> **[optional]** Update [iOS SDK](https://github.com/BranchMetrics/ios-branch-deep-linking/tags) (will need to update `plugin.xml` dependencies if new iOS files)
+> **[optional]** Update [Android](https://github.com/BranchMetrics/android-branch-deep-linking/releases) and [iOS](https://github.com/BranchMetrics/ios-branch-deep-linking/releases) SDKs
 
 ```sh
-./src/scripts/npm/updateIosSdk.sh 0.13.5;
-./src/scripts/npm/updateAndroidSdk.sh 2.5.9;
+./src/scripts/npm/updateNativeSdk.sh -a 2.5.9 -i 0.13.5
 ```
 
 ### Test
