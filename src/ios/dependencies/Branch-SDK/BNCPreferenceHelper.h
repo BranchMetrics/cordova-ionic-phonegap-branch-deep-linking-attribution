@@ -15,7 +15,7 @@
 
 @property (strong, nonatomic) NSString *branchKey;
 @property (strong, nonatomic) NSString *lastRunBranchKey;
-@property (strong, nonatomic) NSDate *lastStrongMatchDate;
+@property (strong, nonatomic) NSDate   *lastStrongMatchDate;
 @property (strong, nonatomic) NSString *appVersion;
 @property (strong, nonatomic) NSString *deviceFingerprintID;
 @property (strong, nonatomic) NSString *sessionID;
@@ -39,6 +39,9 @@
 @property (strong, nonatomic) NSMutableDictionary *savedAnalyticsData;
 @property (assign, nonatomic) NSInteger installRequestDelay;
 @property (strong, nonatomic) NSDictionary *appleSearchAdDetails;
+@property (strong, nonatomic) NSString *lastSystemBuildVersion;
+@property (strong, nonatomic) NSString *browserUserAgentString;
+@property (strong) NSString *branchAPIURL;
 
 + (BNCPreferenceHelper *)preferenceHelper;
 + (NSURL*) URLForBranchDirectory;
@@ -79,4 +82,7 @@
 - (NSMutableDictionary *)getBranchAnalyticsData;
 - (NSDictionary *)getContentAnalyticsManifest;
 - (void)saveContentAnalyticsManifest:(NSDictionary *)cdManifest;
+
+- (void) save;  //  Flushes preference queue to persistence.
+
 @end
