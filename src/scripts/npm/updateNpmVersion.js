@@ -5,6 +5,7 @@
   var exec = require('child_process').exec
   var fileHelper = require('../lib/fileHelper.js')
   var FILES = ['package.json', 'plugin.xml', 'plugin.template.xml']
+  var isChange = false
 
   // entry
   module.exports = updateNpmVersion
@@ -21,14 +22,12 @@
       var content = readContent(file)
       var updated = updateVersion(file, content, version)
 
-      // early exit (made no changes)
-      if (content === updated) return
-
       // save
       git += 'git add ' + file + ' && '
       saveContent(file, updated)
     }
-    commitChanges(git, version)
+    // publish
+    isChange && commitChanges(git, version)
   }
 
   // handle content
@@ -53,6 +52,7 @@
       if (isFileXml(file)) {
         content = content.replace(prev, next)
       } else {
+        isChange = content.version !== version
         content.version = version
       }
     } catch (e) {

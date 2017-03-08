@@ -38,7 +38,7 @@
   "scripts": {
     "commitmsg": "validate-commit-msg",
     "precommit": "gulp prod",
-    "postcommit": "semantic-release pre --verifyRelease='./src/scripts/npm/nodeVersion'",
+    "postcommit": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion'",
     "prerelease": "gulp prod",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
