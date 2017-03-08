@@ -1,9 +1,12 @@
 (function () {
+  // properties
+  'use strict'
   var path = require('path')
   var exec = require('child_process').exec
   var fileHelper = require('../lib/fileHelper.js')
   var FILES = ['package.json', 'plugin.xml', 'plugin.template.xml']
 
+  // entry
   module.exports = updateNpmVersion
 
   // updates the npm version in semantic-release pre

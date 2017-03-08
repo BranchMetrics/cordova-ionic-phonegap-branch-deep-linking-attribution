@@ -1,12 +1,9 @@
-// TODO: does not work. Automatic Signing of Provisioning Profile is not updating (https://pewpewthespells.com/blog/migrating_code_signing.html#automatic-signing-xcode-7)
-// TODO: users will have to bypass by always opening up Xcode
 (function () {
   // properties
   'use strict'
   var fs = require('fs')
   var path = require('path')
-
-  var fileName = 'build.json'
+  var FILENAME = 'build.json'
 
   // entry
   module.exports = {
@@ -17,7 +14,7 @@
   function addDevelopmentTeam (preferences) {
     console.log('BRANCH SDK: Updating iOS development team')
 
-    var file = path.join(preferences.projectRoot, fileName)
+    var file = path.join(preferences.projectRoot, FILENAME)
     var content = getBuildJson(file)
     content = convertStringToJson(content)
 

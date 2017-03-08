@@ -55,7 +55,8 @@ gulp prerelease;
 > **[optional]** Update [iOS SDK](https://github.com/BranchMetrics/ios-branch-deep-linking/tags) (will need to update `plugin.xml` dependencies if new iOS files)
 
 ```sh
-./src/ios/dependencies/update.sh 0.12.20;
+./src/scripts/npm/updateIosSdk/update.sh 0.13.5;
+./src/scripts/npm/updateAndroidSdk/update.sh 2.5.9;
 ```
 
 ### Test
