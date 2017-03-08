@@ -1,12 +1,12 @@
 (function () {
   // properties
   'use strict'
-  var configPrefrences = require('../sdk/configXml.js')
-  var iosPlist = require('../ios/plist.js')
-  var iosCapabilities = require('../ios/capabilities.js')
-  var iosAssociatedDomains = require('../ios/associatedDomains.js')
-  var iosDevelopmentTeam = require('../ios/developmentTeam.js')
-  var androidManifest = require('../android/androidManifest.js')
+  var configPreferences = require('../npm/processConfigXml.js')
+  var iosPlist = require('../ios/updatePlist.js')
+  var iosCapabilities = require('../ios/enableEntitlements.js')
+  var iosAssociatedDomains = require('../ios/updateAssociatedDomains.js')
+  var iosDevelopmentTeam = require('../ios/updateDevelopmentTeam.js')
+  var androidManifest = require('../android/updateAndroidManifest.js')
   var IOS = 'ios'
   var ANDROID = 'android'
 
@@ -15,7 +15,7 @@
 
   // after prepare hooks based on platform
   function run (context) {
-    var preferences = configPrefrences.read(context)
+    var preferences = configPreferences.read(context)
     var platforms = context.opts.platforms
 
     platforms.forEach(function (platform) {

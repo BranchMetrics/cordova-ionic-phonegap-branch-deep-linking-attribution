@@ -1,7 +1,7 @@
 (function () {
   // properties
   'use strict'
-  var nodeDependencies = require('../npm/nodeDependencies.js')
+  var nodeDependencies = require('../npm/downloadNpmDependencies.js')
 
   // entry
   module.exports = run

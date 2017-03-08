@@ -1,9 +1,10 @@
+// properties
 'use strict'
-
 var exec = require('cordova/exec')
 var deviceVendor = window.clientInformation.vendor
 var _API_CLASS = 'BranchSDK' // SDK Class
 
+// javscript to sdk
 function execute (method, params) {
   params = !params ? [] : params
 
@@ -24,6 +25,7 @@ function executeCallback (method, callback, params) {
   }, _API_CLASS, method, params)
 }
 
+// Branch prototype
 var Branch = function Branch () {
   this.debugMode = false
 }
@@ -190,4 +192,5 @@ Branch.prototype.creditHistory = function () {
   return execute('getCreditHistory')
 }
 
+// export
 module.exports = new Branch()
