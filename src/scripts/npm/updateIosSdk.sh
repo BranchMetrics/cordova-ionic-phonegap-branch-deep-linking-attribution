@@ -7,6 +7,7 @@ set -e
 
 # cd into directory containing this script
 cd "$(dirname "$0")"
+path="../../ios/dependencies"
 
 # check first parameter is set to tag to download
 if [ -z "${1+x}" ]; then
@@ -34,28 +35,25 @@ else
   exit -1
 fi
 
-curl -L -o sdk.zip $tag_url
-rm -rf $tag_extract
 # this will overwrite existing versions of sdk.zip
+curl -L -o "$path"/sdk.zip "$tag_url"
 
-unzip -q -x sdk.zip
-rm -f sdk.zip
 # delete old extracted content or do nothing if we don't have any
+rm -rf "$tag_extract"
 
-rm -rf Branch-SDK
-mv $tag_extract/Branch-SDK/Branch-SDK .
 # silently (-q) extract download
+unzip -q -x "$path"/sdk.zip
 
-rm -rf Branch.framework
-mv $tag_extract/Branch.framework .
 # remove
+rm -rf "${path:?}"/*
 
-rm -rf Fabric
-mv $tag_extract/Branch-SDK/Fabric .
 # copy in new dependencies
+mv "$tag_extract/Branch-SDK/Branch-SDK" "$path"
+mv "$tag_extract/Branch.framework" "$path"
+mv "$tag_extract/Branch-SDK/Fabric" "$path"
 
-rm -rf $tag_extract
 # clean up extract
+rm -rf "$tag_extract"
 
-find . -type f -name '*.m' \
-	-exec perl -i -pe 's/\#import \"\.\.\/Fabric\//#import "/' '{}' +# replace all instances of '#import "../Fabric/' with '#import "' in .m files
+# replace all instances of '#import "../Fabric/' with '#import "' in .m files
+find "$path" -type f -name '*.m' -exec perl -i -pe 's/\#import \"\.\.\/Fabric\//#import "/' '{}' +
