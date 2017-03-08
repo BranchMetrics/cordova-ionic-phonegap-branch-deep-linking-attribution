@@ -12,15 +12,12 @@
 
   // updates the development team for Universal Links
   function addDevelopmentTeam (preferences) {
-    console.log('BRANCH SDK: Updating iOS development team')
-
     var file = path.join(preferences.projectRoot, FILENAME)
     var content = getBuildJson(file)
-    content = convertStringToJson(content)
 
+    content = convertStringToJson(content)
     createDefaultBuildJson(content)
     updateDevelopmentTeam(content, preferences)
-
     content = convertJsonToString(content)
     setBuildJson(file, content)
   }
