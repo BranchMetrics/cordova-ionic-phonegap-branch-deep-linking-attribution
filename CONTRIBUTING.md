@@ -1,4 +1,5 @@
 # Developing the SDK Locally
+
 *Questions? [Contact us](https://support.branch.io/support/tickets/new)*
 
 1. [Dependencies](#dependencies)
@@ -25,13 +26,13 @@ export PATH="/usr/local/bin:$PATH";
 
 ```sh
 brew install node;
-```  
+```
 
 > Gulp
 
 ```sh
 npm install -g gulp-cli;
-```  
+```
 
 ### SDK
 
@@ -46,12 +47,8 @@ npm install --save-dev;
 
 ### Develop
 
-> Build
+> Changes to `/src` don't need a `init.sh` rebuild, just a `cordova run ios`
 
-```sh
-gulp prerelease;
-```
-  
 > **[optional]** Update [Android](https://github.com/BranchMetrics/android-branch-deep-linking/releases) and [iOS](https://github.com/BranchMetrics/ios-branch-deep-linking/releases) SDKs
 
 ```sh
@@ -60,58 +57,26 @@ gulp prerelease;
 
 ### Test
 
-> Modify `BRANCH_KEY` and `URI_SCHEME` and `config.xml` to values in [Branch Dashboard](https://dashboard.branch.io/settings/link)
-
-```sh
-gulp prerelease; cd testbed; npm install -g cordova; cordova platform remove ios; cordova platform remove android; cordova platform remove browser; cordova platform add ios; cordova platform add android; cordova plugin remove branch-cordova-sdk; cordova plugin add ../ --variable BRANCH_KEY=key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT --variable URI_SCHEME=enefftest;
-
-gulp prod;
-cd testbed;
-npm uninstall mkpath node-version-compare plist xml2js;
-rm -rf ../.installed;
-rm -rf ./plugins;
-rm -rf ./platforms;
-cordova platform add ios;
-cordova plugin add ../;
-cordova build ios --developmentTeam="PW4Q8885U7";
-open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
-
-```
-  
 > Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)
 
-```sh
-cordova build ios --developmentTeam="PW4Q8885U7"; open -a Xcode platforms/ios/Branch\ Testing.xcworkspace;
-```
+> ios
 
 ```sh
-cordova build android; cordova run android;
-chrome://inspect/#devices
+./testbed/init -idc
 ```
+  
+> android
 
-> Test harnesses `TODO`
+```sh
+./testbed/init -adc
+```
 
 ### Submit
 
-> **Required** [Semantic Release](https://github.com/semantic-release/semantic-release) comments `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `revert`
+> **Required** [Semantic Release](https://github.com/semantic-release/semantic-release) comments `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `revert`. Versioning handled automatically based on commit messages.
 
 > Submit code with a [pull request](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking)
- 
-```sh
-git checkout -b BRANCH_NAME;
-git add FILE_NAME;
-npm run commit;
-git push origin BRANCH_NAME;
-```
 
 ### Publish
 
-> Update `CHANGELOG.md`
-> Update version within plugin.template.xml
-> Run `gulp prerelease`
-> Merge Pull Request - code to NPM will happen automatically 
-
-
-## Hooks
-
-Don't need to `rebuild.sh`, just re-run `cordova build ios`
+> Code review from a Branch member. Merge will automatically add SDK to NPM.
