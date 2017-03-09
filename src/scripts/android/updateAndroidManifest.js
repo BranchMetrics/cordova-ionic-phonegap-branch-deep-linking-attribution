@@ -27,8 +27,8 @@
   }
 
   // adds to <application> for Branch init and testmode:
-  // <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT" />
-  // <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+  //    <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_icCccJIpd7GlYY5oOmoEtpafuDiuyXhT" />
+  //    <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
   function updateBranchMetaData (manifest, preferences) {
     var metadatas = manifest['manifest']['application'][0]['meta-data'] || []
     var metadata = []
@@ -95,7 +95,7 @@
   }
 
   // adds to main <activity> for URI Scheme
-  //    <intent-filter>
+  //    <intent-filter android:name="io.branch.sdk.UriScheme">
   //        <data android:scheme="ethantest" />
   //        <action android:name="android.intent.action.VIEW" />
   //        <category android:name="android.intent.category.DEFAULT" />
@@ -103,12 +103,16 @@
   //    </intent-filter>
   function updateBranchURIScheme (manifest, mainActivityIndex, preferences) {
     var intentFilters = manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] || []
+    var androidName = 'io.branch.sdk.UriScheme'
 
     // remove
-    intentFilters = removeBasedOnIntentFilter(intentFilters)
+    intentFilters = removeBasedOnAndroidName(intentFilters, androidName)
 
     // add
     manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] = intentFilters.concat([{
+      '$': {
+        'android:name': androidName
+      },
       'action': [{
         '$': {
           'android:name': 'android.intent.action.VIEW'
@@ -134,7 +138,7 @@
   }
 
   // adds to main <activity> for App Links (optional)
-  //    <intent-filter android:autoVerify="true">
+  //    <intent-filter android:name="io.branch.sdk.AppLink" android:autoVerify="true">
   //       <action android:name="android.intent.action.VIEW" />
   //       <category android:name="android.intent.category.DEFAULT" />
   //       <category android:name="android.intent.category.BROWSABLE" />
@@ -144,10 +148,15 @@
   function updateBranchAppLinks (manifest, mainActivityIndex, preferences) {
     var intentFilters = manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] || []
     var data = getAppLinkIntentFilterData(preferences)
+    var androidName = 'io.branch.sdk.AppLink'
+
+    // remove
+    intentFilters = removeBasedOnAndroidName(intentFilters, androidName)
 
     // add new (remove old already done in updateBranchURIScheme)
     manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] = intentFilters.concat([{
       '$': {
+        'android:name': androidName,
         'android:autoVerify': 'true'
       },
       'action': [{
@@ -214,33 +223,6 @@
     return output
   }
 
-  // remove previous Branch related Intent Filters (both URI Scheme and App Link)
-  function removeBasedOnIntentFilter (items) {
-    var without = []
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i]
-      if (item.hasOwnProperty('action') && item.hasOwnProperty('category') && item.hasOwnProperty('data')) {
-        var actions = item['action']
-        var categories = item['category']
-        var data = item['data']
-
-        if (actions.length === 1 && actions[0]['$'].hasOwnProperty('android:name') && actions[0]['$']['android:name'] === 'android.intent.action.VIEW' && categories.length === 2 && categories[0]['$'].hasOwnProperty('android:name') && (categories[0]['$']['android:name'] === 'android.intent.category.DEFAULT' || categories[0]['$']['android:name'] === 'android.intent.category.BROWSABLE') && categories[1]['$'].hasOwnProperty('android:name') && (categories[1]['$']['android:name'] === 'android.intent.category.DEFAULT' || categories[1]['$']['android:name'] === 'android.intent.category.BROWSABLE') && data.length > 0 && data.length < 3) {
-          // URI Scheme
-          if (data[0]['$'].hasOwnProperty('android:scheme') && !item.hasOwnProperty('$')) {
-            continue
-          }
-
-          // AppLink
-          if (data[0]['$'].hasOwnProperty('android:host') && data[0]['$'].hasOwnProperty('android:scheme') && data[0]['$']['android:scheme'] === 'https' && item.hasOwnProperty('$') && item['$'].hasOwnProperty('android:autoVerify') && item['$']['android:autoVerify'] === 'true') {
-            continue
-          }
-        }
-      }
-      without.push(item)
-    }
-    return without
-  }
-
   // remove previous Branch related <meta-data> and <receiver> based on android:name
   function removeBasedOnAndroidName (items, androidName) {
     var without = []
@@ -252,6 +234,8 @@
           continue
         }
         without.push(item)
+      } else {
+        without.push(item)
       }
     }
     return without
@@ -261,14 +245,13 @@
   function getMainLaunchActivityIndex (activities) {
     var launchActivityIndex = -1
 
-    activities.some(function (activity, index) {
+    for (var i = 0; i < activities.length; i++) {
+      var activity = activities[i]
       if (isLaunchActivity(activity)) {
-        launchActivityIndex = index
-        return true
+        launchActivityIndex = i
+        break
       }
-
-      return false
-    })
+    }
 
     return launchActivityIndex
   }
