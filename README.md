@@ -856,6 +856,13 @@
       ```
 
     - Install Android SDK build-tools 24.0.1
+    
+    - Generate Android Keystore
+    
+      ```sh
+      keytool -genkeypair -dname "cn=Full Name, ou=Business Unit, o=Company, c=US" -alias release -keypass aaa111 -keystore release.keystore -storepass aaa111 -validity 10000 
+      keytool -list -v -keystore release.keystore
+      ```
 
   - Genymotion *[optional]*
 
