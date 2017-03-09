@@ -7,6 +7,7 @@
 1. [Develop](#develop)
 1. [Test](#test)
 1. [Submit](#submit)
+1. [Publish](#publish)
 
 ## Dependencies
 
