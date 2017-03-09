@@ -926,6 +926,22 @@
     ```
 
       - Don't use `cordova`, `hyphens`, or `underscores` in your bundle id (widget id)
+      
+      
+  - error
+  
+    - Installing Branch plugin error. Reinstall Branch
+    
+      ```bash
+      # terminal
+      cordova plugin remove io.branch.sdk
+      cordova plugin remove branch-cordova-sdk
+      ```
+      
+      ```xml
+      <!-- config.xml -->
+      <plugin name="branch-cordova-sdk" spec="^2.5.0" />
+      ```
 
 ## Additional
 
