@@ -36,9 +36,10 @@
     }
   },
   "scripts": {
+    "changelog": "./src/scripts/npm/updateChangeLog.js",
     "commitmsg": "validate-commit-msg",
     "precommit": "gulp prod",
-    "prepush": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion'",
+    "prepush": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion' || true",
     "prerelease": "gulp prod",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
