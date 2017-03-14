@@ -457,7 +457,7 @@
     Branch.setIdentity(userId).then(function (res) {
       alert('Response: ' + JSON.stringify(res))
     }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
+      alert('Error: ' + JSON.stringify(err.message))
     })
     ```
 
@@ -465,7 +465,7 @@
     Branch.logout().then(function (res) {
       alert('Response: ' + JSON.stringify(res))
     }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
+      alert('Error: ' + JSON.stringify(err.message))
     })
     ```
 
@@ -483,7 +483,7 @@
     Branch.userCompletedAction(eventName, metaData).then(function (res) {
       alert('Response: ' + JSON.stringify(res))
     }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
+      alert('Error: ' + JSON.stringify(err.message))
     })
     ```
 
@@ -492,7 +492,7 @@
     Branch.userCompletedAction(eventName).then(function (res) {
       alert('Response: ' + JSON.stringify(res))
     }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
+      alert('Error: ' + JSON.stringify(err.message))
     })
     ```
 

@@ -46,18 +46,18 @@
   "dependencies": {
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
-    "plist": "^1.2.0",
-    "xml2js": "^0.4.16"
+    "plist": "^2.0.1",
+    "xml2js": "^0.4.17"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-standard": "^8.0.3",
-    "husky": "^0.12.0",
+    "gulp-standard": "^9.0.0",
+    "husky": "^0.13.2",
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
-    "plist": "^1.2.0",
+    "plist": "^2.0.1",
     "semantic-release": "^6.3.6",
-    "validate-commit-msg": "^2.8.2",
+    "validate-commit-msg": "^2.11.2",
     "xml2js": "^0.4.17"
   }
 }
