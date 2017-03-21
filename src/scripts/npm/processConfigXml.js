@@ -50,7 +50,7 @@
       'projectRoot': getProjectRoot(context),
       'projectName': getProjectName(configXml),
       'branchKey': getBranchValue(branchXml, 'branch-key'),
-      'linkDomain': getBranchValue(branchXml, 'link-domain'),
+      'linkDomain': getBranchLinkDomains(branchXml, 'link-domain'),
       'uriScheme': getBranchValue(branchXml, 'uri-scheme'),
       'iosBundleId': getBundleId(configXml, 'ios'),
       'iosProjectModule': getProjectModule(context),
@@ -75,6 +75,18 @@
   // read branch value from <branch-config>
   function getBranchValue (branchXml, key) {
     return (branchXml.hasOwnProperty(key)) ? branchXml[key][0]['$']['value'] : null
+  }
+
+  // read branch value from <branch-config> for multiple <link-domain>
+  function getBranchLinkDomains (branchXml, key) {
+    var output = []
+    if (branchXml.hasOwnProperty(key)) {
+      for (var i = 0; i < branchXml[key].length; i++) {
+        var item = branchXml[key][i]
+        output.push(item['$']['value'])
+      }
+    }
+    return output
   }
 
   // read bundle id from config.xml (optional values override widget-id)
