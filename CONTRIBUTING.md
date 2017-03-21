@@ -45,8 +45,7 @@
   ```sh
   git clone git@github.com:BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git;
   cd cordova-ionic-phonegap-branch-deep-linking;
-  rm -rf node_modules;
-  yarn install --save-dev;
+  yarn install
   ```
 
 ## Develop
