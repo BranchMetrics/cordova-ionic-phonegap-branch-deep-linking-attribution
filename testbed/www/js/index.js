@@ -46,7 +46,7 @@ function BranchEvent () {
   console.log('Trigger BranchEvent()')
 
   // event name
-  var event = document.getElementById('custom-action').value || 'blank'
+  var event = document.getElementById('custom-action').value
 
   // optional
   var metadata = { 'custom_dictionary': 123, 'anything': 'everything' }
@@ -55,7 +55,7 @@ function BranchEvent () {
     alert('Response: ' + JSON.stringify(res))
   }).catch(function (err) {
     console.error(err)
-    alert('Error: ' + JSON.stringify(err))
+    alert('Error: ' + JSON.stringify(err.message))
   })
 }
 
@@ -92,7 +92,7 @@ function BranchUser () {
     alert('Response: ' + JSON.stringify(res))
   }).catch(function (err) {
     console.error(err)
-    alert('Error: ' + JSON.stringify(err))
+    alert('Error: ' + JSON.stringify(err.message))
   })
 }
 

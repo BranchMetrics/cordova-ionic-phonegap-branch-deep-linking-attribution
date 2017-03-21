@@ -29,7 +29,13 @@
 - Gulp
 
   ```sh
-  npm install -g gulp-cli;
+  npm install -g gulp-cli; # linter
+  ```
+
+- Yarn
+
+  ```sh
+  npm install -g yarn # faster npm
   ```
 
 ## Setup
@@ -40,7 +46,7 @@
   git clone git@github.com:BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git;
   cd cordova-ionic-phonegap-branch-deep-linking;
   rm -rf node_modules;
-  npm install --save-dev;
+  yarn install --save-dev;
   ```
 
 ## Develop

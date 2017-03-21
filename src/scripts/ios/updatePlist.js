@@ -17,6 +17,7 @@
     var obj = convertXmlToObject(xml)
 
     obj = appendPlist(obj, preferences)
+    obj = correctPlistBlanks(obj)
     xml = convertObjectToXml(obj)
     writePList(filePath, xml)
   }
@@ -84,6 +85,17 @@
     // override
     obj.branch_key = preferences.branchKey
     obj.branch_app_domain = preferences.linkDomain
+
+    return obj
+  }
+
+  // npm list 1.2.0 -> 2.0.1 causes app crash due to malformed plist (from <string/> to <string></string>)
+  // specifically NSMainNibFile and NSMainNibFile~ipad
+  function correctPlistBlanks (obj) {
+    for (var key in obj) {
+      var val = obj[key]
+      if (!val) obj[key] = ''
+    }
 
     return obj
   }

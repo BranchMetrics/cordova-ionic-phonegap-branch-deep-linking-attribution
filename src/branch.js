@@ -86,7 +86,7 @@ Branch.prototype.setIdentity = function (identity) {
     return execute('setIdentity', [String(identity)])
   } else {
     return new Promise(function (resolve, reject) {
-      reject('Please set an identity')
+      reject(new Error('Please set an identity'))
     })
   }
 }
@@ -98,7 +98,7 @@ Branch.prototype.logout = function () {
 Branch.prototype.userCompletedAction = function (action, metaData) {
   if (!action) {
     return new Promise(function (resolve, reject) {
-      reject('Please set an event name')
+      reject(new Error('Please set an event name'))
     })
   }
 
@@ -159,7 +159,7 @@ Branch.prototype.createBranchUniversalObject = function (options) {
           return execute('listOnSpotlight', [obj.instanceId])
         } else {
           return new Promise(function (resolve, reject) {
-            reject('iOS Spotlight only')
+            reject(new Error('iOS Spotlight only'))
           })
         }
       }
