@@ -182,25 +182,29 @@
   // determine the Branch link domain <data> to append to the App Link intent filter
   function getAppLinkIntentFilterData (preferences) {
     var intentFilterData = []
+    var linkDomains = preferences.linkDomain
 
-    if (preferences.linkDomain.indexOf('app.link') !== -1) {
-      // app.link needs an additional -alternate link domain
-      var first = preferences.linkDomain.split('.')[0]
-      var rest = preferences.linkDomain.split('.').slice(2).join('.')
-      var alternate = first + '-alternate' + '.' + rest
+    for (var i = 0; i < linkDomains.length; i++) {
+      var linkDomain = linkDomains[i]
 
-      intentFilterData.push(getAppLinkIntentFilterDictionary(preferences.linkDomain))
-      intentFilterData.push(getAppLinkIntentFilterDictionary(alternate))
-    } else if (preferences.linkDomain.indexOf('bnc.lt') !== -1) {
-      // bnc.lt
-      if (preferences.androidPrefix == null) {
-        throw new Error('BRANCH SDK: Missing "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
+      // app.link link domains need -alternate associated domains as well (for Deep Views)
+      if (linkDomain.indexOf('app.link') !== -1) {
+        var first = linkDomain.split('.')[0]
+        var rest = linkDomain.split('.').slice(2).join('.')
+        var alternate = first + '-alternate' + '.' + rest
+
+        intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain))
+        intentFilterData.push(getAppLinkIntentFilterDictionary(alternate))
+      } else if (linkDomain.indexOf('bnc.lt') !== -1) {
+        // bnc.lt
+        if (preferences.androidPrefix == null) {
+          throw new Error('BRANCH SDK: Missing "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
+        }
+        intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain, preferences.androidPrefix))
+      } else {
+        // custom
+        intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain))
       }
-
-      intentFilterData.push(getAppLinkIntentFilterDictionary(preferences.linkDomain, preferences.androidPrefix))
-    } else {
-      // custom
-      intentFilterData.push(getAppLinkIntentFilterDictionary(preferences.linkDomain))
     }
 
     return intentFilterData

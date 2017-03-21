@@ -99,18 +99,23 @@
   function updateAssociatedDomains (preferences) {
     var domainList = []
     var prefix = 'applinks:'
+    var linkDomains = preferences.linkDomain
 
-    // add link domain to associated domain
-    domainList.push(prefix + preferences.linkDomain)
+    for (var i = 0; i < linkDomains.length; i++) {
+      var linkDomain = linkDomains[i]
 
-    // app.link link domains need -alternate associated domains as well (for Deep Views)
-    if (preferences.linkDomain.indexOf('app.link') !== -1) {
-      var first = preferences.linkDomain.split('.')[0]
-      var second = preferences.linkDomain.split('.')[1]
-      var rest = preferences.linkDomain.split('.').slice(2).join('.')
-      var alternate = first + '-alternate'
+      // add link domain to associated domain
+      domainList.push(prefix + linkDomain)
 
-      domainList.push(prefix + alternate + '.' + second + '.' + rest)
+      // app.link link domains need -alternate associated domains as well (for Deep Views)
+      if (linkDomain.indexOf('app.link') !== -1) {
+        var first = linkDomain.split('.')[0]
+        var second = linkDomain.split('.')[1]
+        var rest = linkDomain.split('.').slice(2).join('.')
+        var alternate = first + '-alternate'
+
+        domainList.push(prefix + alternate + '.' + second + '.' + rest)
+      }
     }
 
     return domainList

@@ -10,7 +10,6 @@ node_modules
 cordova-ionic-phonegap-branch-deep-linking.iml
 local.properties
 out/
-src/cordova-ionic-phonegap-branch-deep-linking.iml
 npm-debug.log*
 *.map
 yarn.lock

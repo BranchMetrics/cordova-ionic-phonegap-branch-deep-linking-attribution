@@ -587,7 +587,9 @@
     <branch-config>
       <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
       <uri-scheme value="branchcordova" />
-      <link-domain value="cordova.app.link" />
+      <link-domain value="yourcustomdomain.com" />
+      <link-domain value="cordova.app.link" />  <!-- optional previous link domain -->
+      <link-domain value="bnc.lt" />  <!-- optional previous link domain -->
       <ios-team-release value="PW4Q8885U7" />
       <ios-team-debug value="FG35JLLMXX" /> <!-- optional -->
       <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt) -->

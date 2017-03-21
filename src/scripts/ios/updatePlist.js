@@ -84,7 +84,7 @@
 
     // override
     obj.branch_key = preferences.branchKey
-    obj.branch_app_domain = preferences.linkDomain
+    obj.branch_app_domain = preferences.linkDomain[0]
 
     return obj
   }
