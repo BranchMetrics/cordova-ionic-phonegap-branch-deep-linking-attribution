@@ -36,7 +36,7 @@
     }
   },
   "scripts": {
-    "changelog": "node ./src/scripts/npm/updateChangeLog.js",
+    "changelog": "node ./src/scripts/npm/updateChangeLog -reset=true",
     "commitmsg": "validate-commit-msg",
     "precommit": "gulp prod",
     "prepush": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion' || true",

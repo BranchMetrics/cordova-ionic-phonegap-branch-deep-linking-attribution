@@ -1,54 +1,95 @@
-// TODO: pull entire history
 // TODO: test git push
-// TODO: reverse on github end
+// TODO: early exit based on last changelog version
+// TODO: 'Authorization': 'token xxxx', for testing
+// TODO: add npm run changelog to pre push
+// TODO: uncomment functions
 
 (function () {
   // libs
   'use strict'
   var path = require('path')
-  var exec = require('child_process').exec
+  // var exec = require('child_process').exec
   var fileHelper = require('../lib/fileHelper.js')
   var request = require('request')
   var FILE = path.join(__dirname, '../../../', 'CHANGELOG.md')
 
   // properties
-  var apiURL = 'https://api.github.com/'
+  var apiURL = 'https://api.github.com/repos/'
   var gitURL = 'https://github.com/'
-  var baseURL = 'repos/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/'
+  var baseURL = 'BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/'
   var tagsURL = apiURL + baseURL + 'tags'
-  var issuesURL = apiURL + baseURL + 'issues?state=closed'
+  var issuesURL = apiURL + baseURL + 'issues'
   var commitsURL = apiURL + baseURL + 'commits'
 
   // entry
-  updateChangeLog()
+  module.exports = updateChangeLog()
 
   function updateChangeLog () {
-    var tags = readGit(tagsURL)
-    var issues = readGit(issuesURL)
-    var commits = readGit(commitsURL)
+    var pageLimit = isReset() ? 50 : 2
+    var tags = new Promise(function (resolve, reject) {
+      readData(tagsURL, [], 1, pageLimit, function (values) {
+        resolve(values)
+      })
+    })
+    var issues = new Promise(function (resolve, reject) {
+      readData(issuesURL, [], 1, pageLimit, function (values) {
+        resolve(values)
+      })
+    })
+    var commits = new Promise(function (resolve, reject) {
+      readData(commitsURL, [], 1, pageLimit, function (values) {
+        resolve(values)
+      })
+    })
 
     Promise.all([tags, issues, commits]).then(function (values) {
       var markdown = generateMarkdown(values)
       fileHelper.writeFile(FILE, markdown)
-      commitChanges()
-    }).catch(function (reason) {
-      console.log(reason)
+      // commitChanges()
     })
   }
 
-  function readGit (url) {
-    return new Promise((resolve, reject) => {
-      var options = {
-        method: 'GET',
-        url: url,
-        headers: {
-          'User-Agent': 'branch-cordova-sdk',
-          'cache-control': 'no-cache'
-        }
+  function isReset () {
+    var args = process.argv.slice(2)
+    for (var i = 0; i < args.length; i++) {
+      var arg = args[i]
+      if (arg === '-reset=true') {
+        return true
       }
-      request(options, function (error, response, body) {
-        error ? reject(JSON.parse(error)) : resolve(JSON.parse(body))
-      })
+    }
+    return false
+  }
+
+  function readData (url, data, page, pageLimit, callback) {
+    var link = url + '?page=' + page
+    link += (url.indexOf('issues') > 0) ? '&state=closed' : ''
+
+    readGit(link, function (values) {
+      data.push.apply(data, values)
+      if (values.length === 0 || page >= pageLimit) {
+        callback(data)
+      } else {
+        page += 1
+        readData(url, data, page, pageLimit, callback)
+      }
+    })
+  }
+
+  function readGit (url, callback) {
+    var options = {
+      method: 'GET',
+      url: url,
+      headers: {
+        'User-Agent': 'branch-cordova-sdk',
+        'cache-control': 'no-cache'
+      }
+    }
+    request(options, function (error, response, body) {
+      if (response.statusCode === 200) {
+        callback(JSON.parse(body))
+      } else {
+        throw new Error(JSON.parse(error || body))
+      }
     })
   }
 
@@ -77,7 +118,7 @@
   }
 
   function getHeader () {
-    return '# Changelog\n\n*Questions? [Contact us](https://support.branch.io/support/tickets/new)*\n\n'
+    return '# CHANGELOG\nQuestions? [Contact us](https://support.branch.io/support/tickets/new)\n\n'
   }
 
   function getTagHeader (currentTag) {
@@ -91,15 +132,20 @@
     }
 
     // (O)n (commits)
-    var paragraph = '- **Completed Changes**\n\n'
+    var paragraph = ''
+    var hasHeader = false
     while (commits.length > 0) {
       var current = commits.pop()
 
       // (O)n (commit messages)
-      var message = current.commit.message
-      if (isValidCommitMessage(message)) {
-        paragraph += '  - ' + message + ' ([' + current.sha.substr(0, 6) + '](' + current.html_url + '))\n\n'
+      var message = current.commit.message.replace(/(\r\n|\n|\r)/gm, '')
+
+      if (!hasHeader) {
+        paragraph += '- **Completed Changes**\n'
+        hasHeader = true
       }
+
+      paragraph += '  - ' + message + ' ([' + current.sha.substr(0, 5) + '](' + current.html_url + '))\n'
 
       if (currentTag.commit.sha === current.sha) {
         // assign date to be used for header and issues conditional
@@ -108,8 +154,8 @@
 
         // complete body
         body = ''
-        body += '(' + date.replace('T', ' ').replace('Z', '') + ')\n\n'
-        body += paragraph
+        body += '(' + date.substr(0, 10) + ')\n\n'
+        body += paragraph + '\n'
         break
       }
     }
@@ -130,15 +176,15 @@
 
       if (!current.hasOwnProperty('pull_request')) {
         if (!hasHeader) {
-          paragraph += '- **Closed Issues**\n\n'
+          paragraph += '- **Closed Issues**\n'
           hasHeader = true
         }
 
-        paragraph += '  - ' + current.title + ' ([#' + current.number + '](' + current.html_url + '))\n\n'
+        paragraph += '  - ' + current.title.replace(/(\r\n|\n|\r)/gm, '') + ' ([#' + current.number + '](' + current.html_url + '))\n'
       }
 
-      if (new Date(current.closed_at).getTime() < new Date(currentTag.date).getTime()) {
-        body += paragraph
+      if (new Date(current.closed_at).getTime() < new Date(currentTag.date).getTime() && hasHeader) {
+        body += paragraph + '\n'
         break
       }
     }
@@ -146,25 +192,26 @@
     return body
   }
 
-  function isValidCommitMessage (message) {
-    var commitMessages = ['feat:', 'fix:', 'docs:', 'style:', 'refactor:', 'perf:', 'test:', 'chore:', 'revert:']
-    for (var i = 0; i < commitMessages.length; i++) {
-      var commitMessage = commitMessages[i]
-      if (message.indexOf(commitMessage) === 0) {
-        return true
-      }
-    }
-    return false
-  }
+  // only show conventional-commit-types
+  // function isValidCommitMessage (message) {
+  //   var commitMessages = ['feat:', 'fix:', 'docs:', 'style:', 'refactor:', 'perf:', 'test:', 'chore:', 'revert:']
+  //   for (var i = 0; i < commitMessages.length; i++) {
+  //     var commitMessage = commitMessages[i]
+  //     if (message.indexOf(commitMessage) === 0) {
+  //       return true
+  //     }
+  //   }
+  //   return false
+  // }
 
   // push file code changes to github
-  function commitChanges () {
-    var git = 'git add ' + FILE + ' && git add git commit -m "chore: updated changelog" && git push'
-    git = 'echo'
-    exec(git, function (err, stdout, stderr) {
-      if (err) {
-        throw new Error('BRANCH SDK: Failed cto ommit git changes for changelog. Docs https://goo.gl/GijGKP')
-      }
-    })
-  }
+  // function commitChanges () {
+  //   var git = 'git add ' + FILE + ' && git add git commit -m "chore: updated changelog" && git push'
+  //   git = 'echo'
+  //   exec(git, function (err, stdout, stderr) {
+  //     if (err) {
+  //       throw new Error('BRANCH SDK: Failed cto ommit git changes for changelog. Docs https://goo.gl/GijGKP')
+  //     }
+  //   })
+  // }
 })()
