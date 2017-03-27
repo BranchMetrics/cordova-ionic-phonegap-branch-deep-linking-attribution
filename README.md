@@ -92,7 +92,7 @@
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
         <uri-scheme value="branchcordova" />
         <link-domain value="cordova.app.link" />
-        <ios-team-prod value="PW4Q8885U7" />
+        <ios-team-release value="PW4Q8885U7" />
       </branch-config>
     ```
 
