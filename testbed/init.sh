@@ -64,6 +64,7 @@ main() {
   rm -rf ../.installed
   rm -rf ./plugins
   rm -rf ./platforms
+  rm -rf ./build.json
 
   # build (platforms added before plugin because before_plugin_install does not work on file reference)
   if [[ "$run_ios" == "true" ]]; then

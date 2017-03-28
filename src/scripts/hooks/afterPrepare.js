@@ -5,7 +5,6 @@
   var iosPlist = require('../ios/updatePlist.js')
   var iosCapabilities = require('../ios/enableEntitlements.js')
   var iosAssociatedDomains = require('../ios/updateAssociatedDomains.js')
-  var iosDevelopmentTeam = require('../ios/updateDevelopmentTeam.js')
   var androidManifest = require('../android/updateAndroidManifest.js')
   var IOS = 'ios'
   var ANDROID = 'android'
@@ -26,7 +25,6 @@
         iosPlist.addBranchSettings(preferences)
         iosCapabilities.enableAssociatedDomains(preferences)
         iosAssociatedDomains.addAssociatedDomains(preferences)
-        iosDevelopmentTeam.addDevelopmentTeam(preferences)
       }
     })
   }
