@@ -58,6 +58,12 @@
   ./src/scripts/npm/updateNativeSdk.sh -a 2.5.9 -i 0.13.5
   ```
 
+- **[optional]** Update `CHANGELOG.md`
+
+  ```sh
+  npm run changelog
+  ```
+
 ## Test
 
 - Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)
