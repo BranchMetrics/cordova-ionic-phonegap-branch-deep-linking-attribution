@@ -36,7 +36,7 @@
   }
 
   function saveContent (file, content) {
-    return isFileXml(file) ? fileHelper.writeFile(file, content) : fileHelper.writeFile(file, JSON.stringify(content, null, 2))
+    return isFileXml(file) ? fileHelper.writeFile(file, content) : fileHelper.writeFile(file, JSON.stringify(content, null, 2) + '\n')
   }
 
   function isFileXml (file) {
