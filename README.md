@@ -39,15 +39,15 @@
   - [Track Event](#track-event)
   - [Handle Referrals](#handle-referrals)
 - [Troubleshooting](#troubleshooting)
-  - [Testing: Key Points](#testing-key-points)
   - [Testing: Optional App Config](#testing-optional-app-config)
-  - [Testing: Sample Testing App](#testing-sample-testing-app)
-  - [Testing: Show Console Logs](#testing-show-console-logs)
-  - [Testing: Supported Platforms](#testing-supported-platforms)
+  - [Testing: Branch Analytics](#testing-branch-analytics)
   - [Testing: Simulating an Install](#testing-simulating-an-install)
+  - [Testing: Supported Platforms](#testing-supported-platforms)  
+  - [Testing: Sample Test App](#testing-sample-test-app)
   - [Link Data: Universal Object Properties](#link-data-universal-object-properties)
   - [Link Data: Deep Link Properties](#link-data-deep-link-properties)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
+  - [Compiling: Show Console Logs](#compiling-show-console-logs)
   - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
   - [Compiling: Errors](#compiling-errors)
 - [Additional](#additional)
@@ -568,15 +568,6 @@
 
 ## Troubleshooting
 
-- #### Testing: Key Points
-
-  - Use the Branch `key_live`
-
-  - Use `Branch.initSession(function(data) {})` to read Deep Link data
-
-  - Test on a `device` *(`simulator`, `browser`, and `genymotion` cause issues)*
-  - [Incompatible Plugins](#compiling-incompatible-plugins)
-
 - #### Testing: Optional App Config
 
   ```xml
@@ -601,54 +592,57 @@
   <widget ios-CFBundleIdentifier="com.eneff.branch.cordovatestbedios" android-packageName="com.eneff.branch.cordovatestbedandroid" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   ```
 
-- #### Testing: Sample Testing App
+- #### Testing: Branch Analytics
+  
+  - Whenever a user `clicks` on a deep link and opens the app, this will trigger an `install` or an `open`.
 
-  - [Branch Testing App](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/testbed)
+    - `installs` represent Branch recognizing the app_id and device_id for the first time.
 
-- #### Testing: Show Console Logs
+    - `installs` represent new app users and the success rate of your Branch deep links.     
 
-  - iOS Simulator
+    - `installs` do **not** represent App Store downloads.
 
-    - `cordova run ios;`
+    - `non-Branch installs` are installs outside of Branch deep link clicks.    
 
-    - Safari -> Preferences -> Advance -> Show Develop menu in menu bar
+    - `opens` are non installs.    
 
-    - Safari -> Develop -> Simulator -> index.html -> Console
+    - If a user uninstalls and reinstalls the app, this will be an `open` because Branch recognizes the device. 
 
-    - *May need to unplug and replug device*
+    - If a user has the app and clicks a Branch deep link, this will be an `open` because the user is not new.
 
-    - *May need to open Xcode and update provisioning profile*
+- #### Testing: Simulating an Install
 
-  - iOS Xcode
+  - iOS
+  
+    - Delete app
+  
+    - iPhone Device -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
 
-    - `cordova plugin add cordova-plugin-console;`
+    - Add `Branch.setDebug(true);` before `Branch.initSession();` ([Initialize Branch Features](#initialize-branch-features))   
+    - Click on a deep link *(will navigate to `$fallback_url` because app is not installed)*
+    
+    - Install the app
 
-    - `cordova build ios;`
+    - Open the app
 
-    - Xcode -> APP_LOCATION/platforms/ios/APP_NAME.Xcodeproj
+    - Read from `Branch.initSession(data)` for `+is_first_session = true` 
+    
+  - Android
+  
+    - Delete app 
 
-    - Xcode -> App -> General -> Signing -> Team
+    - Add `<android-testmode value="true" />` to your `Config.xml` ([Testing: Optional App Config](#testing-optional-app-config))
+    
+    - Add `Branch.setDebug(true);` before `Branch.initSession();` ([Initialize Branch Features](#initialize-branch-features)) 
 
-    - Xcode -> Product -> Run
+    - Click on a deep link *(will navigate to `$fallback_url` because app is not installed)*
+    
+    - Install the app
 
-    - Xcode -> View -> Debug Area -> Activate Console
+    - Open the app
 
-  - Android Device
-
-    - Plug device in
-
-    - `cordova run android;`
-
-    - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
-
-  - Android Genymotion
-
-    - Genymotion -> Start
-
-    - `cordova run android;`
-
-    - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
-
+    - Read from `Branch.initSession(data)` for `+is_first_session = true`
+    
 - #### Testing: Supported Platforms
 
   - Apps which support Branch deep links
@@ -658,7 +652,7 @@
     | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
     | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | Works except the `app.link` domain is not click-able |
     | Twitter | ✅ | | ✅ |
-    | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | 🅾️ |
+    | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
     | Slack | ✅ | | ✅ | |
     | Chrome address bar | ✅ | | ✅ |
     | Chrome web page | ✅ | | ✅ |
@@ -666,66 +660,16 @@
     | FireFox web page | ✅ | | ✅ |
     | Safari address bar | 🅾️ | | |
     | Safari web page | ✅ | | |
-    | WeChat | 🅾️ | | 🅾️ |
+    | WeChat | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
     | WhatsApp | ✅ | | ✅ |
     | Hangouts | ✅ | | ✅ |
     | iMessage | ✅ | | |
     | Apple Mail | ✅ | | |
     | Gmail | ✅ | | ✅ |
 
-- #### Testing: Simulating an Install
+- #### Testing: Sample Testing App
 
-  - Branch analytics
-  
-    - Whenever a user `clicks` on a deep link and opens the app, this event can trigger either an `open` or an `install`. 
-
-      - An `install` happens whenever the app opens and Branch recognizes the app_id and device_id for the first time.
-      
-      - An `open` happens whenever the app opens and is not a Branch install.
-
-    - Some key points about Branch's `open` and `install` metrics:
-
-      - Branch installs are not a total of App Store downloads.
-      
-      - Branch installs represent the number of new app users from a deep link.
-      
-      - Branch installs represent new user growth and the success rate of your Branch deep links. 
-      
-      - If a user uninstalls and reinstalls the app, this will be an open because Branch still recognizes the app_id and device_id. 
-      
-      - If the user already has the app and then opens the app from a Branch deep link, this will be an open because this is not a new user.
-      
-      - Branch also tracks non-Branch installs which are unique app_id and device_id app opens without a corresponding Branch deep link click. 
-
-  - iOS
-  
-    - Delete app
-  
-    - iPhone Device -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
-    
-    - Click on deep link *(will navigate to fallback url because app is not installed)*
-
-    - Add `Branch.setDebug(true);` before `Branch.initSession();`
-    
-    - Install the app
-
-    - Open the app
-
-    - Read from `Branch.initSession(data)` for `+is_first_session = true`    
-    
-  - Android
-  
-    - Delete app 
-
-    - Click on deep link *(will navigate to fallback url because app is not installed)*
-    
-    - Add `<android-testmode value="true" />` to your `Config.xml` [Testing: Optional App Config](#testing-optional-app-config)
-    
-    - Install the app
-
-    - Open the app
-
-    - Read from `Branch.initSession(data)` for `+is_first_session = true`
+  - [Branch Testing App](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/testbed)
 
 - #### Link Data: Universal Object Properties
 
@@ -912,6 +856,50 @@
 
     - Genymotion -> Add virtual device -> Google Nexus 6P - 6.0.0 - API 23 -> Next
 
+- #### Compiling: Show Console Logs
+
+  - iOS Simulator
+
+    - `cordova run ios;`
+
+    - Safari -> Preferences -> Advance -> Show Develop menu in menu bar
+
+    - Safari -> Develop -> Simulator -> index.html -> Console
+
+    - *May need to unplug and replug device*
+
+    - *May need to open Xcode and update provisioning profile*
+
+  - iOS Xcode
+
+    - `cordova plugin add cordova-plugin-console;`
+
+    - `cordova build ios;`
+
+    - Xcode -> APP_LOCATION/platforms/ios/APP_NAME.Xcodeproj
+
+    - Xcode -> App -> General -> Signing -> Team
+
+    - Xcode -> Product -> Run
+
+    - Xcode -> View -> Debug Area -> Activate Console
+
+  - Android Device
+
+    - Plug device in
+
+    - `cordova run android;`
+
+    - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
+
+  - Android Genymotion
+
+    - Genymotion -> Start
+
+    - `cordova run android;`
+
+    - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
+
 - #### Compiling: Incompatible Plugins
 
   - The following plugins will not work with the Branch SDK
@@ -973,8 +961,7 @@
     ```
 
       - Don't use `cordova`, `hyphens`, or `underscores` in your bundle id (widget id)
-      
-      
+
   - error
   
     - Installing Branch plugin error. Reinstall Branch
