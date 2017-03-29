@@ -675,19 +675,57 @@
 
 - #### Testing: Simulating an Install
 
-  - Add `Branch.setDebug(true);` before `Branch.initSession();`
+  - Branch analytics
+  
+    - Whenever a user `clicks` on a deep link and opens the app, this event can trigger either an `open` or an `install`. 
 
-  - Delete app
+      - An `install` happens whenever the app opens and Branch recognizes the app_id and device_id for the first time.
+      
+      - An `open` happens whenever the app opens and is not a Branch install.
 
-  - `[iOS only]` iPhone -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
+    - Some key points about Branch's `open` and `install` metrics:
 
-  - Click on deep link *(will navigate to fallback url because app is not installed)*
+      - Branch installs are not a total of App Store downloads.
+      
+      - Branch installs represent the number of new app users from a deep link.
+      
+      - Branch installs represent new user growth and the success rate of your Branch deep links. 
+      
+      - If a user uninstalls and reinstalls the app, this will be an open because Branch still recognizes the app_id and device_id. 
+      
+      - If the user already has the app and then opens the app from a Branch deep link, this will be an open because this is not a new user.
+      
+      - Branch also tracks non-Branch installs which are unique app_id and device_id app opens without a corresponding Branch deep link click. 
 
-  - Install the app
+  - iOS
+  
+    - Delete app
+  
+    - iPhone Device -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
+    
+    - Click on deep link *(will navigate to fallback url because app is not installed)*
 
-  - Open the app
+    - Add `Branch.setDebug(true);` before `Branch.initSession();`
+    
+    - Install the app
 
-  - Read from `Branch.initSession(data)` for `+is_first_session = true`
+    - Open the app
+
+    - Read from `Branch.initSession(data)` for `+is_first_session = true`    
+    
+  - Android
+  
+    - Delete app 
+
+    - Click on deep link *(will navigate to fallback url because app is not installed)*
+    
+    - Add `<android-testmode value="true" />` to your `Config.xml` [Testing: Optional App Config](#testing-optional-app-config)
+    
+    - Install the app
+
+    - Open the app
+
+    - Read from `Branch.initSession(data)` for `+is_first_session = true`
 
 - #### Link Data: Universal Object Properties
 
