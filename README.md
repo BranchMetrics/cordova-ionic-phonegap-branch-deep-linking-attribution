@@ -472,7 +472,7 @@
   
   - Events named `open`, `close`, `install`, and `referred session` are Branch restricted
 
-  - Recommened to [Track User](#track-user) before [Track Event](#track-event) to associate events with a user
+  - Recommened to [Track User](#track-user) before [Track Event](#track-event) to associate custom events with a user
 
     ```js
     var eventName = 'clicked_on_this'
