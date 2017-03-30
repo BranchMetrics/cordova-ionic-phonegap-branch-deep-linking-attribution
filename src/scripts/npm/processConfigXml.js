@@ -54,7 +54,7 @@
       'uriScheme': getBranchValue(branchXml, 'uri-scheme'),
       'iosBundleId': getBundleId(configXml, 'ios'),
       'iosProjectModule': getProjectModule(context),
-      'iosTeamRelease': getBranchValue(branchXml, 'ios-team-release'),
+      'iosTeamRelease': getBranchValue(branchXml, 'ios-team-release'), // optional
       'iosTeamDebug': getBranchValue(branchXml, 'ios-team-debug'), // optional
       'androidBundleId': getBundleId(configXml, 'android'), // optional
       'androidPrefix': getBranchValue(branchXml, 'android-prefix'), // optional
@@ -136,7 +136,7 @@
     if (preferences.iosBundleId === null || !/^[a-zA-Z0-9.]*$/.test(preferences.iosBundleId)) {
       throw new Error('BRANCH SDK: Invalid "id" or "ios-CFBundleIdentifier" in <widget> in your config.xml. Docs https://goo.gl/GijGKP')
     }
-    if (preferences.iosTeamRelease === null || !/^[a-zA-Z0-9]{10}$/.test(preferences.iosTeamRelease)) {
+    if (preferences.iosTeamRelease !== null && !/^[a-zA-Z0-9]{10}$/.test(preferences.iosTeamRelease)) {
       throw new Error('BRANCH SDK: Invalid "ios-team-release" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
     if (preferences.iosTeamDebug !== null && !/^[a-zA-Z0-9]{10}$/.test(preferences.iosTeamDebug)) {

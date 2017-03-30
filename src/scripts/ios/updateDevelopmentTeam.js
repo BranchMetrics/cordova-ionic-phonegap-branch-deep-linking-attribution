@@ -85,6 +85,10 @@
     var release = preferences.iosTeamRelease
     var debug = (preferences.iosTeamDebug) ? preferences.iosTeamDebug : preferences.iosTeamRelease
 
+    if (release === null) {
+      throw new Error('BRANCH SDK: Invalid "ios-team-release" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
+    }
+
     content.ios.release.developmentTeam = release
     content.ios.debug.developmentTeam = debug
   }
