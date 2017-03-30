@@ -10,6 +10,7 @@ body {
 button, input {
   padding: 0.5em;
   border: 3px solid #F5F5F5;
+  width: 100%;
 }
 button {
   background-color: #F5F5F5;
