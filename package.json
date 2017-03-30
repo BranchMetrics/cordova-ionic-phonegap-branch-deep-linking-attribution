@@ -39,7 +39,7 @@
     "changelog": "node ./src/scripts/npm/updateChangeLog -reset=true",
     "commitmsg": "validate-commit-msg",
     "precommit": "gulp prod",
-    "prepush": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion' || true",
+    "postcommit": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion' || true",
     "prerelease": "gulp prod",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
