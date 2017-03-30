@@ -456,7 +456,7 @@
     })
     ```
 
- - Removes the identity of a user
+  - Removes the identity of a user
 
     ```js
     Branch.logout().then(function (res) {
