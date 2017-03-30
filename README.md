@@ -98,9 +98,10 @@
 
   - Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)
     - `com.eneff.branch.cordovatestbed`
+    - `key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3`
     - `branchcordova`
-    - `PW4Q8885U7`
     - `cordova.app.link`
+    - `PW4Q8885U7`
 
 - #### Initialize Branch
 
