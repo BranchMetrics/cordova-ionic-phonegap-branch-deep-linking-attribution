@@ -456,6 +456,8 @@
     })
     ```
 
+ - Removes the identity of a user
+
     ```js
     Branch.logout().then(function (res) {
       alert('Response: ' + JSON.stringify(res))
