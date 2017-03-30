@@ -611,38 +611,23 @@
     - If a user has the app and clicks a Branch deep link, this will be an `open` because the user is not new.
 
 - #### Testing: Simulating an Install
-
-  - iOS
   
-    - Delete app
+  - Delete your app
+
+  - **[iOS]** iPhone Device -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
+
+  - **[Android]** Add `<android-testmode value="true" />` to your `Config.xml` ([Testing: Optional App Config](#testing-optional-app-config))
+
+  - Add `Branch.setDebug(true);` before `Branch.initSession();` ([Initialize Branch Features](#initialize-branch-features))   
   
-    - iPhone Device -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
+  - Click on a deep link to navigate to your `$fallback_url` because your app is not installed
 
-    - Add `Branch.setDebug(true);` before `Branch.initSession();` ([Initialize Branch Features](#initialize-branch-features))   
-    - Click on a deep link *(will navigate to `$fallback_url` because app is not installed)*
-    
-    - Install the app
+  - Install your app
 
-    - Open the app
+  - Open your app
 
-    - Read from `Branch.initSession(data)` for `+is_first_session = true` 
-    
-  - Android
-  
-    - Delete app 
+  - Read from `Branch.initSession(data)` for `+is_first_session = true` 
 
-    - Add `<android-testmode value="true" />` to your `Config.xml` ([Testing: Optional App Config](#testing-optional-app-config))
-    
-    - Add `Branch.setDebug(true);` before `Branch.initSession();` ([Initialize Branch Features](#initialize-branch-features)) 
-
-    - Click on a deep link *(will navigate to `$fallback_url` because app is not installed)*
-    
-    - Install the app
-
-    - Open the app
-
-    - Read from `Branch.initSession(data)` for `+is_first_session = true`
-    
 - #### Testing: Supported Platforms
 
   - Apps which support Branch deep links
