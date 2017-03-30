@@ -50,12 +50,6 @@
   - [Compiling: Show Console Logs](#compiling-show-console-logs)
   - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
   - [Compiling: Errors](#compiling-errors)
-- [Additional](#additional)
-  - [SDK Development](#sdk-development)
-  - [Bulk Link Creation](#bulk-link-creation)
-  - [Analytical Data](#analytical-data)
-  - [Webpage Features](#webpage-features)
-  - [Premium Features](#premium-feature)
 
 ## Getting Started
 
@@ -962,43 +956,3 @@
       <!-- config.xml -->
       <plugin name="branch-cordova-sdk" spec="^2.5.0" />
       ```
-
-## Additional
-
-- #### SDK Development
-
-  - [Changelog](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/CHANGELOG.md)
-
-  - [Contributing](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/DEVELOPING.md)
-
-- #### Bulk Link Creation
-
- - [HTTP API](https://github.com/BranchMetrics/branch-deep-linking-public-api)
-
- - [Marketing Dashboard](https://dashboard.branch.io/marketing)
-
-- #### Analytical Data
-
-  - [Summary Dashboard](https://dashboard.branch.io/)
-
-  - [Export Button](https://dashboard.branch.io/liveview/links)
-
-  - [Export API](https://dev.branch.io/methods-endpoints/data-export-api/guide/)
-
-  - [Webhooks](https://dev.branch.io/getting-started/webhooks/guide/)
-
-- #### Webpage Features
-
-  - [Text Me The App](https://github.com/BranchMetrics/web-branch-deep-linking#sendsmsphone-linkdata-options-callback)
-
-  - [Smart Banner](https://github.com/BranchMetrics/web-branch-deep-linking#banneroptions-data)
-
-  - [DeepView](https://github.com/BranchMetrics/web-branch-deep-linking#deepview)
-
-- #### Premium Features
-
-  - [Journey App Banner](https://dev.branch.io/premium-solutions/)
-
-  - [Deep Link Emails](https://dev.branch.io/premium-solutions/)
-
-  - [Data Integrations](https://dev.branch.io/premium-solutions/)
