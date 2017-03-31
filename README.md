@@ -39,6 +39,7 @@
   - [Track Event](#track-event)
   - [Handle Referrals](#handle-referrals)
 - [Troubleshooting](#troubleshooting)
+  - [Testing: Key Points](#testing-key-points)
   - [Testing: Optional App Config](#testing-optional-app-config)
   - [Testing: Branch Analytics](#testing-branch-analytics)
   - [Testing: Simulating an Install](#testing-simulating-an-install)
@@ -48,7 +49,8 @@
   - [Link Data: Deep Link Properties](#link-data-deep-link-properties)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
   - [Compiling: Show Console Logs](#compiling-show-console-logs)
-  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
+  - [Compiling: Updating Branch SDK](#compiling-updating-branch-sdk)
+  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)  
   - [Compiling: Errors](#compiling-errors)
 
 ## Getting Started
@@ -565,6 +567,12 @@
 
 ## Troubleshooting
 
+- #### Testing: Key Points
+
+ - Need to checkmark "app uses IDFA and GAID" when submitting your app to the App Store and Google Play Store
+ 
+ – Best to enable [Deepviews](https://dashboard.branch.io/settings/deepviews) ([Testing: Supported Platforms](#testing-supported-platforms))
+
 - #### Testing: Optional App Config
 
   ```xml
@@ -882,6 +890,19 @@
 
     - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
 
+- #### Compiling: Updating Branch SDK
+
+  ```bash
+  # terminal
+  cordova plugin remove io.branch.sdk
+  cordova plugin remove branch-cordova-sdk
+  ```
+
+  ```xml
+  <!-- config.xml -->
+  <plugin name="branch-cordova-sdk" spec="^2.5.0" />
+  ```
+
 - #### Compiling: Incompatible Plugins
 
   - The following plugins will not work with the Branch SDK
@@ -943,18 +964,3 @@
     ```
 
       - Don't use `cordova`, `hyphens`, or `underscores` in your bundle id (widget id)
-
-  - error
-  
-    - Installing Branch plugin error. Reinstall Branch
-    
-      ```bash
-      # terminal
-      cordova plugin remove io.branch.sdk
-      cordova plugin remove branch-cordova-sdk
-      ```
-      
-      ```xml
-      <!-- config.xml -->
-      <plugin name="branch-cordova-sdk" spec="^2.5.0" />
-      ```
