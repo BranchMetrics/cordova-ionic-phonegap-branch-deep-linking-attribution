@@ -665,7 +665,7 @@
     | canonicalUrl | | The canonical URL, used for SEO purposes | `$canonical_url`
     | title | | The name for the piece of content | `$og_title`
     | contentDescription | | A description for the content | `$og_description`
-    | contentImageUrl | | The image URL for the content | `$og_image_url `
+    | contentImageUrl | | The image URL for the content. Must be an absolute path | `$og_image_url `
     | price | | The price of the item | `$amount`
     | currency | | The currency representing the price in ISO 4217 currency code | `$currency`
     | contentIndexingMode | `"public"` | Can be set to either `"public"` or `"private"`. Public indicates that you’d like this content to be discovered by other apps. | `$publicly_indexable`
