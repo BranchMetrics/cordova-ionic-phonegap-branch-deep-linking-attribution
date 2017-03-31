@@ -569,9 +569,9 @@
 
 - #### Testing: Key Points
 
- - Need to checkmark "app uses IDFA and GAID" when submitting your app to the App Store and Google Play Store
- 
- – Best to enable [Deepviews](https://dashboard.branch.io/settings/deepviews) ([Testing: Supported Platforms](#testing-supported-platforms))
+  - Need to checkmark "app uses IDFA and GAID" when submitting your app to the App Store and Google Play Store
+
+  – Best to enable [Deepviews](https://dashboard.branch.io/settings/deepviews) ([Testing: Supported Platforms](#testing-supported-platforms))
 
 - #### Testing: Optional App Config
 
