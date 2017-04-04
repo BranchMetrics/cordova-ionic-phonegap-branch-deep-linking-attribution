@@ -37,15 +37,21 @@ Branch.prototype.disableGlobalListenersWarnings = function () {
 
 Branch.prototype.initSession = function (deepLinkDataListener) {
   // private method to filter out +clicked_branch_link = false in deep link callback
+  var previous = ''
   var deepLinkDataParser = function (deepLinkData) {
     var isBranchLink = '+clicked_branch_link'
     var isNonBranchLink = '+non_branch_link'
+    // TODO: figure out why iOS SDK passes data twice on Ionic 2 terminated and no network connection
+    var isNewData = JSON.stringify(deepLinkData) !== previous
+    var isBranchLinkClick = deepLinkData.hasOwnProperty(isBranchLink) && deepLinkData[isBranchLink] === true
+    var isNonBranchLinkClick = deepLinkData.hasOwnProperty(isNonBranchLink)
 
-    // +clicked_branch_link' = true || +non_branch_link
-    if ((deepLinkData.hasOwnProperty(isBranchLink) && deepLinkData[isBranchLink] === true) || (deepLinkData.hasOwnProperty(isNonBranchLink))) {
+    // is +clicked_branch_link' = true || +non_branch_link
+    if (isNewData && (isBranchLinkClick || isNonBranchLinkClick)) {
       // to Branch.initSession(function(data) {})
       deepLinkDataListener(deepLinkData)
     }
+    previous = JSON.stringify(deepLinkData)
   }
 
   if (!disableGlobalListenersWarnings && !deepLinkDataListener && !window.DeepLinkHandler) {

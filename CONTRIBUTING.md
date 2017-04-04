@@ -90,6 +90,6 @@
 
 ## Publish
 
-- Pull reques code review from a Branch team member
+- Pull request code review from a Branch team member
 
 - Merges will automatically add SDK to NPM
