@@ -166,7 +166,7 @@
     // ...
     ```
 
-  - Ionic 2
+  - Ionic 2/3
     ```typescript
     // sample app.component.js
     import { Component } from '@angular/core';
@@ -930,13 +930,13 @@
     - Branch opens and installs your app. You cannot simulate Branch in the desktop browser
 
       ```js
-      // Ionic 2 - running on browser instead of device
+      // Ionic 2/3 - running on browser instead of device
       if (!platform.is('cordova')) { return }
       Branch.userCompletedAction('did_this')
       ```
 
       ```js
-      // Ionic 2 - missing Branch import
+      // Ionic 2/3 - missing Branch import
       declare var Branch
       ```
 
