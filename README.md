@@ -963,4 +963,4 @@
     No profiles for 'com.eneff.branch.cordova_testbed' were found
     ```
 
-      - Don't use `cordova`, `hyphens`, or `underscores` in your bundle id (widget id)
+      - Don't use `cordova`, `hyphens` (Android), or `underscores` (iOS) in your bundle id (widget id)
