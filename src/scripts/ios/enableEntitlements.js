@@ -5,6 +5,7 @@
   var compare = require('node-version-compare')
   var IOS_DEPLOYMENT_TARGET = '8.0'
   var COMMENT_KEY = /_comment$/
+  var CODESIGNIDENTITY = 'iPhone Developer'
 
   // entry
   module.exports = {
@@ -29,6 +30,7 @@
 
     for (config in configurations) {
       buildSettings = configurations[config].buildSettings
+      buildSettings.CODE_SIGN_IDENTITY = '"' + CODESIGNIDENTITY + '"'
       buildSettings.CODE_SIGN_ENTITLEMENTS = '"' + entitlementsFile + '"'
 
       // if deployment target is less then the required one - increase it
