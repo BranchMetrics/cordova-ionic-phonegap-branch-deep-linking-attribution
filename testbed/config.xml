@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.eneff.branch.cordovatestbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <!-- Branch (plugin pulled locally instead of npm)-->
+  <!-- Branch -->
 
+  <!-- uncomment the following line if building locally and not contributing -->
   <!-- <plugin name="branch-cordova-sdk" />  -->
   <branch-config>
     <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
@@ -9,6 +10,7 @@
     <link-domain value="cordova.app.link" />
     <ios-team-release value="PW4Q8885U7" />
   </branch-config>
+  <preference name="android-minSdkVersion" value="15" />
 
   <name>Branch Testing</name>
   <description>Testing App For Branch Cordova</description>
