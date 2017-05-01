@@ -301,6 +301,8 @@
   - Needs a [Branch Universal Object](#create-content-reference)
 
   - Link Data: [Deep Link Properties](#link-data-deep-link-properties)
+  
+  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/links)
 
     ```js
     // optional fields
@@ -436,6 +438,8 @@
   - Track how many times a user views a particular piece of content
 
   - Needs a [Branch Universal Object](#create-content-reference)
+  
+  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/content)
 
     ```js
     branchUniversalObj.registerView().then(function (res) {
@@ -448,6 +452,8 @@
 - #### Track User
 
   - Sets the identity of a user (email, ID, UUID, etc) for events, deep links, and referrals
+  
+  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/identities)  
 
     ```js
     var userId = '123456'
@@ -475,6 +481,8 @@
   - Events named `open`, `close`, `install`, and `referred session` are Branch restricted
 
   - Recommened to [Track User](#track-user) before [Track Event](#track-event) to associate custom events with a user
+  
+  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/events)
 
     ```js
     var eventName = 'clicked_on_this'
@@ -498,6 +506,8 @@
 - #### Handle Referrals
 
   - Referral points are obtained from events triggered by users from rules created on the [Branch Dashboard](https://dashboard.branch.io/referrals/rules)
+  
+  - Verify on the [Branch Dashboard](https://dashboard.branch.io/referrals/analytics)
 
   - Get credits
 
