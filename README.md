@@ -958,7 +958,7 @@
     The following build commands failed:
       Check dependencies
     (1 failure)
-    Error: Error code 65 for command: xcodebuild with args: -xcconfig,/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/cordova/build-debug.xcconfig,-workspace,Branch Testing.xcworkspace,-scheme,Branch Testing,-configuration,Debug,-destination,generic/platform=iOS,-archivePath,Branch Testing.xcarchive,archive,CONFIGURATION_BUILD_DIR=/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/build/device,SHARED_PRECOMPS_DIR=/Users/eneff/Desktop/active/branch/lib/cordova-ionic-phonegap-branch-deep-linking/testbed/platforms/ios/build/sharedpch
+    Error: Error code 65 for command: xcodebuild with args: -xcconfig,cordova/build-debug.xcconfig,-workspace,Branch Testing.xcworkspace,-scheme,Branch Testing,-configuration,Debug,-destination,generic/platform=iOS,-archivePath,Branch Testing.xcarchive,archive,CONFIGURATION_BUILD_DIR=build/device,SHARED_PRECOMPS_DIR=build/sharedpch
     ```
 
       - Open app in `Xcode` and launch from there (to select a `Provisioning Profile`)
@@ -974,3 +974,11 @@
     ```
 
       - Don't use `cordova`, `hyphens` (Android), or `underscores` (iOS) in your bundle id (widget id)
+
+    ```sh
+    Error: Error code 1 for command: /gradlew with args: cdvBuildDebug,-b,/build.gradle,-Dorg.gradle.daemon=true,-Pandroid.useDeprecatedNdk=true
+    ```
+
+      - Add `<preference name="android-minSdkVersion" value="15" />` to your `config.xml`
+
+
