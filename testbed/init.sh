@@ -62,6 +62,7 @@ main() {
     npm uninstall mkpath node-version-compare plist xml2js
   fi
   rm -rf ../.installed
+  rm -rf ./node_modules
   rm -rf ./plugins
   rm -rf ./platforms
   rm -rf ./build.json

@@ -15,11 +15,10 @@
   // updates the xcode preferences to allow associated domains
   function enableAssociatedDomains (preferences) {
     var entitlementsFile = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.projectName, 'Resources', preferences.projectName + '.entitlements')
-    var projectFile = preferences.iosProjectModule.parseProjectFile(path.join(preferences.projectRoot, 'platforms', 'ios'))
 
-    activateAssociativeDomains(projectFile.xcode, entitlementsFile)
-    addPbxReference(projectFile.xcode, entitlementsFile)
-    projectFile.write()
+    activateAssociativeDomains(preferences.iosProjectModule.xcode, entitlementsFile)
+    addPbxReference(preferences.iosProjectModule.xcode, entitlementsFile)
+    preferences.iosProjectModule.write()
   }
 
   // adds entitlement files to the xcode project

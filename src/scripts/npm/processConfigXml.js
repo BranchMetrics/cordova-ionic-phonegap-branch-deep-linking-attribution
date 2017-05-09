@@ -105,12 +105,56 @@
 
   // read iOS project module from cordova context
   function getProjectModule (context) {
-    // try pre-5.0 cordova structure
+    var projectRoot = getProjectRoot(context)
+    var projectPath = path.join(projectRoot, 'platforms', 'ios')
+
+    // try pre 5.0 cordova structure
     try {
-      return context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios
+      return context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios.parseProjectFile(projectPath)
     } catch (e) {
-      return context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios')
+      // try pre 7.0 cordova structure
+      try {
+        return context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios').parseProjectFile(projectPath)
+      } catch (e) {
+        return getProjectModulePlugman(context)
+      }
     }
+  }
+
+  function getProjectModulePlugman (context) {
+    var projectRoot = getProjectRoot(context)
+    var projectPath = path.join(projectRoot, 'platforms', 'ios')
+    var projectFiles = context.requireCordovaModule('glob').sync(path.join(projectPath, '*.xcodeproj', 'project.pbxproj'))
+
+    if (projectFiles.length === 0) {
+      throw new Error('BRANCH SDK: Unable to locate the Xcode project file.')
+    }
+
+    var pbxPath = projectFiles[0]
+    var xcodeproj = context.requireCordovaModule('xcode').project(pbxPath)
+    xcodeproj.parseSync()
+
+    var xCodeProjectFile = {
+      'xcode': xcodeproj,
+      'write': function () {
+        var fs = context.requireCordovaModule('fs')
+        var frameworksFile = path.join(projectPath, 'frameworks.json')
+        var frameworks = {}
+        try {
+          frameworks = context.requireCordovaModule(frameworksFile)
+        } catch (e) {}
+
+        fs.writeFileSync(pbxPath, xcodeproj.writeSync())
+        if (Object.keys(frameworks).length === 0) {
+          // If there is no framework references remain in the project, just remove this file
+          context.requireCordovaModule('shelljs').rm('-rf', frameworksFile)
+          return
+        }
+        fs.writeFileSync(frameworksFile, JSON.stringify(this.frameworks, null, 4))
+      }
+    }
+
+    return xCodeProjectFile
   }
 
   // validate <branch-config> properties within config.xml
