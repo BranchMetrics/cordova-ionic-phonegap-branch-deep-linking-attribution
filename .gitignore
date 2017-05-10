@@ -3,6 +3,7 @@ testbed/platforms
 testbed/plugins
 testbed/hooks
 testbed/build.json
+testbed/package.json
 node_modules
 .installed
 .gradle/

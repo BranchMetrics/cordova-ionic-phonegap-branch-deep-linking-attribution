@@ -105,11 +105,58 @@
 
   // read iOS project module from cordova context
   function getProjectModule (context) {
-    // try pre-5.0 cordova structure
+    var projectRoot = getProjectRoot(context)
+    var projectPath = path.join(projectRoot, 'platforms', 'ios')
+
     try {
-      return context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios
+      // pre 5.0 cordova structure
+      return context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios.parseProjectFile(projectPath)
     } catch (e) {
-      return context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios')
+      try {
+        // pre 7.0 cordova structure
+        return context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios').parseProjectFile(projectPath)
+      } catch (e) {
+        // post 7.0 cordova structure
+        return getProjectModuleGlob(context)
+      }
+    }
+  }
+
+  function getProjectModuleGlob (context) {
+    // get xcodeproj
+    var projectRoot = getProjectRoot(context)
+    var projectPath = path.join(projectRoot, 'platforms', 'ios')
+    var projectFiles = context.requireCordovaModule('glob').sync(path.join(projectPath, '*.xcodeproj', 'project.pbxproj'))
+    if (projectFiles.length === 0) return
+    var pbxPath = projectFiles[0]
+    var xcodeproj = context.requireCordovaModule('xcode').project(pbxPath)
+
+    // add hash
+    xcodeproj.parseSync()
+
+    // return xcodeproj and write method
+    return {
+      'xcode': xcodeproj,
+      'write': function () {
+        // save xcodeproj
+        var fs = context.requireCordovaModule('fs')
+        fs.writeFileSync(pbxPath, xcodeproj.writeSync())
+
+        // pull framework dependencies
+        var frameworksFile = path.join(projectPath, 'frameworks.json')
+        var frameworks = {}
+
+        try {
+          frameworks = context.requireCordovaModule(frameworksFile)
+        } catch (e) {}
+        // If there are no framework references, remove this file
+        if (Object.keys(frameworks).length === 0) {
+          return context.requireCordovaModule('shelljs').rm('-rf', frameworksFile)
+        }
+
+        // save frameworks
+        fs.writeFileSync(frameworksFile, JSON.stringify(frameworks, null, 4))
+      }
     }
   }
 
