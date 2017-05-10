@@ -49,7 +49,7 @@
   - [Link Data: Deep Link Properties](#link-data-deep-link-properties)
   - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
   - [Compiling: Show Console Logs](#compiling-show-console-logs)
-  - [Compiling: Updating Branch SDK](#compiling-updating-branch-sdk)
+  - [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
   - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)  
   - [Compiling: Errors](#compiling-errors)
 
@@ -900,7 +900,7 @@
 
     - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
 
-- #### Compiling: Updating Branch SDK
+- #### Compiling: Updating the Branch SDK
 
   ```bash
   # terminal
