@@ -108,53 +108,56 @@
     var projectRoot = getProjectRoot(context)
     var projectPath = path.join(projectRoot, 'platforms', 'ios')
 
-    // try pre 5.0 cordova structure
     try {
+      // pre 5.0 cordova structure
       return context.requireCordovaModule('cordova-lib/src/plugman/platforms').ios.parseProjectFile(projectPath)
     } catch (e) {
-      // try pre 7.0 cordova structure
       try {
+        // pre 7.0 cordova structure
         return context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios').parseProjectFile(projectPath)
       } catch (e) {
-        return getProjectModulePlugman(context)
+        // post 7.0 cordova structure
+        return getProjectModuleGlob(context)
       }
     }
   }
 
-  function getProjectModulePlugman (context) {
+  function getProjectModuleGlob (context) {
+    // get xcodeproj
     var projectRoot = getProjectRoot(context)
     var projectPath = path.join(projectRoot, 'platforms', 'ios')
     var projectFiles = context.requireCordovaModule('glob').sync(path.join(projectPath, '*.xcodeproj', 'project.pbxproj'))
-
-    if (projectFiles.length === 0) {
-      throw new Error('BRANCH SDK: Unable to locate the Xcode project file.')
-    }
-
+    if (projectFiles.length === 0) return
     var pbxPath = projectFiles[0]
     var xcodeproj = context.requireCordovaModule('xcode').project(pbxPath)
+
+    // add hash
     xcodeproj.parseSync()
 
-    var xCodeProjectFile = {
+    // return xcodeproj and write method
+    return {
       'xcode': xcodeproj,
       'write': function () {
+        // save xcodeproj
         var fs = context.requireCordovaModule('fs')
+        fs.writeFileSync(pbxPath, xcodeproj.writeSync())
+
+        // pull framework dependencies
         var frameworksFile = path.join(projectPath, 'frameworks.json')
         var frameworks = {}
+
         try {
           frameworks = context.requireCordovaModule(frameworksFile)
         } catch (e) {}
-
-        fs.writeFileSync(pbxPath, xcodeproj.writeSync())
+        // If there are no framework references, remove this file
         if (Object.keys(frameworks).length === 0) {
-          // If there is no framework references remain in the project, just remove this file
-          context.requireCordovaModule('shelljs').rm('-rf', frameworksFile)
-          return
+          return context.requireCordovaModule('shelljs').rm('-rf', frameworksFile)
         }
-        fs.writeFileSync(frameworksFile, JSON.stringify(this.frameworks, null, 4))
+
+        // save frameworks
+        fs.writeFileSync(frameworksFile, JSON.stringify(frameworks, null, 4))
       }
     }
-
-    return xCodeProjectFile
   }
 
   // validate <branch-config> properties within config.xml
