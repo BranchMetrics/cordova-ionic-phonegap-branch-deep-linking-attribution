@@ -12,11 +12,11 @@
 
 ## Data Flow
 
-1. Users- sets values https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/testbed/config.xml#L7-L13
-1. Hooks run on build https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/plugin.xml#L45-L47
-1. Hooks call scripts https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/hooks
-1. Scripts for iOS https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/ios
-1. Scripts for Android https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/android (edited)
+- Users sets values https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/testbed/config.xml#L7-L13
+- Hooks run on build https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/plugin.xml#L45-L47
+- Hooks call scripts https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/hooks
+- Scripts for iOS https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/ios
+- Scripts for Android https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/android
 
 
 ## Dependencies
