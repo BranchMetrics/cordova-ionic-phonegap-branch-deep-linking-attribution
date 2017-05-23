@@ -96,9 +96,7 @@
                 if (!jsonData) {
                     NSLog(@"Parsing Error: %@", [err localizedDescription]);
                     NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:[err localizedDescription], @"error", nil];
-                    NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict
-                                                                        options:NSJSONWritingPrettyPrinted
-                                                                          error:&err];
+                    NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict options:NSJSONWritingPrettyPrinted error:&err];
 
                     resultString = [[NSString alloc] initWithData:errorJSON encoding:NSUTF8StringEncoding];
                     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:resultString];
@@ -113,9 +111,7 @@
 
             // We create a JSON string result, because we're getting an error if we directly return a string result.
             NSDictionary *errorDict = [NSDictionary dictionaryWithObjectsAndKeys:[error localizedDescription], @"error", nil];
-            NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict
-                                                                options:NSJSONWritingPrettyPrinted
-                                                                  error:&error];
+            NSData* errorJSON = [NSJSONSerialization dataWithJSONObject:errorDict options:NSJSONWritingPrettyPrinted error:&error];
 
             resultString = [[NSString alloc] initWithData:errorJSON encoding:NSUTF8StringEncoding];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:resultString];
@@ -147,7 +143,7 @@
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enableDebug];
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
- }
+}
 
 - (void)getAutoInstance:(CDVInvokedUrlCommand*)command
 {
@@ -513,10 +509,7 @@
         }
     }
 
-    [branchUniversalObj showShareSheetWithLinkProperties:linkProperties
-                                                andShareText:shareText
-                                                fromViewController:self.viewController
-                                                completion:^(NSString *activityType, BOOL completed) {
+    [branchUniversalObj showShareSheetWithLinkProperties:linkProperties andShareText:shareText fromViewController:self.viewController completion:^(NSString *activityType, BOOL completed) {
 
         int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
 
@@ -579,9 +572,7 @@
         CDVPluginResult* pluginResult = nil;
         if (!error) {
             NSError *err;
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"result":string}
-                                                               options:0
-                                                                 error:&err];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"result":string} options:0 error:&err];
             if (!jsonData) {
                 NSLog(@"Parsing Error: %@", [err localizedDescription]);
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[err localizedDescription]];
