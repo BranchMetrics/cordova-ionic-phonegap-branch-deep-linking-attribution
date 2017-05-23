@@ -598,7 +598,7 @@
       <link-domain value="bnc.lt" />  <!-- optional previous link domain -->
       <ios-team-release value="PW4Q8885U7" /> <!-- required if iOS app -->
       <ios-team-debug value="FG35JLLMXX" /> <!-- optional -->
-      <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt) -->
+      <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt and custom domains) -->
       <android-testmode value="true" /> <!-- optional (simulate installs) -->
     </branch-config>
   ```
