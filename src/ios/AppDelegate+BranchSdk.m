@@ -11,7 +11,7 @@
 #import "BranchNPM.h"
 
 #ifdef BRANCH_NPM
-    #import "Branch.h" 
+    #import "Branch.h"
 #else
     #import <Branch/Branch.h>
 #endif
@@ -25,9 +25,9 @@
 @implementation AppDelegate (BranchSdk)
 
 // Respond to URI scheme links
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
     // pass the url to the handle deep link call
-    if (![[Branch getInstance] handleDeepLink:url]) {
+    if (![[Branch getInstance] application:app openURL:url options:options]) {
         // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
         [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLNotification object:url]];
         // send unhandled URL to notification

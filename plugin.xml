@@ -69,6 +69,7 @@ SOFTWARE.
     <config-file target="config.xml" parent="/*">
       <feature name="BranchSDK">
         <param name="ios-package" value="BranchSDK" />
+        <param name="onload" value="true" />
       </feature>
     </config-file>
 
