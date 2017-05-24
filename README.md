@@ -70,7 +70,7 @@
     <!-- sample config.xml -->
     <widget id="com.eneff.branch.cordovatestbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
       <!-- Branch -->
-      <plugin name="branch-cordova-sdk" spec="^2.5.0" />
+      <plugin name="branch-cordova-sdk" spec="^2.6.0" />
       <branch-config>
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
         <uri-scheme value="branchcordova" />
@@ -84,7 +84,7 @@
     <!-- sample config.xml -->
     <widget id="com.eneff.branch.cordovatestbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
       <!-- Branch -->
-      <plugin name="branch-cordova-sdk" spec="^2.5.0" />
+      <plugin name="branch-cordova-sdk" spec="^2.6.0" />
       <branch-config>
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
         <uri-scheme value="branchcordova" />
@@ -481,7 +481,7 @@
   
   - Events named `open`, `close`, `install`, and `referred session` are Branch restricted
 
-  - Recommened to [Track User](#track-user) before [Track Event](#track-event) to associate custom events with a user
+  - Recommended to [Track User](#track-user) before [Track Event](#track-event) to associate custom events with a user
   
   - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/events)
 
@@ -987,7 +987,7 @@
 
   ```xml
   <!-- config.xml -->
-  <plugin name="branch-cordova-sdk" spec="^2.5.0" />
+  <plugin name="branch-cordova-sdk" spec="^2.6.0" />
   ```
 
 - #### Compiling: Incompatible Plugins
