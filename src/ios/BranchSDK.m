@@ -233,6 +233,90 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)sendCommerceEvent:(CDVInvokedUrlCommand*)command
+{
+    NSDictionary *data = [command.arguments objectAtIndex:0];
+    NSDictionary *metadata;
+    BNCCommerceEvent *commerce = [[BNCCommerceEvent alloc] init];
+    NSArray *categories = [NSArray arrayWithObjects:BNCProductCategoryAnimalSupplies, BNCProductCategoryApparel, BNCProductCategoryArtsEntertainment, BNCProductCategoryBabyToddler, BNCProductCategoryBusinessIndustrial, BNCProductCategoryCamerasOptics, BNCProductCategoryElectronics, BNCProductCategoryFoodBeverageTobacco, BNCProductCategoryFurniture, BNCProductCategoryHardware, BNCProductCategoryHealthBeauty, BNCProductCategoryHomeGarden, BNCProductCategoryLuggageBags, BNCProductCategoryMature, BNCProductCategoryMedia, BNCProductCategoryOfficeSupplies, BNCProductCategoryReligious, BNCProductCategorySoftware, BNCProductCategorySportingGoods, BNCProductCategoryToysGames, BNCProductCategoryVehiclesParts, nil];
+
+    if ([command.arguments count] == 2) {
+        metadata = [command.arguments objectAtIndex:1];
+    }
+
+    for (id key in data) {
+        if ([key isEqualToString:@"revenue"]) {
+            NSString *value = ([[data objectForKey:key] isKindOfClass:[NSString class]]) ? [data objectForKey:key] : [[data objectForKey:key] stringValue];
+            commerce.revenue = [NSDecimalNumber decimalNumberWithString:value];
+        }
+        else if ([key isEqualToString:@"currency"]) {
+            commerce.currency = [data objectForKey:key];
+        }
+        else if ([key isEqualToString:@"transactionID"]) {
+            commerce.transactionID = [data objectForKey:key];
+        }
+        else if ([key isEqualToString:@"shipping"]) {
+            NSString *value = ([[data objectForKey:key] isKindOfClass:[NSString class]]) ? [data objectForKey:key] : [[data objectForKey:key] stringValue];
+            commerce.shipping = [NSDecimalNumber decimalNumberWithString:value];
+        }
+        else if ([key isEqualToString:@"tax"]) {
+            NSString *value = ([[data objectForKey:key] isKindOfClass:[NSString class]]) ? [data objectForKey:key] : [[data objectForKey:key] stringValue];
+            commerce.tax = [NSDecimalNumber decimalNumberWithString:value];
+        }
+        else if ([key isEqualToString:@"coupon"]) {
+            commerce.coupon = [data objectForKey:key];
+        }
+        else if ([key isEqualToString:@"affiliation"]) {
+            commerce.affiliation = [data objectForKey:key];
+        }
+        else if ([key isEqualToString:@"products"] && [[data objectForKey:key] isKindOfClass:[NSArray class]]) {
+            NSMutableArray *products = [[NSMutableArray alloc] init];
+            NSArray *dataProducts = [data objectForKey:key];
+            for (NSDictionary *dataDictionary in dataProducts) {
+                BNCProduct *product = [[BNCProduct alloc] init];
+                for (id key in dataDictionary) {
+                    if ([key isEqualToString:@"sku"]) {
+                        product.sku = [dataDictionary objectForKey:key];
+                    }
+                    else if ([key isEqualToString:@"name"]) {
+                        product.name = [dataDictionary objectForKey:key];
+                    }
+                    else if ([key isEqualToString:@"price"]) {
+                        NSString *value = ([[dataDictionary objectForKey:key] isKindOfClass:[NSString class]]) ? [dataDictionary objectForKey:key] : [[dataDictionary objectForKey:key] stringValue];
+                        product.price = [NSDecimalNumber decimalNumberWithString:value];
+                    }
+                    else if ([key isEqualToString:@"quantity"]) {
+                        NSString *value = ([[dataDictionary objectForKey:key] isKindOfClass:[NSString class]]) ? [dataDictionary objectForKey:key] : [[dataDictionary objectForKey:key] stringValue];
+                        product.quantity = [NSNumber numberWithInt:[value intValue]];
+                    }
+                    else if ([key isEqualToString:@"brand"]) {
+                        product.brand = [dataDictionary objectForKey:key];
+                    }
+                    else if ([key isEqualToString:@"category"]) {
+                        NSString *value = ([[dataDictionary objectForKey:key] isKindOfClass:[NSString class]]) ? [dataDictionary objectForKey:key] : [[dataDictionary objectForKey:key] stringValue];
+                        product.category = [categories objectAtIndex:[value intValue]];
+                    }
+                    else if ([key isEqualToString:@"variant"]) {
+                        product.variant = [dataDictionary objectForKey:key];
+                    }
+                }
+                [products addObject:product];
+            }
+            commerce.products = products;
+        }
+    }
+
+    [[Branch getInstance] sendCommerceEvent:commerce metadata:metadata withCompletion:^(NSDictionary *response, NSError *error) {
+        CDVPluginResult *pluginResult = nil;
+        if (!error) {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"Success"];
+        } else {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+        }
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
+}
+
 - (void)logout:(CDVInvokedUrlCommand*)command
 {
     Branch *branch = [self getInstance];

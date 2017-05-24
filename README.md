@@ -37,6 +37,7 @@
   - [Track Content](#track-content)
   - [Track User](#track-user)
   - [Track Event](#track-event)
+  - [Track Commerce](#track-commerce)
   - [Handle Referrals](#handle-referrals)
 - [Troubleshooting](#troubleshooting)
   - [Testing: Key Points](#testing-key-points)
@@ -502,6 +503,82 @@
       alert('Error: ' + JSON.stringify(err.message))
     })
     ```
+
+- #### Track Commerce
+
+  - Registers custom commerce events
+
+  - Recommended to [Track User](#track-user) before [Track Commerce](#track-commerce) to associate commerce events with a user
+  
+  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/commerce)
+
+    ```js
+    // only revenue is required
+    var event = {
+      'revenue': 50.29,
+      'currency': 'USD',
+      'transactionID': 'transaction id',
+      'coupon': 'coupon',
+      'shipping': 2.22,
+      'tax': 5.11,
+      'affiliation': 'affiliation',
+      'products': [
+        {
+          'sku': 'u123',
+          'name': 'cactus',
+          'price': 4.99,
+          'quantity': 2,
+          'brand': 'brand',
+          'category': 1,
+          'variant': 'variant'
+        },
+        {
+          'sku': 'u456',
+          'name': 'grass',
+          'price': 0.00,
+          'quantity': 1
+        }
+      ]
+    }
+    
+    // optional fields
+    var metadata = {
+      'custom_dictionary': 123,
+      'anything': 'everything'
+    }
+
+    Branch.sendCommerceEvent(event, metadata).then(function (res) {
+      console.log(res)
+      alert('Response: ' + JSON.stringify(res))
+    }).catch(function (err) {
+      console.error(err)
+      alert('Error: ' + JSON.stringify(err.message))
+    })
+    ```
+
+    | Value | Category |
+    | :-: | --- |
+    | 0 | AnimalSupplies |
+    | 1 | Apparel |
+    | 2 | ArtsEntertainment |
+    | 3 | BabyToddler |
+    | 4 | BusinessIndustrial |
+    | 5 | CamerasOptics |
+    | 6 | Electronics |
+    | 7 | FoodBeverageTobacco |
+    | 8 | Furniture |
+    | 9 | Hardware |
+    | 10 | HealthBeauty |
+    | 11 | HomeGarden |
+    | 12 | LuggageBags |
+    | 13 | Mature |
+    | 14 | Media |
+    | 15 | OfficeSupplies |
+    | 16 | Religious |
+    | 17 | Software |
+    | 18 | SportingGoods |
+    | 19 | ToysGames |
+    | 20 | VehiclesParts |
 
 - #### Handle Referrals
 

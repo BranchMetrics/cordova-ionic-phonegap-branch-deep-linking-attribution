@@ -116,6 +116,21 @@ Branch.prototype.userCompletedAction = function (action, metaData) {
   return execute('userCompletedAction', args)
 }
 
+Branch.prototype.sendCommerceEvent = function (action, metaData) {
+  if (!action) {
+    return new Promise(function (resolve, reject) {
+      reject(new Error('Please set a commerce event'))
+    })
+  }
+
+  var args = [action]
+  if (metaData) {
+    args.push(metaData)
+  }
+
+  return execute('sendCommerceEvent', args)
+}
+
 Branch.prototype.createBranchUniversalObject = function (options) {
   return new Promise(function (resolve, reject) {
     execute('createBranchUniversalObject', [options]).then(function (res) {

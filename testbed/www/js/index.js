@@ -49,8 +49,58 @@ function BranchEvent () {
   var event = document.getElementById('custom-action').value
 
   // optional
-  var metadata = { 'custom_dictionary': 123, 'anything': 'everything' }
+  var metadata = {
+    'custom_dictionary': 123,
+    'anything': 'everything'
+  }
+
   Branch.userCompletedAction(event, metadata).then(function (res) {
+    console.log(res)
+    alert('Response: ' + JSON.stringify(res))
+  }).catch(function (err) {
+    console.error(err)
+    alert('Error: ' + JSON.stringify(err.message))
+  })
+}
+
+function BranchCommerce () {
+  console.log('Trigger BranchCommerce()')
+
+  // revenue required
+  var event = {
+    'revenue': 50.29,
+    'currency': 'USD',
+    'transactionID': 'transaction id',
+    'coupon': 'coupon',
+    'shipping': 2.22,
+    'tax': 5.11,
+    'affiliation': 'affiliation',
+    'products': [
+      {
+        'sku': 'u123',
+        'name': 'cactus',
+        'price': 4.99,
+        'quantity': 2,
+        'brand': 'brand',
+        'category': 1,
+        'variant': 'variant'
+      },
+      {
+        'sku': 'u456',
+        'name': 'grass',
+        'price': 0.00,
+        'quantity': 1
+      }
+    ]
+  }
+
+  // optional
+  var metadata = {
+    'custom_dictionary': 123,
+    'anything': 'everything'
+  }
+
+  Branch.sendCommerceEvent(event, metadata).then(function (res) {
     console.log(res)
     alert('Response: ' + JSON.stringify(res))
   }).catch(function (err) {
