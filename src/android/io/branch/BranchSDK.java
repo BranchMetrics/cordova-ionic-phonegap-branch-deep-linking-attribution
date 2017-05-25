@@ -414,21 +414,21 @@ public class BranchSDK extends CordovaPlugin {
     private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams, JSONObject strings) throws JSONException {
 
         ShareSheetStyle shareSheetStyle = new ShareSheetStyle(this.activity, strings.getString("shareTitle"), strings.getString("shareText"))
-                .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), strings.getString("copyToClipboard"), strings.getString("clipboardSuccess"))
-                .setMoreOptionStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_search), strings.getString("more"))
-                .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
-                .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL)
-                .addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE)
-                .addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER)
-                .setAsFullWidthStyle(true)
-                .setSharingTitle(strings.getString("shareWith"));
+        .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), strings.getString("copyToClipboard"), strings.getString("clipboardSuccess"))
+        .setMoreOptionStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_search), strings.getString("more"))
+        .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
+        .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL)
+        .addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE)
+        .addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER)
+        .setAsFullWidthStyle(true)
+        .setSharingTitle(strings.getString("shareWith"));
 
         BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
         BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
         BranchUniversalObject branchObj = branchObjWrapper.branchUniversalObj;
 
         branchObj.showShareSheet(this.activity, linkProperties, shareSheetStyle,
-                new ShowShareSheetListener(branchObjWrapper.onShareLinkDialogLaunched, branchObjWrapper.onShareLinkDialogDismissed, branchObjWrapper.onLinkShareResponse, branchObjWrapper.onChannelSelected));
+            new ShowShareSheetListener(branchObjWrapper.onShareLinkDialogLaunched, branchObjWrapper.onShareLinkDialogDismissed, branchObjWrapper.onLinkShareResponse, branchObjWrapper.onChannelSelected));
 
     }
 
@@ -470,7 +470,7 @@ public class BranchSDK extends CordovaPlugin {
                 for (int i=0; i<array.length(); i++){
                     linkProperties.addTag(array.get(i).toString());
                 }
-           }
+            }
         }
 
         Log.d(LCAT, "Adding control parameters:");
@@ -1151,7 +1151,5 @@ public class BranchSDK extends CordovaPlugin {
                 e.printStackTrace();
             }
         }
-
     }
-
 }
