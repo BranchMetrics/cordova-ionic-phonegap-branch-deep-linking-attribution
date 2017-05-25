@@ -195,15 +195,12 @@
 
         intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain))
         intentFilterData.push(getAppLinkIntentFilterDictionary(alternate))
-      } else if (linkDomain.indexOf('bnc.lt') !== -1) {
-        // bnc.lt
+      } else {
+        // bnc.lt and custom domains
         if (preferences.androidPrefix === null) {
           throw new Error('BRANCH SDK: Invalid "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
         }
         intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain, preferences.androidPrefix))
-      } else {
-        // custom
-        intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain))
       }
     }
 
