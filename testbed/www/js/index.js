@@ -69,7 +69,7 @@ function BranchCommerce () {
   // revenue required
   var event = {
     'revenue': 50.29,
-    'currency': 'USD',
+    'currency': 148, // USD
     'transactionID': 'transaction id',
     'coupon': 'coupon',
     'shipping': 2.22,
@@ -82,7 +82,7 @@ function BranchCommerce () {
         'price': 4.99,
         'quantity': 2,
         'brand': 'brand',
-        'category': 1,
+        'category': 17, // Software
         'variant': 'variant'
       },
       {
