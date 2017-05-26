@@ -216,7 +216,7 @@
 
   - Delete your app from the device
 
-  - Compile your app *(`cordova run ios` `phonegap run ios` `ionic run ios`)*
+  - Compile your app *(`cordova run ios` `phonegap run ios` `ionic cordova run ios`)*
 
   - Paste deep link in `Apple Notes`
 
@@ -230,7 +230,7 @@
 
   - Delete your app from the device
 
-  - Compile your app *(`cordova run android` `phonegap run android` `ionic run android`)*
+  - Compile your app *(`cordova run android` `phonegap run android` `ionic cordova run android`)*
 
   - Paste deep link in `Google Hangouts`
 
