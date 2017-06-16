@@ -15,7 +15,7 @@
   // after prepare hooks based on platform
   function run (context) {
     var preferences = configPreferences.read(context)
-    var platforms = context.opts.platforms
+    var platforms = context.opts.cordova.platforms
 
     platforms.forEach(function (platform) {
       if (platform === ANDROID) {
