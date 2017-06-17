@@ -67,6 +67,14 @@
 - #### Configure App
 
   - Cordova and Ionic
+  
+    Install Plugin
+    ```
+      cordova plugin add --save branch-cordova-sdk
+      // Ionic
+      ionic plugin add --save branch-cordova-sdk
+    ```
+    
     ```xml
     <!-- sample config.xml -->
     <widget id="com.eneff.branch.cordovatestbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
