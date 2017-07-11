@@ -81,9 +81,11 @@ main() {
   fi
 
   # TODO: remove this cordova error fix (https://stackoverflow.com/questions/42350505/error-cannot-read-property-replace-of-undefined-when-building-ios-cordova)
-  cd ./platforms/ios/cordova/node_modules/
-  npm install ios-sim@latest
-  cd ../../../../
+  if [[ "$run_ios" == "true" ]]; then
+    cd ./platforms/ios/cordova/node_modules/
+    npm install ios-sim@latest
+    cd ../../../../
+  fi
 
   # plugin
   cordova plugin add ../
