@@ -10,16 +10,13 @@ node_js:
 before_install:
   - npm i -g npm@^2.0.0
 before_script:
+  - curl -Lo travis_after_all.py https://git.io/vLSON
   - npm prune
 script:
   - npm run prerelease
 after_success:
-  - 'curl -Lo travis_after_all.py https://git.io/travis_after_all'
   - python travis_after_all.py
-  - export $(cat .to_export_back) &> /dev/null
-  - echo $TRAVIS_PULL_REQUEST
-  - ls
-  - test "$TRAVIS_PULL_REQUEST" == "false" && npm run semantic-release
+  - npm run semantic-release
 branches:
   only:
     - master
