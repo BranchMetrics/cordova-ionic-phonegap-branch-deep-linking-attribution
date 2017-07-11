@@ -533,6 +533,27 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
+     * <p>Sets the cookie based matching for all incoming requests.</p>
+     * <p>If you want cookie based matching, call this <b>before</b> initUserSession</p>
+     *
+     * @param linkDomain A {@link String} value to of the link domain for cookie based matching.
+     * @param callbackContext   A callback to execute at the end of this method
+     */
+    private void setCookieBasedMatching(String linkDomain, CallbackContext callbackContext)
+    {
+
+        this.activity = this.cordova.getActivity();
+
+        Branch instance = Branch.getAutoInstance(this.activity.getApplicationContext());
+
+        if (linkDomain != null) {
+            instance.enableCookieBasedMatching(linkDomain);
+        }
+
+        callbackContext.success("Success");
+    }
+
+    /**
      * <p>Sets the library to function in debug mode, enabling logging of all requests.</p>
      * <p>If you want to flag debug, call this <b>before</b> initUserSession</p>
      *

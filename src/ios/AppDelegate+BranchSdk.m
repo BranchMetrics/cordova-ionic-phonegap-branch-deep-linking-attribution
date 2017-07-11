@@ -16,7 +16,7 @@
     #import <Branch/Branch.h>
 #endif
 
-@interface AppDelegate (BranchSDK)
+@interface AppDelegate (BranchSdk)
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler;
 
@@ -46,6 +46,16 @@
     }
 
     return YES;
+}
+
+// Respond to Push Notifications
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    @try {
+        [[Branch getInstance] handlePushNotification:userInfo];
+    }
+    @catch (NSException *exception) {
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"BSDKPostUnhandledURL" object:userInfo]];
+    }
 }
 
 @end

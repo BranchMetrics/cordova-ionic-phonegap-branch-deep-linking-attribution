@@ -16,6 +16,7 @@
     var mainActivityIndex = getMainLaunchActivityIndex(manifest['manifest']['application'][0]['activity'])
 
     // update manifest
+    manifest = updateMultidex(manifest)
     manifest = updateBranchMetaData(manifest, preferences)
     manifest = updateBranchReferrerTracking(manifest)
     manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex, preferences)
@@ -53,6 +54,14 @@
     }
     manifest['manifest']['application'][0]['meta-data'] = metadatas.concat(metadata)
 
+    return manifest
+  }
+
+  // adds to <application> for multidex (needed for all the frameworks)
+  //    <application android:name="android.support.multidex.MultiDexApplication" >
+  //    </application>
+  function updateMultidex (manifest) {
+    manifest['manifest']['application'][0]['$']['android:name'] = 'android.support.multidex.MultiDexApplication'
     return manifest
   }
 

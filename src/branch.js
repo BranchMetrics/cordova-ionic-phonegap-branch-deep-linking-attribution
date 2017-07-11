@@ -79,6 +79,12 @@ Branch.prototype.setDebug = function (isEnabled) {
   return execute('setDebug', [isEnabled])
 }
 
+Branch.prototype.setCookieBasedMatching = function (linkDomain) {
+  if (linkDomain && deviceVendor.indexOf('Apple') < 0) {
+    return execute('setCookieBasedMatching', [linkDomain])
+  }
+}
+
 Branch.prototype.getFirstReferringParams = function () {
   return execute('getFirstReferringParams')
 }

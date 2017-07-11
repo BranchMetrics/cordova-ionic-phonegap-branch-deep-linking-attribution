@@ -90,6 +90,13 @@
     ./testbed/init -adc
     ```
 
+  - files
+  
+    - test `branch.js` with console logs to Safari and Chrome inspectors
+    - test `hooks` by changing to `before_prepare` and console logs with `cordova build`
+    - test `BranchSDK.m` with `NSLog()` with Xcode
+    - test `BranchSDK.java` with `system.out.println()` with Android Studio
+
 ## Submit
 
 - **[required]** Git [comment prefix](https://github.com/semantic-release/semantic-release): `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `revert`
