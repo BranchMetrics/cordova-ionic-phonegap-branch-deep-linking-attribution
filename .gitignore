@@ -3,6 +3,7 @@ testbed/platforms
 testbed/plugins
 testbed/hooks
 testbed/build.json
+testbed/config.xml
 testbed/package.json
 node_modules
 .installed
