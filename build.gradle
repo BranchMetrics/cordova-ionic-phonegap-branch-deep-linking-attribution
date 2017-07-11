@@ -1,0 +1,2 @@
+  // branch chrome tabs for better matching
+  compile 'com.android.support:customtabs:23.3.0'

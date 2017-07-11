@@ -248,7 +248,10 @@
     // for development and debugging only
     Branch.setDebug(true)
 
-    // sync with Mixpanel if installed
+    // for better Android matching
+    Branch.setCookieBasedMatching('cordova.app.link')
+
+    // to sync with Mixpanel if plugin is installed
     Branch.setMixpanelToken('your_mixpanel_token')
 
     // Branch initialization
