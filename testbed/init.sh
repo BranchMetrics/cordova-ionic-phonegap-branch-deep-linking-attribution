@@ -66,7 +66,11 @@ main() {
   rm -rf ./plugins
   rm -rf ./platforms
   rm -rf ./build.json
+  rm -rf ./config.xml
   rm -rf ./package.json
+
+  # config
+  yes | \cp -f config.template.xml config.xml
 
   # build (platforms added before plugin because before_plugin_install does not work on file reference)
   if [[ "$run_ios" == "true" ]]; then
@@ -75,6 +79,11 @@ main() {
   if [[ "$run_and" == "true" ]]; then
     cordova platform add android
   fi
+
+  # TODO: remove this cordova error fix (https://stackoverflow.com/questions/42350505/error-cannot-read-property-replace-of-undefined-when-building-ios-cordova)
+  cd ./platforms/ios/cordova/node_modules/
+  npm install ios-sim@latest
+  cd ../../../../
 
   # plugin
   cordova plugin add ../
