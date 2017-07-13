@@ -1,15 +1,59 @@
 # CHANGELOG
 Questions? [Contact us](https://support.branch.io/support/tickets/new)
 
+## [v2.6.4](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.4) (2017-07-13)
+
+- **Completed Changes**
+  - Merge pull request #346 from BranchMetrics/testing-npm-updateTesting npm update ([d772c](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/d772c5b5006afe5e919aa72d21fe1eadf29c62e1))
+
+- **Closed Issues**
+  - createBranchUniversalObject Error (Ionic) ([#340](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/340))
+
 ## [v2.6.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.0) (2017-05-25)
 
 - **Completed Changes**
+  - chore: updated npm version to 2.6.4 ([14973](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/149735a261450d6aa9e9e32390ee8c00b218df8c))
+  - fix: test npm publish ([a6285](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/a628585665c9cd774fdfef00f4dbbaf8392f2acc))
+  - Merge pull request #345 from BranchMetrics/npm-updatefix: removed google play services ([779a9](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/779a9a0d009fd98bc096b413672b0d7e06aefabb))
+  - chore: removed the end line new line ([26868](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/2686897d666204ea4398e185b556cbf29f1495cd))
+  - Merge branch 'npm-update' of github.com:BranchMetrics/cordova-ionic-phonegap-branch-deep-linking into npm-update ([58a62](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/58a62976f1810670c183e6bfbc22631a6a5aeff5))
+  - fix: removed google play services as it conflicts with other plugins ([d0bf5](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/d0bf552f57c8db7e08c1704d9377e6b94819259e))
+  - chore: updated npm version to 2.6.3 ([298c6](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/298c6744cc4c18ac790dcf5ade199ea4f1a6448c))
+  - fix: removed google play services as it conflicts with other plugins ([f12e6](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/f12e6e6f6c1957f2c7f0cc7f201e80f3b09ac14a))
+  - docs: fixed broken link ([e4650](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/e465000827fc0a1728fd3e6e238ab5cc9f4aac62))
+  - Merge pull request #343 from BranchMetrics/test-npm-versionTest npm version ([b7b2d](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/b7b2d62f356c4c991fa1f0315f837b0c51278000))
+  - chore: updated npm version to 2.6.3 ([30349](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/30349baa8ce6f370c9be3688a55ba41b55a7c0bd))
+  - fix: correct semantic release ([33462](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/334628667d9d6bb928bf53b4272782fdf7d4c478))
+  - Merge pull request #342 from BranchMetrics/test-npm-updatefix: added npm-check for dependencies ([18688](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/1868825b1801bb4c1fa0bce281a8bd04e65932fb))
+  - fix: added npm-check for dependencies ([0ab40](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/0ab40bd77aa0c5f1c01f574dcde408ccaef5a75f))
+  - Merge pull request #341 from BranchMetrics/test-npm-deployTest npm deploy ([13c77](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/13c774cae1d225b1bd747713758dcebbc8f8b4f5))
+  - chore: updated npm version to 2.6.2 ([bf753](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/bf7533931c5918ee978784bd4544cb96272d3acc))
+  - fix: testing npm deploy ([cfc59](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/cfc595d58562988e72f0b44910072fac614e7f48))
+  - Merge pull request #337 from BranchMetrics/npm-updatefix: updated node dependencies ([e80e7](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/e80e7e384eb15e90c7461b94a73fa0aeb1716e78))
+  - fix: added android multidexing for all branch required frameworks ([edc54](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/edc548092b66eeb9e578ac3588c86312e42deb1b))
+  - fix: added android chrome tabs for better matching ([92bfe](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/92bfefe4da37df4147f9e23e31e7056444cd06aa))
+  - docs: updated how to test each file ([a66ca](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/a66caaebd9207ea5937935a69b166ead9cc02bbc))
+  - fix: cordova iso-sim error correction only for runs on ios ([0c4fe](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/0c4fe2dc20824d4882c6ea6dfbd000b0c31e8a2a))
+  - fix: cordova iso-sim error when building testbed ([256bd](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/256bd0c487bdd6575d484bbe612940ebebc6cae2))
+  - fix: removed testbed/config.xml from GitHub since cordova 7.0.0 overrides defaults ([c5752](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/c575200f4cf6be8c2ff79c8d3409751de5b95a20))
+  - fix: updated node dependencies ([5c59d](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/5c59d53821dedee703f9be31e9e1f97063467d0b))
+  - Merge pull request #336 from BranchMetrics/force-npm-updatefix: correction on deferred deep linking comment ([2eaff](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/2eaff0709332741273b4c4b74aaaec3cea8efffa))
+  - fix: correction on deferred deep linking comment ([5b769](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/5b7691e84acb1b1c3048a943995300fe26a78d57))
+  - Merge pull request #334 from harshabonthu/masterMove Before prepare and After prepare hooks to after plugin install, add ([69cfa](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/69cfaed949d52df5f46213c35d2aece085a73357))
+  - chore: updated npm version to 2.6.1 ([ef754](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/ef75476a82bdff8fef4e4027d6215399cd9f29a3))
+  - fix: move before_prepare and after_prepare hooks to after_plugin install, addThis fixes the bug mentioned here: https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/333 ([44a7a](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/44a7ac1ff2656ae5f3fbc6b0d29ed6221a80d95e))
+  - Merge pull request #331 from BranchMetrics/routineRoutine ([8426c](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/8426cbd7270a0cea0e482fc4a936e860dbf851b3))
+  - chore: updated changelog ([c5045](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/c50453f66a92ad5c1911d354407ad2e3749521e0))
+  - chore: updated iOS sdk to 0.15.3 ([42ea9](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/42ea93ded32e5f94281996093f7e8cebd63ea842))
   - docs: update run for ionic3 ([62537](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/62537d04de93d510ef1b18cb740aee9a4ca31266))
   - docs: added indention to currencies ([549a0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/549a042568f3635b61dbd385f6282ca70dd78e51))
   - Merge pull request #328 from BranchMetrics/fix-cordovaadded commerce events ([720cc](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/720cc2605544f209cba533d31daeca01aeb59c9e))
 
 - **Closed Issues**
+  - Associated domain capabilities not copied to Xcode ([#333](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/333))
+  - Deeplink from app content ([#332](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/332))
   - Branch.io init returning 400 bad request ([#330](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/330))
+  - iOS: Instead of opening application directly, Branch.io takes me to safari ([#329](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/329))
   - Instead of opening application directly, Branch.io takes me to the App Store ([#327](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/327))
   - Multiple Dex Exception on latest build branch-cordova-sdk 2.5.16 ([#326](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/326))
 
@@ -133,6 +177,7 @@ Questions? [Contact us](https://support.branch.io/support/tickets/new)
 
 - **Closed Issues**
   - Twitter Share does not show preview ([#305](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/305))
+  - Deep link is received twice in iOS in Ionic 2 ([#304](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/304))
 
 ## [v2.5.11](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.5.11) (2017-03-21)
 
