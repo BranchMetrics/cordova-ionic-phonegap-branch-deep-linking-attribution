@@ -32,7 +32,7 @@ SOFTWARE.
   <name>branch-cordova-sdk</name>
   <description>Branch SDK Plugin</description>
   <license>Apache 2.0</license>
-  <keywords>cordova,branch</keywords>
+  <keywords>branch, deep linking, cordova, phonegap, ionic</keywords>
   <repo>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK.git</repo>
   <issue>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues</issue>
 
