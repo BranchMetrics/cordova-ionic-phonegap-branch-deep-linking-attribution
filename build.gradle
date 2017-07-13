@@ -13,6 +13,6 @@ dependencies {
   compile 'com.google.android.gms:play-services-appindexing:9.+'
   // branch chrome tabs for better matching
   compile 'com.android.support:customtabs:23.3.0'
-  // branch gaid for better device matching
-  compile 'com.google.android.gms:play-services-ads:9+'
+  // branch gaid for better device matching (TODO: turned off because it conflicts with other plugins)
+  // compile 'com.google.android.gms:play-services-ads:11+'
 }
