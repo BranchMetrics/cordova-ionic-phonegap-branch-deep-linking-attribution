@@ -101,6 +101,8 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BNCContentDiscoveryManager.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCDebug.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCDebug.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCDeepLinkViewControllerInstance.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCDeepLinkViewControllerInstance.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCDeviceInfo.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCDeviceInfo.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCEncodingUtils.h" />

@@ -41,6 +41,7 @@
     "precommit": "npm-check --skip-unused && gulp prod",
     "postcommit": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion' || true",
     "prerelease": "gulp prod",
+    "depenencies": "npm-check -u",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
@@ -57,10 +58,10 @@
     "husky": "^0.14.3",
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
-    "npm-check": "^5.4.4",
+    "npm-check": "^5.4.5",
     "plist": "^2.1.0",
     "semantic-release": "^6.3.6",
-    "validate-commit-msg": "^2.12.2",
+    "validate-commit-msg": "^2.14.0",
     "xml2js": "^0.4.17"
   }
 }
