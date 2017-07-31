@@ -41,6 +41,7 @@
     "precommit": "npm-check --skip-unused && gulp prod",
     "postcommit": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion' || true",
     "prerelease": "gulp prod",
+    "dependencies": "npm-check -u",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
