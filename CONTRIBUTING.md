@@ -14,7 +14,7 @@
 
 - [Users sets values](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/testbed/config.template.xml#L6-L13)
 - [Hooks run on build](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/plugin.xml#L45-L47)
-- [Hooks call scripts[(https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/hooks)
+- [Hooks call scripts](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/hooks)
 - [Scripts for iOS](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/ios)
 - [Scripts for Android](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/android)
 
