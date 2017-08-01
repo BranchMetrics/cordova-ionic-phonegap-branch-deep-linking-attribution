@@ -51,12 +51,9 @@ options() {
 }
 
 main() {
-  # validate
-  gulp prod
-
   # clean
   if [[ "$run_cor" == "true" ]]; then
-    npm install -g cordova
+    npm install -g cordova gulp-cli ios-deploy
   fi
   if [[ "$run_dep" == "true" ]]; then
     npm uninstall mkpath node-version-compare plist xml2js
@@ -68,6 +65,9 @@ main() {
   rm -rf ./build.json
   rm -rf ./config.xml
   rm -rf ./package.json
+
+  # validate
+  gulp prod
 
   # config
   yes | \cp -f config.template.xml config.xml
