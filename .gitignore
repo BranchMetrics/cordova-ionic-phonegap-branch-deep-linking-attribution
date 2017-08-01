@@ -15,3 +15,4 @@ out/
 npm-debug.log*
 *.map
 package-lock.json
+yarn-error.log
