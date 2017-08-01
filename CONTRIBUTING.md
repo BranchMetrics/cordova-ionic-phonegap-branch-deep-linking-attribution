@@ -2,6 +2,7 @@
 
 *Questions? [Contact us](https://support.branch.io/support/tickets/new)*
 
+1. [Todo](#todo)
 1. [Data Flow](#data-flow)
 1. [Dependencies](#dependencies)
 1. [Setup](#setup)
@@ -9,6 +10,12 @@
 1. [Test](#test)
 1. [Submit](#submit)
 1. [Publish](#publish)
+
+## TODO
+
+  -  `<plugin name="branch-cordova-sdk" spec="../" />` or `cordova plugin add ../` causes an infinite loop when importing Branch on Cordova 7.0.1. Works on Cordova 6.5.0.
+  -  need to remove `TODO` from `init.sh` for `ios-sim` error
+  -  `cordova platform update android@6.2.2` added for Cordova 6.5.0 error on Android
 
 ## Data Flow
 
