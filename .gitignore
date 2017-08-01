@@ -14,4 +14,4 @@ local.properties
 out/
 npm-debug.log*
 *.map
-yarn.lock
+package-lock.json

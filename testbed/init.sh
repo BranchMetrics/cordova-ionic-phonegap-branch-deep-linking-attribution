@@ -65,6 +65,7 @@ main() {
   rm -rf ./build.json
   rm -rf ./config.xml
   rm -rf ./package.json
+  rm -rf ./package-lock.json
 
   # validate
   gulp prod
