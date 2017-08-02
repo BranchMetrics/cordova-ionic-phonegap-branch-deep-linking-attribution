@@ -51,12 +51,9 @@ options() {
 }
 
 main() {
-  # validate
-  gulp prod
-
   # clean
   if [[ "$run_cor" == "true" ]]; then
-    npm install -g cordova
+    npm install -g cordova gulp-cli ios-deploy
   fi
   if [[ "$run_dep" == "true" ]]; then
     npm uninstall mkpath node-version-compare plist xml2js
@@ -68,9 +65,13 @@ main() {
   rm -rf ./build.json
   rm -rf ./config.xml
   rm -rf ./package.json
+  rm -rf ./package-lock.json
+
+  # validate
+  gulp prod
 
   # config
-  yes | \cp -f config.template.xml config.xml
+  cp config.template.xml config.xml
 
   # build (platforms added before plugin because before_plugin_install does not work on file reference)
   if [[ "$run_ios" == "true" ]]; then
@@ -78,17 +79,19 @@ main() {
   fi
   if [[ "$run_and" == "true" ]]; then
     cordova platform add android
+    # TODO: remove for cordova 6.5.0
+    cordova platform update android@6.2.2
   fi
 
   # TODO: remove this cordova error fix (https://stackoverflow.com/questions/42350505/error-cannot-read-property-replace-of-undefined-when-building-ios-cordova)
-  if [[ "$run_ios" == "true" ]]; then
-    cd ./platforms/ios/cordova/node_modules/
-    npm install ios-sim@latest
-    cd ../../../../
-  fi
+  # if [[ "$run_ios" == "true" ]]; then
+  #   cd ./platforms/ios/cordova/node_modules/
+  #   npm install ios-sim@latest
+  #   cd ../../../../
+  # fi
 
   # plugin
-  cordova plugin add ../
+  # cordova plugin add ../
 
   # run
   if [[ "$run_ios" == "true" ]]; then
