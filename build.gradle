@@ -7,12 +7,12 @@ android {
 dependencies {
   // multidex for frameworks
   compile 'com.android.support:multidex:1.0.1'
-  // branch sdk
+  // Branch sdk
   compile 'io.branch.sdk.android:library:2+'
-  // branch app indexing
-  compile 'com.google.android.gms:play-services-appindexing:9.+'
-  // branch chrome tabs for better matching
-  compile 'com.android.support:customtabs:23.3.0'
-  // branch gaid for better device matching (TODO: turned off because it conflicts with other plugins)
+  // Branch app indexing
+  // compile 'com.google.android.gms:play-services-appindexing:9.+'
+  // Branch chrome tabs for better matching
+  // compile 'com.android.support:customtabs:23.3.0'
+  // Branch GAID for better device matching (TODO: turned off because it conflicts with other plugins)
   // compile 'com.google.android.gms:play-services-ads:11+'
 }
