@@ -707,7 +707,7 @@
     | | iOS | Details | Android | Details
     | --- | :-: | --- | :-: | ---
     | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
-    | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | Works except the `app.link` domain is not click-able |
+    | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | |
     | Twitter | ✅ | | ✅ |
     | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
     | Slack | ✅ | | ✅ | |
@@ -718,7 +718,7 @@
     | Safari address bar | 🅾️ | | |
     | Safari web page | ✅ | | |
     | WeChat | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
-    | WhatsApp | ✅ | | ✅ |
+    | WhatsApp | ✅ | `app.link` requires https/http to be clickable | ✅ | `app.link` requires https/http to be clickable
     | Hangouts | ✅ | | ✅ |
     | iMessage | ✅ | | |
     | Apple Mail | ✅ | | |
