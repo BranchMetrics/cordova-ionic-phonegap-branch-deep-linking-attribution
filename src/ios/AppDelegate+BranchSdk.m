@@ -16,13 +16,13 @@
     #import <Branch/Branch.h>
 #endif
 
-@interface AppDelegate (BranchSdk)
+@interface AppDelegate (BranchSDK)
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler;
 
 @end
 
-@implementation AppDelegate (BranchSdk)
+@implementation AppDelegate (BranchSDK)
 
 // Respond to URI scheme links
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {

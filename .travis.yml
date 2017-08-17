@@ -13,7 +13,7 @@ before_script:
   - curl -Lo travis_after_all.py https://git.io/vLSON
   - npm prune
 script:
-  - npm run prerelease
+  - npm run validate
 after_success:
   - python travis_after_all.py
   - npm run semantic-release

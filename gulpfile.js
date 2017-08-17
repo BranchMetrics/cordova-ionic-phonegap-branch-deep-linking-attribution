@@ -62,7 +62,8 @@ function genNpmPluginXML () {
 
   files = files.concat(emitFiles(head + 'Fabric/'))
   files = files.concat(emitFiles(head + 'Branch-SDK/'))
-  files = files.concat(emitFiles(head + 'Branch-SDK/Requests/'))
+  files = files.concat(emitFiles(head + 'Branch-SDK/Networking/'))
+  files = files.concat(emitFiles(head + 'Branch-SDK/Networking/Requests/'))
 
   xml = xml.replace('<!--[Branch Framework Reference]-->', newLineIndent + files.join(newLineIndent))
 
