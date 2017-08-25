@@ -35,9 +35,11 @@ function BranchInit (isDebug) {
 
   // Branch initialization
   Branch.initSession(function (data) {
-    // read deep link data on click
-    console.log('Trigger DeepLinkHandler()')
-    alert('Deep Link Data: ' + JSON.stringify(data))
+    if (data['+clicked_branch_link']) {
+      // read deep link data on click
+      console.log('Trigger DeepLinkHandler()')
+      alert('Deep Link Data: ' + JSON.stringify(data))
+    }
   }).then(function (res) {
     console.log(res)
   }).catch(function (err) {
