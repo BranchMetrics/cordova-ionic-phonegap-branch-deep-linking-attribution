@@ -122,10 +122,11 @@
       },
       branchInit: function() {
         // Branch initialization
-        if (data['+clicked_branch_link']) {
-          // read deep link data on click
-          console.log('Trigger DeepLinkHandler()')
-          alert('Deep Link Data: ' + JSON.stringify(data))
+        Branch.initSession(function(data) {
+          if (data['+clicked_branch_link']) {
+            // read deep link data on click
+            alert('Deep Link Data: ' + JSON.stringify(data))
+          }
         });
       }
     };
@@ -180,9 +181,6 @@
 
     import { TabsPage } from '../pages/tabs/tabs';
 
-    // Branch import
-    declare var Branch;
-
     @Component({
       template: `<ion-nav [root]="rootPage"></ion-nav>`
     })
@@ -204,6 +202,7 @@
         const branchInit = () => {
           // only on devices
           if (!platform.is('cordova')) { return }
+          const Branch = window['Branch'];
           Branch.initSession(data => {
             if (data['+clicked_branch_link']) {
               // read deep link data on click
