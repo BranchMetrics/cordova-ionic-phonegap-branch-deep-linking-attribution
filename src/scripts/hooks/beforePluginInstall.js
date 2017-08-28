@@ -6,7 +6,7 @@
   // entry
   module.exports = run
 
-  // before plugin install hooks
+  // builds before plugin install hooks
   function run (context) {
     nodeDependencies.install(context)
   }

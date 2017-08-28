@@ -8,7 +8,7 @@
   // entry
   module.exports = run
 
-  // after prepare hooks based on platform
+  // builds after platform config
   function run (context) {
     var preferences = configPreferences.read(context)
     var platforms = context.opts.cordova.platforms

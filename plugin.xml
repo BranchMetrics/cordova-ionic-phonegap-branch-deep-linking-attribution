@@ -42,9 +42,11 @@ SOFTWARE.
   </engines>
 
   <!-- Hooks -->
-  <hook src="src/scripts/hooks/beforePluginInstall.js" type="before_plugin_install" />
-  <hook src="src/scripts/hooks/afterPluginInstall.js" type="after_plugin_install" />
-  <hook src="src/scripts/hooks/afterPluginAdd.js" type="after_plugin_add" />
+  <hook src="src/scripts/hooks/beforePluginInstall.js" type="before_plugin_install" />  <!-- install node modules-->
+  <hook src="src/scripts/hooks/beforePrepare.js" type="after_plugin_install" />         <!-- support yarn cordova:reset -->
+  <hook src="src/scripts/hooks/afterPrepare.js" type="after_plugin_add" />              <!-- support yarn cordova:reset -->
+  <hook src="src/scripts/hooks/beforePrepare.js" type="before_prepare" />               <!-- support multiple platforms -->
+  <hook src="src/scripts/hooks/afterPrepare.js" type="after_prepare" />                 <!-- support multiple platforms -->
 
   <!-- JavaScript -->
   <js-module src="src/branch.js" name="Branch">
