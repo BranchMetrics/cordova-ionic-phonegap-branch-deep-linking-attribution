@@ -499,8 +499,8 @@
 
     ```js
     var eventName = 'clicked_on_this'
-    var metaData = { 'custom_dictionary': 123, 'anything': 'everything' }
-    Branch.userCompletedAction(eventName, metaData).then(function (res) {
+    var metadata = { 'custom_dictionary': 123, 'anything': 'everything' }
+    Branch.userCompletedAction(eventName, metadata).then(function (res) {
       alert('Response: ' + JSON.stringify(res))
     }).catch(function (err) {
       alert('Error: ' + JSON.stringify(err.message))
