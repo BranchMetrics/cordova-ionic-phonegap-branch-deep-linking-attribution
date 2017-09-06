@@ -30,6 +30,7 @@
   function getEntitlementFiles (preferences) {
     var files = []
     var entitlements = path.join(preferences.projectRoot, 'platforms', 'ios', preferences.projectName, 'Resources', preferences.projectName + '.entitlements')
+    files.push(path.join(preferences.projectRoot, 'platforms', 'ios', preferences.projectName, preferences.projectName + '.entitlements'))
     files.push(entitlements)
 
     for (var i = 0; i < BUILD_TYPES.length; i++) {
