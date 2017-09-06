@@ -38,7 +38,7 @@ Branch.prototype.disableGlobalListenersWarnings = function () {
 var runOnce = true
 Branch.prototype.initSession = function (deepLinkDataListener) {
   // handle double init from onResume on iOS
-  if (!runOnce) return
+  if (!runOnce) return new Promise(function (resolve, reject) {})
   runOnce = (deviceVendor.indexOf('Apple') < 0)
 
   // private method to filter out +clicked_branch_link = false in deep link callback
