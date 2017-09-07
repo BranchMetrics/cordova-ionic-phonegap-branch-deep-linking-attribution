@@ -19,7 +19,7 @@
     manifest = updateMultidex(manifest)
     manifest = updateBranchMetaData(manifest, preferences)
     manifest = updateBranchReferrerTracking(manifest)
-    manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex, preferences)
+    manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex)
     manifest = updateBranchURIScheme(manifest, mainActivityIndex, preferences)
     manifest = updateBranchAppLinks(manifest, mainActivityIndex, preferences)
 
@@ -98,7 +98,7 @@
 
   // adds to main <activity>:
   //    android:launchMode="singleTask"
-  function updateLaunchOptionToSingleTask (manifest, mainActivityIndex, preferences) {
+  function updateLaunchOptionToSingleTask (manifest, mainActivityIndex) {
     manifest['manifest']['application'][0]['activity'][mainActivityIndex]['$']['android:launchMode'] = 'singleTask'
     return manifest
   }

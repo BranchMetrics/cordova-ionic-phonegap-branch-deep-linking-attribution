@@ -5,9 +5,7 @@
   var iosPlist = require('../ios/updatePlist.js')
   var iosCapabilities = require('../ios/enableEntitlements.js')
   var iosAssociatedDomains = require('../ios/updateAssociatedDomains.js')
-  var androidManifest = require('../android/updateAndroidManifest.js')
   var IOS = 'ios'
-  var ANDROID = 'android'
 
   // entry
   module.exports = run
@@ -18,9 +16,6 @@
     var platforms = context.opts.cordova.platforms
 
     platforms.forEach(function (platform) {
-      if (platform === ANDROID) {
-        androidManifest.writePreferences(context, preferences)
-      }
       if (platform === IOS) {
         iosPlist.addBranchSettings(preferences)
         iosCapabilities.enableAssociatedDomains(preferences)
