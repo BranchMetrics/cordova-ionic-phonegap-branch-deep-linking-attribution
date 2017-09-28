@@ -35,6 +35,7 @@ Branch.prototype.disableGlobalListenersWarnings = function () {
   disableGlobalListenersWarnings = true
 }
 
+var previousLinkTimestamp = null
 var runOnce = true
 Branch.prototype.initSession = function (deepLinkDataListener) {
   // handle double init from onResume on iOS
@@ -45,13 +46,19 @@ Branch.prototype.initSession = function (deepLinkDataListener) {
   var deepLinkDataParser = function (deepLinkData) {
     var isBranchLink = '+clicked_branch_link'
     var isNonBranchLink = '+non_branch_link'
+    var timestamp = '+click_timestamp'
+
     var isBranchLinkClick = deepLinkData.hasOwnProperty(isBranchLink) && deepLinkData[isBranchLink] === true
     var isNonBranchLinkClick = deepLinkData.hasOwnProperty(isNonBranchLink)
+    var currentLinkTimestamp = deepLinkData.hasOwnProperty(timestamp) ? deepLinkData[timestamp] : null
 
-    // is +clicked_branch_link' = true || +non_branch_link
-    if (isBranchLinkClick || isNonBranchLinkClick) {
+    // is +clicked_branch_link' = true || +non_branch_link && !previousLinkTimestamp
+    if ((isBranchLinkClick || isNonBranchLinkClick) && currentLinkTimestamp !== previousLinkTimestamp) {
       deepLinkDataListener(deepLinkData)
     }
+
+    // handle Ionic 1 double data on iOS terminated
+    previousLinkTimestamp = currentLinkTimestamp
   }
 
   if (!disableGlobalListenersWarnings && !deepLinkDataListener && !window.DeepLinkHandler) {
