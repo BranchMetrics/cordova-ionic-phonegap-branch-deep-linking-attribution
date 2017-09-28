@@ -11,6 +11,7 @@
   // var exec = require('child_process').exec
   var fileHelper = require('../lib/fileHelper.js')
   var request = require('request')
+  var exec = require('child_process').exec
   var FILE = path.join(__dirname, '../../../', 'CHANGELOG.md')
 
   // properties
@@ -45,7 +46,7 @@
     Promise.all([tags, issues, commits]).then(function (values) {
       var markdown = generateMarkdown(values)
       fileHelper.writeFile(FILE, markdown)
-      // commitChanges()
+      commitChanges()
     })
   }
 
@@ -81,7 +82,8 @@
       url: url,
       headers: {
         'User-Agent': 'branch-cordova-sdk',
-        'cache-control': 'no-cache'
+        'cache-control': 'no-cache',
+        'Authorization': 'token be195a3084d82a344aeb03e08264224948cfafcd'
       }
     }
     request(options, function (error, response, body) {
@@ -205,13 +207,13 @@
   // }
 
   // push file code changes to github
-  // function commitChanges () {
-  //   var git = 'git add ' + FILE + ' && git add git commit -m "chore: updated changelog" && git push'
-  //   git = 'echo'
-  //   exec(git, function (err, stdout, stderr) {
-  //     if (err) {
-  //       throw new Error('BRANCH SDK: Failed cto ommit git changes for changelog. Docs https://goo.gl/GijGKP')
-  //     }
-  //   })
-  // }
+  function commitChanges () {
+    var git = 'git add ' + FILE + ' && git add git commit -m "chore: updated changelog" && git push'
+    git = 'echo'
+    exec(git, function (err, stdout, stderr) {
+      if (err) {
+        throw new Error('BRANCH SDK: Failed to commit git changes for changelog. Docs https://goo.gl/GijGKP')
+      }
+    })
+  }
 })()
