@@ -86,7 +86,7 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
             BNCLogError(@"Invalid queue operation: index out of bound!");
             return nil;
         }
-        
+
         request = [self.queue objectAtIndex:index];
         [self.queue removeObjectAtIndex:index];
         [self persistEventually];
@@ -111,10 +111,10 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
             BNCLogError(@"Invalid queue operation: index out of bound!");
             return nil;
         }
-        
+
         BNCServerRequest *request = nil;
         request = [self.queue objectAtIndex:index];
-        
+
         return request;
     }
 }
@@ -176,7 +176,7 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
         for (int i = 0; i < self.queue.count; i++) {
             BNCServerRequest *req = [self.queue objectAtIndex:i];
             if ([req isKindOfClass:[BranchOpenRequest class]]) {
-                
+
                 // Already in front, nothing to do
                 if (i == 0 || (i == 1 && requestAlreadyInProgress)) {
                     return (BranchOpenRequest *)req;
@@ -187,19 +187,19 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
                 break;
             }
         }
-        
+
         if (!openOrInstallRequest) {
             BNCLogError(@"No install or open request in queue while trying to move it to the front.");
             return nil;
         }
-        
+
         if (!requestAlreadyInProgress || !self.queue.count) {
             [self insert:openOrInstallRequest at:0];
         }
         else {
             [self insert:openOrInstallRequest at:1];
         }
-        
+
         return (BranchOpenRequest *)openOrInstallRequest;
     }
 }
@@ -233,9 +233,9 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
             BNCNanoSecondsFromTimeInterval(BATCH_WRITE_TIMEOUT),
             BNCNanoSecondsFromTimeInterval(BATCH_WRITE_TIMEOUT / 10.0)
         );
-        __weak typeof(self) weakSelf = self;
+        __weak __typeof(self) weakSelf = self;
         dispatch_source_set_event_handler(self.persistTimer, ^ {
-            __strong typeof(self) strongSelf = weakSelf;
+            __strong __typeof(self) strongSelf = weakSelf;
             if (strongSelf) {
                 [strongSelf persistImmediately];
                 dispatch_source_cancel(strongSelf.persistTimer);
@@ -290,7 +290,7 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
     @synchronized (self) {
         NSMutableArray *queue = [[NSMutableArray alloc] init];
         NSArray *encodedRequests = nil;
-        
+
         // Capture exception while loading the queue file
         @try {
             NSError *error = nil;
@@ -325,13 +325,13 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
                 BNCLogWarning(@"An exception occurred while attempting to parse a queued request, discarding.");
                 continue;
             }
-            
+
             // Throw out invalid request types
             if (![request isKindOfClass:[BNCServerRequest class]]) {
                 BNCLogWarning(@"Found an invalid request object, discarding. Object is: %@.", request);
                 continue;
             }
-            
+
             // Throw out persisted close requests
             if ([request isKindOfClass:[BranchCloseRequest class]]) {
                 continue;
@@ -339,7 +339,7 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
 
             [queue addObject:request];
         }
-        
+
         self.queue = queue;
     }
 }
@@ -367,9 +367,9 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
 + (void) moveOldQueueFile {
     NSURL *oldURL = [NSURL fileURLWithPath:self.queueFile_deprecated];
     NSURL *newURL = [self URLForQueueFile];
-    
+
     if (!oldURL || !newURL) { return; }
-    
+
     NSError *error = nil;
     [[NSFileManager defaultManager]
         moveItemAtURL:oldURL
@@ -398,7 +398,7 @@ static inline uint64_t BNCNanoSecondsFromTimeInterval(NSTimeInterval interval) {
 + (id)getInstance {
     static BNCServerRequestQueue *sharedQueue = nil;
     static dispatch_once_t onceToken;
-    
+
     dispatch_once(&onceToken, ^ {
         sharedQueue = [[BNCServerRequestQueue alloc] init];
         [sharedQueue retrieve];
