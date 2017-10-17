@@ -35,8 +35,8 @@ Branch.prototype.disableGlobalListenersWarnings = function () {
   disableGlobalListenersWarnings = true
 }
 
-var previousLinkTimestamp = null
 var runOnce = true
+var previousLinkTimestamp = null
 Branch.prototype.initSession = function (deepLinkDataListener) {
   // handle double init from onResume on iOS
   if (!runOnce) return new Promise(function (resolve, reject) {})
@@ -44,13 +44,13 @@ Branch.prototype.initSession = function (deepLinkDataListener) {
 
   // private method to filter out +clicked_branch_link = false in deep link callback
   var deepLinkDataParser = function (deepLinkData) {
+    var timestamp = '+click_timestamp'
     var isBranchLink = '+clicked_branch_link'
     var isNonBranchLink = '+non_branch_link'
-    var timestamp = '+click_timestamp'
 
     var isBranchLinkClick = deepLinkData.hasOwnProperty(isBranchLink) && deepLinkData[isBranchLink] === true
     var isNonBranchLinkClick = deepLinkData.hasOwnProperty(isNonBranchLink)
-    var currentLinkTimestamp = deepLinkData.hasOwnProperty(timestamp) ? deepLinkData[timestamp] : null
+    var currentLinkTimestamp = deepLinkData.hasOwnProperty(timestamp) ? deepLinkData[timestamp] : Date.now()
 
     // is +clicked_branch_link' = true || +non_branch_link && !previousLinkTimestamp
     if ((isBranchLinkClick || isNonBranchLinkClick) && currentLinkTimestamp !== previousLinkTimestamp) {

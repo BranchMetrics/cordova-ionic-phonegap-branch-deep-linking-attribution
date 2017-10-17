@@ -3,6 +3,9 @@ package io.branch;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.annotation.TargetApi;
+import android.net.Uri;
+import android.os.Build;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -14,8 +17,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import android.net.Uri;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -72,6 +73,23 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity.setIntent(intent);
 
+    }
+
+    /**
+     * Handle depreciated call to sendJavaScript for more recent method
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void sendJavascript(final String javascript) {
+        webView.getView().post(new Runnable() {
+            @Override
+            public void run() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    webView.sendJavascript(javascript);
+                } else {
+                    webView.loadUrl("javascript:" + javascript);
+                }
+            }
+        });
     }
 
     /**
@@ -808,7 +826,7 @@ public class BranchSDK extends CordovaPlugin {
             if (error == null && referringParams != null) {
 
                 out = String.format("DeepLinkHandler(%s)", referringParams.toString());
-                webView.sendJavascript(out);
+                sendJavascript(out);
 
                 if (this._callbackContext != null) {
                     this._callbackContext.success(referringParams);
