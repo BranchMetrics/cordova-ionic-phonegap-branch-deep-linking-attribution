@@ -74,6 +74,9 @@ update_and() {
   # copy in new dependencies
   mv "$zip_tmp/Branch-$and_tag.jar" "$path"
 
+  # rename
+  mv "$path/Branch-$and_tag.jar" "$path/Branch.jar"
+
   # clean up
   remove_tmp "$zip_tmp"
 }
