@@ -80,19 +80,18 @@ void ForceCategoriesToLoad(void) {
     BNCForceNSMutableDictionaryCategoryToLoad();
 }
 
-
 #pragma mark - Branch
 
-
-@interface Branch() <BranchDeepLinkingControllerCompletionDelegate, FABKit>
-
+@interface Branch() <BranchDeepLinkingControllerCompletionDelegate, FABKit> {
+    NSInteger _networkCount;
+}
 
 @property (strong, nonatomic) BNCServerInterface *bServerInterface;
 @property (strong, nonatomic) BNCServerRequestQueue *requestQueue;
 @property (strong, nonatomic) dispatch_semaphore_t processing_sema;
 @property (copy,   nonatomic) callbackWithParams sessionInitWithParamsCallback;
 @property (copy,   nonatomic) callbackWithBranchUniversalObject sessionInitWithBranchUniversalObjectCallback;
-@property (assign, nonatomic) NSInteger networkCount;
+@property (assign, atomic)    NSInteger networkCount;
 @property (assign, nonatomic) NSInteger asyncRequestCount;
 @property (assign, nonatomic) BOOL isInitialized;
 @property (assign, nonatomic) BOOL shouldCallSessionInitCallback;
@@ -672,11 +671,14 @@ static BOOL bnc_enableFingerprintIDInCrashlyticsReports = YES;
 
     NSString *source = nil;
     NSString *annotation = nil;
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wpartial-availability"
     if (UIApplicationOpenURLOptionsSourceApplicationKey &&
         UIApplicationOpenURLOptionsAnnotationKey) {
         source = options[UIApplicationOpenURLOptionsSourceApplicationKey];
         annotation = options[UIApplicationOpenURLOptionsAnnotationKey];
     }
+    #pragma clang diagnostic pop
     return [self application:application openURL:url sourceApplication:source annotation:annotation];
 }
 
@@ -1655,6 +1657,18 @@ static BOOL bnc_enableFingerprintIDInCrashlyticsReports = YES;
 
 #pragma mark - Queue management
 
+- (NSInteger) networkCount {
+    @synchronized (self) {
+        return _networkCount;
+    }
+}
+
+- (void) setNetworkCount:(NSInteger)networkCount {
+    @synchronized (self) {
+        _networkCount = networkCount;
+    }
+}
+
 - (void)insertRequestAtFront:(BNCServerRequest *)req {
     if (self.networkCount == 0) {
         [self.requestQueue insert:req at:0];
@@ -1892,7 +1906,6 @@ void BNCPerformBlockOnMainThread(dispatch_block_t block) {
                 BNCLogWarning(@"The automatic deeplink view controller '%@' for key '%@' does not implement 'configureControlWithData:'.",
                     branchSharingController, key);
             }
-            branchSharingController.deepLinkingCompletionDelegate = self;
             self.deepLinkPresentingController = [[[UIApplicationClass sharedApplication].delegate window] rootViewController];
 
             if([self.deepLinkControllers[key] isKindOfClass:[BNCDeepLinkViewControllerInstance class]]) {
@@ -1906,7 +1919,6 @@ void BNCPerformBlockOnMainThread(dispatch_block_t block) {
                     BNCLogWarning(@"View controller does not implement configureControlWithData:");
                 }
                 branchSharingController.deepLinkingCompletionDelegate = self;
-                self.deepLinkPresentingController = [[[UIApplicationClass sharedApplication].delegate window] rootViewController];
                 switch (deepLinkInstance.option) {
                     case BNCViewControllerOptionPresent:
                         [self presentSharingViewController:branchSharingController];
@@ -1964,8 +1976,6 @@ void BNCPerformBlockOnMainThread(dispatch_block_t block) {
                     BNCLogWarning(@"View controller does not implement configureControlWithData:");
                 }
                 branchSharingController.deepLinkingCompletionDelegate = self;
-                self.deepLinkPresentingController = [[[UIApplicationClass sharedApplication].delegate window] rootViewController];
-
                 if ([self.deepLinkPresentingController presentedViewController]) {
                     [self.deepLinkPresentingController dismissViewControllerAnimated:NO completion:^{
                         [self.deepLinkPresentingController presentViewController:branchSharingController animated:YES completion:NULL];
