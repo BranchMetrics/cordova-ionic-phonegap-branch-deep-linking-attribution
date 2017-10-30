@@ -199,7 +199,7 @@
       // app.link link domains need -alternate associated domains as well (for Deep Views)
       if (linkDomain.indexOf('app.link') !== -1) {
         var first = linkDomain.split('.')[0]
-        var rest = linkDomain.split('.').slice(2).join('.')
+        var rest = linkDomain.split('.').slice(1).join('.')
         var alternate = first + '-alternate' + '.' + rest
 
         intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain))
