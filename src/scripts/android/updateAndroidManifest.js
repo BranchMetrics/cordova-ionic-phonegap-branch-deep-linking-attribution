@@ -16,7 +16,6 @@
     var mainActivityIndex = getMainLaunchActivityIndex(manifest['manifest']['application'][0]['activity'])
 
     // update manifest
-    manifest = updateMultidex(manifest)
     manifest = updateBranchMetaData(manifest, preferences)
     manifest = updateBranchReferrerTracking(manifest)
     manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex)
@@ -54,14 +53,6 @@
     }
     manifest['manifest']['application'][0]['meta-data'] = metadatas.concat(metadata)
 
-    return manifest
-  }
-
-  // adds to <application> for multidex (needed for all the frameworks)
-  //    <application android:name="android.support.multidex.MultiDexApplication" >
-  //    </application>
-  function updateMultidex (manifest) {
-    manifest['manifest']['application'][0]['$']['android:name'] = 'android.support.multidex.MultiDexApplication'
     return manifest
   }
 
@@ -199,7 +190,7 @@
       // app.link link domains need -alternate associated domains as well (for Deep Views)
       if (linkDomain.indexOf('app.link') !== -1) {
         var first = linkDomain.split('.')[0]
-        var rest = linkDomain.split('.').slice(2).join('.')
+        var rest = linkDomain.split('.').slice(1).join('.')
         var alternate = first + '-alternate' + '.' + rest
 
         intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain))
