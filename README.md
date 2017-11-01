@@ -1191,6 +1191,9 @@
   <plugin name="branch-cordova-sdk" spec="^2.6.0" />
   ```
 
+  - [Test Deep Link iOS](#test-deep-link-ios)
+  - [Test Deep Link Android](#test-deep-link-android)
+
 - #### Compiling: Incompatible Plugins
 
   - The following plugins will not work with the Branch SDK
