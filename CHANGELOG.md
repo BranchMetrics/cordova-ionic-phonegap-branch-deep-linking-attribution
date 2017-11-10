@@ -1,13 +1,61 @@
 # CHANGELOG
 Questions? [Contact us](https://support.branch.io/support/tickets/new)
 
+## [v2.6.16](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.16) (2017-10-31)
+
+- **Completed Changes**
+  - docs: added testing steps to updating the sdk ([15374](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/15374b0824e7315f87afed891df76418f570ff3c))
+  - Merge pull request #385 from BranchMetrics/bulkylots of fixes ([b1185](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/b11855a0c8cd670dccd076ccc69e0635e5d99c15))
+
+- **Closed Issues**
+  - Android app not receiving Branch link data ([#387](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/387))
+  - Unable to get working with phonegap build ([#386](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/386))
+  - Branch Deep Linking not working in Android ([#384](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/384))
+  - What is "ios-team-release"? where can I take it from? ([#383](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/383))
+
+## [v2.6.15](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.15) (2017-10-17)
+
+- **Completed Changes**
+  - fix: fixes #380 by ripping out Android multidexing because of complications with Android Studio 2.3+ ([24316](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/243165a925f6107d4d5e53c164ccd5268e7b8343))
+  - fix: fixes #384 by referencing the Android SDK jar instead of gradle version ([8869e](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/8869e87b4497ff2e75dd5ca9282fd39f71a04cc1))
+  - chore: update iOS SDK to 0.20.2 ([84787](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/847874ee92682f0d13a3044c5640f9e5deb4efc8))
+  - chore: updated npm version to 2.6.16 ([2feaa](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/2feaaafff2f6d1f2d0c17ce671ec432a9df60628))
+  - fix: corrected App Links -alternate on Android ([5ffeb](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/5ffebb59beb5bd4dbb270bf54c584599d4d22751))
+  - Merge pull request #382 from BranchMetrics/more_fixesMore fixes ([70176](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/7017650390fdaeb9fa494e8433d0f3f52321325a))
+
+- **Closed Issues**
+  - CSP violation unsafe-eval ([#381](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/381))
+  - Android build fails: Could not find any version that matches com.android.support:multidex:25.+. ([#380](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/380))
+  - Typescript typings ([#379](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/379))
+
+## [v2.6.14](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.14) (2017-09-28)
+
+- **Completed Changes**
+  - fix: added more precise measurement for link data duplication on init ([f3748](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/f3748a209202b40d01b3938173868d144fb0e7c0))
+  - fix: corrected testbed flexbox styling for iOS 11 ([5d5d1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/5d5d1d87cbf4f185233d57f40966fcd5b85c4c85))
+  - chore: updated npm version to 2.6.15 ([2490d](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/2490d1e768e8f6c61a7404ec5d0b0bde6d4e3dec))
+  - fix: removed csp violation (#381) ([75ef4](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/75ef406124720330455f6681c0e15d453900191d))
+  - Merge pull request #377 from BranchMetrics/update-versionschore: update ios 0.19.5 ([49821](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/4982186079f9960b4a7056a859cbcce0f9b5cc67))
+  - chore: update ios 0.19.5 ([872f6](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/872f6da3b8c83da9f8f07395313fc7212f8418fb))
+  - Merge pull request #375 from BranchMetrics/ionic1-fixfix: ionic1 double data ([4cebd](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/4cebdcf679d017dd0c7d0b0834954894f7a2f6e5))
+
+- **Closed Issues**
+  - Problem with external deep links on iOS ([#378](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/378))
+  - Failed to fetch plugin ([#376](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/376))
+  - Branch Links Cutoff in iMessage ([#374](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/374))
+  - Error in createObj: "Branch instance not set. Please execute initSession() first" ([#373](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/373))
+
 ## [v2.6.13](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.13) (2017-09-28)
 
 - **Completed Changes**
+  - fix: trying changlog into travis ci ([7926b](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/7926b439c39dcdc9c56b292ceb006c6a43adb2ea))
+  - fix: updated changelog script ([d04fb](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/d04fb884272dd876078576665d4f8b5d10ba3ad1))
+  - chore: updated npm version to 2.6.14 ([c5800](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/c5800ed1643158229cdc7413ef2fb27dfdd83bba))
+  - fix: fixed ionic1 double data on ios terminated ([2789c](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/2789cdd89063fd77a634af808ba430c0c012deb0))
   - Merge pull request #372 from BranchMetrics/update_sdksUpdate sdks ([6193f](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/6193fdf00c8d775520b5ae6e4328bee88ca26ac3))
 
 - **Closed Issues**
-  - Error in createObj: "Branch instance not set. Please execute initSession() first" ([#373](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/373))
+  - android-prefix using custom deepview ([#371](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/371))
 
 ## [v2.6.12](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.12) (2017-09-07)
 
@@ -18,7 +66,6 @@ Questions? [Contact us](https://support.branch.io/support/tickets/new)
   - Merge pull request #366 from BranchMetrics/android-single-taskAndroid single task ([1dcdb](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/1dcdb7617179450147d75fd68bbacbba55884b9e))
 
 - **Closed Issues**
-  - android-prefix using custom deepview ([#371](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/371))
   - QUESTION: *Action required* Upgrade Branch Android SDK ([#370](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/370))
   - Error: BRANCH SDK: Invalid "android-prefix" in <branch-config> in your config.xml ([#369](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/369))
   - Handle Non-Branch Deep links ([#368](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/368))
