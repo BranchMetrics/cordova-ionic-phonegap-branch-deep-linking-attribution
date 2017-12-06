@@ -133,7 +133,6 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BNCStrongMatchHelper.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.m" />
-    <header-file src="src/ios/dependencies/Branch-SDK/Branch-SDK-Prefix.pch" />
     <header-file src="src/ios/dependencies/Branch-SDK/Branch.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Branch.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchActivityItemProvider.h" />
