@@ -126,6 +126,9 @@ main() {
   if [[ "$and_tag" != "false" ]]; then
     update_and
   fi
+
+  # update plugin.xml
+  gulp prod
 }
 
 options "$@"
