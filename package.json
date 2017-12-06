@@ -45,23 +45,15 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
-    "mkpath": "^1.0.0",
-    "node-version-compare": "^1.0.1",
-    "plist": "^2.1.0",
-    "request": "^2.81.0",
-    "xml2js": "^0.4.18"
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "cordova": "^7.0.1",
     "gulp": "^3.9.1",
     "gulp-standard": "^10.1.0",
     "husky": "^0.14.3",
-    "mkpath": "^1.0.0",
-    "node-version-compare": "^1.0.1",
     "npm-check-updates": "^2.12.1",
-    "plist": "^2.1.0",
     "semantic-release": "^7.0.1",
-    "validate-commit-msg": "^2.14.0",
-    "xml2js": "^0.4.18"
+    "validate-commit-msg": "^2.14.0"
   }
 }
