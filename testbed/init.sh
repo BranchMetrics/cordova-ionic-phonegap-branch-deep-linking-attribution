@@ -108,8 +108,10 @@ main() {
     cordova platform add android
   fi
 
-  # plugin
-  cordova plugin add ../
+  logger "info" "BRANCH: add branch sdk plugin \n"
+  cordova plugin add branch-cordova-sdk
+  rm -rf ./plugins/branch-cordova-sdk/src
+  cp -R ../src ./plugins/branch-cordova-sdk/src
 
   if [[ "$run_ios" == "true" ]]; then
     logger "info" "BRANCH: run ios \n"
