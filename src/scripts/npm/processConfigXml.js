@@ -69,7 +69,19 @@
 
   // read project name from config.xml
   function getProjectName (configXml) {
-    return (configXml.widget.hasOwnProperty('name')) ? configXml.widget.name[0] : null
+    var output = null
+    if (configXml.widget.hasOwnProperty('name')) {
+      var name = configXml.widget.name[0]
+      if (typeof name === 'string') {
+        // handle <name>Branch Cordova</name>
+        output = configXml.widget.name[0]
+      } else {
+        // handle <name short="Branch">Branch Cordova</name>
+        output = configXml.widget.name[0]['_']
+      }
+    }
+
+    return output
   }
 
   // read branch value from <branch-config>

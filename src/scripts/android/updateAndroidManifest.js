@@ -14,13 +14,14 @@
     var pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
     var manifest = xmlHelper.readXmlAsJson(pathToManifest)
     var mainActivityIndex = getMainLaunchActivityIndex(manifest['manifest']['application'][0]['activity'])
+    var targetSdk = manifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion']
 
     // update manifest
     manifest = updateBranchMetaData(manifest, preferences)
     manifest = updateBranchReferrerTracking(manifest)
     manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex)
     manifest = updateBranchURIScheme(manifest, mainActivityIndex, preferences)
-    manifest = updateBranchAppLinks(manifest, mainActivityIndex, preferences)
+    manifest = updateBranchAppLinks(manifest, mainActivityIndex, preferences, targetSdk)
 
     // save new version of the AndroidManifest
     xmlHelper.writeJsonAsXml(pathToManifest, manifest)
@@ -145,20 +146,24 @@
   //       <data android:scheme="https" android:host="ethan.app.link" />
   //       <data android:scheme="https" android:host="ethan-alternate.app.link" />
   //    </intent-filter>
-  function updateBranchAppLinks (manifest, mainActivityIndex, preferences) {
+  function updateBranchAppLinks (manifest, mainActivityIndex, preferences, targetSdk) {
     var intentFilters = manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] || []
     var data = getAppLinkIntentFilterData(preferences)
     var androidName = 'io.branch.sdk.AppLink'
+    var header = {
+      'android:name': androidName,
+      'android:autoVerify': 'true'
+    }
+    if (targetSdk && parseInt(targetSdk) < 23) {
+      delete header['android:autoVerify']
+    }
 
     // remove
     intentFilters = removeBasedOnAndroidName(intentFilters, androidName)
 
     // add new (remove old already done in updateBranchURIScheme)
     manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] = intentFilters.concat([{
-      '$': {
-        'android:name': androidName,
-        'android:autoVerify': 'true'
-      },
+      '$': header,
       'action': [{
         '$': {
           'android:name': 'android.intent.action.VIEW'

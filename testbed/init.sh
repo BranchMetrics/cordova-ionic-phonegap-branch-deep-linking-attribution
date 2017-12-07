@@ -50,9 +50,31 @@ options() {
   done
 }
 
+# logging
+logger() {
+  if [ "$1" == "info" ] ; then
+    COLOR="96m";
+  elif [ "$1" == "success" ] ; then
+    COLOR="92m";
+  elif [ "$1" == "warning" ] ; then
+    COLOR="93m";
+  elif [ "$1" == "danger" ] ; then
+    COLOR="91m";
+  else
+    COLOR="0m";
+  fi
+
+  STARTCOLOR="\e[$COLOR";
+  ENDCOLOR="\e[0m";
+
+  printf "$STARTCOLOR%b$ENDCOLOR" "$2";
+}
+
+# main
 main() {
-  # clean
+  logger "info" "BRANCH: clean \n"
   rm -rf ../.installed
+  rm -rf ../tmp
   rm -rf ./node_modules
   rm -rf ./plugins
   rm -rf ./platforms
@@ -62,37 +84,47 @@ main() {
   rm -rf ./package-lock.json
 
   if [[ "$run_cor" == "true" ]]; then
+    logger "info" "BRANCH: install cordova \n"
     npm install -g cordova gulp-cli ios-deploy
   fi
+
   if [[ "$run_dep" == "true" ]]; then
+    logger "info" "BRANCH: uninstall node dependencies \n"
     npm uninstall mkpath node-version-compare plist xml2js
   fi
 
-  # validate
+  logger "info" "BRANCH: validate code \n"
   gulp prod
 
-  # config
+  logger "info" "BRANCH: copy config \n"
   cp config.template.xml config.xml
 
-  # build (platforms added before plugin because before_plugin_install does not work on file reference)
   if [[ "$run_ios" == "true" ]]; then
+    logger "info" "BRANCH: add ios platform \n"
     cordova platform add ios
   fi
+
   if [[ "$run_and" == "true" ]]; then
+    logger "info" "BRANCH: add android platform \n"
     cordova platform add android
   fi
 
-  # plugin
-  cordova plugin add ../
+  logger "info" "BRANCH: add branch sdk plugin \n"
+  rsync -a ../ ../tmp --exclude testbed --exclude node_modules --exclude .git --exclude tests
+  cordova plugin add ../tmp
+  rm -rf ../tmp
 
-  # run
   if [[ "$run_ios" == "true" ]]; then
+    logger "info" "BRANCH: run ios \n"
     cordova run ios --device
   fi
+
   if [[ "$run_and" == "true" ]]; then
+    logger "info" "BRANCH: run android \n"
     cordova run android
   fi
 }
 
+# run
 options "$@"
 main

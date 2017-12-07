@@ -9,6 +9,7 @@ node_modules
 .installed
 .gradle/
 .idea/
+tmp/
 cordova-ionic-phonegap-branch-deep-linking.iml
 local.properties
 out/

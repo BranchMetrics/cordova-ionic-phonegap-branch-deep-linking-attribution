@@ -1,14 +1,39 @@
 # CHANGELOG
 Questions? [Contact us](https://support.branch.io/support/tickets/new)
 
+## [v2.6.18](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.18) (2017-11-10)
+
+- **Completed Changes**
+  - Merge pull request #391 from BranchMetrics/fix-associated-domainsfix: corrected the duplication of custom link domains in the iOS enti… ([f67eb](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/f67eb65fdde31e1c0f04a4d0c5fd72880ba4bdba))
+
+- **Closed Issues**
+  - Cold Start ([#397](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/397))
+  - Cannot resolve module 'cordova/exec' in branch.js ([#396](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/396))
+  - iOS distribution error, applinks not supported ([#395](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/395))
+  - ios - Terminating app due to uncaught exception 'NSUnknownKeyException', reason: '[<BranchUniversalObject 0x1c42ece80> setValue:forUndefinedKey:]: this class is not key value coding-compliant for the key integer.' ([#390](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/390))
+
+## [v2.6.17](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.17) (2017-11-09)
+
+- **Completed Changes**
+  - Merge branch 'master' into fix-associated-domains ([24919](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/24919563eab3a83469683cee1d6a4eb6f31b0be8))
+  - fix: corrected the duplication of custom link domains in the iOS entitlements ([99901](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/999016b1eb9e6e4332574cb33aea6e7abdc51521))
+  - Merge pull request #388 from BranchMetrics/updatesUpdates ([eb064](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/eb06417ac73780a37cee7aa8877bb04b7d807d84))
+
+- **Closed Issues**
+  - Getting Error: Cannot read property '$' of undefined while building android apk ([#389](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/389))
+  - Android app not receiving Branch link data ([#387](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/387))
+
 ## [v2.6.16](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/releases/tag/v2.6.16) (2017-10-31)
 
 - **Completed Changes**
+  - chore: relocated known issues in contributing ([82371](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/823718b93d2f456098d6c77981eaf41c3438d018))
+  - chore: updated the changelog ([a452c](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/a452c23e051f247c36d4c4881cc99b14d97523c8))
+  - chore: updated npm version to 2.6.17 ([212d3](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/212d380bd4148e5326b06618abe4a99416a38ebe))
+  - fix: updated android to 2.13.1Hot fix : Referral params are not returned when initSession is called mutiple times while an init session is in progress ([aec99](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/aec99398eaef6cdb38143e5372ff6c03fe6f7f87))
   - docs: added testing steps to updating the sdk ([15374](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/15374b0824e7315f87afed891df76418f570ff3c))
   - Merge pull request #385 from BranchMetrics/bulkylots of fixes ([b1185](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/b11855a0c8cd670dccd076ccc69e0635e5d99c15))
 
 - **Closed Issues**
-  - Android app not receiving Branch link data ([#387](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/387))
   - Unable to get working with phonegap build ([#386](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/386))
   - Branch Deep Linking not working in Android ([#384](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/384))
   - What is "ios-team-release"? where can I take it from? ([#383](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/383))

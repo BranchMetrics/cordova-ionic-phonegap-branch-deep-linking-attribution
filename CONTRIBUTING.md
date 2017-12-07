@@ -65,7 +65,8 @@
 - **[optional]** Update [Android](https://github.com/BranchMetrics/android-branch-deep-linking/releases) and [iOS](https://github.com/BranchMetrics/ios-branch-deep-linking/releases) SDKs
 
   ```sh
-  ./src/scripts/npm/updateNativeSdk.sh -a 2.5.9 -i 0.13.5
+  ./src/scripts/npm/updateNativeSdk.sh -a 2.5.9 
+  ./src/scripts/npm/updateNativeSdk.sh -i 0.13.5
   ```
 
 - **[optional]** Update `CHANGELOG.md`

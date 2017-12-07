@@ -439,10 +439,10 @@
             NSString *indexingMode = [properties valueForKey:key];
             // Default contentIndexMode is always public
             if ([indexingMode isEqualToString:@"private"]) {
-                branchUniversalObj.contentIndexMode = ContentIndexModePrivate;
+                branchUniversalObj.contentIndexMode = BranchContentIndexModePrivate;
             }
             else {
-                branchUniversalObj.contentIndexMode = ContentIndexModePublic;
+                branchUniversalObj.contentIndexMode = BranchContentIndexModePublic;
             }
         }
         else if ([key isEqualToString:@"canonicalIdentifier"]) {
