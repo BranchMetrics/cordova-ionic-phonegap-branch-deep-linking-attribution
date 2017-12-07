@@ -45,7 +45,11 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
-    "request": "^2.81.0"
+    "mkpath": "^1.0.0",
+    "node-version-compare": "^1.0.1",
+    "plist": "^2.1.0",
+    "request": "^2.81.0",
+    "xml2js": "^0.4.18"
   },
   "devDependencies": {
     "cordova": "^7.0.1",
