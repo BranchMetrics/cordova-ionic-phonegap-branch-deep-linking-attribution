@@ -74,6 +74,7 @@ logger() {
 main() {
   logger "info" "BRANCH: clean \n"
   rm -rf ../.installed
+  rm -rf ../tmp
   rm -rf ./node_modules
   rm -rf ./plugins
   rm -rf ./platforms
@@ -88,7 +89,7 @@ main() {
   fi
 
   if [[ "$run_dep" == "true" ]]; then
-    logger "info" "BRANCH: install node dependencies \n"
+    logger "info" "BRANCH: uninstall node dependencies \n"
     npm uninstall mkpath node-version-compare plist xml2js
   fi
 
@@ -109,9 +110,9 @@ main() {
   fi
 
   logger "info" "BRANCH: add branch sdk plugin \n"
-  cordova plugin add branch-cordova-sdk
-  rm -rf ./plugins/branch-cordova-sdk/src
-  cp -R ../src ./plugins/branch-cordova-sdk/src
+  rsync -a ../ ../tmp --exclude testbed --exclude node_modules --exclude .git --exclude tests
+  cordova plugin add ../tmp
+  rm -rf ../tmp
 
   if [[ "$run_ios" == "true" ]]; then
     logger "info" "BRANCH: run ios \n"
