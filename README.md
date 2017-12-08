@@ -255,9 +255,6 @@
     // for better Android matching
     Branch.setCookieBasedMatching('cordova.app.link')
 
-    // to sync with Mixpanel if plugin is installed
-    Branch.setMixpanelToken('your_mixpanel_token')
-
     // Branch initialization
     Branch.initSession(function(data) {
       if (data['+clicked_branch_link']) {
@@ -1071,6 +1068,14 @@
       | 175 | YER | 
       | 176 | ZAR | 
       | 177 | ZMW | 
+
+- #### Link data: Mixpanel Integration
+
+  - Sync with Mixpanel if plugin is installed
+
+    ```js
+    Branch.setRequestMetadata("$mixpanel_distinct_id", "123")
+    ```
 
 - #### Compiling: Cordova Dependencies
 

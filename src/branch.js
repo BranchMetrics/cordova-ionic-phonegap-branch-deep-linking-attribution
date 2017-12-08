@@ -75,8 +75,18 @@ Branch.prototype.initSession = function (deepLinkDataListener) {
   return execute('initSession')
 }
 
-Branch.prototype.setMixpanelToken = function (token) {
-  return execute('setMixpanelToken', [token])
+Branch.prototype.setRequestMetadata = function (key, val) {
+  if (!key || typeof key !== 'string') {
+    return new Promise(function (resolve, reject) {
+      reject(new Error('Please set key'))
+    })
+  }
+  if (!val || typeof val !== 'string') {
+    return new Promise(function (resolve, reject) {
+      reject(new Error('Please set value'))
+    })
+  }
+  return execute('setRequestMetadata', [key, val])
 }
 
 Branch.prototype.setDebug = function (isEnabled) {
