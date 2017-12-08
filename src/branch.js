@@ -75,6 +75,11 @@ Branch.prototype.initSession = function (deepLinkDataListener) {
   return execute('initSession')
 }
 
+// deprecated for setRequestMetadata()
+Branch.prototype.setMixpanelToken = function (token) {
+  return this.setRequestMetadata('$mixpanel_distinct_id', token)
+}
+
 Branch.prototype.setRequestMetadata = function (key, val) {
   if (!key || typeof key !== 'string') {
     return new Promise(function (resolve, reject) {
