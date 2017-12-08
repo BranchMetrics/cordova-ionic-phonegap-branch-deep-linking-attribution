@@ -31,7 +31,7 @@ function BranchInit (isDebug) {
   Branch.setCookieBasedMatching('cordova.app.link')
 
   // sync with Mixpanel if installed
-  Branch.setMixpanelToken('your_mixpanel_token')
+  Branch.setRequestMetadata('$mixpanel_distinct_id', 'your_mixpanel_token')
 
   // Branch initialization
   Branch.initSession(function (data) {
