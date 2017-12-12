@@ -11,20 +11,47 @@
 
   // injects config.xml preferences into AndroidManifest.xml file.
   function writePreferences (context, preferences) {
-    var pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
-    var manifest = xmlHelper.readXmlAsJson(pathToManifest)
+    // read manifest
+    var manifest = getManifest(context)
+
+    // update manifest
+    manifest.file = updateBranchMetaData(manifest.file, preferences)
+    manifest.file = updateBranchReferrerTracking(manifest.file)
+    manifest.file = updateLaunchOptionToSingleTask(manifest.file, manifest.mainActivityIndex)
+    manifest.file = updateBranchURIScheme(manifest.file, manifest.mainActivityIndex, preferences)
+    manifest.file = updateBranchAppLinks(manifest.file, manifest.mainActivityIndex, preferences, manifest.targetSdk)
+
+    // save manifest
+    xmlHelper.writeJsonAsXml(manifest.path, manifest.file)
+  }
+
+  // get AndroidManifest.xml information
+  function getManifest (context) {
+    var pathToManifest
+    var manifest
+
+    try {
+      // cordova platform add android@6.0.0
+      pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
+      manifest = xmlHelper.readXmlAsJson(pathToManifest)
+    } catch (e) {
+      try {
+        // cordova platform add android@7.0.0
+        pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'app', 'src', 'main', 'AndroidManifest.xml')
+        manifest = xmlHelper.readXmlAsJson(pathToManifest)
+      } catch (e) {
+        throw new Error('BRANCH SDK: Cannot read AndroidManfiest.xml ' + e)
+      }
+    }
     var mainActivityIndex = getMainLaunchActivityIndex(manifest['manifest']['application'][0]['activity'])
     var targetSdk = manifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion']
 
-    // update manifest
-    manifest = updateBranchMetaData(manifest, preferences)
-    manifest = updateBranchReferrerTracking(manifest)
-    manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex)
-    manifest = updateBranchURIScheme(manifest, mainActivityIndex, preferences)
-    manifest = updateBranchAppLinks(manifest, mainActivityIndex, preferences, targetSdk)
-
-    // save new version of the AndroidManifest
-    xmlHelper.writeJsonAsXml(pathToManifest, manifest)
+    return {
+      file: manifest,
+      path: pathToManifest,
+      mainActivityIndex: mainActivityIndex,
+      targetSdk: targetSdk
+    }
   }
 
   // adds to <application> for Branch init and testmode:

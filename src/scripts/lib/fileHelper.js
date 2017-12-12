@@ -6,7 +6,17 @@
   // entry
   module.exports = {
     readFile: readFile,
-    writeFile: writeFile
+    writeFile: writeFile,
+    accessFile: accessFile
+  }
+
+  // access file
+  function accessFile (file) {
+    try {
+      return fs.accessSync(file)
+    } catch (err) {
+      throw new Error('BRANCH SDK: Cannot access file ' + file)
+    }
   }
 
   // read file
