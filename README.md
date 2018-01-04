@@ -329,8 +329,6 @@
       custom_string: 'data',
       custom_integer: Date.now(),
       custom_boolean: true,
-      custom_array: [1, 2, 3, 4, 5],
-      custom_object: { 'random': 'dictionary' }
     }
 
     branchUniversalObj.generateShortUrl(analytics, properties).then(function (res) {
@@ -364,8 +362,6 @@
       custom_string: 'data',
       custom_integer: Date.now(),
       custom_boolean: true,
-      custom_array: [1, 2, 3, 4, 5],
-      custom_object: { 'random': 'dictionary' }
     }
 
     var message = 'Check out this link'
