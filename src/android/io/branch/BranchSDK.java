@@ -62,6 +62,7 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity = this.cordova.getActivity();
 
+        Branch.disableInstantDeepLinking(true);
         Branch.getAutoInstance(this.activity.getApplicationContext());
 
     }
