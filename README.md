@@ -1257,6 +1257,6 @@
     Error: Error code 1 for command: /gradlew with args: cdvBuildDebug,-b,/build.gradle,-Dorg.gradle.daemon=true,-Pandroid.useDeprecatedNdk=true
     ```
 
-      - Add `<preference name="android-minSdkVersion" value="15" />` to your `config.xml`
+      - Add `<preference name="android-minSdkVersion" value="16" />` to your `config.xml`
 
 
