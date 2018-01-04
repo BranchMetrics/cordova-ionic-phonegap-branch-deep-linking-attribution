@@ -166,6 +166,8 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/NSMutableDictionary+Branch.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/NSString+Branch.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/NSString+Branch.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/UIViewController+Branch.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/UIViewController+Branch.m" />
     
     <header-file src="src/ios/dependencies/Branch-SDK/Networking/BNCNetworkService.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Networking/BNCNetworkService.m" />
