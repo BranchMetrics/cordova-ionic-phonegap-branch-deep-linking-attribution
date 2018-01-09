@@ -328,9 +328,7 @@
       $match_duration: 2000,
       custom_string: 'data',
       custom_integer: Date.now(),
-      custom_boolean: true,
-      custom_array: [1, 2, 3, 4, 5],
-      custom_object: { 'random': 'dictionary' }
+      custom_boolean: true
     }
 
     branchUniversalObj.generateShortUrl(analytics, properties).then(function (res) {
@@ -363,9 +361,7 @@
       $desktop_url: 'http://www.example.com/desktop',
       custom_string: 'data',
       custom_integer: Date.now(),
-      custom_boolean: true,
-      custom_array: [1, 2, 3, 4, 5],
-      custom_object: { 'random': 'dictionary' }
+      custom_boolean: true
     }
 
     var message = 'Check out this link'
@@ -1261,6 +1257,6 @@
     Error: Error code 1 for command: /gradlew with args: cdvBuildDebug,-b,/build.gradle,-Dorg.gradle.daemon=true,-Pandroid.useDeprecatedNdk=true
     ```
 
-      - Add `<preference name="android-minSdkVersion" value="15" />` to your `config.xml`
+      - Add `<preference name="android-minSdkVersion" value="16" />` to your `config.xml`
 
 

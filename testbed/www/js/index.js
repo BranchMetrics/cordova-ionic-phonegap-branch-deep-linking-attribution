@@ -233,9 +233,7 @@ function BranchDeepLink () {
     $match_duration: 2000,
     custom_string: 'data',
     custom_integer: Date.now(),
-    custom_boolean: true,
-    custom_array: [1, 2, 3, 4, 5],
-    custom_object: { 'random': 'dictionary' }
+    custom_boolean: true
   }
 
   // needs a universal object

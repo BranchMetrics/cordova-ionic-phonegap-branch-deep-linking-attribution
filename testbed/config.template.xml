@@ -7,7 +7,7 @@
     <link-domain value="cordova.app.link" />
     <ios-team-release value="PW4Q8885U7" />
   </branch-config>
-  <preference name="android-minSdkVersion" value="15" />
+  <preference name="android-minSdkVersion" value="16" />
 
   <name>Branch Cordova</name>
   <description>Testing App For Branch Cordova</description>

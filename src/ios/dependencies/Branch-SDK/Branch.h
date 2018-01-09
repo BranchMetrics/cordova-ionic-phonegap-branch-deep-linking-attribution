@@ -35,6 +35,7 @@
 #import "BranchUniversalObject.h"
 #import "BranchView.h"
 #import "BranchViewHandler.h"
+#import "UIViewController+Branch.h"
 
 /**
  `Branch` is the primary interface of the Branch iOS SDK. Currently, all interactions you will make are funneled through this class. It is not meant to be instantiated or subclassed, usage should be limited to the global instance.
@@ -124,7 +125,6 @@ extern NSString * const BNCCanonicalIdList;
 extern NSString * const BNCPurchaseAmount;
 extern NSString * const BNCPurchaseCurrency;
 extern NSString * const BNCCanonicalIdList;
-extern NSString * const BNCPurchaseAmount;
 extern NSString * const BNCRegisterViewEvent;
 extern NSString * const BNCAddToWishlistEvent;
 extern NSString * const BNCAddToCartEvent;
