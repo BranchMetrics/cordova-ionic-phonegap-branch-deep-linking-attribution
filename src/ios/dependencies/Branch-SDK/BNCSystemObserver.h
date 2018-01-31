@@ -6,7 +6,11 @@
 //  Copyright (c) 2014 Branch Metrics. All rights reserved.
 //
 
+#if __has_feature(modules)
+@import Foundation;
+#else
 #import <Foundation/Foundation.h>
+#endif
 
 typedef NS_ENUM(NSInteger, BNCUpdateState) {
     BNCUpdateStateInstall      = 0,    //  App was recently installed.
@@ -16,7 +20,9 @@ typedef NS_ENUM(NSInteger, BNCUpdateState) {
 
 @interface BNCSystemObserver : NSObject
 
-+ (NSString *)getUniqueHardwareId:(BOOL *)isReal isDebug:(BOOL)debug andType:(NSString **)type;
++ (NSString *)getUniqueHardwareId:(BOOL *)isReal
+                          isDebug:(BOOL)debug
+                          andType:(NSString *__autoreleasing*)type;
 + (NSString *)getVendorId;
 + (NSString *)getDefaultUriScheme;
 + (NSString *)getAppVersion;
@@ -33,5 +39,7 @@ typedef NS_ENUM(NSInteger, BNCUpdateState) {
 + (BOOL)isSimulator;
 + (BOOL)adTrackingSafe;
 + (NSDate*) appInstallDate;
++ (NSDate*) appBuildDate;
++ (NSString*) getAdId;
 
 @end

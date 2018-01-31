@@ -36,6 +36,7 @@ Branch.prototype.disableGlobalListenersWarnings = function () {
 }
 
 var runOnce = true
+var previousLinkTimestamp = null
 Branch.prototype.initSession = function (deepLinkDataListener) {
   // handle double init from onResume on iOS
   if (!runOnce) return new Promise(function (resolve, reject) {})
@@ -43,15 +44,21 @@ Branch.prototype.initSession = function (deepLinkDataListener) {
 
   // private method to filter out +clicked_branch_link = false in deep link callback
   var deepLinkDataParser = function (deepLinkData) {
+    var timestamp = '+click_timestamp'
     var isBranchLink = '+clicked_branch_link'
     var isNonBranchLink = '+non_branch_link'
+
     var isBranchLinkClick = deepLinkData.hasOwnProperty(isBranchLink) && deepLinkData[isBranchLink] === true
     var isNonBranchLinkClick = deepLinkData.hasOwnProperty(isNonBranchLink)
+    var currentLinkTimestamp = deepLinkData.hasOwnProperty(timestamp) ? deepLinkData[timestamp] : Date.now()
 
-    // is +clicked_branch_link' = true || +non_branch_link
-    if (isBranchLinkClick || isNonBranchLinkClick) {
+    // is +clicked_branch_link' = true || +non_branch_link && !previousLinkTimestamp
+    if ((isBranchLinkClick || isNonBranchLinkClick) && currentLinkTimestamp !== previousLinkTimestamp) {
       deepLinkDataListener(deepLinkData)
     }
+
+    // handle Ionic 1 double data on iOS terminated
+    previousLinkTimestamp = currentLinkTimestamp
   }
 
   if (!disableGlobalListenersWarnings && !deepLinkDataListener && !window.DeepLinkHandler) {
@@ -68,8 +75,23 @@ Branch.prototype.initSession = function (deepLinkDataListener) {
   return execute('initSession')
 }
 
+// deprecated for setRequestMetadata()
 Branch.prototype.setMixpanelToken = function (token) {
-  return execute('setMixpanelToken', [token])
+  return this.setRequestMetadata('$mixpanel_distinct_id', token)
+}
+
+Branch.prototype.setRequestMetadata = function (key, val) {
+  if (!key || typeof key !== 'string') {
+    return new Promise(function (resolve, reject) {
+      reject(new Error('Please set key'))
+    })
+  }
+  if (!val || typeof val !== 'string') {
+    return new Promise(function (resolve, reject) {
+      reject(new Error('Please set value'))
+    })
+  }
+  return execute('setRequestMetadata', [key, val])
 }
 
 Branch.prototype.setDebug = function (isEnabled) {

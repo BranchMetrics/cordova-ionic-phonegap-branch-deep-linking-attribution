@@ -11,12 +11,6 @@
 1. [Submit](#submit)
 1. [Publish](#publish)
 
-## TODO
-
-  -  `<plugin name="branch-cordova-sdk" spec="../" />` or `cordova plugin add ../` causes an infinite loop when importing Branch on Cordova 7.0.1. Works on Cordova 6.5.0.
-  -  need to remove `TODO` from `init.sh` for `ios-sim` error
-  -  `cordova platform update android@6.2.2` added for Cordova 6.5.0 error on Android
-
 ## Data Flow
 
 - [Users sets values](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/blob/master/testbed/config.template.xml#L6-L13)
@@ -24,7 +18,6 @@
 - [Hooks call scripts](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/hooks)
 - [Scripts for iOS](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/ios)
 - [Scripts for Android](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/src/scripts/android)
-
 
 ## Dependencies
 
@@ -72,7 +65,8 @@
 - **[optional]** Update [Android](https://github.com/BranchMetrics/android-branch-deep-linking/releases) and [iOS](https://github.com/BranchMetrics/ios-branch-deep-linking/releases) SDKs
 
   ```sh
-  ./src/scripts/npm/updateNativeSdk.sh -a 2.5.9 -i 0.13.5
+  ./src/scripts/npm/updateNativeSdk.sh -a 2.5.9 
+  ./src/scripts/npm/updateNativeSdk.sh -i 0.13.5
   ```
 
 - **[optional]** Update `CHANGELOG.md`
@@ -117,3 +111,9 @@
 - Pull request code review from a Branch team member
 
 - Merges will automatically add SDK to NPM
+
+## Additional
+
+  -  `<plugin name="branch-cordova-sdk" spec="../" />` or `cordova plugin add ../` causes an infinite loop when importing Branch on Cordova 7.0.1. Works on Cordova 6.5.0.
+  -  need to remove `TODO` from `init.sh` for `ios-sim` error
+  -  `cordova platform update android@6.2.2` added for Cordova 6.5.0 error on Android

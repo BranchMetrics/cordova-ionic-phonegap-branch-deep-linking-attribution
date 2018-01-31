@@ -6,20 +6,17 @@
 //  Copyright (c) 2015 Branch Metrics. All rights reserved.
 //
 
-
 #import "BranchOpenRequest.h"
-#import "BNCPreferenceHelper.h"
 #import "BNCSystemObserver.h"
-#import "BNCDeviceInfo.h"
-#import "BNCCrashlyticsWrapper.h"
 #import "BranchConstants.h"
-#import "BNCEncodingUtils.h"
-#import "BranchViewHandler.h"
-#import "BNCFabricAnswers.h"
 #import "BranchContentDiscoveryManifest.h"
 #import "BranchContentDiscoverer.h"
 #import "NSMutableDictionary+Branch.h"
-#import "BNCLog.h"
+#import "BNCEncodingUtils.h"
+#import "BNCCrashlyticsWrapper.h"
+#import "BNCFabricAnswers.h"
+#import "BNCDeviceInfo.h"
+#import "Branch.h"
 
 @interface BranchOpenRequest ()
 @property (assign, nonatomic) BOOL isInstall;
@@ -33,7 +30,7 @@
 }
 
 - (id)initWithCallback:(callbackWithStatus)callback isInstall:(BOOL)isInstall {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         _callback = callback;
         _isInstall = isInstall;
     }
@@ -57,12 +54,16 @@
     [self safeSetValue:[BNCSystemObserver getAppVersion] forKey:BRANCH_REQUEST_KEY_APP_VERSION onDict:params];
     [self safeSetValue:[BNCSystemObserver getDefaultUriScheme] forKey:BRANCH_REQUEST_KEY_URI_SCHEME onDict:params];
     [self safeSetValue:[BNCSystemObserver getUpdateState] forKey:BRANCH_REQUEST_KEY_UPDATE onDict:params];
-    [self safeSetValue:[NSNumber numberWithBool:preferenceHelper.checkedFacebookAppLinks] forKey:BRANCH_REQUEST_KEY_CHECKED_FACEBOOK_APPLINKS onDict:params];
-    [self safeSetValue:[NSNumber numberWithBool:preferenceHelper.checkedAppleSearchAdAttribution] forKey:BRANCH_REQUEST_KEY_CHECKED_APPLE_AD_ATTRIBUTION onDict:params];
+    [self safeSetValue:[NSNumber numberWithBool:preferenceHelper.checkedFacebookAppLinks]
+        forKey:BRANCH_REQUEST_KEY_CHECKED_FACEBOOK_APPLINKS onDict:params];
+    [self safeSetValue:[NSNumber numberWithBool:preferenceHelper.checkedAppleSearchAdAttribution]
+        forKey:BRANCH_REQUEST_KEY_CHECKED_APPLE_AD_ATTRIBUTION onDict:params];
     [self safeSetValue:preferenceHelper.linkClickIdentifier forKey:BRANCH_REQUEST_KEY_LINK_IDENTIFIER onDict:params];
     [self safeSetValue:preferenceHelper.spotlightIdentifier forKey:BRANCH_REQUEST_KEY_SPOTLIGHT_IDENTIFIER onDict:params];
     [self safeSetValue:preferenceHelper.universalLinkUrl forKey:BRANCH_REQUEST_KEY_UNIVERSAL_LINK_URL onDict:params];
     [self safeSetValue:preferenceHelper.externalIntentURI forKey:BRANCH_REQUEST_KEY_EXTERNAL_INTENT_URI onDict:params];
+    if (preferenceHelper.limitFacebookTracking)
+        params[@"limit_facebook_tracking"] = CFBridgingRelease(kCFBooleanTrue);
 
     NSMutableDictionary *cdDict = [[NSMutableDictionary alloc] init];
     BranchContentDiscoveryManifest *contentDiscoveryManifest = [BranchContentDiscoveryManifest getInstance];
@@ -70,17 +71,16 @@
     [cdDict bnc_safeSetObject:[BNCSystemObserver getBundleID] forKey:BRANCH_BUNDLE_IDENTIFIER];
     [self safeSetValue:cdDict forKey:BRANCH_CONTENT_DISCOVER_KEY onDict:params];
 
-    if (preferenceHelper.appleSearchAdDetails) {
+    if (preferenceHelper.appleSearchAdNeedsSend) {
         NSString *encodedSearchData = nil;
         @try {
             NSData *jsonData = [BNCEncodingUtils encodeDictionaryToJsonData:preferenceHelper.appleSearchAdDetails];
             encodedSearchData = [BNCEncodingUtils base64EncodeData:jsonData];
-        } @catch (id e) { }
+        } @catch (id) { }
         [self safeSetValue:encodedSearchData
                     forKey:BRANCH_REQUEST_KEY_SEARCH_AD
                     onDict:params];
     }
-    /**/
 
     [serverInterface postRequest:params url:[preferenceHelper getAPIURL:BRANCH_REQUEST_ENDPOINT_OPEN] key:key callback:callback];
 }
@@ -96,7 +96,7 @@
 
     BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
     NSDictionary *data = response.data;
-
+    
     // Handle possibly mis-parsed identity.
     id userIdentity = data[BRANCH_RESPONSE_KEY_DEVELOPER_IDENTITY];
     if ([userIdentity isKindOfClass:[NSNumber class]]) {
@@ -111,7 +111,8 @@
 
     if (Branch.enableFingerprintIDInCrashlyticsReports) {
         BNCCrashlyticsWrapper *crashlytics = [BNCCrashlyticsWrapper wrapper];
-        [crashlytics setObjectValue:preferenceHelper.deviceFingerprintID forKey:BRANCH_CRASHLYTICS_FINGERPRINT_ID_KEY];
+        [crashlytics setObjectValue:preferenceHelper.deviceFingerprintID
+            forKey:BRANCH_CRASHLYTICS_FINGERPRINT_ID_KEY];
     }
 
     NSString *sessionData = data[BRANCH_RESPONSE_KEY_SESSION_DATA];
@@ -119,7 +120,7 @@
     } else
     if ([sessionData isKindOfClass:[NSDictionary class]]) {
         BNCLogWarning(@"Received session data of type '%@' data is '%@'.",
-            NSStringFromClass(sessionData.class), sessionData);
+            NSStringFromClass(sessionData.class), sessionData);        
         sessionData = [BNCEncodingUtils encodeDictionaryToJsonString:(NSDictionary*)sessionData];
     } else
     if ([sessionData isKindOfClass:[NSArray class]]) {
@@ -133,6 +134,16 @@
     }
 
     // Update session params
+    
+    
+    if (preferenceHelper.spotlightIdentifier) {
+        NSMutableDictionary *sessionDataDict =
+        [NSMutableDictionary dictionaryWithDictionary: [BNCEncodingUtils decodeJsonStringToDictionary:sessionData]];
+        NSDictionary *spotlightDic = @{BRANCH_RESPONSE_KEY_SPOTLIGHT_IDENTIFIER:preferenceHelper.spotlightIdentifier};
+        [sessionDataDict addEntriesFromDictionary:spotlightDic];
+        sessionData = [BNCEncodingUtils encodeDictionaryToJsonString:sessionDataDict];
+    }
+    
     preferenceHelper.sessionParams = sessionData;
 
     // Scenarios:
@@ -161,23 +172,18 @@
         }
     }
 
-    NSString *referredUrl = nil;
+    NSString *referringURL = nil;
     if (preferenceHelper.universalLinkUrl) {
-        referredUrl = preferenceHelper.universalLinkUrl;
+        referringURL = preferenceHelper.universalLinkUrl;
     }
     else if (preferenceHelper.externalIntentURI) {
-        referredUrl = preferenceHelper.externalIntentURI;
+        referringURL = preferenceHelper.externalIntentURI;
     }
     else {
         NSDictionary *sessionDataDict = [BNCEncodingUtils decodeJsonStringToDictionary:sessionData];
         if (sessionDataDict[BRANCH_RESPONSE_KEY_BRANCH_REFERRING_LINK]) {
-            referredUrl = sessionDataDict[BRANCH_RESPONSE_KEY_BRANCH_REFERRING_LINK];
+            referringURL = sessionDataDict[BRANCH_RESPONSE_KEY_BRANCH_REFERRING_LINK];
         }
-    }
-    BranchContentDiscoveryManifest *cdManifest = [BranchContentDiscoveryManifest getInstance];
-    [cdManifest onBranchInitialised:data withUrl:referredUrl];
-    if ([cdManifest isCDEnabled]) {
-        [[BranchContentDiscoverer getInstance] startDiscoveryTaskWithManifest:cdManifest];
     }
 
     // Clear link identifiers so they don't get reused on the next open
@@ -186,13 +192,20 @@
     preferenceHelper.spotlightIdentifier = nil;
     preferenceHelper.universalLinkUrl = nil;
     preferenceHelper.externalIntentURI = nil;
-    preferenceHelper.appleSearchAdDetails = nil;
+    preferenceHelper.appleSearchAdNeedsSend = NO;
+    preferenceHelper.referringURL = referringURL;
 
     if (data[BRANCH_RESPONSE_KEY_BRANCH_IDENTITY]) {
         preferenceHelper.identityID = data[BRANCH_RESPONSE_KEY_BRANCH_IDENTITY];
     }
 
     [BranchOpenRequest releaseOpenResponseLock];
+
+    BranchContentDiscoveryManifest *cdManifest = [BranchContentDiscoveryManifest getInstance];
+    [cdManifest onBranchInitialised:data withUrl:referringURL];
+    if ([cdManifest isCDEnabled]) {
+        [[BranchContentDiscoverer getInstance] startDiscoveryTaskWithManifest:cdManifest];
+    }
 
     // Check if there is any Branch View to show
     NSObject *branchViewDict = data[BRANCH_RESPONSE_KEY_BRANCH_VIEW_DATA];
@@ -206,7 +219,6 @@
     if (self.callback) {
         self.callback(YES, nil);
     }
-
 }
 
 - (NSString *)getActionName {

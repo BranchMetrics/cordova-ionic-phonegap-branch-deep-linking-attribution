@@ -69,7 +69,19 @@
 
   // read project name from config.xml
   function getProjectName (configXml) {
-    return (configXml.widget.hasOwnProperty('name')) ? configXml.widget.name[0] : null
+    var output = null
+    if (configXml.widget.hasOwnProperty('name')) {
+      var name = configXml.widget.name[0]
+      if (typeof name === 'string') {
+        // handle <name>Branch Cordova</name>
+        output = configXml.widget.name[0]
+      } else {
+        // handle <name short="Branch">Branch Cordova</name>
+        output = configXml.widget.name[0]['_']
+      }
+    }
+
+    return output
   }
 
   // read branch value from <branch-config>
@@ -192,7 +204,7 @@
     if (preferences.androidBundleId !== null && !/^[a-zA-Z0-9._]+$/.test(preferences.androidBundleId)) {
       throw new Error('BRANCH SDK: Invalid "id" or "android-packageName" in <widget> in your config.xml. Docs https://goo.gl/GijGKP')
     }
-    if (preferences.androidPrefix !== null && !/^[/].[a-zA-Z0-9]{3}$/.test(preferences.androidPrefix)) {
+    if (preferences.androidPrefix !== null && !/^[/].[a-zA-Z0-9]{3,4}$/.test(preferences.androidPrefix)) {
       throw new Error('BRANCH SDK: Invalid "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP')
     }
     if (!(preferences.androidTestMode === 'true' || preferences.androidTestMode === 'false' || preferences.androidTestMode === null)) {

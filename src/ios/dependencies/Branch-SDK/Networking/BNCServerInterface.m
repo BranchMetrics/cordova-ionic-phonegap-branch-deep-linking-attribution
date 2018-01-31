@@ -397,7 +397,7 @@
         NSData *data = [BNCEncodingUtils dataFromHexString:hexKey];
         if (data) {
             SecKeyRef secKey = [self publicSecKeyFromPKCS12CertChainData:data];
-            if (secKey) [array addObject:(__bridge id)secKey];
+            if (secKey) [array addObject:(__bridge_transfer id)secKey];
         }
     }
     return array;
@@ -472,18 +472,35 @@ exit:
     [self postRequest:post url:url retryNumber:0 key:key callback:callback];
 }
 
+- (BOOL) isV2APIURL:(NSString*)urlstring {
+    NSRange range = [urlstring rangeOfString:@"branch.io/v2/"];
+    return (range.location != NSNotFound);
+}
+
 - (void)postRequest:(NSDictionary *)post
                 url:(NSString *)url
         retryNumber:(NSInteger)retryNumber
                 key:(NSString *)key
            callback:(BNCServerCallback)callback {
-    NSDictionary *extendedParams = [self updateDeviceInfoToParams:post];
+
+    NSMutableDictionary *extendedParams = nil;
+    if ([self isV2APIURL:url]) {
+        extendedParams = [NSMutableDictionary new];
+        if (post) [extendedParams addEntriesFromDictionary:post];
+        NSDictionary *d = [[BNCDeviceInfo getInstance] v2dictionary];
+        if (d.count) extendedParams[@"user_data"] = d;
+    } else {
+        extendedParams = [self updateDeviceInfoToParams:post];
+    }
     NSURLRequest *request = [self preparePostRequest:extendedParams url:url key:key retryNumber:retryNumber];
     
     // Instrumentation metrics
     self.requestEndpoint = [self.preferenceHelper getEndpointFromURL:url];
 
-    [self genericHTTPRequest:request retryNumber:retryNumber callback:callback retryHandler:^NSURLRequest *(NSInteger lastRetryNumber) {
+    [self genericHTTPRequest:request
+                 retryNumber:retryNumber
+                    callback:callback
+                retryHandler:^ NSURLRequest *(NSInteger lastRetryNumber) {
         return [self preparePostRequest:extendedParams url:url key:key retryNumber:++lastRetryNumber];
     }];
 }
@@ -591,7 +608,8 @@ exit:
 
     if (!operation) {
         NSString *message = BNCLocalizedString(
-            @"A network operation instance is expected to be returned by the networkOperationWithURLRequest:completion: method."
+            @"A network operation instance is expected to be returned by the"
+             " networkOperationWithURLRequest:completion: method."
         );
         NSError *error = [NSError branchErrorWithCode:BNCNetworkServiceInterfaceError localizedMessage:message];
         return error;
@@ -641,7 +659,8 @@ exit:
             networkOperationWithURLRequest:request.copy
             completion:^void (id<BNCNetworkOperationProtocol>operation) {
                 serverResponse =
-                    [self processServerResponse:operation.response data:operation.responseData error:operation.error];
+                    [self processServerResponse:operation.response
+                        data:operation.responseData error:operation.error];
                 [self collectInstrumentationMetricsWithOperation:operation];                    
                 dispatch_semaphore_signal(semaphore);
             }];
@@ -681,12 +700,19 @@ exit:
                                  key:(NSString *)key
                          retryNumber:(NSInteger)retryNumber {
 
-    NSDictionary *preparedParams = [self prepareParamDict:params key:key retryNumber:retryNumber requestType:@"POST"];
+    NSMutableDictionary *preparedParams =
+        [self prepareParamDict:params key:key retryNumber:retryNumber requestType:@"POST"];
+    if ([self isV2APIURL:url]) {
+        preparedParams[@"sdk"] = nil;
+    }
     NSData *postData = [BNCEncodingUtils encodeDictionaryToJsonData:preparedParams];
     NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
 
     BNCLogDebug(@"URL: %@.", url);
-    BNCLogDebug(@"Body: %@.", preparedParams);
+    BNCLogDebug(@"Body: %@\nJSON: %@.",
+        preparedParams,
+        [[NSString alloc] initWithData:postData encoding:NSUTF8StringEncoding]
+    );
     
     NSMutableURLRequest *request =
         [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
@@ -700,7 +726,7 @@ exit:
     return request;
 }
 
-- (NSDictionary *)prepareParamDict:(NSDictionary *)params
+- (NSMutableDictionary *)prepareParamDict:(NSDictionary *)params
 							   key:(NSString *)key
 					   retryNumber:(NSInteger)retryNumber
                        requestType:(NSString *)reqType {
@@ -779,11 +805,12 @@ exit:
     [self safeSetValue:deviceInfo.browserUserAgent forKey:@"user_agent" onDict:dict];
     [self safeSetValue:deviceInfo.country forKey:@"country" onDict:dict];
     [self safeSetValue:deviceInfo.language forKey:@"language" onDict:dict];
+    dict[@"local_ip"] = deviceInfo.localIPAddress;
 
     dict[BRANCH_REQUEST_KEY_AD_TRACKING_ENABLED] = @(deviceInfo.isAdTrackingEnabled);
 }
 
-- (NSDictionary*)updateDeviceInfoToParams:(NSDictionary *)params {
+- (NSMutableDictionary*)updateDeviceInfoToParams:(NSDictionary *)params {
     NSMutableDictionary *extendedParams=[[NSMutableDictionary alloc] init];
     [extendedParams addEntriesFromDictionary:params];
     [self updateDeviceInfoToMutableDictionary:extendedParams];

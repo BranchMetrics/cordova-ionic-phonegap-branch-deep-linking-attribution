@@ -4,8 +4,32 @@
   background-color: #FFFFFF;
 }
 body {
-  padding: 0.8em 0em 0.2em 0em;
+  display: flex;
+  flex-direction: column;
+  padding: 1em 0em 0.5em 0em;
   max-width: 40em;
+  margin: 0 auto;
+}
+fieldset {
+  border-color: #303030;
+  margin: 0.5em 1em;
+  padding: 0.75em;
+}
+fieldset > *:not(:first-child) {
+  margin-bottom: 0.5em;
+}
+fieldset > *:last-child {
+  margin-bottom: 0;
+}
+section {
+  display: flex;
+  flex-direction: row;
+}
+section > button:nth-child(even) {
+  margin-left: 0.5em;
+}
+section > button:nth-child(odd) {
+  margin-right: 0.5em;
 }
 button, input {
   padding: 0.5em;
@@ -14,20 +38,4 @@ button, input {
 }
 button {
   background-color: #F5F5F5;
-}
-div, fieldset {
-  border-color: #303030;
-  margin: 0.5em 0;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  justify-content: space-around;
-  -webkit-flex-direction: row;
-  flex-direction: row;
-}
-fieldset > div > *, div > * {
-  margin: 0 0.5em;
-  width: 0em;
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
 }

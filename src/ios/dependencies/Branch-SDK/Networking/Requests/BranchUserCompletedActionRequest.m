@@ -28,7 +28,7 @@
 }
 
 - (id)initWithAction:(NSString *)action state:(NSDictionary *)state withBranchViewCallback:(id)callback {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         _action = action;
         _state = state;
         _branchViewcallback = callback;
@@ -53,7 +53,9 @@
     params[BRANCH_REQUEST_KEY_DEVICE_FINGERPRINT_ID] = preferenceHelper.deviceFingerprintID;
     params[BRANCH_REQUEST_KEY_BRANCH_IDENTITY] = preferenceHelper.identityID;
     params[BRANCH_REQUEST_KEY_SESSION_ID] = preferenceHelper.sessionID;
-    
+    if (preferenceHelper.limitFacebookTracking)
+        params[@"limit_facebook_tracking"] = CFBridgingRelease(kCFBooleanTrue);
+
     if (self.state) {
         params[BRANCH_REQUEST_KEY_STATE] = self.state;
     }
@@ -76,7 +78,7 @@
 #pragma mark - NSCoding methods
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithCoder:decoder]) {
+    if ((self = [super initWithCoder:decoder])) {
         _action = [decoder decodeObjectForKey:@"action"];
         _state = [decoder decodeObjectForKey:@"state"];
     }

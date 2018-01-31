@@ -255,20 +255,13 @@
     // for better Android matching
     Branch.setCookieBasedMatching('cordova.app.link')
 
-    // to sync with Mixpanel if plugin is installed
-    Branch.setMixpanelToken('your_mixpanel_token')
-
     // Branch initialization
     Branch.initSession(function(data) {
       if (data['+clicked_branch_link']) {
         // read deep link data on click
         alert('Deep Link Data: ' + JSON.stringify(data))
       }
-    }).then(function(res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
+    });
     ```
 
 - #### Create Content Reference
@@ -335,9 +328,7 @@
       $match_duration: 2000,
       custom_string: 'data',
       custom_integer: Date.now(),
-      custom_boolean: true,
-      custom_array: [1, 2, 3, 4, 5],
-      custom_object: { 'random': 'dictionary' }
+      custom_boolean: true
     }
 
     branchUniversalObj.generateShortUrl(analytics, properties).then(function (res) {
@@ -370,9 +361,7 @@
       $desktop_url: 'http://www.example.com/desktop',
       custom_string: 'data',
       custom_integer: Date.now(),
-      custom_boolean: true,
-      custom_array: [1, 2, 3, 4, 5],
-      custom_object: { 'random': 'dictionary' }
+      custom_boolean: true
     }
 
     var message = 'Check out this link'
@@ -1072,6 +1061,14 @@
       | 176 | ZAR | 
       | 177 | ZMW | 
 
+- #### Link data: Mixpanel Integration
+
+  - Sync with Mixpanel if plugin is installed
+
+    ```js
+    Branch.setRequestMetadata("$mixpanel_distinct_id", "123")
+    ```
+
 - #### Compiling: Cordova Dependencies
 
   - Node
@@ -1191,6 +1188,9 @@
   <plugin name="branch-cordova-sdk" spec="^2.6.0" />
   ```
 
+  - [Test Deep Link iOS](#test-deep-link-ios)
+  - [Test Deep Link Android](#test-deep-link-android)
+
 - #### Compiling: Incompatible Plugins
 
   - The following plugins will not work with the Branch SDK
@@ -1257,6 +1257,6 @@
     Error: Error code 1 for command: /gradlew with args: cdvBuildDebug,-b,/build.gradle,-Dorg.gradle.daemon=true,-Pandroid.useDeprecatedNdk=true
     ```
 
-      - Add `<preference name="android-minSdkVersion" value="15" />` to your `config.xml`
+      - Add `<preference name="android-minSdkVersion" value="16" />` to your `config.xml`
 
 

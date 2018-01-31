@@ -11,20 +11,47 @@
 
   // injects config.xml preferences into AndroidManifest.xml file.
   function writePreferences (context, preferences) {
-    var pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
-    var manifest = xmlHelper.readXmlAsJson(pathToManifest)
-    var mainActivityIndex = getMainLaunchActivityIndex(manifest['manifest']['application'][0]['activity'])
+    // read manifest
+    var manifest = getManifest(context)
 
     // update manifest
-    manifest = updateMultidex(manifest)
-    manifest = updateBranchMetaData(manifest, preferences)
-    manifest = updateBranchReferrerTracking(manifest)
-    manifest = updateLaunchOptionToSingleTask(manifest, mainActivityIndex)
-    manifest = updateBranchURIScheme(manifest, mainActivityIndex, preferences)
-    manifest = updateBranchAppLinks(manifest, mainActivityIndex, preferences)
+    manifest.file = updateBranchMetaData(manifest.file, preferences)
+    manifest.file = updateBranchReferrerTracking(manifest.file)
+    manifest.file = updateLaunchOptionToSingleTask(manifest.file, manifest.mainActivityIndex)
+    manifest.file = updateBranchURIScheme(manifest.file, manifest.mainActivityIndex, preferences)
+    manifest.file = updateBranchAppLinks(manifest.file, manifest.mainActivityIndex, preferences, manifest.targetSdk)
 
-    // save new version of the AndroidManifest
-    xmlHelper.writeJsonAsXml(pathToManifest, manifest)
+    // save manifest
+    xmlHelper.writeJsonAsXml(manifest.path, manifest.file)
+  }
+
+  // get AndroidManifest.xml information
+  function getManifest (context) {
+    var pathToManifest
+    var manifest
+
+    try {
+      // cordova platform add android@6.0.0
+      pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml')
+      manifest = xmlHelper.readXmlAsJson(pathToManifest)
+    } catch (e) {
+      try {
+        // cordova platform add android@7.0.0
+        pathToManifest = path.join(context.opts.projectRoot, 'platforms', 'android', 'app', 'src', 'main', 'AndroidManifest.xml')
+        manifest = xmlHelper.readXmlAsJson(pathToManifest)
+      } catch (e) {
+        throw new Error('BRANCH SDK: Cannot read AndroidManfiest.xml ' + e)
+      }
+    }
+    var mainActivityIndex = getMainLaunchActivityIndex(manifest['manifest']['application'][0]['activity'])
+    var targetSdk = manifest['manifest']['uses-sdk'][0]['$']['android:targetSdkVersion']
+
+    return {
+      file: manifest,
+      path: pathToManifest,
+      mainActivityIndex: mainActivityIndex,
+      targetSdk: targetSdk
+    }
   }
 
   // adds to <application> for Branch init and testmode:
@@ -54,14 +81,6 @@
     }
     manifest['manifest']['application'][0]['meta-data'] = metadatas.concat(metadata)
 
-    return manifest
-  }
-
-  // adds to <application> for multidex (needed for all the frameworks)
-  //    <application android:name="android.support.multidex.MultiDexApplication" >
-  //    </application>
-  function updateMultidex (manifest) {
-    manifest['manifest']['application'][0]['$']['android:name'] = 'android.support.multidex.MultiDexApplication'
     return manifest
   }
 
@@ -154,20 +173,24 @@
   //       <data android:scheme="https" android:host="ethan.app.link" />
   //       <data android:scheme="https" android:host="ethan-alternate.app.link" />
   //    </intent-filter>
-  function updateBranchAppLinks (manifest, mainActivityIndex, preferences) {
+  function updateBranchAppLinks (manifest, mainActivityIndex, preferences, targetSdk) {
     var intentFilters = manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] || []
     var data = getAppLinkIntentFilterData(preferences)
     var androidName = 'io.branch.sdk.AppLink'
+    var header = {
+      'android:name': androidName,
+      'android:autoVerify': 'true'
+    }
+    if (targetSdk && parseInt(targetSdk) < 23) {
+      delete header['android:autoVerify']
+    }
 
     // remove
     intentFilters = removeBasedOnAndroidName(intentFilters, androidName)
 
     // add new (remove old already done in updateBranchURIScheme)
     manifest['manifest']['application'][0]['activity'][mainActivityIndex]['intent-filter'] = intentFilters.concat([{
-      '$': {
-        'android:name': androidName,
-        'android:autoVerify': 'true'
-      },
+      '$': header,
       'action': [{
         '$': {
           'android:name': 'android.intent.action.VIEW'
@@ -199,7 +222,7 @@
       // app.link link domains need -alternate associated domains as well (for Deep Views)
       if (linkDomain.indexOf('app.link') !== -1) {
         var first = linkDomain.split('.')[0]
-        var rest = linkDomain.split('.').slice(2).join('.')
+        var rest = linkDomain.split('.').slice(1).join('.')
         var alternate = first + '-alternate' + '.' + rest
 
         intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain))

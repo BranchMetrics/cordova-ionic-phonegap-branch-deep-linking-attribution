@@ -8,12 +8,13 @@
 
 
 #import "BNCStrongMatchHelper.h"
-#import <objc/runtime.h>
 #import "BNCConfig.h"
 #import "BNCPreferenceHelper.h"
 #import "BNCSystemObserver.h"
 #import "BranchConstants.h"
 #import "BNCLog.h"
+#import "UIViewController+Branch.h"
+#import <objc/runtime.h>
 
 
 #pragma mark BNCStrongMatchHelper iOS 8.0
@@ -44,7 +45,14 @@
 
 
 #else   // ------------------------------------------------------------------------------ iOS >= 9.0
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpartial-availability"
+
+#if __has_feature(modules)
+@import SafariServices;
+#else
 #import <SafariServices/SafariServices.h>
+#endif
 
 
 #pragma mark - BNCMatchView
@@ -133,7 +141,7 @@
 
 + (NSURL *)getUrlForCookieBasedMatchingWithBranchKey:(NSString *)branchKey
                                          redirectUrl:(NSString *)redirectUrl {
-    if (!branchKey) {
+    if (!branchKey || !self.cookiesAvailableInOS) {
         return nil;
     }
     
@@ -192,7 +200,13 @@
     #pragma clang diagnostic pop
 }
 
++ (BOOL)cookiesAvailableInOS {
+    return [UIDevice currentDevice].systemVersion.doubleValue < 11.0;
+}
+
 - (void)createStrongMatchWithBranchKey:(NSString *)branchKey {
+    if (!self.class.cookiesAvailableInOS) return;
+
     @synchronized (self) {
         if (self.requestInProgress) return;
 
@@ -246,37 +260,6 @@
     return YES;
 }
 
-- (UIWindow*) keyWindow {
-    Class UIApplicationClass = NSClassFromString(@"UIApplication");
-    UIWindow *keyWindow = [UIApplicationClass sharedApplication].keyWindow;
-    if (keyWindow) return keyWindow;
-	// ToDo: Put different code for extensions here.
-    return nil;
-}
-
-/**
-  Find the top view controller that is not of type UINavigationController, UITabBarController, UISplitViewController
- */
-- (UIViewController *)topViewController:(UIViewController *)baseViewController {
-    if ([baseViewController isKindOfClass:[UINavigationController class]]) {
-        return [self topViewController: ((UINavigationController *)baseViewController).visibleViewController];
-    }
-
-    if ([baseViewController isKindOfClass:[UITabBarController class]]) {
-        return [self topViewController: ((UITabBarController *)baseViewController).selectedViewController];
-    }
-
-    if ([baseViewController isKindOfClass:[UISplitViewController class]]) {
-        return [self topViewController: ((UISplitViewController *)baseViewController).viewControllers.firstObject];
-    }
-
-    if ([baseViewController presentedViewController] != nil) {
-        return [self topViewController: [baseViewController presentedViewController]];
-    }
-
-    return baseViewController;
-}
-
 - (BOOL) willLoadViewControllerWithURL:(NSURL*)matchURL {
     if (self.primaryWindow) return NO;
 
@@ -311,7 +294,7 @@
     }
 
     BNCLogDebugSDK(@"Safari is initializing.");
-    self.primaryWindow = [self keyWindow];
+    self.primaryWindow = [UIViewController bnc_currentWindow];
 
     self.matchViewController = [[BNCMatchViewControllerSubclass alloc] initWithURL:matchURL];
     if (!self.matchViewController) return NO;
@@ -323,7 +306,7 @@
     self.matchView.alpha = 1.0;
     [self.matchView addSubview:self.matchViewController.view];
 
-    UIViewController *rootViewController = [self topViewController:self.primaryWindow.rootViewController];
+    UIViewController *rootViewController = [self.primaryWindow.rootViewController bnc_currentViewController];
 
     [rootViewController addChildViewController:self.matchViewController];
     UIView *parentView = rootViewController.view ?: self.primaryWindow;
@@ -361,4 +344,5 @@
 
 @end
 
+#pragma clang diagnostic pop
 #endif  // ------------------------------------------------------------------------------ iOS >= 9.0

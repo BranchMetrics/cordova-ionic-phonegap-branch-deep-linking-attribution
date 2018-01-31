@@ -48,9 +48,11 @@
 */
 //--------------------------------------------------------------------------------------------------
 
-
+#if __has_feature(modules)
+@import Foundation;
+#else
 #import <Foundation/Foundation.h>
-
+#endif
 
 #ifdef __cplusplus
 extern "C" {

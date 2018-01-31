@@ -77,23 +77,38 @@
     var prev = entitlements[ASSOCIATED_DOMAINS]
     var next = updateAssociatedDomains(preferences)
 
-    prev = removePreviousAssociatedDomains(prev)
+    prev = removePreviousAssociatedDomains(preferences, prev)
     entitlements[ASSOCIATED_DOMAINS] = domains.concat(prev, next)
 
     return entitlements
   }
 
   // removed previous associated domains related to Branch (will not remove link domain changes from custom domains or custom sub domains)
-  function removePreviousAssociatedDomains (domains) {
+  function removePreviousAssociatedDomains (preferences, domains) {
     var output = []
+    var linkDomains = preferences.linkDomain
+
     if (!domains) return output
     for (var i = 0; i < domains.length; i++) {
       var domain = domains[i]
-      if (domain.indexOf('bnc.lt') > 0 || domain.indexOf('app.link') > 0) continue
-      output.push(domain)
+      if (domain.indexOf('applinks:') === 0) {
+        domain = domain.replace('applinks:', '')
+        if (isBranchAssociatedDomains(domain, linkDomains)) {
+          output.push('applinks:' + domain)
+        }
+      } else {
+        if (isBranchAssociatedDomains(domain, linkDomains)) {
+          output.push(domain)
+        }
+      }
     }
 
     return output
+  }
+
+  // determine if previous associated domain is related to Branch (to prevent duplicates when appending new)
+  function isBranchAssociatedDomains (domain, linkDomains) {
+    return !(domain.indexOf('bnc.lt') > 0 || domain.indexOf('app.link') > 0 || linkDomains.indexOf(domain) >= 0)
   }
 
   // determine which Branch Link Domains to append

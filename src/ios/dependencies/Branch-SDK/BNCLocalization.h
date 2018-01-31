@@ -6,7 +6,11 @@
 //  Copyright © 2017 Branch Metrics. All rights reserved.
 //
 
+#if __has_feature(modules)
+@import Foundation;
+#else
 #import <Foundation/Foundation.h>
+#endif
 
 @interface BNCLocalization : NSObject
 
@@ -15,8 +19,8 @@
 + (NSDictionary<NSString*, NSDictionary*>*) languageDictionaries;
 - (NSString*) localizeString:(NSString*)string;
 
-@property (copy) NSString* currentLanguage;
-@property (strong, readonly) NSDictionary *currentLanguageDictionary;
+@property (copy, atomic) NSString* currentLanguage;
+@property (strong, atomic, readonly) NSDictionary *currentLanguageDictionary;
 @end
 
 #pragma mark Convenience Functions

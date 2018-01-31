@@ -3,6 +3,9 @@ package io.branch;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.annotation.TargetApi;
+import android.net.Uri;
+import android.os.Build;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -14,8 +17,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import android.net.Uri;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -61,6 +62,7 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity = this.cordova.getActivity();
 
+        Branch.disableInstantDeepLinking(true);
         Branch.getAutoInstance(this.activity.getApplicationContext());
 
     }
@@ -72,6 +74,23 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity.setIntent(intent);
 
+    }
+
+    /**
+     * Handle depreciated call to sendJavaScript for more recent method
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void sendJavascript(final String javascript) {
+        webView.getView().post(new Runnable() {
+            @Override
+            public void run() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    webView.sendJavascript(javascript);
+                } else {
+                    webView.loadUrl("javascript:" + javascript);
+                }
+            }
+        });
     }
 
     /**
@@ -97,7 +116,7 @@ public class BranchSDK extends CordovaPlugin {
         } else if (action.equals("initSession")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
-        } else if (action.equals("setMixpanelToken")) {
+        } else if (action.equals("setRequestMetadata")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
         } else {
@@ -593,9 +612,9 @@ public class BranchSDK extends CordovaPlugin {
      * @param token           A {@link String} value containing the unique identifier of the Mixpanel user.
      * @param callbackContext A callback to execute at the end of this method
      */
-    private void setMixpanelToken(String token, CallbackContext callbackContext) {
+    private void setRequestMetadata(String key, String val, CallbackContext callbackContext) {
 
-        Branch.getInstance().setRequestMetadata("$mixpanel_distinct_id", token);
+        Branch.getInstance().setRequestMetadata(key, val);
 
         callbackContext.success("Success");
 
@@ -808,7 +827,7 @@ public class BranchSDK extends CordovaPlugin {
             if (error == null && referringParams != null) {
 
                 out = String.format("DeepLinkHandler(%s)", referringParams.toString());
-                webView.sendJavascript(out);
+                sendJavascript(out);
 
                 if (this._callbackContext != null) {
                     this._callbackContext.success(referringParams);
@@ -1240,8 +1259,8 @@ public class BranchSDK extends CordovaPlugin {
                     setDebug(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("initSession")) {
                     initSession(this.callbackContext);
-                } else if (this.action.equals("setMixpanelToken")) {
-                    setMixpanelToken(this.args.getString(0), this.callbackContext);
+                } else if (this.action.equals("setRequestMetadata")) {
+                    setRequestMetadata(this.args.getString(0), this.args.getString(1), this.callbackContext);
                 } else {
                     if (this.action.equals("setIdentity")) {
                         setIdentity(this.args.getString(0), this.callbackContext);
