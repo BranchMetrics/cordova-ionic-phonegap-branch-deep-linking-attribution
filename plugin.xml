@@ -93,6 +93,8 @@ SOFTWARE.
     <header-file src="src/ios/dependencies/Fabric/Fabric+FABKits.h" />
     <header-file src="src/ios/dependencies/Fabric/Fabric.h" />
     
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCApplication.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCApplication.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCAvailability.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCAvailability.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCCallbacks.h" />
@@ -117,6 +119,8 @@ SOFTWARE.
     <header-file src="src/ios/dependencies/Branch-SDK/BNCFabricAnswers.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCFabricAnswers.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCFieldDefines.h" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCKeyChain.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCKeyChain.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCLinkCache.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCLinkCache.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCLinkData.h" />
@@ -133,6 +137,10 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BNCStrongMatchHelper.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCURLBlackList.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCURLBlackList.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/Branch+Validator.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/Branch+Validator.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/Branch.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Branch.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchActivityItemProvider.h" />
