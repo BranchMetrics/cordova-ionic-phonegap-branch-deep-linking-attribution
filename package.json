@@ -36,28 +36,83 @@
     }
   },
   "scripts": {
-    "changelog": "node ./src/scripts/npm/updateChangeLog -reset=true",
-    "commitmsg": "validate-commit-msg",
-    "validate": "gulp prod",
-    "dependencies": "ncu -u",
-    "precommit": "gulp prod",
-    "postcommit": "semantic-release pre --verifyRelease='./src/scripts/npm/updateNpmVersion' || true",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "validate": "            echo 'run validation scripts';     gulp prod",
+    "travis-deploy-once": "  echo 'prevent multiple deploys';   travis-deploy-once",
+    "commitmsg": "           echo 'validate commit messages';   commitlint -e $GIT_PARAMS",
+    "precommit": "           echo 'run prettier on commit';     lint-staged",
+    "prettier": "            echo 'run prettier';               prettier --write './{src,testbed,tests}/**/*.js'",
+    "lint": "                echo 'run code linter';            eslint --ext=js --fix ./src",
+    "semantic-release": "    echo 'run continuous integration'; semantic-release"
   },
   "dependencies": {
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
-    "plist": "^2.1.0",
-    "request": "^2.81.0",
-    "xml2js": "^0.4.18"
+    "plist": "^3.0.1",
+    "request": "^2.85.0",
+    "xml2js": "^0.4.19"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb",
+      "prettier",
+      "plugin:jest/recommended"
+    ],
+    "rules": {
+      "react/jsx-filename-extension": 0,
+      "object-shorthand": 0
+    },
+    "globals": {
+      "document": true,
+      "window": true,
+      "navigator": true
+    }
+  },
+  "release": {
+    "verifyConditions": [
+      "@semantic-release/changelog",
+      "@semantic-release/git"
+    ],
+    "prepare": [
+      {
+        "path": "@semantic-release/changelog",
+        "changelogFile": "CHANGELOG.md"
+      },
+      "@semantic-release/git"
+    ],
+    "publish": [
+      "@semantic-release/github"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "src/*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^6.1.3",
+    "@commitlint/config-conventional": "^6.1.3",
+    "@semantic-release/changelog": "^2.0.1",
+    "@semantic-release/git": "^4.0.2",
+    "@semantic-release/github": "^4.2.11",
     "cordova": "^7.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jest": "^21.15.1",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
     "gulp": "^3.9.1",
-    "gulp-standard": "^10.1.0",
     "husky": "^0.14.3",
-    "npm-check-updates": "^2.12.1",
-    "semantic-release": "^7.0.1",
-    "validate-commit-msg": "^2.14.0"
+    "lint-staged": "^7.0.4",
+    "prettier": "^1.12.1",
+    "semantic-release": "^15.1.7",
+    "travis-deploy-once": "^4.4.1"
   }
 }
