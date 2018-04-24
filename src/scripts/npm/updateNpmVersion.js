@@ -1,84 +1,97 @@
-(function () {
+(function() {
   // properties
-  'use strict'
-  var path = require('path')
-  var exec = require('child_process').exec
-  var fileHelper = require('../lib/fileHelper.js')
-  var FILES = ['package.json', 'plugin.xml', 'plugin.template.xml']
-  var isChange = false
+  
+
+
+  const path = require("path");
+  const exec = require("child_process").exec;
+  const fileHelper = require("../lib/fileHelper.js");
+  const FILES = ["package.json", "plugin.xml", "plugin.template.xml"];
+  let isChange = false;
 
   // entry
-  module.exports = updateNpmVersion
+  module.exports = updateNpmVersion;
 
   // updates the npm version in semantic-release pre
-  function updateNpmVersion (pluginConfig, config, callback) {
-    var files = readFilePaths(FILES)
-    var version = config.nextRelease.version
-    var git = ''
+  function updateNpmVersion(pluginConfig, config, callback) {
+    const files = readFilePaths(FILES);
+    const version = config.nextRelease.version;
+    let git = "";
 
-    for (var i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
       // update
-      var file = files[i]
-      var content = readContent(file)
-      var updated = updateVersion(file, content, version)
+      const file = files[i];
+      const content = readContent(file);
+      const updated = updateVersion(file, content, version);
 
       // save
-      git += 'git add ' + file + ' && '
-      saveContent(file, updated)
+      git += `git add ${  file  } && `;
+      saveContent(file, updated);
     }
     // publish
-    isChange && commitChanges(git, version)
+    isChange && commitChanges(git, version);
   }
 
   // handle content
-  function readContent (file) {
-    return isFileXml(file) ? fileHelper.readFile(file) : JSON.parse(fileHelper.readFile(file))
+  function readContent(file) {
+    return isFileXml(file)
+      ? fileHelper.readFile(file)
+      : JSON.parse(fileHelper.readFile(file));
   }
 
-  function saveContent (file, content) {
-    return isFileXml(file) ? fileHelper.writeFile(file, content) : fileHelper.writeFile(file, JSON.stringify(content, null, 2) + '\n')
+  function saveContent(file, content) {
+    return isFileXml(file)
+      ? fileHelper.writeFile(file, content)
+      : fileHelper.writeFile(file, `${JSON.stringify(content, null, 2)  }\n`);
   }
 
-  function isFileXml (file) {
-    return file.indexOf('xml') > 0
+  function isFileXml(file) {
+    return file.indexOf("xml") > 0;
   }
 
   // update content based on xml or json
-  function updateVersion (file, content, version) {
-    var prev = /id="branch-cordova-sdk"[\s]*version="\d+\.\d+\.\d+"/mgi
-    var next = 'id="branch-cordova-sdk"\n  version="' + version + '"'
+  function updateVersion(file, content, version) {
+    const prev = /id="branch-cordova-sdk"[\s]*version="\d+\.\d+\.\d+"/gim;
+    const next = `id="branch-cordova-sdk"\n  version="${  version  }"`;
 
     try {
       if (isFileXml(file)) {
-        content = content.replace(prev, next)
+        content = content.replace(prev, next);
       } else {
-        isChange = content.version !== version
-        content.version = version
+        isChange = content.version !== version;
+        content.version = version;
       }
     } catch (e) {
-      throw new Error('BRANCH SDK: update to update npm version with file ' + file)
+      throw new Error(
+        `BRANCH SDK: update to update npm version with file ${  file}`
+      );
     }
-    return content
+    return content;
   }
 
   // get the absolute path of the files within the root directory
-  function readFilePaths (files) {
-    var locations = []
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i]
-      var location = path.join(__dirname, '../../../', file)
-      locations.push(location)
+  function readFilePaths(files) {
+    const locations = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const location = path.join(__dirname, "../../../", file);
+      locations.push(location);
     }
-    return locations
+    return locations;
   }
 
   // push file code changes to github
-  function commitChanges (git, version) {
-    git += 'git commit -m "chore: updated npm version to ' + version + '" && git push'
-    exec(git, function (err, stdout, stderr) {
+  function commitChanges(git, version) {
+    git +=
+      `git commit -m "chore: updated npm version to ${ 
+      version 
+      }" && git push`;
+    exec(git, (err, stdout, stderr) => {
       if (err) {
-        throw new Error('BRANCH SDK: Failed to commit git changes for the npm version. Docs https://goo.gl/GijGKP')
+        throw new Error(
+          "BRANCH SDK: Failed to commit git changes for the npm version. Docs https://goo.gl/GijGKP"
+        );
       }
-    })
+    });
   }
-})()
+})();

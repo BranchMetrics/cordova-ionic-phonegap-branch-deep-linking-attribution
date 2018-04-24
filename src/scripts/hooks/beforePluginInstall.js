@@ -1,13 +1,15 @@
-(function () {
+(function() {
   // properties
-  'use strict'
-  var nodeDependencies = require('../npm/downloadNpmDependencies.js')
+  
+
+
+  const nodeDependencies = require("../npm/downloadNpmDependencies.js");
 
   // entry
-  module.exports = run
+  module.exports = run;
 
   // builds before plugin install hooks
-  function run (context) {
-    nodeDependencies.install(context)
+  function run(context) {
+    nodeDependencies.install(context);
   }
-})()
+})();

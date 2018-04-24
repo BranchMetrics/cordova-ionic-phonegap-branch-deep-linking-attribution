@@ -1,26 +1,28 @@
-(function () {
+(function() {
   // properties
-  'use strict'
-  var configPreferences = require('../npm/processConfigXml.js')
-  var iosPlist = require('../ios/updatePlist.js')
-  var iosCapabilities = require('../ios/enableEntitlements.js')
-  var iosAssociatedDomains = require('../ios/updateAssociatedDomains.js')
-  var IOS = 'ios'
+  
+
+
+  const configPreferences = require("../npm/processConfigXml.js");
+  const iosPlist = require("../ios/updatePlist.js");
+  const iosCapabilities = require("../ios/enableEntitlements.js");
+  const iosAssociatedDomains = require("../ios/updateAssociatedDomains.js");
+  const IOS = "ios";
 
   // entry
-  module.exports = run
+  module.exports = run;
 
   // builds before platform config
-  function run (context) {
-    var preferences = configPreferences.read(context)
-    var platforms = context.opts.cordova.platforms
+  function run(context) {
+    const preferences = configPreferences.read(context);
+    const platforms = context.opts.cordova.platforms;
 
-    platforms.forEach(function (platform) {
+    platforms.forEach((platform) => {
       if (platform === IOS) {
-        iosPlist.addBranchSettings(preferences)
-        iosCapabilities.enableAssociatedDomains(preferences)
-        iosAssociatedDomains.addAssociatedDomains(preferences)
+        iosPlist.addBranchSettings(preferences);
+        iosCapabilities.enableAssociatedDomains(preferences);
+        iosAssociatedDomains.addAssociatedDomains(preferences);
       }
-    })
+    });
   }
-})()
+})();
