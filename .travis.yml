@@ -12,9 +12,9 @@ cache:
 notifications:
   email: false
 install:
-  - yarn install
+  - npm install
 script:
-  - yarn validate
+  - npm run validate
 after_success:
   - npm run travis-deploy-once "npm run semantic-release"
 branches:
