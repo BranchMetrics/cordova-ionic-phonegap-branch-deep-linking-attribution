@@ -10,7 +10,7 @@ const BranchInit = isDebug => {
   console.log("Trigger BranchInit()");
 
   // for GDPR compliance (can be called at anytime )
-  Branch.trackingDisabled(true);
+  Branch.setTrackingDisabled(false);
 
   // for development and debugging only
   Branch.setDebug(isDebug);
@@ -243,17 +243,17 @@ const BranchShareSheet = () => {
   // optional listeners (must be called before showShareSheet)
   branchUniversalObj.onShareSheetLaunched(res => {
     // android only
-    logger(res);
+    console.log(res);
   });
   branchUniversalObj.onShareSheetDismissed(res => {
-    logger(res);
+    console.log(res);
   });
   branchUniversalObj.onLinkShareResponse(res => {
-    logger(res);
+    console.log(res);
   });
   branchUniversalObj.onChannelSelected(res => {
     // android only
-    logger(res);
+    console.log(res);
   });
 
   // share sheet
