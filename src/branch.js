@@ -49,10 +49,10 @@ Branch.prototype.disableGlobalListenersWarnings = function() {
   disableGlobalListenersWarnings = true;
 };
 
-Branch.prototype.setTrackingDisabled = function(isDisabled) {
-  var value = typeof isDisabled === "boolean" ? isDisabled : false;
+Branch.prototype.disableTracking = function(isEnabled) {
+  var value = typeof isEnabled === "boolean" ? isEnabled : false;
   this.trackingDisabled = value;
-  return execute("setTrackingDisabled", [value]);
+  return execute("disableTracking", [value]);
 };
 
 let runOnce = true;

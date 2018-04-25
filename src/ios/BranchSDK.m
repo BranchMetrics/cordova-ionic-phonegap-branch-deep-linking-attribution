@@ -126,7 +126,7 @@
 
 }
 
-- (void)setTrackingDisabled:(CDVInvokedUrlCommand*)command
+- (void)disableTracking:(CDVInvokedUrlCommand*)command
 {
 
   bool enabled = [[command.arguments objectAtIndex:0] boolValue] == YES;

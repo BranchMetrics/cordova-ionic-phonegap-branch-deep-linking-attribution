@@ -112,6 +112,8 @@ public class BranchSDK extends CordovaPlugin {
             if (args.length() == 1) {
                 cordova.getActivity().runOnUiThread(r);
             }
+        } else if (action.equals("disableTracking")) {
+            cordova.getActivity().runOnUiThread(r);
             return true;
         } else if (action.equals("initSession")) {
             cordova.getActivity().runOnUiThread(r);
@@ -591,6 +593,18 @@ public class BranchSDK extends CordovaPlugin {
         }
 
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ isEnable));
+    /**
+     * <p>Disables tracking for GDPR compliance.</p>
+     * <p>Can flag at any time.</p>
+     * <p>Limits all Branch network requests and forces long link generation.</p>
+     *
+     * @param isEnable        A {@link Boolean} value to enable/disable debugging mode for the app.
+     * @param callbackContext A callback to execute at the end of this method
+     */
+    private void disableTracking(boolean isEnable, CallbackContext callbackContext) {
+        this.activity = this.cordova.getActivity();
+        Branch.getAutoInstance(this.activity.getApplicationContext()).disableTracking(isEnable);
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
     }
 
     /**
@@ -1257,6 +1271,8 @@ public class BranchSDK extends CordovaPlugin {
             try {
                 if (this.action.equals("setDebug")) {
                     setDebug(this.args.getBoolean(0), this.callbackContext);
+                } else if (this.action.equals("disableTracking")) {
+                    disableTracking(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("initSession")) {
                     initSession(this.callbackContext);
                 } else if (this.action.equals("setRequestMetadata")) {

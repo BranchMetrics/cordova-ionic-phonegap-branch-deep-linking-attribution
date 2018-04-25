@@ -28,7 +28,7 @@
 // BranchSDK Basic Methods
 - (void)initSession:(CDVInvokedUrlCommand*)command;
 - (void)setMixpanelToken:(CDVInvokedUrlCommand*)command;
-- (void)setTrackingDisabled:(CDVInvokedUrlCommand*)command;
+- (void)disableTracking:(CDVInvokedUrlCommand*)command;
 - (void)setDebug:(CDVInvokedUrlCommand*)command;
 - (void)getAutoInstance:(CDVInvokedUrlCommand*)command;
 - (void)getLatestReferringParams:(CDVInvokedUrlCommand*)command;

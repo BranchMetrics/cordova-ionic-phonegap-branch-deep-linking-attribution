@@ -10,7 +10,7 @@ const BranchInit = isDebug => {
   console.log("Trigger BranchInit()");
 
   // for GDPR compliance (can be called at anytime )
-  Branch.setTrackingDisabled(false);
+  Branch.disabledTracking(false);
 
   // for development and debugging only
   Branch.setDebug(isDebug);
