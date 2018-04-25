@@ -1,29 +1,27 @@
 // properties
 
+var exec = require("cordova/exec");
 
-
-const exec = require("cordova/exec");
-
-const deviceVendor = window.clientInformation.vendor;
-const _API_CLASS = "BranchSDK"; // SDK Class
+var deviceVendor = window.clientInformation.vendor;
+var _API_CLASS = "BranchSDK"; // SDK Class
 
 // javscript to sdk
 function execute(method, params) {
   params = !params ? [] : params;
 
-  return new Promise(((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     exec(
-      (res) => {
+      res => {
         resolve(res);
       },
-      (err) => {
+      err => {
         reject(err);
       },
       _API_CLASS,
       method,
       params
     );
-  }));
+  });
 }
 
 function executeCallback(method, callback, params) {
@@ -31,7 +29,7 @@ function executeCallback(method, callback, params) {
 
   exec(
     callback,
-    (err) => {
+    err => {
       console.error(err);
     },
     _API_CLASS,
@@ -41,7 +39,7 @@ function executeCallback(method, callback, params) {
 }
 
 // Branch prototype
-const Branch = function Branch() {
+var Branch = function Branch() {
   this.debugMode = false;
   this.trackingDisabled = false;
 };
@@ -61,20 +59,20 @@ let runOnce = true;
 let previousLinkTimestamp = null;
 Branch.prototype.initSession = function(deepLinkDataListener) {
   // handle double init from onResume on iOS
-  if (!runOnce) return new Promise(((resolve, reject) => {}));
+  if (!runOnce) return new Promise((resolve, reject) => {});
   runOnce = deviceVendor.indexOf("Apple") < 0;
 
   // private method to filter out +clicked_branch_link = false in deep link callback
-  const deepLinkDataParser = function(deepLinkData) {
-    const timestamp = "+click_timestamp";
-    const isBranchLink = "+clicked_branch_link";
-    const isNonBranchLink = "+non_branch_link";
+  var deepLinkDataParser = function(deepLinkData) {
+    var timestamp = "+click_timestamp";
+    var isBranchLink = "+clicked_branch_link";
+    var isNonBranchLink = "+non_branch_link";
 
-    const isBranchLinkClick =
+    var isBranchLinkClick =
       deepLinkData.hasOwnProperty(isBranchLink) &&
       deepLinkData[isBranchLink] === true;
-    const isNonBranchLinkClick = deepLinkData.hasOwnProperty(isNonBranchLink);
-    const currentLinkTimestamp = deepLinkData.hasOwnProperty(timestamp)
+    var isNonBranchLinkClick = deepLinkData.hasOwnProperty(isNonBranchLink);
+    var currentLinkTimestamp = deepLinkData.hasOwnProperty(timestamp)
       ? deepLinkData[timestamp]
       : Date.now();
 
@@ -123,23 +121,23 @@ Branch.prototype.setMixpanelToken = function(token) {
 
 Branch.prototype.setRequestMetadata = function(key, val) {
   if (!key || typeof key !== "string") {
-    return new Promise(((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       reject(new Error("Please set key"));
-    }));
+    });
   }
   if (!val || typeof val !== "string") {
-    return new Promise(((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       reject(new Error("Please set value"));
-    }));
+    });
   }
   return execute("setRequestMetadata", [key, val]);
 };
 
 Branch.prototype.setDebug = function(isEnabled) {
-  isEnabled = typeof isEnabled !== "boolean" ? false : isEnabled;
-  this.debugMode = isEnabled;
+  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+  this.debugMode = value;
 
-  return execute("setDebug", [isEnabled]);
+  return execute("setDebug", [value]);
 };
 
 Branch.prototype.setCookieBasedMatching = function(linkDomain) {
@@ -159,11 +157,10 @@ Branch.prototype.getLatestReferringParams = function() {
 Branch.prototype.setIdentity = function(identity) {
   if (identity) {
     return execute("setIdentity", [String(identity)]);
-  } 
-    return new Promise(((resolve, reject) => {
-      reject(new Error("Please set an identity"));
-    }));
-  
+  }
+  return new Promise((resolve, reject) => {
+    reject(new Error("Please set an identity"));
+  });
 };
 
 Branch.prototype.logout = function() {
@@ -172,12 +169,12 @@ Branch.prototype.logout = function() {
 
 Branch.prototype.userCompletedAction = function(action, metaData) {
   if (!action) {
-    return new Promise(((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       reject(new Error("Please set an event name"));
-    }));
+    });
   }
 
-  const args = [action];
+  var args = [action];
   if (metaData) {
     args.push(metaData);
   }
@@ -187,12 +184,12 @@ Branch.prototype.userCompletedAction = function(action, metaData) {
 
 Branch.prototype.sendCommerceEvent = function(action, metaData) {
   if (!action) {
-    return new Promise(((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       reject(new Error("Please set a commerce event"));
-    }));
+    });
   }
 
-  const args = [action];
+  var args = [action];
   if (metaData) {
     args.push(metaData);
   }
@@ -201,10 +198,10 @@ Branch.prototype.sendCommerceEvent = function(action, metaData) {
 };
 
 Branch.prototype.createBranchUniversalObject = function(options) {
-  return new Promise(((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     execute("createBranchUniversalObject", [options]).then(
-      (res) => {
-        const obj = {
+      res => {
+        var obj = {
           message: res.message,
           instanceId: res.branchUniversalObjectId
         };
@@ -261,20 +258,19 @@ Branch.prototype.createBranchUniversalObject = function(options) {
         obj.listOnSpotlight = function() {
           if (!(deviceVendor.indexOf("Apple") < 0)) {
             return execute("listOnSpotlight", [obj.instanceId]);
-          } 
-            return new Promise(((resolve, reject) => {
-              reject(new Error("iOS Spotlight only"));
-            }));
-          
+          }
+          return new Promise((resolve, reject) => {
+            reject(new Error("iOS Spotlight only"));
+          });
         };
 
         resolve(obj);
       },
-      (err) => {
+      err => {
         reject(err);
       }
     );
-  }));
+  });
 };
 
 Branch.prototype.loadRewards = function(bucket) {
@@ -286,7 +282,7 @@ Branch.prototype.loadRewards = function(bucket) {
 };
 
 Branch.prototype.redeemRewards = function(value, bucket) {
-  const params = [value];
+  var params = [value];
   if (bucket) {
     params.push(bucket);
   }
