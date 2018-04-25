@@ -71,7 +71,15 @@
   "release": {
     "verifyConditions": [
       "@semantic-release/changelog",
-      "@semantic-release/git"
+      "@semantic-release/github",
+      "@semantic-release/git",
+      "@semantic-release/npm"
+    ],
+    "verifyRelease": [
+      {
+        "path": "@semantic-release/exec",
+        "cmd": "node ./src/scripts/npm/updateNpmVersion"
+      }
     ],
     "prepare": [
       {
@@ -81,7 +89,8 @@
       "@semantic-release/git"
     ],
     "publish": [
-      "@semantic-release/github"
+      "@semantic-release/github",
+      "@semantic-release/npm"
     ]
   },
   "commitlint": {
@@ -99,8 +108,10 @@
     "@commitlint/cli": "^6.1.3",
     "@commitlint/config-conventional": "^6.1.3",
     "@semantic-release/changelog": "^2.0.1",
+    "@semantic-release/exec": "^2.2.3",
     "@semantic-release/git": "^4.0.2",
     "@semantic-release/github": "^4.2.11",
+    "@semantic-release/npm": "^3.2.4",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
