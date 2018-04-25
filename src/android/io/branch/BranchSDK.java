@@ -1029,7 +1029,7 @@ public class BranchSDK extends CordovaPlugin {
 
             JSONObject response = new JSONObject();
 
-            if (error == null) {
+            if (error == null || url != null) {
 
                 try {
                     response.put("url", url);
