@@ -43,11 +43,18 @@ function executeCallback(method, callback, params) {
 // Branch prototype
 const Branch = function Branch() {
   this.debugMode = false;
+  this.trackingDisabled = false;
 };
 
 let disableGlobalListenersWarnings = false;
 Branch.prototype.disableGlobalListenersWarnings = function() {
   disableGlobalListenersWarnings = true;
+};
+
+Branch.prototype.setTrackingDisabled = function(isDisabled) {
+  var value = typeof isDisabled === "boolean" ? isDisabled : false;
+  this.trackingDisabled = value;
+  return execute("setTrackingDisabled", [value]);
 };
 
 let runOnce = true;
