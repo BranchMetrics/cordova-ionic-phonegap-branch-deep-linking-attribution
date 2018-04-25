@@ -109,9 +109,8 @@ public class BranchSDK extends CordovaPlugin {
         Runnable r = new RunnableThread(action, args, callbackContext);
 
         if (action.equals("setDebug")) {
-            if (args.length() == 1) {
-                cordova.getActivity().runOnUiThread(r);
-            }
+            cordova.getActivity().runOnUiThread(r);
+            return true;
         } else if (action.equals("disableTracking")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
@@ -447,21 +446,21 @@ public class BranchSDK extends CordovaPlugin {
     private void showShareSheet(int instanceIdx, JSONObject options, JSONObject controlParams, JSONObject strings) throws JSONException {
 
         ShareSheetStyle shareSheetStyle = new ShareSheetStyle(this.activity, strings.getString("shareTitle"), strings.getString("shareText"))
-        .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), strings.getString("copyToClipboard"), strings.getString("clipboardSuccess"))
-        .setMoreOptionStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_search), strings.getString("more"))
-        .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
-        .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL)
-        .addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE)
-        .addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER)
-        .setAsFullWidthStyle(true)
-        .setSharingTitle(strings.getString("shareWith"));
+                .setCopyUrlStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_send), strings.getString("copyToClipboard"), strings.getString("clipboardSuccess"))
+                .setMoreOptionStyle(this.activity.getResources().getDrawable(android.R.drawable.ic_menu_search), strings.getString("more"))
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER)
+                .setAsFullWidthStyle(true)
+                .setSharingTitle(strings.getString("shareWith"));
 
         BranchUniversalObjectWrapper branchObjWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
         BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
         BranchUniversalObject branchObj = branchObjWrapper.branchUniversalObj;
 
         branchObj.showShareSheet(this.activity, linkProperties, shareSheetStyle,
-            new ShowShareSheetListener(branchObjWrapper.onShareLinkDialogLaunched, branchObjWrapper.onShareLinkDialogDismissed, branchObjWrapper.onLinkShareResponse, branchObjWrapper.onChannelSelected));
+                new ShowShareSheetListener(branchObjWrapper.onShareLinkDialogLaunched, branchObjWrapper.onShareLinkDialogDismissed, branchObjWrapper.onLinkShareResponse, branchObjWrapper.onChannelSelected));
 
     }
 
@@ -500,7 +499,7 @@ public class BranchSDK extends CordovaPlugin {
         if (options.has("tags")) {
             JSONArray array = (JSONArray) options.get("tags");
             if (array != null) {
-                for (int i=0; i<array.length(); i++){
+                for (int i = 0; i < array.length(); i++) {
                     linkProperties.addTag(array.get(i).toString());
                 }
             }
@@ -557,11 +556,10 @@ public class BranchSDK extends CordovaPlugin {
      * <p>Sets the cookie based matching for all incoming requests.</p>
      * <p>If you want cookie based matching, call this <b>before</b> initUserSession</p>
      *
-     * @param linkDomain A {@link String} value to of the link domain for cookie based matching.
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param linkDomain      A {@link String} value to of the link domain for cookie based matching.
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void setCookieBasedMatching(String linkDomain, CallbackContext callbackContext)
-    {
+    private void setCookieBasedMatching(String linkDomain, CallbackContext callbackContext) {
 
         this.activity = this.cordova.getActivity();
 
@@ -578,21 +576,15 @@ public class BranchSDK extends CordovaPlugin {
      * <p>Sets the library to function in debug mode, enabling logging of all requests.</p>
      * <p>If you want to flag debug, call this <b>before</b> initUserSession</p>
      *
-     * @param isEnable A {@link Boolean} value to enable/disable debugging mode for the app.
-     * @param callbackContext   A callback to execute at the end of this method
+     * @param isEnable        A {@link Boolean} value to enable/disable debugging mode for the app.
+     * @param callbackContext A callback to execute at the end of this method
      */
-    private void setDebug(boolean isEnable, CallbackContext callbackContext)
-    {
-
+    private void setDebug(boolean isEnable, CallbackContext callbackContext) {
         this.activity = this.cordova.getActivity();
+        Branch.getAutoInstance(this.activity.getApplicationContext()).setDebug();
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
+    }
 
-        Branch debugInstance = Branch.getAutoInstance(this.activity.getApplicationContext());
-
-        if (isEnable) {
-            debugInstance.setDebug();
-        }
-
-        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ isEnable));
     /**
      * <p>Disables tracking for GDPR compliance.</p>
      * <p>Can flag at any time.</p>
@@ -682,7 +674,7 @@ public class BranchSDK extends CordovaPlugin {
 
         CommerceEvent commerce = new CommerceEvent();
         Iterator<String> keys = action.keys();
-        while(keys.hasNext()){
+        while (keys.hasNext()) {
             String key = keys.next();
             String val;
             try {
@@ -719,7 +711,7 @@ public class BranchSDK extends CordovaPlugin {
                     Product product = new Product();
                     JSONObject item = products.getJSONObject(i);
                     keys = item.keys();
-                    while(keys.hasNext()) {
+                    while (keys.hasNext()) {
                         key = keys.next();
                         try {
                             val = item.getString(key);
@@ -778,7 +770,6 @@ public class BranchSDK extends CordovaPlugin {
         public CallbackContext onChannelSelected;
 
         /**
-         *
          * @param branchUniversalObj branchUniversalObj
          * @constructor
          */
@@ -1080,7 +1071,6 @@ public class BranchSDK extends CordovaPlugin {
         private CallbackContext _onChannelSelected;
 
         /**
-         *
          * @param onShareLinkDialogLaunched
          * @param onShareLinkDialogDismissed
          * @param onLinkShareResponse
