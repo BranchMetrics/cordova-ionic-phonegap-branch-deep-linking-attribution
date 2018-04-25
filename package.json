@@ -40,7 +40,7 @@
     "travis-deploy-once": "  echo 'prevent multiple deploys';   travis-deploy-once",
     "commitmsg": "           echo 'validate commit messages';   commitlint -e $GIT_PARAMS",
     "precommit": "           echo 'run prettier on commit';     lint-staged",
-    "examples": "            echo 'generate examples';          node ./src/scripts/npm/createExamples",
+    "examples": "            echo 'generate examples';          node ./src/scripts/examples",
     "prettier": "            echo 'run prettier';               prettier --write './{src,testbed,tests}/**/*.js'",
     "lint": "                echo 'run code linter';            eslint --ext=js --fix ./src",
     "semantic-release": "    echo 'run continuous integration'; semantic-release"
