@@ -6,14 +6,14 @@ const logger = (message, isError) => {
 };
 
 // branch
-const BranchInit = isDebug => {
+const BranchInit = () => {
   console.log("Trigger BranchInit()");
 
-  // for GDPR compliance (can be called at anytime )
-  Branch.disabledTracking(false);
+  // for GDPR compliance (can be called at anytime)
+  Branch.disableTracking(true);
 
   // for development and debugging only
-  Branch.setDebug(isDebug);
+  Branch.setDebug(true);
 
   // for better Android matching
   Branch.setCookieBasedMatching("cordova.app.link");
@@ -308,12 +308,21 @@ const BranchReferralsHistory = () => {
 
 // app
 const app = {
-  initialize: () => this.bindEvents(),
-  bindEvents: () => {
-    document.addEventListener("deviceready", this.onDeviceReady, false);
-    document.addEventListener("resume", this.onDeviceResume, false);
+  initialize: () => {
+    app.bindEvents();
   },
-  onDeviceReady: () => BranchInit(true),
-  onDeviceResume: () => BranchInit(true)
+  bindEvents: () => {
+    document.addEventListener("deviceready", app.onDeviceReady, false);
+    document.addEventListener("resume", app.onDeviceResume, false);
+  },
+  onDeviceReady: () => {
+    console.log("Trigger resume()");
+    BranchInit();
+  },
+  onDeviceResume: () => {
+    console.log("Trigger ready()");
+    BranchInit();
+  }
 };
+
 app.initialize();
