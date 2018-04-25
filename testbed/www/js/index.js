@@ -1,14 +1,69 @@
-/* eslint-disable no-unused-vars, no-undef, no-console, no-alert */
-
-const logger = (message, isError) => {
-  console.log(message);
-  alert(`${isError ? "Error" : "Response"}: ${JSON.stringify(message)}`);
+// app
+var app = {
+  initialize: function initialize() {
+    app.bindEvents();
+  },
+  bindEvents: function bindEvents() {
+    document.addEventListener("deviceready", app.onDeviceReady, false);
+    document.addEventListener("resume", app.onDeviceResume, false);
+  },
+  onDeviceReady: function onDeviceReady() {
+    BranchInit();
+  },
+  onDeviceResume: function onDeviceResume() {
+    BranchInit();
+  }
 };
 
-// branch
-const BranchInit = () => {
-  console.log("Trigger BranchInit()");
+var branchUniversalObj = null;
 
+// cache DOM
+var branchUniversalObject = document.getElementById("branchUniversalObject");
+var branchDeepLink = document.getElementById("branchDeepLink");
+var branchShareSheet = document.getElementById("branchShareSheet");
+var branchFirstData = document.getElementById("branchFirstData");
+var branchLatestData = document.getElementById("branchLatestData");
+var branchView = document.getElementById("branchView");
+var branchSpotlight = document.getElementById("branchSpotlight");
+var branchUser = document.getElementById("branchUser");
+var branchLogout = document.getElementById("branchLogout");
+var branchEvent = document.getElementById("branchEvent");
+var branchCommerce = document.getElementById("branchCommerce");
+var branchReferralsReward = document.getElementById("branchReferralsReward");
+var branchReferralsLoad = document.getElementById("branchReferralsLoad");
+var branchReferralsRedeem = document.getElementById("branchReferralsRedeem");
+var branchReferralsHistory = document.getElementById("branchReferralsHistory");
+
+// handle DOM
+branchUniversalObject.addEventListener("click", BranchUniversalObject);
+branchDeepLink.addEventListener("click", BranchDeepLink);
+branchShareSheet.addEventListener("click", BranchShareSheet);
+branchFirstData.addEventListener("click", BranchFirstData);
+branchLatestData.addEventListener("click", BranchLatestData);
+branchView.addEventListener("click", BranchView);
+branchSpotlight.addEventListener("click", BranchSpotlight);
+branchUser.addEventListener("click", BranchUser);
+branchLogout.addEventListener("click", BranchLogout);
+branchEvent.addEventListener("click", BranchEvent);
+branchCommerce.addEventListener("click", BranchCommerce);
+branchReferralsReward.addEventListener("click", BranchReferralsReward);
+branchReferralsLoad.addEventListener("click", BranchReferralsLoad);
+branchReferralsRedeem.addEventListener("click", BranchReferralsRedeem);
+branchReferralsHistory.addEventListener("click", BranchReferralsHistory);
+
+// run
+app.initialize();
+
+// logger
+function logger(message, isError) {
+  var header = isError ? "Error" : "Response";
+  var output = header + ": " + JSON.stringify(message);
+  console.log(output);
+  alert(output);
+}
+
+// branch
+function BranchInit() {
   // for GDPR compliance (can be called at anytime)
   Branch.disableTracking(true);
 
@@ -22,39 +77,42 @@ const BranchInit = () => {
   Branch.setRequestMetadata("$mixpanel_distinct_id", "your_mixpanel_token");
 
   // Branch initialization
-  Branch.initSession(data => {
+  Branch.initSession(function callback(data) {
     if (data["+clicked_branch_link"]) {
       // read deep link data on click
-      console.log("Trigger DeepLinkHandler()");
-      alert(`Deep Link Data: ${JSON.stringify(data)}`);
+      logger(data);
     }
   })
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchEvent = () => {
-  console.log("Trigger BranchEvent()");
-
+function BranchEvent() {
   // event name
-  const event = document.getElementById("custom-action").value;
+  var event = document.getElementById("custom-action").value;
 
   // optional
-  const metadata = {
+  var metadata = {
     custom_dictionary: 123,
     anything: "everything"
   };
 
   Branch.userCompletedAction(event, metadata)
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchCommerce = () => {
-  console.log("Trigger BranchCommerce()");
-
+function BranchCommerce() {
   // revenue required
-  const event = {
+  var event = {
     revenue: 50.29,
     currency: 148, // USD
     transactionID: "transaction id",
@@ -82,59 +140,68 @@ const BranchCommerce = () => {
   };
 
   // optional
-  const metadata = {
+  var metadata = {
     custom_dictionary: 123,
     anything: "everything"
   };
 
   Branch.sendCommerceEvent(event, metadata)
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchFirstData = () => {
-  console.log("Trigger BranchFirstData()");
-
+function BranchFirstData() {
   Branch.getFirstReferringParams()
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchLatestData = () => {
-  console.log("Trigger BranchLatestData()");
-
+function BranchLatestData() {
   Branch.getLatestReferringParams()
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchUser = () => {
-  console.log("Trigger BranchUser()");
-
-  const userId = document.getElementById("identity").value;
+function BranchUser() {
+  var userId = document.getElementById("identity").value;
   Branch.setIdentity(userId)
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchLogout = () => {
-  console.log("Trigger BranchLogout()");
-
+function BranchLogout() {
   Branch.logout()
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-let branchUniversalObj = null;
-const BranchUniversalObject = () => {
-  console.log("Trigger BranchUniversalObject()");
-
+function BranchUniversalObject() {
   // only canonicalIdentifier is required
-  const properties = {
+  var properties = {
     canonicalIdentifier: "content/123",
     canonicalUrl: "https://example.com/content/123",
     title: "Content 123 Title",
-    contentDescription: `Content 123 Description ${Date.now()}`,
+    contentDescription: "Content 123 Description " + Date.now(),
     contentImageUrl: "http://lorempixel.com/400/400/",
     price: 12.12,
     currency: "GBD",
@@ -148,31 +215,33 @@ const BranchUniversalObject = () => {
 
   // create a branchUniversalObj variable to reference with other Branch methods
   Branch.createBranchUniversalObject(properties)
-    .then(res => {
+    .then(function success(res) {
       branchUniversalObj = res;
       logger(res);
     })
-    .catch(err => logger(err, true));
-};
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchView = () => {
-  console.log("Trigger BranchView()");
-
+function BranchView() {
   if (branchUniversalObj === null) {
     alert("need to Generate Branch Universal Object");
     return;
   }
   branchUniversalObj
     .registerView()
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchDeepLink = () => {
-  console.log("Trigger BranchDeepLink()");
-
+function BranchDeepLink() {
   // optional fields
-  const analytics = {
+  var analytics = {
     channel: "facebook",
     feature: "onboarding",
     campaign: "content 123 launch",
@@ -182,7 +251,7 @@ const BranchDeepLink = () => {
   };
 
   // optional fields
-  const properties = {
+  var properties = {
     $desktop_url: "http://www.example.com/desktop",
     $android_url: "http://www.example.com/android",
     $ios_url: "http://www.example.com/ios",
@@ -202,19 +271,19 @@ const BranchDeepLink = () => {
 
   branchUniversalObj
     .generateShortUrl(analytics, properties)
-    .then(res => {
+    .then(function success(res) {
       document.getElementById("generated-url").placeholder = "";
       document.getElementById("generated-url").value = res.url;
       logger(res);
     })
-    .catch(err => logger(err, true));
-};
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchShareSheet = () => {
-  console.log("Trigger BranchShareSheet()");
-
+function BranchShareSheet() {
   // optional fields
-  const analytics = {
+  var analytics = {
     channel: "facebook",
     feature: "onboarding",
     campaign: "content 123 launch",
@@ -223,7 +292,7 @@ const BranchShareSheet = () => {
   };
 
   // optional fields
-  const properties = {
+  var properties = {
     $desktop_url: "http://www.example.com/desktop",
     custom_string: "data",
     custom_integer: Date.now(),
@@ -232,7 +301,7 @@ const BranchShareSheet = () => {
     custom_object: { random: "dictionary" }
   };
 
-  const message = "Check out this link";
+  var message = "Check out this link";
 
   // needs a universal object
   if (branchUniversalObj === null) {
@@ -241,88 +310,77 @@ const BranchShareSheet = () => {
   }
 
   // optional listeners (must be called before showShareSheet)
-  branchUniversalObj.onShareSheetLaunched(res => {
+  branchUniversalObj.onShareSheetLaunched(function success(res) {
     // android only
     console.log(res);
   });
-  branchUniversalObj.onShareSheetDismissed(res => {
+  branchUniversalObj.onShareSheetDismissed(function success(res) {
     console.log(res);
   });
-  branchUniversalObj.onLinkShareResponse(res => {
+  branchUniversalObj.onLinkShareResponse(function success(res) {
     console.log(res);
   });
-  branchUniversalObj.onChannelSelected(res => {
+  branchUniversalObj.onChannelSelected(function success(res) {
     // android only
     console.log(res);
   });
 
   // share sheet
   branchUniversalObj.showShareSheet(analytics, properties, message);
-};
+}
 
-const BranchSpotlight = () => {
-  console.log("Trigger ListOnSpotlight()");
-
+function BranchSpotlight() {
   if (branchUniversalObj === null) {
     alert("need to Generate Branch Universal Object");
     return;
   }
   branchUniversalObj
     .listOnSpotlight()
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchReferralsReward = () => {
-  console.log("Trigger BranchReferralsReward()");
-
+function BranchReferralsReward() {
   Branch.userCompletedAction("add5credits")
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchReferralsLoad = () => {
-  console.log("Trigger BranchReferralsLoad()");
-
+function BranchReferralsLoad() {
   Branch.loadRewards()
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchReferralsRedeem = () => {
-  console.log("Trigger BranchReferralsRedeem()");
-
-  const amount = 10;
+function BranchReferralsRedeem() {
+  var amount = 10;
   Branch.redeemRewards(amount)
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
 
-const BranchReferralsHistory = () => {
-  console.log("Trigger BranchReferralsHistory()");
-
+function BranchReferralsHistory() {
   Branch.creditHistory()
-    .then(res => logger(res))
-    .catch(err => logger(err, true));
-};
-
-// app
-const app = {
-  initialize: () => {
-    app.bindEvents();
-  },
-  bindEvents: () => {
-    document.addEventListener("deviceready", app.onDeviceReady, false);
-    document.addEventListener("resume", app.onDeviceResume, false);
-  },
-  onDeviceReady: () => {
-    console.log("Trigger resume()");
-    BranchInit();
-  },
-  onDeviceResume: () => {
-    console.log("Trigger ready()");
-    BranchInit();
-  }
-};
-
-app.initialize();
+    .then(function success(res) {
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}

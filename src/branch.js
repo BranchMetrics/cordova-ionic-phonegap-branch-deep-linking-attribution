@@ -1,78 +1,76 @@
-// properties
-
 var exec = require("cordova/exec");
-
 var deviceVendor = window.clientInformation.vendor;
-var _API_CLASS = "BranchSDK"; // SDK Class
-
-// javscript to sdk
-function execute(method, params) {
-  params = !params ? [] : params;
-
-  return new Promise((resolve, reject) => {
-    exec(
-      res => {
-        resolve(res);
-      },
-      err => {
-        reject(err);
-      },
-      _API_CLASS,
-      method,
-      params
-    );
-  });
-}
-
-function executeCallback(method, callback, params) {
-  params = !params ? [] : params;
-
-  exec(
-    callback,
-    err => {
-      console.error(err);
-    },
-    _API_CLASS,
-    method,
-    params
-  );
-}
-
-// Branch prototype
+var API_CLASS = "BranchSDK"; // SDK Class
+var runOnce = true;
+var previousLinkTimestamp = null;
+var isDisableGlobalListenersWarnings = false;
 var Branch = function Branch() {
   this.debugMode = false;
   this.trackingDisabled = false;
 };
 
-let disableGlobalListenersWarnings = false;
-Branch.prototype.disableGlobalListenersWarnings = function() {
-  disableGlobalListenersWarnings = true;
+// javscript to sdk
+function execute(method, params) {
+  var output = !params ? [] : params;
+
+  return new Promise(function promise(resolve, reject) {
+    exec(
+      function success(res) {
+        resolve(res);
+      },
+      function failure(err) {
+        reject(err);
+      },
+      API_CLASS,
+      method,
+      output
+    );
+  });
+}
+
+function executeCallback(method, callback, params) {
+  var output = !params ? [] : params;
+
+  exec(
+    callback,
+    function failure(err) {
+      console.error(err);
+    },
+    API_CLASS,
+    method,
+    output
+  );
+}
+
+// Branch prototype
+Branch.prototype.disableGlobalListenersWarnings = function disableGlobalListenersWarnings() {
+  isDisableGlobalListenersWarnings = true;
 };
 
-Branch.prototype.disableTracking = function(isEnabled) {
+Branch.prototype.disableTracking = function disableTracking(isEnabled) {
   var value = typeof isEnabled === "boolean" ? isEnabled : false;
   this.trackingDisabled = value;
   return execute("disableTracking", [value]);
 };
 
-let runOnce = true;
-let previousLinkTimestamp = null;
-Branch.prototype.initSession = function(deepLinkDataListener) {
-  // handle double init from onResume on iOS
-  if (!runOnce) return new Promise((resolve, reject) => {});
-  runOnce = deviceVendor.indexOf("Apple") < 0;
-
+Branch.prototype.initSession = function initSession(deepLinkDataListener) {
   // private method to filter out +clicked_branch_link = false in deep link callback
-  var deepLinkDataParser = function(deepLinkData) {
+  function deepLinkDataParser(deepLinkData) {
     var timestamp = "+click_timestamp";
     var isBranchLink = "+clicked_branch_link";
     var isNonBranchLink = "+non_branch_link";
 
     var isBranchLinkClick =
-      deepLinkData.hasOwnProperty(isBranchLink) &&
+      Object.prototype.hasOwnProperty.call(deepLinkData, isBranchLink) &&
       deepLinkData[isBranchLink] === true;
-    var isNonBranchLinkClick = deepLinkData.hasOwnProperty(isNonBranchLink);
-    var currentLinkTimestamp = deepLinkData.hasOwnProperty(timestamp)
+    var isNonBranchLinkClick = Object.prototype.hasOwnProperty.call(
+      deepLinkData,
+      isNonBranchLink
+    );
+    var currentLinkTimestamp = Object.prototype.hasOwnProperty.call(
+      deepLinkData,
+      timestamp
+    )
       ? deepLinkData[timestamp]
       : Date.now();
 
@@ -86,10 +84,14 @@ Branch.prototype.initSession = function(deepLinkDataListener) {
 
     // handle Ionic 1 double data on iOS terminated
     previousLinkTimestamp = currentLinkTimestamp;
-  };
+  }
+
+  // handle double init from onResume on iOS
+  if (!runOnce) return new Promise(function promise(resolve, reject) {});
+  runOnce = deviceVendor.indexOf("Apple") < 0;
 
   if (
-    !disableGlobalListenersWarnings &&
+    !isDisableGlobalListenersWarnings &&
     !deepLinkDataListener &&
     !window.DeepLinkHandler
   ) {
@@ -98,7 +100,7 @@ Branch.prototype.initSession = function(deepLinkDataListener) {
       "BRANCH SDK: No callback in initSession and no global DeepLinkHandler method. No Branch deep link data will be returned. Docs https://goo.gl/GijGKP"
     );
   } else if (
-    !disableGlobalListenersWarnings &&
+    !isDisableGlobalListenersWarnings &&
     window.DeepLinkHandler !== undefined &&
     window.DeepLinkHandler.toString() !== deepLinkDataParser.toString()
   ) {
@@ -115,66 +117,71 @@ Branch.prototype.initSession = function(deepLinkDataListener) {
 };
 
 // deprecated for setRequestMetadata()
-Branch.prototype.setMixpanelToken = function(token) {
+Branch.prototype.setMixpanelToken = function setMixpanelToken(token) {
   return this.setRequestMetadata("$mixpanel_distinct_id", token);
 };
 
-Branch.prototype.setRequestMetadata = function(key, val) {
+Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
   if (!key || typeof key !== "string") {
-    return new Promise((resolve, reject) => {
+    return new Promise(function promise(resolve, reject) {
       reject(new Error("Please set key"));
     });
   }
   if (!val || typeof val !== "string") {
-    return new Promise((resolve, reject) => {
+    return new Promise(function promise(resolve, reject) {
       reject(new Error("Please set value"));
     });
   }
   return execute("setRequestMetadata", [key, val]);
 };
 
-Branch.prototype.setDebug = function(isEnabled) {
+Branch.prototype.setDebug = function setDebug(isEnabled) {
   var value = typeof isEnabled !== "boolean" ? false : isEnabled;
   this.debugMode = value;
 
   return execute("setDebug", [value]);
 };
 
-Branch.prototype.setCookieBasedMatching = function(linkDomain) {
-  if (linkDomain && deviceVendor.indexOf("Apple") < 0) {
-    return execute("setCookieBasedMatching", [linkDomain]);
-  }
+Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
+  linkDomain
+) {
+  return linkDomain && deviceVendor.indexOf("Apple") < 0
+    ? execute("setCookieBasedMatching", [linkDomain])
+    : null;
 };
 
-Branch.prototype.getFirstReferringParams = function() {
+Branch.prototype.getFirstReferringParams = function getFirstReferringParams() {
   return execute("getFirstReferringParams");
 };
 
-Branch.prototype.getLatestReferringParams = function() {
+Branch.prototype.getLatestReferringParams = function getLatestReferringParams() {
   return execute("getLatestReferringParams");
 };
 
-Branch.prototype.setIdentity = function(identity) {
+Branch.prototype.setIdentity = function setIdentity(identity) {
   if (identity) {
     return execute("setIdentity", [String(identity)]);
   }
-  return new Promise((resolve, reject) => {
+  return new Promise(function promise(resolve, reject) {
     reject(new Error("Please set an identity"));
   });
 };
 
-Branch.prototype.logout = function() {
+Branch.prototype.logout = function logout() {
   return execute("logout");
 };
 
-Branch.prototype.userCompletedAction = function(action, metaData) {
+Branch.prototype.userCompletedAction = function userCompletedAction(
+  action,
+  metaData
+) {
+  var args = [action];
   if (!action) {
-    return new Promise((resolve, reject) => {
+    return new Promise(function promise(resolve, reject) {
       reject(new Error("Please set an event name"));
     });
   }
 
-  var args = [action];
   if (metaData) {
     args.push(metaData);
   }
@@ -182,14 +189,17 @@ Branch.prototype.userCompletedAction = function(action, metaData) {
   return execute("userCompletedAction", args);
 };
 
-Branch.prototype.sendCommerceEvent = function(action, metaData) {
+Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
+  action,
+  metaData
+) {
+  var args = [action];
   if (!action) {
-    return new Promise((resolve, reject) => {
+    return new Promise(function promise(resolve, reject) {
       reject(new Error("Please set a commerce event"));
     });
   }
 
-  var args = [action];
   if (metaData) {
     args.push(metaData);
   }
@@ -197,20 +207,22 @@ Branch.prototype.sendCommerceEvent = function(action, metaData) {
   return execute("sendCommerceEvent", args);
 };
 
-Branch.prototype.createBranchUniversalObject = function(options) {
-  return new Promise((resolve, reject) => {
+Branch.prototype.createBranchUniversalObject = function createBranchUniversalObject(
+  options
+) {
+  return new Promise(function promise(resolve, reject) {
     execute("createBranchUniversalObject", [options]).then(
-      res => {
+      function success(res) {
         var obj = {
           message: res.message,
           instanceId: res.branchUniversalObjectId
         };
 
-        obj.registerView = function() {
+        obj.registerView = function registerView() {
           return execute("registerView", [obj.instanceId]);
         };
 
-        obj.generateShortUrl = function(options, controlParameters) {
+        obj.generateShortUrl = function generateShortUrl(controlParameters) {
           return execute("generateShortUrl", [
             obj.instanceId,
             options,
@@ -218,20 +230,21 @@ Branch.prototype.createBranchUniversalObject = function(options) {
           ]);
         };
 
-        obj.showShareSheet = function(options, controlParameters, shareText) {
-          if (!shareText) {
-            shareText = "This stuff is awesome: ";
-          }
+        obj.showShareSheet = function showShareSheet(
+          controlParameters,
+          shareText
+        ) {
+          var message = !shareText ? "This stuff is awesome: " : shareText;
 
           return execute("showShareSheet", [
             obj.instanceId,
             options,
             controlParameters,
-            shareText
+            message
           ]);
         };
 
-        obj.onShareSheetLaunched = function(callback) {
+        obj.onShareSheetLaunched = function onShareSheetLaunched(callback) {
           if (deviceVendor.indexOf("Apple") < 0) {
             executeCallback("onShareLinkDialogLaunched", callback, [
               obj.instanceId
@@ -239,49 +252,45 @@ Branch.prototype.createBranchUniversalObject = function(options) {
           }
         };
 
-        obj.onShareSheetDismissed = function(callback) {
+        obj.onShareSheetDismissed = function onShareSheetDismissed(callback) {
           executeCallback("onShareLinkDialogDismissed", callback, [
             obj.instanceId
           ]);
         };
 
-        obj.onLinkShareResponse = function(callback) {
+        obj.onLinkShareResponse = function onLinkShareResponse(callback) {
           executeCallback("onLinkShareResponse", callback, [obj.instanceId]);
         };
 
-        obj.onChannelSelected = function(callback) {
+        obj.onChannelSelected = function onChannelSelected(callback) {
           if (deviceVendor.indexOf("Apple") < 0) {
             executeCallback("onChannelSelected", callback, [obj.instanceId]);
           }
         };
 
-        obj.listOnSpotlight = function() {
+        obj.listOnSpotlight = function listOnSpotlight() {
           if (!(deviceVendor.indexOf("Apple") < 0)) {
             return execute("listOnSpotlight", [obj.instanceId]);
           }
-          return new Promise((resolve, reject) => {
-            reject(new Error("iOS Spotlight only"));
-          });
+          return reject(new Error("iOS Spotlight only"));
         };
 
         resolve(obj);
       },
-      err => {
+      function failure(err) {
         reject(err);
       }
     );
   });
 };
 
-Branch.prototype.loadRewards = function(bucket) {
-  if (!bucket) {
-    bucket = "";
-  }
+Branch.prototype.loadRewards = function loadRewards(bucket) {
+  var output = !bucket ? "" : bucket;
 
-  return execute("loadRewards", [bucket]);
+  return execute("loadRewards", [output]);
 };
 
-Branch.prototype.redeemRewards = function(value, bucket) {
+Branch.prototype.redeemRewards = function redeemRewards(value, bucket) {
   var params = [value];
   if (bucket) {
     params.push(bucket);
@@ -290,7 +299,7 @@ Branch.prototype.redeemRewards = function(value, bucket) {
   return execute("redeemRewards", params);
 };
 
-Branch.prototype.creditHistory = function() {
+Branch.prototype.creditHistory = function creditHistory() {
   return execute("getCreditHistory");
 };
 

@@ -54,18 +54,17 @@
   },
   "eslintConfig": {
     "extends": [
-      "airbnb",
-      "prettier",
-      "plugin:jest/recommended"
+      "airbnb-base/legacy",
+      "prettier"
     ],
     "rules": {
-      "react/jsx-filename-extension": 0,
-      "object-shorthand": 0
+      "no-console": 0,
+      "no-alert": 0,
+      "no-use-before-define": 0
     },
-    "globals": {
-      "document": true,
-      "window": true,
-      "navigator": true
+    "globals" : {
+      "Promise": true,
+      "Branch": true
     }
   },
   "release": {
@@ -113,12 +112,10 @@
     "@semantic-release/github": "^4.2.11",
     "@semantic-release/npm": "^3.2.4",
     "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jest": "^21.15.1",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
     "gulp": "^3.9.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.4",

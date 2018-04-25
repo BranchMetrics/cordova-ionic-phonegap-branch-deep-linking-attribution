@@ -11,56 +11,56 @@
 <body>
   <fieldset>
     <legend>Branch Universal Object</legend>
-    <button onclick="BranchUniversalObject()">Create</button>
+    <button id="branchUniversalObject">Create</button>
   </fieldset>
   <fieldset>
     <legend>Branch Deep Link</legend>
       <input id="alias" name="alias" type="text" placeholder="Deep link alias (optional)">
       <section>
-        <button onclick="BranchDeepLink()">Create</button>
-        <button onclick="BranchShareSheet()">Share</button>
+        <button id="branchDeepLink">Create</button>
+        <button id="branchShareSheet">Share</button>
       </section>
       <input type="text" id="generated-url" placeholder="Deep link" readonly>
   </fieldset>
   <fieldset>
     <legend>Branch Deep Link Data</legend>
     <section>
-      <button onclick="BranchFirstData()">First</button>
-      <button onclick="BranchLatestData()">Latest</button>
+      <button id="branchFirstData">First</button>
+      <button id="branchLatestData">Latest</button>
     </section>
   </fieldset>
   <fieldset>
     <legend>Branch Content</legend>
     <section>
-      <button onclick="BranchView()">Create</button>
-      <button onclick="BranchSpotlight()">Share</button>
+      <button id="branchView">Create</button>
+      <button id="branchSpotlight">Share</button>
     </section>
   </fieldset>
   <fieldset>
     <legend>Branch User</legend>
     <input type="text" id="identity" name="identity" placeholder="User Id">
     <section>
-      <button onclick="BranchUser()">Login</button>
-      <button onclick="BranchLogout()">Logout</button>
+      <button id="branchUser">Login</button>
+      <button id="branchLogout">Logout</button>
     </section>
   </fieldset>
   <fieldset>
     <legend>Branch Event</legend>
     <input type="text" id="custom-action" name="custom-action" placeholder="Event Name">
     <section>
-      <button onclick="BranchEvent()">Create</button>
-      <button onclick="BranchCommerce()">Commerce</button>
+      <button id="branchEvent">Create</button>
+      <button id="branchCommerce">Commerce</button>
     </section>
   </fieldset>
   <fieldset>
     <legend>Branch Referral</legend>
     <section>
-      <button onclick="BranchReferralsReward()">Reward</button>
-      <button onclick="BranchReferralsLoad()">Load</button>
+      <button id="branchReferralsReward">Reward</button>
+      <button id="branchReferralsLoad">Load</button>
     </section>
     <section>
-      <button onclick="BranchReferralsRedeem()">Redeem</button>
-      <button onclick="BranchReferralsHistory()">History</button>
+      <button id="branchReferralsRedeem">Redeem</button>
+      <button id="branchReferralsHistory">History</button>
     </section>
   </fieldset>
   <script type="text/javascript" src="cordova.js"></script>
