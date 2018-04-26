@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.eneff.branch.ionic3" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <branch-config>
+        <branch-key value="key_live_gdyoTb1FlA8TQmJ6Ly05XamhxznRaZGf" />
+        <uri-scheme value="branchionic3" />
+        <link-domain value="4m4z.app.link" />
+        <ios-team-release value="PW4Q8885U7" />
+    </branch-config>
+    <name>Ionic3</name>
