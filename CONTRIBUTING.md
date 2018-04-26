@@ -54,10 +54,6 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 
 ## Develop
 
-```sh
-yarn examples
-```
-
 * Changes to `/src` don't need a `yarn examples` rebuild, just a `cordova run`
 * Changes to `/src/index.js` need changes to `testbed/platforms/ios/platform_www/plugins/branch-cordova-sdk` and a `cordova run ios`
 
@@ -72,16 +68,19 @@ yarn examples
 
 * Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)
 
-  * ios
+  * build
 
     ```sh
-    ./testbed/init -idc
+    cd ./
+    yarn examples
     ```
 
-  * android
-
     ```sh
-    ./testbed/init -adc
+    cd examples/cordova1
+    # (plug in devices)
+    # (ionic build if ionic 3)
+    cordova run ios
+    cordova run android
     ```
 
   * files
