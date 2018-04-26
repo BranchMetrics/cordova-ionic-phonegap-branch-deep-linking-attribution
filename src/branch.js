@@ -1,15 +1,15 @@
 var exec = require("cordova/exec");
 var deviceVendor = window.clientInformation.vendor;
-var API_CLASS = "BranchSDK"; // SDK Class
-var runOnce = true;
-var previousLinkTimestamp = null;
-var isDisableGlobalListenersWarnings = false;
+// SDK Class
+var API_CLASS = "BranchSDK";
+
+// Branch prototype
 var Branch = function Branch() {
   this.debugMode = false;
   this.trackingDisabled = false;
 };
 
-// javscript to sdk
+// JavsSript to SDK wrappers
 function execute(method, params) {
   var output = !params ? [] : params;
 
@@ -48,85 +48,15 @@ function executeReject(message) {
   });
 }
 
-// Branch prototype
-Branch.prototype.disableGlobalListenersWarnings = function disableGlobalListenersWarnings() {
-  isDisableGlobalListenersWarnings = true;
-};
-
+// Branch interface
 Branch.prototype.disableTracking = function disableTracking(isEnabled) {
   var value = typeof isEnabled === "boolean" ? isEnabled : false;
   this.trackingDisabled = value;
   return execute("disableTracking", [value]);
 };
 
-Branch.prototype.initSession = function initSession(deepLinkDataListener) {
-  // handle double init from onResume on iOS
-  if (!runOnce) {
-    return executeReject("");
-  }
-  runOnce = deviceVendor.indexOf("Apple") < 0;
-
-  // private method to filter out +clicked_branch_link = false in deep link callback
-  function deepLinkDataParser(deepLinkData) {
-    var timestamp = "+click_timestamp";
-    var isBranchLink = "+clicked_branch_link";
-    var isNonBranchLink = "+non_branch_link";
-
-    var isBranchLinkClick =
-      Object.prototype.hasOwnProperty.call(deepLinkData, isBranchLink) &&
-      deepLinkData[isBranchLink] === true;
-    var isNonBranchLinkClick = Object.prototype.hasOwnProperty.call(
-      deepLinkData,
-      isNonBranchLink
-    );
-    var currentLinkTimestamp = Object.prototype.hasOwnProperty.call(
-      deepLinkData,
-      timestamp
-    )
-      ? deepLinkData[timestamp]
-      : Date.now();
-
-    // is +clicked_branch_link' = true || +non_branch_link && !previousLinkTimestamp
-    if (
-      (isBranchLinkClick || isNonBranchLinkClick) &&
-      currentLinkTimestamp !== previousLinkTimestamp
-    ) {
-      deepLinkDataListener(deepLinkData);
-    }
-
-    // handle Ionic 1 double data on iOS terminated
-    previousLinkTimestamp = currentLinkTimestamp;
-  }
-
-  if (
-    !isDisableGlobalListenersWarnings &&
-    !deepLinkDataListener &&
-    !window.DeepLinkHandler
-  ) {
-    // missing deep link data return
-    console.warn(
-      "BRANCH SDK: No callback in initSession and no global DeepLinkHandler method. No Branch deep link data will be returned. Docs https://goo.gl/GijGKP"
-    );
-  } else if (
-    !isDisableGlobalListenersWarnings &&
-    window.DeepLinkHandler !== undefined &&
-    window.DeepLinkHandler.toString() !== deepLinkDataParser.toString()
-  ) {
-    // deprecated 2.5.0: open and non deep link data will pass into DeepLinkHandler
-    console.warn(
-      "BRANCH SDK: Your DeepLinkHandler has changed. It will now pass non-Branch data. Docs https://goo.gl/GijGKP"
-    );
-  } else {
-    // from iOS and Android SDKs to JavaScript
-    window.DeepLinkHandler = deepLinkDataParser;
-  }
-
+Branch.prototype.initSession = function initSession() {
   return execute("initSession");
-};
-
-// deprecated for setRequestMetadata()
-Branch.prototype.setMixpanelToken = function setMixpanelToken(token) {
-  return this.setRequestMetadata("$mixpanel_distinct_id", token);
 };
 
 Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
@@ -288,7 +218,6 @@ Branch.prototype.createBranchUniversalObject = function createBranchUniversalObj
 
 Branch.prototype.loadRewards = function loadRewards(bucket) {
   var output = !bucket ? "" : bucket;
-
   return execute("loadRewards", [output]);
 };
 
@@ -305,5 +234,5 @@ Branch.prototype.creditHistory = function creditHistory() {
   return execute("getCreditHistory");
 };
 
-// export
+// export Branch object
 module.exports = new Branch();
