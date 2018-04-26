@@ -64,11 +64,11 @@ function logger(message, isError) {
 
 // branch
 function BranchInit() {
-  // for GDPR compliance (can be called at anytime)
-  Branch.disableTracking(true);
-
   // for development and debugging only
   Branch.setDebug(true);
+
+  // for GDPR compliance (can be called at anytime)
+  Branch.disableTracking(false);
 
   // for better Android matching
   Branch.setCookieBasedMatching("cordova.app.link");
