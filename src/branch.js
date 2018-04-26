@@ -54,6 +54,10 @@ Branch.prototype.disableTracking = function disableTracking(isEnabled) {
 };
 
 Branch.prototype.initSession = function initSession(deepLinkDataListener) {
+  // handle double init from onResume on iOS
+  if (!runOnce) return new Promise(function promise(resolve, reject) {});
+  runOnce = deviceVendor.indexOf("Apple") < 0;
+
   // private method to filter out +clicked_branch_link = false in deep link callback
   function deepLinkDataParser(deepLinkData) {
     var timestamp = "+click_timestamp";
@@ -85,10 +89,6 @@ Branch.prototype.initSession = function initSession(deepLinkDataListener) {
     // handle Ionic 1 double data on iOS terminated
     previousLinkTimestamp = currentLinkTimestamp;
   }
-
-  // handle double init from onResume on iOS
-  if (!runOnce) return new Promise(function promise(resolve, reject) {});
-  runOnce = deviceVendor.indexOf("Apple") < 0;
 
   if (
     !isDisableGlobalListenersWarnings &&
@@ -222,24 +222,28 @@ Branch.prototype.createBranchUniversalObject = function createBranchUniversalObj
           return execute("registerView", [obj.instanceId]);
         };
 
-        obj.generateShortUrl = function generateShortUrl(controlParameters) {
+        obj.generateShortUrl = function generateShortUrl(
+          analytics,
+          properties
+        ) {
           return execute("generateShortUrl", [
             obj.instanceId,
-            options,
-            controlParameters
+            analytics,
+            properties
           ]);
         };
 
         obj.showShareSheet = function showShareSheet(
-          controlParameters,
+          analytics,
+          properties,
           shareText
         ) {
           var message = !shareText ? "This stuff is awesome: " : shareText;
 
           return execute("showShareSheet", [
             obj.instanceId,
-            options,
-            controlParameters,
+            analytics,
+            properties,
             message
           ]);
         };
