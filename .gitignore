@@ -1,6 +1,7 @@
 node_modules/
 examples/
 tests/
+tmp/
 
 testbed/platforms
 testbed/plugins
