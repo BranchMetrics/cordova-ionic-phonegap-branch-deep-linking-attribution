@@ -112,11 +112,11 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
     // sample index.js
     var app = {
       initialize: function() {
-        this.bindEvents();
+        app.bindEvents();
       },
       bindEvents: function() {
-        document.addEventListener("deviceready", this.onDeviceReady, false);
-        document.addEventListener("resume", this.onDeviceResume, false);
+        document.addEventListener("deviceready", app.onDeviceReady, false);
+        document.addEventListener("resume", app.onDeviceResume, false);
       },
       onDeviceReady: function() {
         app.branchInit();
