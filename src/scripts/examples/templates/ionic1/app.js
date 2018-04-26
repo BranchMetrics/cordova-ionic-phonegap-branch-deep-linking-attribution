@@ -36,8 +36,7 @@ angular
 
       function branchInit() {
         // Branch initialization
-        Branch.setDebug(true);
-        Branch.initSession(function(data) {
+        Branch.initSession().then(function(data) {
           // read deep link data on click
           alert("Deep Link Data: " + JSON.stringify(data));
         });

@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
   <h2>Welcome to Ionic!</h2>
   <p>
     This starter project comes with simple tabs-based layout for apps
@@ -14,19 +14,5 @@
     Take a look at the <code>src/pages/</code> directory to add or change tabs,
     update any existing page or create new pages.
   </p>
-  <ion-card>
-    <ion-card-header>
-      Link
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-input type="text" placeholder="link alias"></ion-input>
-      </ion-item>
-      <ion-grid>
-        <ion-row>
-          <ion-col><button ion-button color="light" block (tap)='linkShare();'>Share</button></ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
+  <button ion-button block (tap)='BranchShare();'>Share</button>
 </ion-content>

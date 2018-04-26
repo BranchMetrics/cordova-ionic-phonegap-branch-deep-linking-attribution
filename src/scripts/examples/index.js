@@ -1,5 +1,13 @@
 /* eslint-disable no-console */
 
+// TESTING STEPS:
+// cd ./
+// yarn examples
+// cd examples/cordova1
+// (plug in devices)
+// cordova run ios
+// cordova run android
+
 const { spawn } = require("child_process");
 
 const DIR = "examples";
@@ -49,14 +57,10 @@ const buildCordova1 = async () => {
 
   await run(`cordova plugin add ../../${TMP}`, `${DIR}/${CORDOVA1}`);
   await run(`cordova platform add ios android`, `${DIR}/${CORDOVA1}`);
-  // cd examples/cordova1
-  // (plug in devices)
-  // cordova run ios
-  // cordova run android
 };
 
 const buildPhoneGap1 = async () => {
-  await run(`phonegap create phonegap1`, `${DIR}`);
+  await run(`phonegap create ${PHONEGAP1}`, `${DIR}`);
   await run(
     `cp ./src/scripts/examples/templates/${PHONEGAP1}/index.xml ./${DIR}/${PHONEGAP1}/config.xml`
   );
@@ -69,25 +73,55 @@ const buildPhoneGap1 = async () => {
   await run(
     `cp ./src/scripts/examples/templates/${CORDOVA1}/index.css ./${DIR}/${PHONEGAP1}/www/css/index.css`
   );
-
   await run(`phonegap plugin add ../../${TMP}`, `${DIR}/${PHONEGAP1}`);
   await run(`phonegap platform add ios android`, `${DIR}/${PHONEGAP1}`);
-  // cd examples/phonegap1
-  // (plug in devices)
-  // phonegap run ios
-  // phonegap run android
 };
 
 const buildIonic1 = async () => {
-  await run(`ionic start ionic1 blank --cordova --type ionic1`, `${DIR}`);
-  await run(`ionic cordova plugin add ../../${TMP}`, `${DIR}/${IONIC1}`);
-  await run(`ionic cordova platform add ios android`, `${DIR}/${IONIC1}`);
+  await run(`ionic start ${IONIC1} tabs --cordova --type ionic1`, `${DIR}`);
+  await run(
+    `cp ./src/scripts/examples/templates/${IONIC1}/index.xml ./${DIR}/${IONIC1}/config.xml`
+  );
+  await run(
+    `cp ./src/scripts/examples/templates/${IONIC1}/index.html ./${DIR}/${IONIC1}/www/templates/tab-dash.html`
+  );
+  await run(
+    `cp ./src/scripts/examples/templates/${IONIC1}/app.js ./${DIR}/${IONIC1}/www/js/app.js`
+  );
+  await run(
+    `cp ./src/scripts/examples/templates/${IONIC1}/controllers.js ./${DIR}/${IONIC1}/www/js/controllers.js`
+  );
+  await run(`mkdir -p plugins/branch-cordova-sdk`, `${DIR}/${IONIC1}`);
+  await run(
+    `rsync -a ../../${TMP}/ plugins/branch-cordova-sdk`,
+    `${DIR}/${IONIC1}`
+  );
+  await run(`ionic cordova platform add ios`, `${DIR}/${IONIC1}`);
+  await run(`ionic cordova platform add android`, `${DIR}/${IONIC1}`);
 };
 
 const buildIonic3 = async () => {
-  await run(`ionic start ionic3 blank --cordova`, `${DIR}`);
-  await run(`ionic cordova plugin add ../../${TMP}`, `${DIR}/${IONIC3}`);
-  await run(`ionic cordova platform add ios android`, `${DIR}/${IONIC3}`);
+  await run(`ionic start ${IONIC3} tabs --cordova`, `${DIR}`);
+  await run(`mkdir -p plugins/branch-cordova-sdk`, `${DIR}/${IONIC3}`);
+  await run(
+    `cp ./src/scripts/examples/templates/${IONIC3}/index.xml ./${DIR}/${IONIC3}/config.xml`
+  );
+  await run(
+    `cp ./src/scripts/examples/templates/${IONIC3}/index.html ./${DIR}/${IONIC3}/src/pages/home/home.html`
+  );
+  await run(
+    `cp ./src/scripts/examples/templates/${IONIC3}/app.js ./${DIR}/${IONIC3}/src/app/app.component.ts`
+  );
+  await run(
+    `cp ./src/scripts/examples/templates/${IONIC3}/controllers.js ./${DIR}/${IONIC3}/src/pages/home/home.ts`
+  );
+  await run(
+    `rsync -a ../../${TMP}/ plugins/branch-cordova-sdk`,
+    `${DIR}/${IONIC3}`
+  );
+  await run(`ionic cordova platform add ios`, `${DIR}/${IONIC3}`);
+  await run(`ionic cordova platform add android`, `${DIR}/${IONIC3}`);
+  await run(`ionic build`, `${DIR}/${IONIC3}`);
 };
 
 const installDependencies = async () => {
@@ -96,7 +130,7 @@ const installDependencies = async () => {
 
 const copySdk = async () => {
   await run(
-    `rsync -a ./ ./${TMP} --exclude testbed --exclude node_modules --exclude .git --exclude ${DIR} --exclude ${TMP}`
+    `rsync -a ./ ./${TMP} --exclude node_modules --exclude .git --exclude ${DIR} --exclude ${TMP}`
   );
 };
 
@@ -108,10 +142,10 @@ const main = async () => {
   await cleanDirectory();
   // await installDependencies();
   await copySdk();
-  // await buildCordova1();
+  await buildCordova1();
   await buildPhoneGap1();
-  // await buildIonic1();
-  // await buildIonic3();
+  await buildIonic1();
+  await buildIonic3();
   await removeCopySdk();
 };
 
