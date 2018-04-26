@@ -1,15 +1,6 @@
 node_modules/
 examples/
-tests/
 tmp/
-
-testbed/platforms
-testbed/plugins
-testbed/hooks
-testbed/build.json
-testbed/config.xml
-testbed/package.json
-testbed/package-lock.json
 
 .DS_Store
 .installed

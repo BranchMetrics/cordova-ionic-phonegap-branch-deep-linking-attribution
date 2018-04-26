@@ -1,8 +1,6 @@
+./examples/
+./tmp/
 node_modules/
-examples/
-tests/
-testbed/
-tmp/
 
 .DS_Store
 .installed
