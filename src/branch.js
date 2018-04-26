@@ -42,9 +42,9 @@ function executeCallback(method, callback, params) {
   );
 }
 
-function executeRejection(message) {
+function executeReject(message) {
   return new Promise(function promise(resolve, reject) {
-    reject(new Error(message));
+    reject(message);
   });
 }
 
@@ -62,7 +62,7 @@ Branch.prototype.disableTracking = function disableTracking(isEnabled) {
 Branch.prototype.initSession = function initSession(deepLinkDataListener) {
   // handle double init from onResume on iOS
   if (!runOnce) {
-    return executeRejection("");
+    return executeReject("");
   }
   runOnce = deviceVendor.indexOf("Apple") < 0;
 
@@ -131,10 +131,10 @@ Branch.prototype.setMixpanelToken = function setMixpanelToken(token) {
 
 Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
   if (!key || typeof key !== "string") {
-    return executeRejection("Please set key");
+    return executeReject("Please set key");
   }
   if (!val || typeof val !== "string") {
-    return executeRejection("Please set value");
+    return executeReject("Please set value");
   }
   return execute("setRequestMetadata", [key, val]);
 };
@@ -166,7 +166,7 @@ Branch.prototype.setIdentity = function setIdentity(identity) {
   if (identity) {
     return execute("setIdentity", [String(identity)]);
   }
-  return executeRejection("Please set an identity");
+  return executeReject("Please set an identity");
 };
 
 Branch.prototype.logout = function logout() {
@@ -179,7 +179,7 @@ Branch.prototype.userCompletedAction = function userCompletedAction(
 ) {
   var args = [action];
   if (!action) {
-    return executeRejection("Please set an event name");
+    return executeReject("Please set an event name");
   }
 
   if (metaData) {
@@ -195,7 +195,7 @@ Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
 ) {
   var args = [action];
   if (!action) {
-    return executeRejection("Please set a commerce event");
+    return executeReject("Please set a commerce event");
   }
 
   if (metaData) {
@@ -274,7 +274,7 @@ Branch.prototype.createBranchUniversalObject = function createBranchUniversalObj
           if (!(deviceVendor.indexOf("Apple") < 0)) {
             return execute("listOnSpotlight", [obj.instanceId]);
           }
-          return reject(new Error("iOS Spotlight only"));
+          return executeReject("iOS Spotlight only");
         };
 
         resolve(obj);
