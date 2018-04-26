@@ -46,8 +46,7 @@
   NSURL *url = [NSURL URLWithString:arg];
   self.deepLinkUrl = [url absoluteString];
 
-  Branch *branch = [self getInstance];
-  return [NSNumber numberWithBool:[branch handleDeepLink:url]];
+  return [NSNumber numberWithBool:[[Branch getInstance] handleDeepLink:url]];
 }
 
 - (void)continueUserActivity:(CDVInvokedUrlCommand*)command
@@ -63,9 +62,7 @@
     self.deepLinkUrl = [userActivity.webpageURL absoluteString];
   }
 
-  Branch *branch = [self getInstance];
-
-  [branch continueUserActivity:userActivity];
+  [[Branch getInstance] continueUserActivity:userActivity];
 }
 
 #pragma mark - Public APIs
@@ -73,9 +70,7 @@
 
 - (void)initSession:(CDVInvokedUrlCommand*)command
 {
-  Branch *branch = [self getInstance];
-
-  [branch initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
+  [[Branch getInstance] initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
 
     NSString *resultString = nil;
     CDVPluginResult *pluginResult = nil;
@@ -137,7 +132,6 @@
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
 
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-
 }
 
 - (void)setDebug:(CDVInvokedUrlCommand*)command
@@ -551,7 +545,8 @@
 
   [branchUniversalObj getShortUrlWithLinkProperties:props andCallback:^(NSString *url, NSError *error) {
     CDVPluginResult* pluginResult = nil;
-    if (!error) {
+
+    if (url) {
       NSError *err;
       NSDictionary *jsonObj = [[NSDictionary alloc] initWithObjectsAndKeys:url, @"url", 0, @"options", &err, @"error", nil];
 
