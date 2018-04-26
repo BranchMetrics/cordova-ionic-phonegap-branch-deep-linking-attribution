@@ -5,6 +5,7 @@
 // yarn examples
 // cd examples/cordova1
 // (plug in devices)
+// (ionic build if ionic 3)
 // cordova run ios
 // cordova run android
 
@@ -121,7 +122,6 @@ const buildIonic3 = async () => {
   );
   await run(`ionic cordova platform add ios`, `${DIR}/${IONIC3}`);
   await run(`ionic cordova platform add android`, `${DIR}/${IONIC3}`);
-  await run(`ionic build`, `${DIR}/${IONIC3}`);
 };
 
 const installDependencies = async () => {
