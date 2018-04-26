@@ -42,6 +42,12 @@ function executeCallback(method, callback, params) {
   );
 }
 
+function executeRejection(message) {
+  return new Promise(function promise(resolve, reject) {
+    reject(new Error(message));
+  });
+}
+
 // Branch prototype
 Branch.prototype.disableGlobalListenersWarnings = function disableGlobalListenersWarnings() {
   isDisableGlobalListenersWarnings = true;
@@ -55,7 +61,9 @@ Branch.prototype.disableTracking = function disableTracking(isEnabled) {
 
 Branch.prototype.initSession = function initSession(deepLinkDataListener) {
   // handle double init from onResume on iOS
-  if (!runOnce) return new Promise(function promise(resolve, reject) {});
+  if (!runOnce) {
+    return executeRejection("");
+  }
   runOnce = deviceVendor.indexOf("Apple") < 0;
 
   // private method to filter out +clicked_branch_link = false in deep link callback
@@ -123,14 +131,10 @@ Branch.prototype.setMixpanelToken = function setMixpanelToken(token) {
 
 Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
   if (!key || typeof key !== "string") {
-    return new Promise(function promise(resolve, reject) {
-      reject(new Error("Please set key"));
-    });
+    return executeRejection("Please set key");
   }
   if (!val || typeof val !== "string") {
-    return new Promise(function promise(resolve, reject) {
-      reject(new Error("Please set value"));
-    });
+    return executeRejection("Please set value");
   }
   return execute("setRequestMetadata", [key, val]);
 };
@@ -162,9 +166,7 @@ Branch.prototype.setIdentity = function setIdentity(identity) {
   if (identity) {
     return execute("setIdentity", [String(identity)]);
   }
-  return new Promise(function promise(resolve, reject) {
-    reject(new Error("Please set an identity"));
-  });
+  return executeRejection("Please set an identity");
 };
 
 Branch.prototype.logout = function logout() {
@@ -177,9 +179,7 @@ Branch.prototype.userCompletedAction = function userCompletedAction(
 ) {
   var args = [action];
   if (!action) {
-    return new Promise(function promise(resolve, reject) {
-      reject(new Error("Please set an event name"));
-    });
+    return executeRejection("Please set an event name");
   }
 
   if (metaData) {
@@ -195,9 +195,7 @@ Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
 ) {
   var args = [action];
   if (!action) {
-    return new Promise(function promise(resolve, reject) {
-      reject(new Error("Please set a commerce event"));
-    });
+    return executeRejection("Please set a commerce event");
   }
 
   if (metaData) {
