@@ -686,9 +686,11 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 
 * #### Testing: Key Points
 
-  * Need to checkmark "app uses IDFA and GAID" when publishing your app
+  * Need to select "app uses IDFA and GAID" when publishing your app
 
   * Best to enable [Deepviews](https://dashboard.branch.io/settings/deepviews) ([Testing: Supported Platforms](#testing-supported-platforms))
+
+  * Mobile browser capability: `Android 4.4.4+`, `Safari 8+`, `Chrome 32+`, `Firefox 29+`
 
 * #### Testing: Optional App Config
 
