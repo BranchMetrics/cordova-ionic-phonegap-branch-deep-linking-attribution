@@ -92,6 +92,7 @@ const buildIonic1 = async () => {
   await run(
     `cp ./src/scripts/examples/templates/${IONIC1}/controllers.js ./${DIR}/${IONIC1}/www/js/controllers.js`
   );
+  await run(`rm -rf ./${DIR}/${IONIC1}/.git`);
   await run(`mkdir -p plugins/branch-cordova-sdk`, `${DIR}/${IONIC1}`);
   await run(
     `rsync -a ../../${TMP}/ plugins/branch-cordova-sdk`,
@@ -116,6 +117,7 @@ const buildIonic3 = async () => {
   await run(
     `cp ./src/scripts/examples/templates/${IONIC3}/controllers.js ./${DIR}/${IONIC3}/src/pages/home/home.ts`
   );
+  await run(`rm -rf ./${DIR}/${IONIC3}/.git`);
   await run(
     `rsync -a ../../${TMP}/ plugins/branch-cordova-sdk`,
     `${DIR}/${IONIC3}`
