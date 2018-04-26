@@ -36,7 +36,7 @@
     }
   },
   "scripts": {
-    "validate": "            echo 'run validation scripts';     gulp prod",
+    "validate": "            echo 'run validation scripts';     node ./src/scripts/npm/updatePluginXml",
     "travis-deploy-once": "  echo 'prevent multiple deploys';   travis-deploy-once",
     "commitmsg": "           echo 'validate commit messages';   commitlint -e $GIT_PARAMS",
     "precommit": "           echo 'run prettier on commit';     lint-staged",

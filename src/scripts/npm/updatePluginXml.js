@@ -1,25 +1,4 @@
-// import
-var gulp = require("gulp");
 var fs = require("fs");
-
-// primary tasks
-gulp.task("dev", ["setupDev"]);
-gulp.task("prod", ["setupNpm"]);
-
-// --------------------------------------------------
-// Setup
-// --------------------------------------------------
-gulp.task("setupDev", function() {
-  // setup for development use
-  getDevPluginXML();
-  setIosNpmOrDev("dev");
-});
-
-gulp.task("setupNpm", function() {
-  // setup for npm deployment
-  genNpmPluginXML();
-  setIosNpmOrDev("npm");
-});
 
 function getDevPluginXML() {
   // generate plugin.xml for local development
@@ -84,3 +63,10 @@ function emitFiles(path) {
   ret.push("");
   return ret;
 }
+
+function main() {
+  genNpmPluginXML();
+  setIosNpmOrDev("npm");
+}
+
+module.exports = main();
