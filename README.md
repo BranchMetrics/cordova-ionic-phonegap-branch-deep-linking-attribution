@@ -1276,7 +1276,7 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 
 * #### Compiling: Errors
 
-  * ##### Migrating Branch Cordova SDK from v2.5+ to v3.0+
+  * ##### Migrating Branch Cordova SDK from v2.5+ to v2.7+
 
     ```diff
     // Branch initialization
