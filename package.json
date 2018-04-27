@@ -1,7 +1,7 @@
 {
   "name": "branch-cordova-sdk",
   "description": "Branch Metrics Cordova SDK",
-  "main": "src/branch.js",
+  "main": "src/index.js",
   "version": "2.6.24",
   "homepage": "https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking",
   "repository": {
@@ -11,30 +11,11 @@
   "bugs": {
     "url": "https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues"
   },
-  "keywords": [
-    "ecosystem:cordova",
-    "ecosystem:phonegap",
-    "ecosystem:ionic",
-    "cordova-ios",
-    "cordova-android",
-    "branch",
-    "linking",
-    "deep links",
-    "deep linking",
-    "universal links",
-    "app links",
-    "deferred deep linking"
-  ],
   "platforms": [
     "android",
     "ios"
   ],
   "license": "MIT",
-  "config": {
-    "validate-commit-msg": {
-      "types": "conventional-commit-types"
-    }
-  },
   "scripts": {
     "validate": "            echo 'run validation scripts';     node ./src/scripts/npm/updatePluginXml",
     "travis-deploy-once": "  echo 'prevent multiple deploys';   travis-deploy-once",
@@ -62,7 +43,7 @@
       "no-alert": 0,
       "no-use-before-define": 0
     },
-    "globals" : {
+    "globals": {
       "Promise": true,
       "Branch": true
     }
@@ -116,9 +97,8 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jest": "^21.15.1",
-    "gulp": "^3.9.1",
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.4",
+    "lint-staged": "^7.0.5",
     "prettier": "^1.12.1",
     "semantic-release": "^15.1.7",
     "travis-deploy-once": "^4.4.1"
