@@ -1,3 +1,11 @@
+<a name="2.7.1"></a>
+## [2.7.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v2.7.0...v2.7.1) (2018-05-03)
+
+
+### Bug Fixes
+
+* android-prefix no longer needed for custom link domains ([0a9100e](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/0a9100e))
+
 <a name="2.7.0"></a>
 # [2.7.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v2.6.24...v2.7.0) (2018-04-27)
 
