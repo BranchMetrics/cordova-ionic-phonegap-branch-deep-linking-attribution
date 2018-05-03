@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const fs = require("fs");
   const xml2js = require("xml2js");
@@ -27,7 +25,7 @@
         }
       });
     } catch (err) {
-      throw new Error(`BRANCH SDK: Cannot write file ${  file}`);
+      throw new Error(`BRANCH SDK: Cannot write file ${file}`);
     }
 
     return parsedData;
@@ -43,7 +41,7 @@
       fs.writeFileSync(file, changedXmlData);
     } catch (err) {
       isSaved = false;
-      throw new Error(`BRANCH SDK: Cannot write file ${  file}`);
+      throw new Error(`BRANCH SDK: Cannot write file ${file}`);
     }
 
     return isSaved;
