@@ -302,8 +302,11 @@
         intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain));
         intentFilterData.push(getAppLinkIntentFilterDictionary(alternate));
       } else {
-        // bnc.lt and custom domains
-        if (preferences.androidPrefix === null) {
+        // bnc.lt
+        if (
+          linkDomain.indexOf("bnc.lt") !== -1 &&
+          preferences.androidPrefix === null
+        ) {
           throw new Error(
             'BRANCH SDK: Invalid "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP'
           );
