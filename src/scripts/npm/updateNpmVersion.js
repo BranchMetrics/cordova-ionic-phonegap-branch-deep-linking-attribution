@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const path = require("path");
   const exec = require("child_process").exec;
@@ -25,7 +23,7 @@
       const updated = updateVersion(file, content, version);
 
       // save
-      git += `git add ${  file  } && `;
+      git += `git add ${file} && `;
       saveContent(file, updated);
     }
     // publish
@@ -42,7 +40,7 @@
   function saveContent(file, content) {
     return isFileXml(file)
       ? fileHelper.writeFile(file, content)
-      : fileHelper.writeFile(file, `${JSON.stringify(content, null, 2)  }\n`);
+      : fileHelper.writeFile(file, `${JSON.stringify(content, null, 2)}\n`);
   }
 
   function isFileXml(file) {
@@ -52,7 +50,7 @@
   // update content based on xml or json
   function updateVersion(file, content, version) {
     const prev = /id="branch-cordova-sdk"[\s]*version="\d+\.\d+\.\d+"/gim;
-    const next = `id="branch-cordova-sdk"\n  version="${  version  }"`;
+    const next = `id="branch-cordova-sdk"\n  version="${version}"`;
 
     try {
       if (isFileXml(file)) {
@@ -63,7 +61,7 @@
       }
     } catch (e) {
       throw new Error(
-        `BRANCH SDK: update to update npm version with file ${  file}`
+        `BRANCH SDK: update to update npm version with file ${file}`
       );
     }
     return content;
@@ -82,10 +80,7 @@
 
   // push file code changes to github
   function commitChanges(git, version) {
-    git +=
-      `git commit -m "chore: updated npm version to ${ 
-      version 
-      }" && git push`;
+    git += `git commit -m "chore: updated npm version to ${version}" && git push`;
     exec(git, (err, stdout, stderr) => {
       if (err) {
         throw new Error(

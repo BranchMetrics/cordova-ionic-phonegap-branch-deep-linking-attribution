@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const fs = require("fs");
   const plist = require("plist");
@@ -14,12 +12,9 @@
 
   // updates the platforms/ios/app.plist file with branch settings within app/config.xml
   function addBranchSettings(preferences) {
-    const filePath =
-      `platforms/ios/${ 
-      preferences.projectName 
-      }/${ 
-      preferences.projectName 
-      }-Info.plist`;
+    const filePath = `platforms/ios/${preferences.projectName}/${
+      preferences.projectName
+    }-Info.plist`;
     let xml = readPlist(filePath);
     let obj = convertXmlToObject(xml);
 
