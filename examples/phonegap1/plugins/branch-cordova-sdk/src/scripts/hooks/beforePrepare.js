@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const configPreferences = require("../npm/processConfigXml.js");
   const iosPlist = require("../ios/updatePlist.js");
@@ -17,7 +15,7 @@
     const preferences = configPreferences.read(context);
     const platforms = context.opts.cordova.platforms;
 
-    platforms.forEach((platform) => {
+    platforms.forEach(platform => {
       if (platform === IOS) {
         iosPlist.addBranchSettings(preferences);
         iosCapabilities.enableAssociatedDomains(preferences);

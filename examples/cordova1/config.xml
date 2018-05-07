@@ -28,6 +28,6 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <plugin name="branch-cordova-sdk" spec="file:../../tmp" />
-    <engine name="ios" spec="~4.5.4" />
-    <engine name="android" spec="~7.0.0" />
+    <engine name="ios" spec="^4.5.4" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

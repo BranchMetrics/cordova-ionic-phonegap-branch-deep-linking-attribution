@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const path = require("path");
   const fs = require("fs");
@@ -37,7 +35,7 @@
       "ios",
       preferences.projectName,
       "Resources",
-      `${preferences.projectName  }.entitlements`
+      `${preferences.projectName}.entitlements`
     );
     files.push(
       path.join(
@@ -45,7 +43,7 @@
         "platforms",
         "ios",
         preferences.projectName,
-        `${preferences.projectName  }.entitlements`
+        `${preferences.projectName}.entitlements`
       )
     );
     files.push(entitlements);
@@ -57,7 +55,7 @@
         "platforms",
         "ios",
         preferences.projectName,
-        `Entitlements-${  buildType  }.plist`
+        `Entitlements-${buildType}.plist`
       );
       files.push(plist);
     }
@@ -117,11 +115,11 @@
       if (domain.indexOf("applinks:") === 0) {
         domain = domain.replace("applinks:", "");
         if (isBranchAssociatedDomains(domain, linkDomains)) {
-          output.push(`applinks:${  domain}`);
+          output.push(`applinks:${domain}`);
         }
       } else if (isBranchAssociatedDomains(domain, linkDomains)) {
-          output.push(domain);
-        }
+        output.push(domain);
+      }
     }
 
     return output;
@@ -156,9 +154,9 @@
           .split(".")
           .slice(2)
           .join(".");
-        const alternate = `${first  }-alternate`;
+        const alternate = `${first}-alternate`;
 
-        domainList.push(`${prefix + alternate  }.${  second  }.${  rest}`);
+        domainList.push(`${prefix + alternate}.${second}.${rest}`);
       }
     }
 

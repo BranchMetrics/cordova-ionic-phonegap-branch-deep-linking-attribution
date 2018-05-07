@@ -830,14 +830,9 @@ public class BranchSDK extends CordovaPlugin {
             String out;
 
             if (error == null && referringParams != null) {
-
-                out = String.format("DeepLinkHandler(%s)", referringParams.toString());
-                sendJavascript(out);
-
                 if (this._callbackContext != null) {
                     this._callbackContext.success(referringParams);
                 }
-
             } else {
                 JSONObject message = new JSONObject();
                 try {
@@ -845,7 +840,6 @@ public class BranchSDK extends CordovaPlugin {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 if (this._callbackContext != null) {
                     this._callbackContext.error(message);
                 }

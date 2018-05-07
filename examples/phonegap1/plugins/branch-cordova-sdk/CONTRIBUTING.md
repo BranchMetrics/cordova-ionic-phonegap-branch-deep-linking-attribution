@@ -36,12 +36,6 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
   brew install node;
   ```
 
-* Gulp
-
-  ```sh
-  npm install -g gulp-cli; # linter
-  ```
-
 * Yarn
 
   ```sh
@@ -60,8 +54,8 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 
 ## Develop
 
-* Changes to `/src` don't need a `init.sh` rebuild, just a `cordova run ios`
-* Changes to `/src/branch.js` need changes to `testbed/platforms/ios/platform_www/plugins/branch-cordova-sdk` and a `cordova run ios`
+* Changes to `/src` don't need a `yarn examples` rebuild, just a `cordova run`
+* Changes to `/src/index.js` need changes to `testbed/platforms/ios/platform_www/plugins/branch-cordova-sdk` and a `cordova run ios`
 
 * **[optional]** Update [Android](https://github.com/BranchMetrics/android-branch-deep-linking/releases) and [iOS](https://github.com/BranchMetrics/ios-branch-deep-linking/releases) SDKs
 
@@ -70,31 +64,28 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
   ./src/scripts/npm/updateNativeSdk.sh -i 0.13.5
   ```
 
-* **[optional]** Update `CHANGELOG.md`
-
-  ```sh
-  npm run changelog
-  ```
-
 ## Test
 
 * Validate all features on both `iOS` and `Android` on `device` only (no `simulator` or `TestFlight`)
 
-  * ios
+  * build
 
     ```sh
-    ./testbed/init -idc
+    cd ./
+    yarn examples
     ```
 
-  * android
-
     ```sh
-    ./testbed/init -adc
+    cd examples/cordova1
+    # (plug in devices)
+    # (ionic build if ionic 3)
+    cordova run ios
+    cordova run android
     ```
 
   * files
 
-    * test `branch.js` with console logs to Safari and Chrome inspectors
+    * test `index.js` with console logs to Safari and Chrome inspectors
     * test `hooks` by changing to `before_prepare` and console logs with `cordova build`
     * test `BranchSDK.m` with `NSLog()` with Xcode
     * test `BranchSDK.java` with `system.out.println()` with Android Studio
@@ -112,9 +103,3 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 * Pull request code review from a Branch team member
 
 * Merges will automatically add SDK to NPM
-
-## Additional
-
-* `<plugin name="branch-cordova-sdk" spec="../" />` or `cordova plugin add ../` causes an infinite loop when importing Branch on Cordova 7.0.1. Works on Cordova 6.5.0.
-* need to remove `TODO` from `init.sh` for `ios-sim` error
-* `cordova platform update android@6.2.2` added for Cordova 6.5.0 error on Android

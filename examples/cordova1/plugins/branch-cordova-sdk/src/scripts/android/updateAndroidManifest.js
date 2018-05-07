@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const path = require("path");
   const xmlHelper = require("../lib/xmlHelper.js");
@@ -67,7 +65,7 @@
         );
         manifest = xmlHelper.readXmlAsJson(pathToManifest);
       } catch (e) {
-        throw new Error(`BRANCH SDK: Cannot read AndroidManfiest.xml ${  e}`);
+        throw new Error(`BRANCH SDK: Cannot read AndroidManfiest.xml ${e}`);
       }
     }
     const mainActivityIndex = getMainLaunchActivityIndex(
@@ -91,7 +89,10 @@
     let metadatas = manifest.manifest.application[0]["meta-data"] || [];
     const metadata = [];
     const keys = ["io.branch.sdk.BranchKey", "io.branch.sdk.TestMode"];
-    const vals = [preferences.branchKey, preferences.androidTestMode || "false"];
+    const vals = [
+      preferences.branchKey,
+      preferences.androidTestMode || "false"
+    ];
 
     // remove old
     for (var i = 0; i < keys.length; i++) {
@@ -109,9 +110,7 @@
         }
       });
     }
-    manifest.manifest.application[0]["meta-data"] = metadatas.concat(
-      metadata
-    );
+    manifest.manifest.application[0]["meta-data"] = metadatas.concat(metadata);
 
     return manifest;
   }
@@ -298,13 +297,16 @@
           .split(".")
           .slice(1)
           .join(".");
-        const alternate = `${first  }-alternate` + `.${  rest}`;
+        const alternate = `${first}-alternate` + `.${rest}`;
 
         intentFilterData.push(getAppLinkIntentFilterDictionary(linkDomain));
         intentFilterData.push(getAppLinkIntentFilterDictionary(alternate));
       } else {
-        // bnc.lt and custom domains
-        if (preferences.androidPrefix === null) {
+        // bnc.lt
+        if (
+          linkDomain.indexOf("bnc.lt") !== -1 &&
+          preferences.androidPrefix === null
+        ) {
           throw new Error(
             'BRANCH SDK: Invalid "android-prefix" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP'
           );
@@ -343,10 +345,7 @@
     const without = [];
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      if (
-        item.hasOwnProperty("$") &&
-        item.$.hasOwnProperty("android:name")
-      ) {
+      if (item.hasOwnProperty("$") && item.$.hasOwnProperty("android:name")) {
         const key = item.$["android:name"];
         if (key === androidName) {
           continue;
@@ -383,7 +382,7 @@
       return false;
     }
 
-    isLauncher = intentFilters.some((intentFilter) => {
+    isLauncher = intentFilters.some(intentFilter => {
       const action = intentFilter.action;
       const category = intentFilter.category;
 

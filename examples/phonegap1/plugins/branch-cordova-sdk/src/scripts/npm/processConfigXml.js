@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const path = require("path");
   const xmlHelper = require("../lib/xmlHelper.js");
@@ -16,7 +14,11 @@
     const projectRoot = getProjectRoot(context);
     const configXml = getConfigXml(projectRoot);
     const branchXml = getBranchXml(configXml);
-    const branchPreferences = getBranchPreferences(context, configXml, branchXml);
+    const branchPreferences = getBranchPreferences(
+      context,
+      configXml,
+      branchXml
+    );
 
     validateBranchPreferences(branchPreferences);
 
@@ -92,9 +94,7 @@
 
   // read branch value from <branch-config>
   function getBranchValue(branchXml, key) {
-    return branchXml.hasOwnProperty(key)
-      ? branchXml[key][0].$.value
-      : null;
+    return branchXml.hasOwnProperty(key) ? branchXml[key][0].$.value : null;
   }
 
   // read branch value from <branch-config> for multiple <link-domain>
