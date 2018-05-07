@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const SDK = "branch-cordova-sdk";
   const fs = require("fs");
@@ -59,16 +57,14 @@
 
     // install one at a time
     const module = modules.pop();
-    console.log(`BRANCH SDK: Installing node dependency ${  module}`);
+    console.log(`BRANCH SDK: Installing node dependency ${module}`);
 
-    const install = `npm install --prefix ./plugins/${  SDK  } -D ${  module}`;
+    const install = `npm install --prefix ./plugins/${SDK} -D ${module}`;
     exec(install, (err, stdout, stderr) => {
       // handle error
       if (err) {
         throw new Error(
-          `BRANCH SDK: Failed to install Branch node dependency ${ 
-            module 
-            }. Docs https://goo.gl/GijGKP`
+          `BRANCH SDK: Failed to install Branch node dependency ${module}. Docs https://goo.gl/GijGKP`
         );
       } else {
         // next module
@@ -109,7 +105,7 @@
 
   // artifact caused by 'npm install --prefix'
   function removeEtcDirectory() {
-    const remove = `rm -r ./plugins/${  SDK  }/etc`;
+    const remove = `rm -r ./plugins/${SDK}/etc`;
     exec(remove);
   }
 })();

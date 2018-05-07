@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const nodeDependencies = require("../npm/downloadNpmDependencies.js");
 

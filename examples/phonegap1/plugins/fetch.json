@@ -2,7 +2,7 @@
   "branch-cordova-sdk": {
     "source": {
       "type": "local",
-      "path": "/Users/eneff/drive/active4/branch/lib/cordova-ionic-phonegap-branch-deep-linking/examples/phonegap1/node_modules/branch-cordova-sdk"
+      "path": "/Users/eneff/Dropbox/company/lib/cordova-ionic-phonegap-branch-deep-linking/examples/phonegap1/node_modules/branch-cordova-sdk"
     },
     "is_top_level": true,
     "variables": {}

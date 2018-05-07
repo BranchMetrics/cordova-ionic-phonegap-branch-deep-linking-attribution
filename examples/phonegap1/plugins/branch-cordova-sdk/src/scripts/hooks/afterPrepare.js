@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const configPreferences = require("../npm/processConfigXml.js");
   const iosDevelopmentTeam = require("../ios/updateDevelopmentTeam.js");
@@ -17,7 +15,7 @@
     const preferences = configPreferences.read(context);
     const platforms = context.opts.cordova.platforms;
 
-    platforms.forEach((platform) => {
+    platforms.forEach(platform => {
       if (platform === ANDROID) {
         androidManifest.writePreferences(context, preferences);
       }

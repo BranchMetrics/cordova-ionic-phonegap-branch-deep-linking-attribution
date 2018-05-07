@@ -6,8 +6,6 @@
 
 (function() {
   // libs
-  
-
 
   const path = require("path");
   // var exec = require('child_process').exec
@@ -20,32 +18,32 @@
   const apiURL = "https://api.github.com/repos/";
   const gitURL = "https://github.com/";
   const baseURL = "BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/";
-  const tagsURL = `${apiURL + baseURL  }tags`;
-  const issuesURL = `${apiURL + baseURL  }issues`;
-  const commitsURL = `${apiURL + baseURL  }commits`;
+  const tagsURL = `${apiURL + baseURL}tags`;
+  const issuesURL = `${apiURL + baseURL}issues`;
+  const commitsURL = `${apiURL + baseURL}commits`;
 
   // entry
   module.exports = updateChangeLog();
 
   function updateChangeLog() {
     const pageLimit = isReset() ? 50 : 2;
-    const tags = new Promise(((resolve, reject) => {
-      readData(tagsURL, [], 1, pageLimit, (values) => {
+    const tags = new Promise((resolve, reject) => {
+      readData(tagsURL, [], 1, pageLimit, values => {
         resolve(values);
       });
-    }));
-    const issues = new Promise(((resolve, reject) => {
-      readData(issuesURL, [], 1, pageLimit, (values) => {
+    });
+    const issues = new Promise((resolve, reject) => {
+      readData(issuesURL, [], 1, pageLimit, values => {
         resolve(values);
       });
-    }));
-    const commits = new Promise(((resolve, reject) => {
-      readData(commitsURL, [], 1, pageLimit, (values) => {
+    });
+    const commits = new Promise((resolve, reject) => {
+      readData(commitsURL, [], 1, pageLimit, values => {
         resolve(values);
       });
-    }));
+    });
 
-    Promise.all([tags, issues, commits]).then((values) => {
+    Promise.all([tags, issues, commits]).then(values => {
       const markdown = generateMarkdown(values);
       fileHelper.writeFile(FILE, markdown);
       commitChanges();
@@ -64,10 +62,10 @@
   }
 
   function readData(url, data, page, pageLimit, callback) {
-    let link = `${url  }?page=${  page}`;
+    let link = `${url}?page=${page}`;
     link += url.indexOf("issues") > 0 ? "&state=closed" : "";
 
-    readGit(link, (values) => {
+    readGit(link, values => {
       data.push(...values);
       if (values.length === 0 || page >= pageLimit) {
         callback(data);
@@ -126,16 +124,9 @@
   }
 
   function getTagHeader(currentTag) {
-    return (
-      `## [${ 
-      currentTag.name 
-      }](${ 
-      gitURL 
-      }${baseURL 
-      }releases/tag/${ 
-      currentTag.name 
-      }) `
-    );
+    return `## [${currentTag.name}](${gitURL}${baseURL}releases/tag/${
+      currentTag.name
+    }) `;
   }
 
   function getCommitParagraph(currentTag, commits) {
@@ -158,14 +149,9 @@
         hasHeader = true;
       }
 
-      paragraph +=
-        `  - ${ 
-        message 
-        } ([${ 
-        current.sha.substr(0, 5) 
-        }](${ 
-        current.html_url 
-        }))\n`;
+      paragraph += `  - ${message} ([${current.sha.substr(0, 5)}](${
+        current.html_url
+      }))\n`;
 
       if (currentTag.commit.sha === current.sha) {
         // assign date to be used for header and issues conditional
@@ -174,8 +160,8 @@
 
         // complete body
         body = "";
-        body += `(${  date.substr(0, 10)  })\n\n`;
-        body += `${paragraph  }\n`;
+        body += `(${date.substr(0, 10)})\n\n`;
+        body += `${paragraph}\n`;
         break;
       }
     }
@@ -200,14 +186,9 @@
           hasHeader = true;
         }
 
-        paragraph +=
-          `  - ${ 
-          current.title.replace(/(\r\n|\n|\r)/gm, "") 
-          } ([#${ 
-          current.number 
-          }](${ 
-          current.html_url 
-          }))\n`;
+        paragraph += `  - ${current.title.replace(/(\r\n|\n|\r)/gm, "")} ([#${
+          current.number
+        }](${current.html_url}))\n`;
       }
 
       if (
@@ -215,7 +196,7 @@
           new Date(currentTag.date).getTime() &&
         hasHeader
       ) {
-        body += `${paragraph  }\n`;
+        body += `${paragraph}\n`;
         break;
       }
     }
@@ -237,10 +218,7 @@
 
   // push file code changes to github
   function commitChanges() {
-    let git =
-      `git add ${ 
-      FILE 
-      } && git add git commit -m "chore: updated changelog" && git push`;
+    let git = `git add ${FILE} && git add git commit -m "chore: updated changelog" && git push`;
     git = "echo";
     exec(git, (err, stdout, stderr) => {
       if (err) {

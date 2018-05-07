@@ -1,3 +1,62 @@
+<a name="2.7.1"></a>
+## [2.7.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v2.7.0...v2.7.1) (2018-05-03)
+
+
+### Bug Fixes
+
+* android-prefix no longer needed for custom link domains ([0a9100e](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/0a9100e))
+
+<a name="2.7.0"></a>
+# [2.7.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v2.6.24...v2.7.0) (2018-04-27)
+
+
+### Bug Fixes
+
+* added back options to buo methods ([8b5c50d](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/8b5c50d))
+* added cordova plugin console for debugging ([54a3c5a](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/54a3c5a))
+* added disabletracking to testbed ([05f3ade](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/05f3ade))
+* added examples to github ([5868fd2](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/5868fd2))
+* added examples to github ([09e4861](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/09e4861))
+* added framework for example generation ([bb25057](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/bb25057))
+* added more ci ([4b585c8](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/4b585c8))
+* added more ignores ([9351f1d](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/9351f1d))
+* added more to ignore ([2f17543](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/2f17543))
+* added npm publish and npm version update to circle ci ([53d27e3](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/53d27e3))
+* allow long url on iOS if tracking disabled ([b74bfda](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/b74bfda))
+* cleaned up dependencies ([741f5a3](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/741f5a3))
+* cleaned up npm dependencies ([597461a](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/597461a))
+* converted everything to vanilla ([48809d7](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/48809d7))
+* corrected android long url with no tracking ([628734b](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/628734b))
+* corrected double init callback on iOS ([7a4cf38](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/7a4cf38))
+* corrected nasty stacktrace error messages ([5752f87](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/5752f87))
+* corrected testbed for gdpr tracking ([9a5591a](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/9a5591a))
+* corrected the ignores ([f71e990](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/f71e990))
+* relocted example script to prepare for templates ([06acfe2](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/06acfe2))
+* removed circle ci support for node 6 ([8f28f84](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/8f28f84))
+* removed cordova dependency ([9028ff2](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/9028ff2))
+* removed gulp dependency ([c41897b](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/c41897b))
+* removed gulp standard linting ([4792400](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/4792400))
+* removed mixpanel token ([043ca84](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/043ca84))
+* removed redundancy with reject ([3ed7caf](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/3ed7caf))
+* removed the testbed ([8b8e375](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/8b8e375))
+* updated Android SDK to 2.17.1 ([6d1a257](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/6d1a257))
+* updated circle ci to run on node 7 and 6 ([acf9874](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/acf9874))
+* updated dependencies ([9901a87](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/9901a87))
+* updated ignores ([cf11810](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/cf11810))
+* updated iOS SDK to 0.24.2 ([ec9511e](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/ec9511e))
+* updated testbed with tracking disabled ([bacd590](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/bacd590))
+* updated the ignores ([e89ac26](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/e89ac26))
+* updated the ignores ([54ddbbd](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/54ddbbd))
+* updated yarn lock ([1a8b93e](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/1a8b93e))
+
+
+### Features
+
+* added disable tracking for gdpr ([191f580](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/191f580))
+* added script to build test examples ([eafc6cd](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/eafc6cd))
+* added tracking disabled for gdpr ([44325d4](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/44325d4))
+* created script to auto generate examples ([0b4d902](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/0b4d902))
+
 # CHANGELOG
 Questions? [Contact us](https://support.branch.io/support/tickets/new)
 
@@ -1768,4 +1827,3 @@ Questions? [Contact us](https://support.branch.io/support/tickets/new)
   - Branch not ready on deviceready event ([#16](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/16))
   - setIdentity doesn't work in current version ([#15](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/15))
   - setDebug has no effect ([#14](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/14))
-

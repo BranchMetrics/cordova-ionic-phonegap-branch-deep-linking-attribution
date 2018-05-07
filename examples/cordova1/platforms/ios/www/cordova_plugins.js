@@ -12,7 +12,7 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "branch-cordova-sdk": "2.6.24",
+  "branch-cordova-sdk": "3.0.0",
   "cordova-plugin-whitelist": "1.3.3"
 };
 // BOTTOM OF METADATA

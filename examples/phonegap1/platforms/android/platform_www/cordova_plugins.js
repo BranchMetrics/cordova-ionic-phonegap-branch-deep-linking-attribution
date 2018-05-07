@@ -382,7 +382,7 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "branch-cordova-sdk": "2.6.24",
+  "branch-cordova-sdk": "3.0.0",
   "cordova-plugin-battery-status": "1.2.5",
   "cordova-plugin-camera": "2.4.1",
   "cordova-plugin-device": "1.1.7",

@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const path = require("path");
   const compare = require("node-version-compare");
@@ -22,7 +20,7 @@
       "ios",
       preferences.projectName,
       "Resources",
-      `${preferences.projectName  }.entitlements`
+      `${preferences.projectName}.entitlements`
     );
 
     activateAssociativeDomains(
@@ -43,8 +41,8 @@
 
     for (config in configurations) {
       buildSettings = configurations[config].buildSettings;
-      buildSettings.CODE_SIGN_IDENTITY = `"${  CODESIGNIDENTITY  }"`;
-      buildSettings.CODE_SIGN_ENTITLEMENTS = `"${  entitlementsFile  }"`;
+      buildSettings.CODE_SIGN_IDENTITY = `"${CODESIGNIDENTITY}"`;
+      buildSettings.CODE_SIGN_ENTITLEMENTS = `"${entitlementsFile}"`;
 
       // if deployment target is less then the required one - increase it
       if (buildSettings.IPHONEOS_DEPLOYMENT_TARGET) {

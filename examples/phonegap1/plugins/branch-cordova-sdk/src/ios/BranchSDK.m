@@ -105,9 +105,6 @@
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:resultString];
     }
 
-    // assigns data to DeepLinkHandler within branch.js
-    [self.commandDelegate evalJs:[NSString stringWithFormat:@"DeepLinkHandler(%@)", resultString]];
-
     if (command != nil) {
       [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
     }

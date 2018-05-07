@@ -1,7 +1,5 @@
 (function() {
   // properties
-  
-
 
   const fs = require("fs");
 
@@ -17,7 +15,7 @@
     try {
       return fs.accessSync(file);
     } catch (err) {
-      throw new Error(`BRANCH SDK: Cannot access file ${  file}`);
+      throw new Error(`BRANCH SDK: Cannot access file ${file}`);
     }
   }
 
@@ -26,7 +24,7 @@
     try {
       return fs.readFileSync(file, "utf8");
     } catch (err) {
-      throw new Error(`BRANCH SDK: Cannot read file ${  file}`);
+      throw new Error(`BRANCH SDK: Cannot read file ${file}`);
     }
   }
 
@@ -36,7 +34,7 @@
       fs.writeFileSync(file, content, "utf8");
     } catch (err) {
       throw new Error(
-        `BRANCH SDK: Cannot write file ${  file  } with content ${  content}`
+        `BRANCH SDK: Cannot write file ${file} with content ${content}`
       );
     }
   }
