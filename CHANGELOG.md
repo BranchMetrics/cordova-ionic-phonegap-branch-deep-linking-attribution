@@ -1,3 +1,16 @@
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v2.7.1...v3.0.0) (2018-05-07)
+
+
+### Bug Fixes
+
+* removed DeepLinkHandler for callback ([c9c1543](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/c9c1543))
+
+
+### BREAKING CHANGES
+
+* deep link data must be read from the Branch.initSession().then(data => {}) promise. See https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking#migrating-branch-cordova-sdk-from-v25-to-v30
+
 <a name="2.7.1"></a>
 ## [2.7.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v2.7.0...v2.7.1) (2018-05-03)
 
