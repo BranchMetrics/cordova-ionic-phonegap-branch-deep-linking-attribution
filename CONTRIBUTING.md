@@ -47,9 +47,10 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 * Local
 
   ```sh
-  git clone git@github.com:BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git;
-  cd cordova-ionic-phonegap-branch-deep-linking;
+  git clone git@github.com:BranchMetrics/cordova-ionic-phonegap-branch-deep-linking.git
+  cd cordova-ionic-phonegap-branch-deep-linking
   yarn install
+  yarn examples
   ```
 
 ## Develop
