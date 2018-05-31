@@ -1,0 +1,57 @@
+{
+  "_from": "cordova-plugin-ionic-webview@^1.2.1",
+  "_id": "cordova-plugin-ionic-webview@1.2.1",
+  "_inBundle": false,
+  "_integrity": "sha512-35Tu80g74enHV7HnXPDTwaPfObFydsLWyyAo2Eez/ns80UfhwkV99hWeG5jSO3zpPtSY8AVq7la6Z6Ww+4kDkg==",
+  "_location": "/cordova-plugin-ionic-webview",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-plugin-ionic-webview@^1.2.1",
+    "name": "cordova-plugin-ionic-webview",
+    "escapedName": "cordova-plugin-ionic-webview",
+    "rawSpec": "^1.2.1",
+    "saveSpec": null,
+    "fetchSpec": "^1.2.1"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-ionic-webview/-/cordova-plugin-ionic-webview-1.2.1.tgz",
+  "_shasum": "6d2162a2b1c593de436359d0746afc28b6a28d57",
+  "_spec": "cordova-plugin-ionic-webview@^1.2.1",
+  "_where": "/Users/bnatarajan/Developer/ionic-conference-app",
+  "author": {
+    "name": "Ionic Team"
+  },
+  "bugs": {
+    "url": "https://github.com/ionic-team/cordova-plugin-ionic-webview/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "The official Ionic's WKWebView Engine Plugin",
+  "devDependencies": {
+    "np": "^2.16.0",
+    "sync-cordova-xml": "^0.4.0"
+  },
+  "homepage": "https://github.com/ionic-team/cordova-plugin-ionic-webview#readme",
+  "keywords": [
+    "cordova",
+    "wkwebview"
+  ],
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "name": "cordova-plugin-ionic-webview",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ionic-team/cordova-plugin-ionic-webview.git"
+  },
+  "scripts": {
+    "deploy": "np --yolo",
+    "sync_plugin_xml": "sync-cordova-xml package.json plugin.xml --output=plugin.xml",
+    "version": "npm run sync_plugin_xml && git add plugin.xml"
+  },
+  "version": "1.2.1"
+}

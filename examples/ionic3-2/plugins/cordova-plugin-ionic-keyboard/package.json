@@ -1,0 +1,59 @@
+{
+  "_from": "cordova-plugin-ionic-keyboard@^2.1.2",
+  "_id": "cordova-plugin-ionic-keyboard@2.1.2",
+  "_inBundle": false,
+  "_integrity": "sha512-uJeL83WMMD15Y+aISznwQfm+ZwSHkPvVZSI7cjDZX/6umn2Rz1BiR9W0MSiooSUv5DF3U8QdJjDSDY5cwigbVA==",
+  "_location": "/cordova-plugin-ionic-keyboard",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-plugin-ionic-keyboard@^2.1.2",
+    "name": "cordova-plugin-ionic-keyboard",
+    "escapedName": "cordova-plugin-ionic-keyboard",
+    "rawSpec": "^2.1.2",
+    "saveSpec": null,
+    "fetchSpec": "^2.1.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-ionic-keyboard/-/cordova-plugin-ionic-keyboard-2.1.2.tgz",
+  "_shasum": "6d91bac2b5aba578dcccfd63e61b0960c33f9e4a",
+  "_spec": "cordova-plugin-ionic-keyboard@^2.1.2",
+  "_where": "/Users/bnatarajan/Developer/ionic-conference-app",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://github.com/ionic-team/cordova-plugin-ionic-keyboard/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Ionic Keyboard Plugin",
+  "devDependencies": {
+    "np": "^2.16.0",
+    "sync-cordova-xml": "^0.4.0"
+  },
+  "homepage": "https://github.com/ionic-team/cordova-plugin-ionic-keyboard#readme",
+  "keywords": [
+    "cordova",
+    "keyboard",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "license": "Apache 2.0",
+  "name": "cordova-plugin-ionic-keyboard",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ionic-team/cordova-plugin-ionic-keyboard.git"
+  },
+  "scripts": {
+    "deploy": "np --yolo",
+    "sync_plugin_xml": "sync-cordova-xml package.json plugin.xml --output=plugin.xml",
+    "version": "npm run sync_plugin_xml && git add plugin.xml"
+  },
+  "version": "2.1.2"
+}
