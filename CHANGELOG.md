@@ -1,3 +1,10 @@
+<a name="3.0.1"></a>
+# [3.0.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.0.0...v3.0.1) (2018-05-07)
+
+### Bug Fixes
+
+* Add check for `window.clientInformation` ([55c09b6](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/pull/485/commits/55c09b6))
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v2.7.1...v3.0.0) (2018-05-07)
 
