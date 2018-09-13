@@ -334,7 +334,7 @@
 
 - (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command
 {
-  bool enabled = [[command.arguments objectAtIndex:0] boolValue] == YES;
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
   if (enabled) {
     [[Branch getInstance] delayInitToCheckForSearchAds];
   }
@@ -346,7 +346,7 @@
 
 - (void)setAppleSearchAdsDebugMode:(CDVInvokedUrlCommand*)command
 {
-  bool enabled = [[command.arguments objectAtIndex:0] boolValue] == YES;
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
   if (enabled) {
     [[Branch getInstance] setAppleSearchAdsDebugMode];
   }
