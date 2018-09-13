@@ -133,7 +133,7 @@
 
 - (void)setDebug:(CDVInvokedUrlCommand*)command
 {
-  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue] == YES;
+  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue];
   if (enableDebug) {
     [[Branch getInstance] setDebug];
   }
