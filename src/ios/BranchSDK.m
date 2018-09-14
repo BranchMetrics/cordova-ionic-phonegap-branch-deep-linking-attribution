@@ -133,7 +133,7 @@
 
 - (void)setDebug:(CDVInvokedUrlCommand*)command
 {
-  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue] == YES;
+  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue];
   if (enableDebug) {
     [[Branch getInstance] setDebug];
   }
@@ -330,6 +330,30 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }];
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
+}
+
+- (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command
+{
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  if (enabled) {
+    [[Branch getInstance] delayInitToCheckForSearchAds];
+  }
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
+
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setAppleSearchAdsDebugMode:(CDVInvokedUrlCommand*)command
+{
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  if (enabled) {
+    [[Branch getInstance] setAppleSearchAdsDebugMode];
+  }
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
+
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 #pragma mark - Branch Referral Reward System
