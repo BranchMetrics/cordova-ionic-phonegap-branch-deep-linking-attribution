@@ -119,7 +119,7 @@ Branch.prototype.userCompletedAction = function userCompletedAction(
   return execute("userCompletedAction", args);
 };
 
-Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
+Branch.prototype.sendCommerceEvent= function sendCommerceEvent(
   action,
   metaData
 ) {
@@ -133,6 +133,22 @@ Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
   }
 
   return execute("sendCommerceEvent", args);
+};
+
+Branch.prototype.sendBranchEvent = function sendBranchEvent(
+  action,
+  metaData
+){
+  var args = [action];
+  if(!action){
+    return executeReject("Please set a standard event");
+  }
+
+  if(metaData){
+    args.push(metaData);
+  }
+
+  return execute("sendBranchEvent",args);
 };
 
 Branch.prototype.createBranchUniversalObject = function createBranchUniversalObject(

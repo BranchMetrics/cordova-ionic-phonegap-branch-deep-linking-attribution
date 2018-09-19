@@ -139,6 +139,13 @@ public class BranchSDK extends CordovaPlugin {
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
+                } else if(action.equals("sendBranchEvent")){
+                    if (args.length() < 1 && args.length() > 2) {
+                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        return false;
+                    }
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
                 } else if (action.equals("getFirstReferringParams")) {
                     cordova.getActivity().runOnUiThread(r);
                     return true;
@@ -745,6 +752,36 @@ public class BranchSDK extends CordovaPlugin {
 
     }
 
+    public  BranchEvent sendBranchEvent(String eventName, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
+        BranchEvent event;
+        try {
+            BRANCH_STANDARD_EVENT standardEvent = BRANCH_STANDARD_EVENT.valueOf(eventName);
+            // valueOf on BRANCH_STANDARD_EVENT Enum has succeeded, so this is a standard event.
+            event = new BranchEvent(standardEvent);
+        } catch (IllegalArgumentException e) {
+            // The event name is not found in standard events.
+            // So use custom event mode.
+            event = new BranchEvent(eventName);
+        }
+
+        if (metaData.equals("customData")) {
+
+            JSONObject customData = metaData.getJSONObject("customData");
+            Iterator<?> keys = customData.keys();
+
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                String value = customData.optString(key);
+                event.addCustomDataProperty(key, customData.getString(key));
+            }
+
+        }
+
+        event.logEvent(this.activity);
+
+        return event;
+    }
+
     /**
      * <p>Gets the credit history of the specified bucket and triggers a callback to handle the
      * response.</p>
@@ -1272,6 +1309,8 @@ public class BranchSDK extends CordovaPlugin {
                         }
                     } else if (this.action.equals("sendCommerceEvent")) {
                         sendCommerceEvent(this.args.getJSONObject(0), this.args.getJSONObject(1), this.callbackContext);
+                    }  else if(this.action.equals("sendBranchEvent")){
+                        sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
                     } else if (this.action.equals("getFirstReferringParams")) {
                         getFirstReferringParams(this.callbackContext);
                     } else if (this.action.equals("getLatestReferringParams")) {

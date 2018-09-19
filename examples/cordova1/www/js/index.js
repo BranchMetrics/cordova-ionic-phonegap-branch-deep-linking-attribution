@@ -29,6 +29,8 @@ var branchUser = document.getElementById("branchUser");
 var branchLogout = document.getElementById("branchLogout");
 var branchEvent = document.getElementById("branchEvent");
 var branchCommerce = document.getElementById("branchCommerce");
+var branchStandardEvent=document.getElementById("branchStandardEvent");
+var branchCustomEvent=document.getElementById("branchCustomEvent");
 var branchReferralsReward = document.getElementById("branchReferralsReward");
 var branchReferralsLoad = document.getElementById("branchReferralsLoad");
 var branchReferralsRedeem = document.getElementById("branchReferralsRedeem");
@@ -46,6 +48,8 @@ branchUser.addEventListener("click", BranchUser);
 branchLogout.addEventListener("click", BranchLogout);
 branchEvent.addEventListener("click", BranchEvent);
 branchCommerce.addEventListener("click", BranchCommerce);
+branchStandardEvent.addEventListener("click",BranchStandardEvent);
+branchCustomEvent.addEventListener("click",BranchCustomEvent);
 branchReferralsReward.addEventListener("click", BranchReferralsReward);
 branchReferralsLoad.addEventListener("click", BranchReferralsLoad);
 branchReferralsRedeem.addEventListener("click", BranchReferralsRedeem);
@@ -160,6 +164,45 @@ function BranchCommerce() {
       logger(res);
     })
     .catch(function error(err) {
+      logger(err, true);
+    });
+}
+
+function BranchStandardEvent(){
+
+  var event="ADD_TO_CART"; //"STANDARD_EVENT_ADD_TO_CART";//todo
+
+  // optional
+  var metadata = {
+    custom_dictionary: 123,
+    anything: "everything"
+  };
+
+  Branch.sendBranchEvent(event, metadata)
+    .then(function success(res) {
+    Console.log(res);
+      logger(res);
+    })
+    .catch(function error(err) {
+       Console.log(err);
+      logger(err, true);
+    });
+}
+
+function BranchCustomEvent(){
+  var event="Test Custom Event";
+
+  // optional
+  var customData = {
+    custom_dictionary: 123,
+    anything: "everything"
+  };
+
+  Branch.sendBranchEvent(event, customData)
+    .then(function success(res) {Console.log(res);
+      logger(res);
+    })
+    .catch(function error(err) {  Console.log(err);
       logger(err, true);
     });
 }
