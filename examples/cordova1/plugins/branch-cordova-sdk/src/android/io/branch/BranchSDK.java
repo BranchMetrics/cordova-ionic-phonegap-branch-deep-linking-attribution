@@ -752,7 +752,7 @@ public class BranchSDK extends CordovaPlugin {
 
     }
 
-public  BranchEvent sendBranchEvent(String eventName, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
+    public  BranchEvent sendBranchEvent(String eventName, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
         BranchEvent event;
         try {
             BRANCH_STANDARD_EVENT standardEvent = BRANCH_STANDARD_EVENT.valueOf(eventName);
@@ -764,20 +764,56 @@ public  BranchEvent sendBranchEvent(String eventName, JSONObject metaData, Callb
             event = new BranchEvent(eventName);
         }
 
-        if (metaData.equals("customData")) {
+        Iterator<String> keys = metaData.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            String val;
+            try {
+                val = metaData.getString(key);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                callbackContext.error("Invalid key-value for " + key);
+            }
+            if (key.equals("revenue")) {
+                event.setRevenue(Double.parseDouble(metaData.getString("revenue")));
+            } else if (key.equals("currency")) {
+                String currencyString = metaData.getString("currency");
+                CurrencyType currency = CurrencyType.getValue(currencyString);
+                if (currency != null) {
+                    event.setCurrency(currency);
+                }
+                else {
+                    Log.d(LCAT, "Invalid currency " + currencyString);
+                }
+            } else if (key.equals("transactionID")) {
+                event.setTransactionID(metaData.getString("transactionID"));
+            } else if (key.equals("coupon")) {
+                event.setCoupon(metaData.getString("coupon"));
+            } else if (key.equals("shipping")) {
+                event.setShipping(Double.parseDouble(metaData.getString("shipping")));
+            } else if (key.equals("tax")) {
+                event.setTax(Double.parseDouble(metaData.getString("tax")));
+            } else if (key.equals("affiliation")) {
+                event.setAffiliation(metaData.getString("affiliation"));
+            } else if (key.equals("description")) {
+                event.setDescription(metaData.getString("description"));
+            } else if (key.equals("searchQuery")) {
+                event.setSearchQuery(metaData.getString("searchQuery"));
+            }else if(key.equals("customData")){
+                JSONObject customData = metaData.getJSONObject("customData");
+                 keys = customData.keys();
 
-            JSONObject customData = metaData.getJSONObject("customData");
-            Iterator<?> keys = customData.keys();
-
-            while (keys.hasNext()) {
-                String key = (String) keys.next();
-                String value = customData.optString(key);
-                event.addCustomDataProperty(key, customData.getString(key));
+                while (keys.hasNext()) {
+                    String keyValue = (String) keys.next();
+                    String value = customData.optString(keyValue);
+                    event.addCustomDataProperty(keyValue, customData.getString(keyValue));
+                }
             }
 
         }
 
         event.logEvent(this.activity);
+        //callbackContext.success("Success");
 
         return event;
     }

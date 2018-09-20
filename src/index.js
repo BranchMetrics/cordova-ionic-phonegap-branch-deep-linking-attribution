@@ -139,17 +139,17 @@ Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
 Branch.prototype.sendBranchEvent = function sendBranchEvent(
   action,
   metaData
-){
+) {
   var args = [action];
-  if(!action){
+  if (!action) {
     return executeReject("Please set a standard event");
   }
 
-  if(metaData){
+  if (metaData) {
     args.push(metaData);
   }
 
-  return execute("sendBranchEvent",args);
+  return execute("sendBranchEvent", args);
 };
 
 Branch.prototype.createBranchUniversalObject = function createBranchUniversalObject(
