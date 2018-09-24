@@ -817,7 +817,7 @@ public class BranchSDK extends CordovaPlugin {
 
         return event;
     }
-
+    
     /**
      * <p>Gets the credit history of the specified bucket and triggers a callback to handle the
      * response.</p>
@@ -1345,7 +1345,7 @@ public class BranchSDK extends CordovaPlugin {
                         }
                     } else if (this.action.equals("sendCommerceEvent")) {
                         sendCommerceEvent(this.args.getJSONObject(0), this.args.getJSONObject(1), this.callbackContext);
-                    }  else if(this.action.equals("sendBranchEvent")){
+                    } else if(this.action.equals("sendBranchEvent")){
                         sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
                     } else if (this.action.equals("getFirstReferringParams")) {
                         getFirstReferringParams(this.callbackContext);
