@@ -23,6 +23,8 @@ import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.BranchViewHandler;
 import io.branch.referral.SharingHelper;
+import io.branch.referral.util.BRANCH_STANDARD_EVENT;
+import io.branch.referral.util.BranchEvent;
 import io.branch.referral.util.CommerceEvent;
 import io.branch.referral.util.CurrencyType;
 import io.branch.referral.util.Product;
@@ -139,7 +141,7 @@ public class BranchSDK extends CordovaPlugin {
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
-                } else if(action.equals("sendBranchEvent")){
+                } else if (action.equals("sendBranchEvent")) {
                     if (args.length() < 1 && args.length() > 2) {
                         callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
                         return false;
@@ -752,28 +754,19 @@ public class BranchSDK extends CordovaPlugin {
 
     }
 
-    public  BranchEvent sendBranchEvent(String eventName, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
+    public void sendBranchEvent(String eventName, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
+
         BranchEvent event;
         try {
             BRANCH_STANDARD_EVENT standardEvent = BRANCH_STANDARD_EVENT.valueOf(eventName);
-            // valueOf on BRANCH_STANDARD_EVENT Enum has succeeded, so this is a standard event.
             event = new BranchEvent(standardEvent);
-        } catch (IllegalArgumentException e) {
-            // The event name is not found in standard events.
-            // So use custom event mode.
+        } catch(IllegalArgumentException e) {
             event = new BranchEvent(eventName);
         }
 
-        Iterator<String> keys = metaData.keys();
+        Iterator < String > keys = metaData.keys();
         while (keys.hasNext()) {
             String key = keys.next();
-            String val;
-            try {
-                val = metaData.getString(key);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                callbackContext.error("Invalid key-value for " + key);
-            }
             if (key.equals("revenue")) {
                 event.setRevenue(Double.parseDouble(metaData.getString("revenue")));
             } else if (key.equals("currency")) {
@@ -799,25 +792,21 @@ public class BranchSDK extends CordovaPlugin {
                 event.setDescription(metaData.getString("description"));
             } else if (key.equals("searchQuery")) {
                 event.setSearchQuery(metaData.getString("searchQuery"));
-            }else if(key.equals("customData")){
+            } else if (key.equals("customData")) {
                 JSONObject customData = metaData.getJSONObject("customData");
-                 keys = customData.keys();
+                keys = customData.keys();
 
                 while (keys.hasNext()) {
                     String keyValue = (String) keys.next();
-                    String value = customData.optString(keyValue);
                     event.addCustomDataProperty(keyValue, customData.getString(keyValue));
                 }
             }
 
         }
-
         event.logEvent(this.activity);
-        //callbackContext.success("Success");
-
-        return event;
+        //callbackContext.success();
     }
-    
+
     /**
      * <p>Gets the credit history of the specified bucket and triggers a callback to handle the
      * response.</p>
@@ -1345,7 +1334,7 @@ public class BranchSDK extends CordovaPlugin {
                         }
                     } else if (this.action.equals("sendCommerceEvent")) {
                         sendCommerceEvent(this.args.getJSONObject(0), this.args.getJSONObject(1), this.callbackContext);
-                    } else if(this.action.equals("sendBranchEvent")){
+                    } else if (this.action.equals("sendBranchEvent")) {
                         sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
                     } else if (this.action.equals("getFirstReferringParams")) {
                         getFirstReferringParams(this.callbackContext);
