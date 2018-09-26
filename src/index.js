@@ -128,6 +128,7 @@ Branch.prototype.logout = function logout() {
   return execute("logout");
 };
 
+//DEPRECATED
 Branch.prototype.userCompletedAction = function userCompletedAction(
   action,
   metaData
@@ -144,6 +145,7 @@ Branch.prototype.userCompletedAction = function userCompletedAction(
   return execute("userCompletedAction", args);
 };
 
+//DEPRECATED
 Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
   action,
   metaData

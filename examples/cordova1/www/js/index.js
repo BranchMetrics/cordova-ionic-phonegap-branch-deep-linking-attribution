@@ -105,6 +105,7 @@ function BranchInit() {
     });
 }
 
+//DEPRECATED
 function BranchEvent() {
   // event name
   var event = document.getElementById("custom-action").value;
@@ -124,6 +125,7 @@ function BranchEvent() {
     });
 }
 
+//DEPRECATED
 function BranchCommerce() {
   // revenue required
   var event = {
