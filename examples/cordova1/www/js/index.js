@@ -134,21 +134,22 @@ function BranchCommerce() {
     shipping: 2.22,
     tax: 5.11,
     affiliation: "affiliation",
-    products: [{
-      sku: "u123",
-      name: "cactus",
-      price: 4.99,
-      quantity: 2,
-      brand: "brand",
-      category: 17, // Software
-      variant: "variant"
-    },
-    {
-      sku: "u456",
-      name: "grass",
-      price: 0.0,
-      quantity: 1
-    }
+    products: [
+      {
+        sku: "u123",
+        name: "cactus",
+        price: 4.99,
+        quantity: 2,
+        brand: "brand",
+        category: 17, // Software
+        variant: "variant"
+      },
+      {
+        sku: "u456",
+        name: "grass",
+        price: 0.0,
+        quantity: 1
+      }
     ]
   };
 
@@ -160,6 +161,7 @@ function BranchCommerce() {
 
   Branch.sendCommerceEvent(event, metadata)
     .then(function success(res) {
+      console.log("CommerceEvent", res);
       logger(res);
     })
     .catch(function error(err) {
@@ -169,27 +171,34 @@ function BranchCommerce() {
 
 function BranchStandardEvent() {
 
-  var event = "ADD_TO_CART"; //todo read from standard event enum
-
-  var metadata = {
-    transactionID: '12344555',
-    currency: 'USD',
-    revenue: 1.5,
-    shipping: 10.2,
-    tax: 12.3,
-    coupon: 'test_coupon',
-    affiliation: 'test_affiliation',
-    description: 'Test add to cart event',
-    searchQuery: 'test keyword',
-    customData: {
-      "Custom_Event_Property_Key1": "Custom_Event_Property_val1",
-      "Custom_Event_Property_Key2": "Custom_Event_Property_val2"
-    }
-  };
-
-  Branch.sendBranchEvent(event, metadata)
+  Branch.getStandardEvents()
     .then(function success(res) {
-      logger(res);
+
+      var event = res.STANDARD_EVENT_ADD_TO_CART;
+
+      var metadata = {
+        transactionID: '12344555',
+        currency: 'USD',
+        revenue: 1.5,
+        shipping: 10.2,
+        tax: 12.3,
+        coupon: 'test_coupon',
+        affiliation: 'test_affiliation',
+        description: 'Test add to cart event',
+        searchQuery: 'test keyword',
+        customData: {
+          "Custom_Event_Property_Key1": "Custom_Event_Property_val1",
+          "Custom_Event_Property_Key2": "Custom_Event_Property_val2"
+        }
+      };
+
+      Branch.sendBranchEvent(event, metadata)
+        .then(function success(res) {
+          logger(res);
+        })
+        .catch(function error(err) {
+          logger(err, true);
+        });
     })
     .catch(function error(err) {
       logger(err, true);
@@ -359,9 +368,7 @@ function BranchShareSheet() {
     custom_integer: Date.now(),
     custom_boolean: true,
     custom_array: [1, 2, 3, 4, 5],
-    custom_object: {
-      random: "dictionary"
-    }
+    custom_object: { random: "dictionary" }
   };
 
   var message = "Check out this link";
