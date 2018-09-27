@@ -3,7 +3,7 @@
     <branch-config>
         <branch-key value="key_test_amD23OLJP6x2xTgoOMnyypfdCtfYaudl" />
         <uri-scheme value="branchcordova" />
-        <link-domain value="i2f8.app.link" />
+        <link-domain value="i2f8.test-app.link" />
         <ios-team-release value="PW4Q8885U7" />
     </branch-config>
     <preference name="android-minSdkVersion" value="16" />
