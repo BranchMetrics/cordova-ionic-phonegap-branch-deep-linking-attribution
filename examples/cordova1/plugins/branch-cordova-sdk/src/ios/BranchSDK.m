@@ -231,6 +231,52 @@
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+-(void)sendBranchEvent:(CDVInvokedUrlCommand*)command
+{
+    NSString *eventName = [command.arguments objectAtIndex:0];
+    NSDictionary *metadata;
+    if ([command.arguments count] == 2) {
+        metadata = [command.arguments objectAtIndex:1];
+    }
+    BranchEvent *event = [BranchEvent customEventWithName:eventName];
+    for (id key in metadata) {
+        if ([key isEqualToString:@"transactionID"]) {
+            event.transactionID = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"currency"]) {
+            event.currency = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"shipping"]) {
+            event.shipping = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"tax"]) {
+            event.tax = [NSDecimalNumber decimalNumberWithString:[metadata objectForKey:key]];
+        }
+        else if ([key isEqualToString:@"coupon"]) {
+            event.coupon = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"affiliation"]) {
+            event.affiliation = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"eventDescription"]) {
+            event.eventDescription = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"revenue"]) {
+            event.revenue = [NSDecimalNumber decimalNumberWithString:[metadata objectForKey:key]];
+        }
+        else if ([key isEqualToString:@"searchQuery"]) {
+            event.searchQuery = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"description"]) {
+            event.eventDescription = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"customData"] && [[metadata objectForKey:key] isKindOfClass:[NSMutableDictionary class]]) {
+            event.customData = [metadata objectForKey:key];
+        }
+    }
+    [event logEvent];
+}
+
 - (void)sendCommerceEvent:(CDVInvokedUrlCommand*)command
 {
   NSDictionary *data = [command.arguments objectAtIndex:0];
