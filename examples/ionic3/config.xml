@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.eneff.branch.ionic3" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <branch-config>
-        <branch-key value="key_live_gdyoTb1FlA8TQmJ6Ly05XamhxznRaZGf" />
+        <branch-key value="key_test_hnCYNwKiRvxgl86FyL343hbcsEk9BtZ8" />
         <uri-scheme value="branchionic3" />
-        <link-domain value="4m4z.app.link" />
+        <link-domain value="mp4z.app.link" />
         <ios-team-release value="PW4Q8885U7" />
     </branch-config>
     <name>Ionic3</name>
@@ -87,6 +87,7 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="1.1.19" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="2.0.5" />
+    <plugin name="branch-cordova-sdk" spec="^3.0.1" />
     <engine name="ios" spec="~4.5.4" />
     <engine name="android" spec="~7.0.0" />
 </widget>
