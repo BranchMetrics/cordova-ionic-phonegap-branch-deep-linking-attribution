@@ -121,10 +121,8 @@
 - (void)disableTracking:(CDVInvokedUrlCommand*)command
 {
 
-  bool enabled = [[command.arguments objectAtIndex:0] boolValue] == YES;
-  if (enabled) {
-    [Branch setTrackingDisabled:enabled];
-  }
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  [Branch setTrackingDisabled:enabled];
 
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
 
