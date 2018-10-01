@@ -29,6 +29,8 @@ var branchUser = document.getElementById("branchUser");
 var branchLogout = document.getElementById("branchLogout");
 var branchEvent = document.getElementById("branchEvent");
 var branchCommerce = document.getElementById("branchCommerce");
+var branchStandardEvent = document.getElementById("branchStandardEvent");
+var branchCustomEvent = document.getElementById("branchCustomEvent");
 var branchReferralsReward = document.getElementById("branchReferralsReward");
 var branchReferralsLoad = document.getElementById("branchReferralsLoad");
 var branchReferralsRedeem = document.getElementById("branchReferralsRedeem");
@@ -46,6 +48,8 @@ branchUser.addEventListener("click", BranchUser);
 branchLogout.addEventListener("click", BranchLogout);
 branchEvent.addEventListener("click", BranchEvent);
 branchCommerce.addEventListener("click", BranchCommerce);
+branchStandardEvent.addEventListener("click", BranchStandardEvent);
+branchCustomEvent.addEventListener("click", BranchCustomEvent);
 branchReferralsReward.addEventListener("click", BranchReferralsReward);
 branchReferralsLoad.addEventListener("click", BranchReferralsLoad);
 branchReferralsRedeem.addEventListener("click", BranchReferralsRedeem);
@@ -101,6 +105,7 @@ function BranchInit() {
     });
 }
 
+//DEPRECATED
 function BranchEvent() {
   // event name
   var event = document.getElementById("custom-action").value;
@@ -120,6 +125,7 @@ function BranchEvent() {
     });
 }
 
+//DEPRECATED
 function BranchCommerce() {
   // revenue required
   var event = {
@@ -156,6 +162,62 @@ function BranchCommerce() {
   };
 
   Branch.sendCommerceEvent(event, metadata)
+    .then(function success(res) {
+      console.log("CommerceEvent", res);
+      logger(res);
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
+
+function BranchStandardEvent() {
+
+  Branch.getStandardEvents()
+    .then(function success(res) {
+
+      var event = res.STANDARD_EVENT_ADD_TO_CART;
+
+      var metadata = {
+        transactionID: '12344555',
+        currency: 'USD',
+        revenue: 1.5,
+        shipping: 10.2,
+        tax: 12.3,
+        coupon: 'test_coupon',
+        affiliation: 'test_affiliation',
+        description: 'Test add to cart event',
+        searchQuery: 'test keyword',
+        customData: {
+          "Custom_Event_Property_Key1": "Custom_Event_Property_val1",
+          "Custom_Event_Property_Key2": "Custom_Event_Property_val2"
+        }
+      };
+
+      Branch.sendBranchEvent(event, metadata)
+        .then(function success(res) {
+          logger(res);
+        })
+        .catch(function error(err) {
+          logger(err, true);
+        });
+    })
+    .catch(function error(err) {
+      logger(err, true);
+    });
+}
+
+function BranchCustomEvent() {
+  var event = "Test Custom Event";
+
+  var customData = {
+    customData: {
+      "Custom_Event_Property_Key1": "Custom_Event_Property_val1",
+      "Custom_Event_Property_Key2": "Custom_Event_Property_val2"
+    }
+  };
+
+  Branch.sendBranchEvent(event, customData)
     .then(function success(res) {
       logger(res);
     })

@@ -23,6 +23,8 @@ import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.BranchViewHandler;
 import io.branch.referral.SharingHelper;
+import io.branch.referral.util.BRANCH_STANDARD_EVENT;
+import io.branch.referral.util.BranchEvent;
 import io.branch.referral.util.CommerceEvent;
 import io.branch.referral.util.CurrencyType;
 import io.branch.referral.util.Product;
@@ -133,6 +135,13 @@ public class BranchSDK extends CordovaPlugin {
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("sendCommerceEvent")) {
+                    if (args.length() < 1 && args.length() > 2) {
+                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        return false;
+                    }
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
+                } else if (action.equals("sendBranchEvent")) {
                     if (args.length() < 1 && args.length() > 2) {
                         callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
                         return false;
@@ -745,6 +754,59 @@ public class BranchSDK extends CordovaPlugin {
 
     }
 
+    public void sendBranchEvent(String eventName, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
+
+        BranchEvent event;
+        try {
+            BRANCH_STANDARD_EVENT standardEvent = BRANCH_STANDARD_EVENT.valueOf(eventName);
+            event = new BranchEvent(standardEvent);
+        } catch(IllegalArgumentException e) {
+            event = new BranchEvent(eventName);
+        }
+
+        Iterator < String > keys = metaData.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            if (key.equals("revenue")) {
+                event.setRevenue(Double.parseDouble(metaData.getString("revenue")));
+            } else if (key.equals("currency")) {
+                String currencyString = metaData.getString("currency");
+                CurrencyType currency = CurrencyType.getValue(currencyString);
+                if (currency != null) {
+                    event.setCurrency(currency);
+                }
+                else {
+                    Log.d(LCAT, "Invalid currency " + currencyString);
+                }
+            } else if (key.equals("transactionID")) {
+                event.setTransactionID(metaData.getString("transactionID"));
+            } else if (key.equals("coupon")) {
+                event.setCoupon(metaData.getString("coupon"));
+            } else if (key.equals("shipping")) {
+                event.setShipping(Double.parseDouble(metaData.getString("shipping")));
+            } else if (key.equals("tax")) {
+                event.setTax(Double.parseDouble(metaData.getString("tax")));
+            } else if (key.equals("affiliation")) {
+                event.setAffiliation(metaData.getString("affiliation"));
+            } else if (key.equals("description")) {
+                event.setDescription(metaData.getString("description"));
+            } else if (key.equals("searchQuery")) {
+                event.setSearchQuery(metaData.getString("searchQuery"));
+            } else if (key.equals("customData")) {
+                JSONObject customData = metaData.getJSONObject("customData");
+                keys = customData.keys();
+
+                while (keys.hasNext()) {
+                    String keyValue = (String) keys.next();
+                    event.addCustomDataProperty(keyValue, customData.getString(keyValue));
+                }
+            }
+
+        }
+        event.logEvent(this.activity);
+        //callbackContext.success();
+    }
+
     /**
      * <p>Gets the credit history of the specified bucket and triggers a callback to handle the
      * response.</p>
@@ -1272,6 +1334,8 @@ public class BranchSDK extends CordovaPlugin {
                         }
                     } else if (this.action.equals("sendCommerceEvent")) {
                         sendCommerceEvent(this.args.getJSONObject(0), this.args.getJSONObject(1), this.callbackContext);
+                    } else if (this.action.equals("sendBranchEvent")) {
+                        sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
                     } else if (this.action.equals("getFirstReferringParams")) {
                         getFirstReferringParams(this.callbackContext);
                     } else if (this.action.equals("getLatestReferringParams")) {
