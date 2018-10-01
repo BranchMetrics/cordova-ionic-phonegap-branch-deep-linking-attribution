@@ -247,10 +247,12 @@
             event.currency = [metadata objectForKey:key];
         }
         else if ([key isEqualToString:@"shipping"]) {
-            event.shipping = [metadata objectForKey:key];
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.shipping = [NSDecimalNumber decimalNumberWithString:value];
         }
         else if ([key isEqualToString:@"tax"]) {
-            event.tax = [NSDecimalNumber decimalNumberWithString:[metadata objectForKey:key]];
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.tax = [NSDecimalNumber decimalNumberWithString:value];
         }
         else if ([key isEqualToString:@"coupon"]) {
             event.coupon = [metadata objectForKey:key];
@@ -262,7 +264,8 @@
             event.eventDescription = [metadata objectForKey:key];
         }
         else if ([key isEqualToString:@"revenue"]) {
-            event.revenue = [NSDecimalNumber decimalNumberWithString:[metadata objectForKey:key]];
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.revenue = [NSDecimalNumber decimalNumberWithString:value];
         }
         else if ([key isEqualToString:@"searchQuery"]) {
             event.searchQuery = [metadata objectForKey:key];
