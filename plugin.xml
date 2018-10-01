@@ -137,6 +137,8 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BNCStrongMatchHelper.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCThreads.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCThreads.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCURLBlackList.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCURLBlackList.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/Branch+Validator.h" />
