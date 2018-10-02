@@ -1,5 +1,5 @@
 <a name="3.1.0"></a>
-# [3.0.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.0.1...v3.1.0) (2018-05-07)
+# [3.1.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.0.1...v3.1.0) (2018-10-01)
 
 * Added `sendBranchEvent` for compatibility with v2/event. DEVEX-782 ([55c09b6](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/pull/485/commits/55c09b6))
 * Added Apple Search Ad methods, `delayInitToCheckForSearchAds` and `setAppleSearchAdsDebugMode`. DEVEX-767 ([1b26156]https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/commit/1b26156bd7480b2f7fe8609a0483969be3c6d850)
