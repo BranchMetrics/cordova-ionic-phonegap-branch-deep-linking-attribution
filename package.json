@@ -31,6 +31,7 @@
     "node-version-compare": "^1.0.1",
     "plist": "^3.0.1",
     "request": "^2.85.0",
+    "xcode": "^1.0.0",
     "xml2js": "^0.4.19"
   },
   "eslintConfig": {
