@@ -156,7 +156,7 @@
       .sync(path.join(projectPath, "*.xcodeproj", "project.pbxproj"));
     if (projectFiles.length === 0) return;
     const pbxPath = projectFiles[0];
-    const xcodeproj = context.requireCordovaModule("xcode").project(pbxPath);
+    const xcodeproj = context.require('xcode').project(pbxPath);
 
     // add hash
     xcodeproj.parseSync();
