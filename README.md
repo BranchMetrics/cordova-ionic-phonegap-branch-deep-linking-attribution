@@ -326,6 +326,8 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 
   * Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/links)
 
+  * All function's parameters are mandatory 
+
     ```js
     // optional fields
     var analytics = {
@@ -366,6 +368,8 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
   * Needs a [Branch Universal Object](#create-content-reference)
 
   * Link Data: [Deep Link Properties](#link-data-deep-link-properties)
+
+  * All function's parameters are mandatory 
 
     ```js
     // optional fields
