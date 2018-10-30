@@ -121,10 +121,8 @@
 - (void)disableTracking:(CDVInvokedUrlCommand*)command
 {
 
-  bool enabled = [[command.arguments objectAtIndex:0] boolValue] == YES;
-  if (enabled) {
-    [Branch setTrackingDisabled:enabled];
-  }
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  [Branch setTrackingDisabled:enabled];
 
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
 
@@ -133,7 +131,7 @@
 
 - (void)setDebug:(CDVInvokedUrlCommand*)command
 {
-  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue] == YES;
+  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue];
   if (enableDebug) {
     [[Branch getInstance] setDebug];
   }
@@ -247,10 +245,12 @@
             event.currency = [metadata objectForKey:key];
         }
         else if ([key isEqualToString:@"shipping"]) {
-            event.shipping = [metadata objectForKey:key];
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.shipping = [NSDecimalNumber decimalNumberWithString:value];
         }
         else if ([key isEqualToString:@"tax"]) {
-            event.tax = [NSDecimalNumber decimalNumberWithString:[metadata objectForKey:key]];
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.tax = [NSDecimalNumber decimalNumberWithString:value];
         }
         else if ([key isEqualToString:@"coupon"]) {
             event.coupon = [metadata objectForKey:key];
@@ -262,7 +262,8 @@
             event.eventDescription = [metadata objectForKey:key];
         }
         else if ([key isEqualToString:@"revenue"]) {
-            event.revenue = [NSDecimalNumber decimalNumberWithString:[metadata objectForKey:key]];
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.revenue = [NSDecimalNumber decimalNumberWithString:value];
         }
         else if ([key isEqualToString:@"searchQuery"]) {
             event.searchQuery = [metadata objectForKey:key];
@@ -376,6 +377,30 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }];
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
+}
+
+- (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command
+{
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  if (enabled) {
+    [[Branch getInstance] delayInitToCheckForSearchAds];
+  }
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
+
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setAppleSearchAdsDebugMode:(CDVInvokedUrlCommand*)command
+{
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  if (enabled) {
+    [[Branch getInstance] setAppleSearchAdsDebugMode];
+  }
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
+
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 #pragma mark - Branch Referral Reward System

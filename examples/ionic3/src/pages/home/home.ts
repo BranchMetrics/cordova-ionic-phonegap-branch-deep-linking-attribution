@@ -6,7 +6,7 @@ import { NavController } from "ionic-angular";
   templateUrl: "home.html"
 })
 export class HomePage {
-  constructor(public navCtrl: NavController) {}
+  constructor(public navCtrl: NavController) { }
 
   BranchShare() {
     const Branch = window["Branch"];
@@ -27,7 +27,7 @@ export class HomePage {
       }
     };
 
-    Branch.createBranchUniversalObject(buo).then(function(res) {
+    Branch.createBranchUniversalObject(buo).then(function (res) {
       // optional fields
       var analytics = {
         channel: "facebook",
@@ -51,6 +51,55 @@ export class HomePage {
 
       // share sheet
       res.showShareSheet(analytics, properties, message);
+    });
+  }
+
+  BranchStandardEvent() {
+
+    const Branch = window["Branch"];
+    Branch.getStandardEvents().then(function success(res) {
+      var event = res.STANDARD_EVENT_ADD_TO_CART;
+
+      var metadata = {
+        transactionID: '12344555',
+        currency: 'USD',
+        revenue: 1.5,
+        shipping: 10.2,
+        tax: 12.3,
+        coupon: 'test_coupon',
+        affiliation: 'test_affiliation',
+        description: 'Test add to cart event',
+        searchQuery: 'test keyword',
+        customData: {
+          "Custom_Event_Property_Key1": "Custom_Event_Property_val1",
+          "Custom_Event_Property_Key2": "Custom_Event_Property_val2"
+        }
+      };
+      Branch.sendBranchEvent(event, metadata).then(function success(res) {
+        alert("Branch Event success " + res);
+      }).catch(function error(err) {
+        alert("Branch Event " + err);
+      });
+    }).catch(function error(err) {
+      alert("Get Standard Event " + err);
+    });
+  }
+
+  BranchCustomEvent() {
+    const Branch = window["Branch"];
+    var event = "Test Custom Event";
+
+    var customData = {
+      customData: {
+        "Custom_Event_Property_Key1": "Custom_Event_Property_val1",
+        "Custom_Event_Property_Key2": "Custom_Event_Property_val2"
+      }
+    };
+
+    Branch.sendBranchEvent(event, customData).then(function success(res) {
+      alert("Branch Event success " + res);
+    }).catch(function error(err) {
+      alert("Branch Event " + err);
     });
   }
 }

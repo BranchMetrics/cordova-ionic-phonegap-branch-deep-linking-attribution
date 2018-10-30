@@ -1,5 +1,9 @@
 var exec = require("cordova/exec");
-var deviceVendor = (typeof window.clientInformation != 'undefined' && typeof window.clientInformation.vendor != 'undefined') ? window.clientInformation.vendor : "unknownVendor";
+var deviceVendor =
+  typeof window.clientInformation != "undefined" &&
+  typeof window.clientInformation.vendor != "undefined"
+    ? window.clientInformation.vendor
+    : "unknownVendor";
 
 // SDK Class
 var API_CLASS = "BranchSDK";
@@ -108,6 +112,22 @@ Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
   return linkDomain && deviceVendor.indexOf("Apple") < 0
     ? execute("setCookieBasedMatching", [linkDomain])
     : null;
+};
+
+Branch.prototype.delayInitToCheckForSearchAds = function delayInitToCheckForSearchAds(
+  isEnabled
+) {
+  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+
+  return execute("delayInitToCheckForSearchAds", [value]);
+};
+
+Branch.prototype.setAppleSearchAdsDebugMode = function setAppleSearchAdsDebugMode(
+  isEnabled
+) {
+  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+
+  return execute("setAppleSearchAdsDebugMode", [value]);
 };
 
 Branch.prototype.getFirstReferringParams = function getFirstReferringParams() {

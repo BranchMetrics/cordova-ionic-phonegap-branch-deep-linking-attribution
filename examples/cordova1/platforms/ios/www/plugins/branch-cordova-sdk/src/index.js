@@ -1,8 +1,27 @@
 cordova.define("branch-cordova-sdk.Branch", function(require, exports, module) {
 var exec = require("cordova/exec");
-var deviceVendor = window.clientInformation.vendor;
+var deviceVendor = (typeof window.clientInformation != 'undefined' && typeof window.clientInformation.vendor != 'undefined') ? window.clientInformation.vendor : "unknownVendor";
 // SDK Class
 var API_CLASS = "BranchSDK";
+
+const standardEvent = {
+  STANDARD_EVENT_ADD_TO_CART: "ADD_TO_CART",
+  STANDARD_EVENT_ADD_TO_WISHLIST: "ADD_TO_WISHLIST",
+  STANDARD_EVENT_VIEW_CART: "VIEW_CART",
+  STANDARD_EVENT_INITIATE_PURCHASE: "INITIATE_PURCHASE",
+  STANDARD_EVENT_ADD_PAYMENT_INFO: "ADD_PAYMENT_INFO",
+  STANDARD_EVENT_PURCHASE: "PURCHASE",
+  STANDARD_EVENT_SPEND_CREDITS: "SPEND_CREDITS",
+  STANDARD_EVENT_SEARCH: "SEARCH",
+  STANDARD_EVENT_VIEW_ITEM: "VIEW_ITEM",
+  STANDARD_EVENT_VIEW_ITEMS: "VIEW_ITEMS",
+  STANDARD_EVENT_RATE: "RATE",
+  STANDARD_EVENT_SHARE: "SHARE",
+  STANDARD_EVENT_COMPLETE_REGISTRATION: "COMPLETE_REGISTRATION",
+  STANDARD_EVENT_COMPLETE_TUTORIAL: "COMPLETE_TUTORIAL",
+  STANDARD_EVENT_ACHIEVE_LEVEL: "ACHIEVE_LEVEL",
+  STANDARD_EVENT_UNLOCK_ACHIEVEMENT: "UNLOCK_ACHIEVEMENT"
+}
 
 // Branch prototype
 var Branch = function Branch() {
@@ -13,6 +32,12 @@ var Branch = function Branch() {
 // JavsSript to SDK wrappers
 function execute(method, params) {
   var output = !params ? [] : params;
+
+  if (method == "getStandardEvents") {
+    return new Promise(function promise(resolve, reject) {
+      resolve(standardEvent);
+    });
+  }
 
   return new Promise(function promise(resolve, reject) {
     exec(
@@ -134,6 +159,28 @@ Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
   }
 
   return execute("sendCommerceEvent", args);
+};
+
+
+Branch.prototype.getStandardEvents = function getStandardEvents() {
+  return execute("getStandardEvents");
+
+};
+
+Branch.prototype.sendBranchEvent = function sendBranchEvent(
+  action,
+  metaData
+) {
+  var args = [action];
+  if (!action) {
+    return executeReject("Please set a standard event");
+  }
+
+  if (metaData) {
+    args.push(metaData);
+  }
+
+  return execute("sendBranchEvent", args);
 };
 
 Branch.prototype.createBranchUniversalObject = function createBranchUniversalObject(
