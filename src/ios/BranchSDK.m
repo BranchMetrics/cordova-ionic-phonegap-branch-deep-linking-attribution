@@ -121,10 +121,8 @@
 - (void)disableTracking:(CDVInvokedUrlCommand*)command
 {
 
-  bool enabled = [[command.arguments objectAtIndex:0] boolValue] == YES;
-  if (enabled) {
-    [Branch setTrackingDisabled:enabled];
-  }
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  [Branch setTrackingDisabled:enabled];
 
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
 
@@ -133,7 +131,7 @@
 
 - (void)setDebug:(CDVInvokedUrlCommand*)command
 {
-  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue] == YES;
+  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue];
   if (enableDebug) {
     [[Branch getInstance] setDebug];
   }
@@ -229,6 +227,55 @@
   // TODO: iOS Branch.userCompletedAction needs a callback for success or failure
   CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"Success"];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+-(void)sendBranchEvent:(CDVInvokedUrlCommand*)command
+{
+    NSString *eventName = [command.arguments objectAtIndex:0];
+    NSDictionary *metadata;
+    if ([command.arguments count] == 2) {
+        metadata = [command.arguments objectAtIndex:1];
+    }
+    BranchEvent *event = [BranchEvent customEventWithName:eventName];
+    for (id key in metadata) {
+        if ([key isEqualToString:@"transactionID"]) {
+            event.transactionID = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"currency"]) {
+            event.currency = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"shipping"]) {
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.shipping = [NSDecimalNumber decimalNumberWithString:value];
+        }
+        else if ([key isEqualToString:@"tax"]) {
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.tax = [NSDecimalNumber decimalNumberWithString:value];
+        }
+        else if ([key isEqualToString:@"coupon"]) {
+            event.coupon = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"affiliation"]) {
+            event.affiliation = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"eventDescription"]) {
+            event.eventDescription = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"revenue"]) {
+            NSString *value = ([[metadata objectForKey:key] isKindOfClass:[NSString class]]) ? [metadata objectForKey:key] : [[metadata objectForKey:key] stringValue];
+            event.revenue = [NSDecimalNumber decimalNumberWithString:value];
+        }
+        else if ([key isEqualToString:@"searchQuery"]) {
+            event.searchQuery = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"description"]) {
+            event.eventDescription = [metadata objectForKey:key];
+        }
+        else if ([key isEqualToString:@"customData"] && [[metadata objectForKey:key] isKindOfClass:[NSMutableDictionary class]]) {
+            event.customData = [metadata objectForKey:key];
+        }
+    }
+    [event logEvent];
 }
 
 - (void)sendCommerceEvent:(CDVInvokedUrlCommand*)command
@@ -330,6 +377,30 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }];
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
+}
+
+- (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command
+{
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  if (enabled) {
+    [[Branch getInstance] delayInitToCheckForSearchAds];
+  }
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
+
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setAppleSearchAdsDebugMode:(CDVInvokedUrlCommand*)command
+{
+  bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+  if (enabled) {
+    [[Branch getInstance] setAppleSearchAdsDebugMode];
+  }
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enabled];
+
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 #pragma mark - Branch Referral Reward System

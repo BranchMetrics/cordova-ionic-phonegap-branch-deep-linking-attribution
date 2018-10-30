@@ -84,6 +84,9 @@ SOFTWARE.
     <source-file src="src/ios/BranchSDK.m" />
     <source-file src="src/ios/AppDelegate+BranchSdk.m" />
 
+
     <dependency id="cordova-plugin-cocoapod-support" />
+
+  
   </platform>
 </plugin>

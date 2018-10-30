@@ -8,6 +8,6 @@
 
   // builds before plugin install hooks
   function run(context) {
-    nodeDependencies.install(context);
+    return nodeDependencies.install(context);
   }
 })();
