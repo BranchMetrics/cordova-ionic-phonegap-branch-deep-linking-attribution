@@ -1,5 +1,5 @@
-<a name="3.1.1"></a>
-# [3.1.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.0...v3.1.1) (2018-11-26)
+<a name="3.1.3"></a>
+# [3.1.3](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.0...v3.1.3) (2018-11-26)
 
 * Fixed open URL conflict with URI schemes on iOS. DEVEX-782 ([#478](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/issues/478))
 
