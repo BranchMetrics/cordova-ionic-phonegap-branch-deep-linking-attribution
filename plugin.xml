@@ -69,8 +69,7 @@ SOFTWARE.
 
   <!-- iOS -->
   <platform name="ios">
-    <pods-config ios-min-version="9.0" use-frameworks="true" />
-    <pod name="Branch" />
+    <framework src="Branch" type="podspec" spec="~> 0.25.8" />
 
     <config-file target="config.xml" parent="/*">
       <feature name="BranchSDK">
@@ -83,10 +82,6 @@ SOFTWARE.
     <header-file src="src/ios/BranchSDK.h" />
     <source-file src="src/ios/BranchSDK.m" />
     <source-file src="src/ios/AppDelegate+BranchSdk.m" />
-
-
-    <dependency id="cordova-plugin-cocoapod-support" />
-
   
   </platform>
 </plugin>
