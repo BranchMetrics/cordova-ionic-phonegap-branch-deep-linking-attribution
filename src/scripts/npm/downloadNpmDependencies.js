@@ -35,7 +35,10 @@
 
     // install node modules
     const modules = getNodeModulesToInstall(dependencies);
-    if (modules.length === 0) return async.promise;
+    if (modules.length === 0) {
+      async.resolve();
+      return async.promise;
+    }
 
     installNodeModules(modules, () => {
       // only run once
