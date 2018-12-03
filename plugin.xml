@@ -71,7 +71,7 @@ SOFTWARE.
 
   <!-- iOS -->
   <platform name="ios">
-    <framework src="Branch" type="podspec" spec="0.25.9" />
+    <framework src="Branch" type="podspec" spec="0.25.8" />
 
     <config-file target="config.xml" parent="/*">
       <feature name="BranchSDK">
