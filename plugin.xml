@@ -37,9 +37,11 @@ SOFTWARE.
   <issue>https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/issues</issue>
 
   <!-- Dependencies -->
-  <engines>
-    <engine name="cordova" version=">=3.5.0" />
-  </engines>
+<engines>
+    <engine name="cordova" version=">=7.0.0" />
+    <engine name="cordova-android" version=">=6.3.0" />
+    <engine name="cordova-ios" version=">=4.4.0" />
+</engines>
 
   <!-- Hooks -->
   <hook src="src/scripts/hooks/beforePluginInstall.js" type="before_plugin_install" />
@@ -69,8 +71,7 @@ SOFTWARE.
 
   <!-- iOS -->
   <platform name="ios">
-    <pods-config ios-min-version="9.0" use-frameworks="true" />
-    <pod name="Branch" />
+    <framework src="Branch" type="podspec" spec="~> 0.25.8" />
 
     <config-file target="config.xml" parent="/*">
       <feature name="BranchSDK">
@@ -83,10 +84,6 @@ SOFTWARE.
     <header-file src="src/ios/BranchSDK.h" />
     <source-file src="src/ios/BranchSDK.m" />
     <source-file src="src/ios/AppDelegate+BranchSdk.m" />
-
-
-    <dependency id="cordova-plugin-cocoapod-support" />
-
   
   </platform>
 </plugin>
