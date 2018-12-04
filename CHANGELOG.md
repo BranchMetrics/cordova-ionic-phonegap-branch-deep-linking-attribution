@@ -1,5 +1,5 @@
 <a name="3.1.4"></a>
-# [3.1.4](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.3...v3.1.4) (2018-11-26)
+# [3.1.4](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.3...v3.1.4) (2018-12-04)
 
 * Rever Cocoapods & Gradle support temporarily.([#478](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/pull/531))
 
