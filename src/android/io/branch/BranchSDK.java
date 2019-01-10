@@ -113,7 +113,10 @@ public class BranchSDK extends CordovaPlugin {
         if (action.equals("setDebug")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
-        } else if (action.equals("disableTracking")) {
+        } else if (action.equals("setCookieBasedMatching")) {
+            cordova.getActivity().runOnUiThread(r);
+            return true;
+       } else if (action.equals("disableTracking")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
         } else if (action.equals("initSession")) {
@@ -1317,6 +1320,8 @@ public class BranchSDK extends CordovaPlugin {
             try {
                 if (this.action.equals("setDebug")) {
                     setDebug(this.args.getBoolean(0), this.callbackContext);
+                } else if (this.action.equals("setCookieBasedMatching")) {
+                    setCookieBasedMatching(this.args.getString(0), this.callbackContext);
                 } else if (this.action.equals("disableTracking")) {
                     disableTracking(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("initSession")) {
