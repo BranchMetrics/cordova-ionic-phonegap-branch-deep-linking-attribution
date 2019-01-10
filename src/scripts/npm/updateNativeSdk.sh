@@ -128,7 +128,7 @@ main() {
   fi
 
   # update plugin.xml
-  gulp prod
+  #gulp prod
 }
 
 options "$@"
