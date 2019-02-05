@@ -63,7 +63,8 @@ SOFTWARE.
     </config-file>
 
     <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-    <lib-file src="src/android/dependencies/Branch.aar" />
+    <source-file src="src/android/dependencies/Branch.aar" target-dir="app/libs" />
+    <framework src="src/android/dependencies/rules.gradle" custom="true" type="gradleReference" />
   </platform>
 
   <!-- iOS -->
