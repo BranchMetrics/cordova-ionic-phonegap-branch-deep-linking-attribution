@@ -63,7 +63,7 @@ SOFTWARE.
     </config-file>
 
     <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-    <lib-file src="src/android/dependencies/Branch.jar" />
+    <lib-file src="src/android/dependencies/Branch.aar" />
   </platform>
 
   <!-- iOS -->

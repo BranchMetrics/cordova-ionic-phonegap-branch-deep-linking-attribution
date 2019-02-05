@@ -62,23 +62,11 @@ update_ios() {
 }
 
 update_and() {
-  # properties
-  path="../../android/dependencies"
-  tag_url="https://github.com/BranchMetrics/android-branch-deep-linking/archive/$and_tag.zip"
-  zip_tmp=android-branch-deep-linking-$and_tag
-
-  # validate and download
-  check_tag "$tag_url"
-  download_sdk "$path" "$tag_url" "$zip_tmp"
-
-  # copy in new dependencies
-  mv "$zip_tmp/Branch-$and_tag.jar" "$path"
-
-  # rename
-  mv "$path/Branch-$and_tag.jar" "$path/Branch.jar"
-
-  # clean up
-  remove_tmp "$zip_tmp"
+  # download aar file from bintray
+  url="https://bintray.com/bintray/jcenter/download_file?file_path=io%2Fbranch%2Fsdk%2Fandroid%2Flibrary%2F$and_tag%2Flibrary-$and_tag.aar"
+  
+  echo "downloading $url"
+  curl -L -o "../../android/dependencies/Branch.aar" "$url"
 }
 
 check_tag() {
