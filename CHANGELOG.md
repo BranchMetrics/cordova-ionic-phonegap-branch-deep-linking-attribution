@@ -1,3 +1,8 @@
+<a name="3.1.6"></a>
+# [3.1.6](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.5...v3.1.6) (2019-2-28)
+
+* Upgraded base Branch SDKs to iOS 0.25.11 and Android 3.0.4
+
 <a name="3.1.5"></a>
 # [3.1.5](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.4...v3.1.5) (2018-12-05)
 
