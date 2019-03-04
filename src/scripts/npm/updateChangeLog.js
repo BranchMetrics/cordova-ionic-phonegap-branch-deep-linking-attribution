@@ -1,3 +1,5 @@
+"use strict";
+
 // TODO: test git push
 // TODO: early exit based on last changelog version
 // TODO: 'Authorization': 'token xxxx', for testing
