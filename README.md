@@ -266,7 +266,7 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
     Branch.setDebug(true);
 
     // for GDPR compliance (can be called at anytime)
-    Branch.disabledTracking(false);
+    Branch.disableTracking(false);
 
     // for better Android matching
     Branch.setCookieBasedMatching("cordova.app.link");
