@@ -1,13 +1,16 @@
-(function() {
-  // properties
+const
+  join = require('path').join,
+  exec = require('child_process').exec,
+  name = require('../../../package.json').name;
 
-  const nodeDependencies = require("../npm/downloadNpmDependencies.js");
+module.exports = () => new Promise((resolve, reject) => {
+  console.log(`Installing external NPM dependencies for package "${name}"`);
+  exec('npm install', {cwd: join('plugins', name)}, error => {
+    if (error !== null) {
+      console.log(`Failed with error message: ${error.message}`);
+      return reject();
+    }
 
-  // entry
-  module.exports = run;
-
-  // builds before plugin install hooks
-  function run(context) {
-    nodeDependencies.install(context);
-  }
-})();
+    resolve();
+  });
+});
