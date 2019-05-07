@@ -3,7 +3,7 @@ dependencies {
 }
 repositories {
     flatDir {
-        dirs 'libs'
+        dirs 'app/libs'
     }
 }
 
