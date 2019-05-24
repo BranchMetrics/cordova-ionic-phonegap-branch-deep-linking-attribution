@@ -1,3 +1,9 @@
+<a name="3.2.0"></a>
+# [3.2.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.6...v3.2.0) (2019-5-24)
+
+* Fix Cordova 9 incompatibility.
+* Fix aar not found on Android builds.
+
 <a name="3.1.6"></a>
 # [3.1.6](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.5...v3.1.6) (2019-2-28)
 

@@ -1,4 +1,11 @@
 dependencies {
-    implementation fileTree(dir: 'libs', include: '*.aar')
+    compile (name:'Branch', ext:'aar')
 }
+repositories {
+    flatDir {
+        dirs 'app/libs', 'libs'
+    }
+}
+
+
 
