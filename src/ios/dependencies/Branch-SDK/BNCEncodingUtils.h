@@ -12,7 +12,16 @@
 #import <Foundation/Foundation.h>
 #endif
 
-#pragma mark BNCKeyValue
+#pragma mark BNCWireFormat
+
+extern NSDate*   BNCDateFromWireFormat(id object);
+extern NSNumber* BNCWireFormatFromDate(NSDate *date);
+extern NSNumber* BNCWireFormatFromBool(BOOL b);
+
+extern NSString* BNCStringFromWireFormat(id object);
+extern NSString* BNCWireFormatFromString(NSString *string);
+
+#pragma mark - BNCKeyValue
 
 @interface BNCKeyValue : NSObject
 
@@ -41,9 +50,12 @@
 + (NSData *)encodeDictionaryToJsonData:(NSDictionary *)dictionary;
 
 + (NSString*) stringByPercentDecodingString:(NSString*)string;
++ (NSString*) stringByPercentEncodingStringForQuery:(NSString *)string;
 
++ (NSString *)sanitizedStringFromString:(NSString *)dirtyString;
 + (NSDictionary *)decodeJsonDataToDictionary:(NSData *)jsonData;
 + (NSDictionary *)decodeJsonStringToDictionary:(NSString *)jsonString;
+
 + (NSDictionary *)decodeQueryStringToDictionary:(NSString *)queryString;
 + (NSString *)encodeDictionaryToQueryString:(NSDictionary *)dictionary;
 

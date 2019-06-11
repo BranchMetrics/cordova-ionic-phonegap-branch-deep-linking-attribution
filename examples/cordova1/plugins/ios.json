@@ -1,0 +1,18 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "branch-cordova-sdk": {
+      "PACKAGE_NAME": "com.eneff.branch.cordovatestbed"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.eneff.branch.cordovatestbed"
+    }
+  },
+  "dependent_plugins": {}
+}

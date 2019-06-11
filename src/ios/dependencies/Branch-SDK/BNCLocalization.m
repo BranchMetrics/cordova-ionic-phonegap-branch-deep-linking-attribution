@@ -1,10 +1,12 @@
-//
-//  BNCLocalization.m
-//  Branch-SDK
-//
-//  Created by Parth Kalavadia on 7/10/17.
-//  Copyright © 2017 Branch Metrics. All rights reserved.
-//
+/**
+ @file          BNCLocalization.m
+ @package       Branch-SDK
+ @brief         Branch string localizations.
+
+ @author        Parth Kalavadia
+ @date          July 2017
+ @copyright     Copyright © 2017 Branch. All rights reserved.
+*/
 
 #import "BNCLocalization.h"
 #import "BNCLog.h"
@@ -58,7 +60,7 @@ NSString* _Nonnull BNCLocalizedFormattedString(NSString* _Nonnull const format, 
     }
 }
 
-- (void) setCurrentLanguage:(NSString*_Null_unspecified)language {
+- (void) setCurrentLanguage:(NSString*)language {
     @synchronized (self) {
 
         if (!language.length) {
@@ -191,6 +193,8 @@ NSString* _Nonnull BNCLocalizedFormattedString(NSString* _Nonnull const format, 
     @"Could not generate a URL.":
     @"Could not generate a URL.",
 
+    @"User tracking is disabled.":
+    @"User tracking is disabled."
     };
     return en_dict;
 }
@@ -280,6 +284,9 @@ NSString* _Nonnull BNCLocalizedFormattedString(NSString* _Nonnull const format, 
 
     @"Could not generate a URL.":
     @"Не получилось сгенерировать URL.",
+
+    @"User tracking is disbabled.":
+    @"Трекинг пользователя отключен.",
     };
 
     return ru_dict;

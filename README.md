@@ -19,59 +19,61 @@
 </p>
 
 # Branch for Cordova, PhoneGap, and Ionic
-*Questions? [Contact us](https://support.branch.io/support/tickets/new)*
 
-- [Getting Started](#getting-started)
-  - [Configure Branch](#configure-branch)
-  - [Configure App](#configure-app)
-  - [Initialize Branch](#initialize-branch)
-  - [Test Deep Link iOS](#test-deep-link-ios)
-  - [Test Deep Link Android](#test-deep-link-android)
-- [Features](#features)
-  - [Initialize Branch Features](#initialize-branch-features)
-  - [Create Content Reference](#create-content-reference)
-  - [Create Deep Link](#create-deep-link)
-  - [Share Deep Link](#share-deep-link)
-  - [Read Deep Link](#read-deep-link)
-  - [Display Content](#display-content)
-  - [Track Content](#track-content)
-  - [Track User](#track-user)
-  - [Track Event](#track-event)
-  - [Track Commerce](#track-commerce)
-  - [Handle Referrals](#handle-referrals)
-- [Troubleshooting](#troubleshooting)
-  - [Testing: Key Points](#testing-key-points)
-  - [Testing: Optional App Config](#testing-optional-app-config)
-  - [Testing: Branch Analytics](#testing-branch-analytics)
-  - [Testing: Simulating an Install](#testing-simulating-an-install)
-  - [Testing: Supported Platforms](#testing-supported-platforms)  
-  - [Testing: Sample Test App](#testing-sample-test-app)
-  - [Link Data: Universal Object Properties](#link-data-universal-object-properties)
-  - [Link Data: Deep Link Properties](#link-data-deep-link-properties)
-  - [Link Data: Commerce Properties](#link-data-commerce-properties)
-  - [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
-  - [Compiling: Show Console Logs](#compiling-show-console-logs)
-  - [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
-  - [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)  
-  - [Compiling: Errors](#compiling-errors)
+_Questions? [Contact us](https://support.branch.io/support/tickets/new)_
+
+* [Getting Started](#getting-started)
+  * [Configure Branch](#configure-branch)
+  * [Configure App](#configure-app)
+  * [Initialize Branch](#initialize-branch)
+  * [Test Deep Link iOS](#test-deep-link-ios)
+  * [Test Deep Link Android](#test-deep-link-android)
+* [Features](#features)
+  * [Initialize Branch Features](#initialize-branch-features)
+  * [Create Content Reference](#create-content-reference)
+  * [Create Deep Link](#create-deep-link)
+  * [Share Deep Link](#share-deep-link)
+  * [Read Deep Link](#read-deep-link)
+  * [Display Content](#display-content)
+  * [Track Content](#track-content)
+  * [Track User](#track-user)
+  * [Track Event](#track-event)
+  * [Track Commerce](#track-commerce)
+  * [Handle Referrals](#handle-referrals)
+* [Troubleshooting](#troubleshooting)
+  * [Testing: Key Points](#testing-key-points)
+  * [Testing: Optional App Config](#testing-optional-app-config)
+  * [Testing: Branch Analytics](#testing-branch-analytics)
+  * [Testing: Simulating an Install](#testing-simulating-an-install)
+  * [Testing: Supported Platforms](#testing-supported-platforms)
+  * [Testing: Sample Test App](#testing-sample-test-app)
+  * [Link Data: Universal Object Properties](#link-data-universal-object-properties)
+  * [Link Data: Deep Link Properties](#link-data-deep-link-properties)
+  * [Link Data: Commerce Properties](#link-data-commerce-properties)
+  * [Compiling: Cordova Dependencies](#compiling-cordova-dependencies)
+  * [Compiling: Show Console Logs](#compiling-show-console-logs)
+  * [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
+  * [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
+  * [Compiling: Errors](#compiling-errors)
 
 ## Getting Started
 
-- #### Configure Branch
+* #### Configure Branch
 
-  - Complete your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+  * Complete your [Branch Dashboard](https://dashboard.branch.io/settings/link)
 
     ![image](http://i.imgur.com/wazVu3U.png)
     ![image](http://i.imgur.com/9PEylbS.png)
 
-- #### Configure App
+* #### Configure App
 
-  - Cordova and Ionic
+  * Cordova and Ionic
+
     ```xml
     <!-- sample config.xml -->
     <widget id="com.eneff.branch.cordovatestbed" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
       <!-- Branch -->
-      <plugin name="branch-cordova-sdk" spec="^2.6.0" />
+      <plugin name="branch-cordova-sdk" spec="^3.1.6" />
       <branch-config>
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
         <uri-scheme value="branchcordova" />
@@ -80,12 +82,13 @@
       </branch-config>
     ```
 
-  - PhoneGap
+  * PhoneGap
+
     ```xml
     <!-- sample config.xml -->
     <widget id="com.eneff.branch.cordovatestbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
       <!-- Branch -->
-      <plugin name="branch-cordova-sdk" spec="^2.6.0" />
+      <plugin name="branch-cordova-sdk" spec="^3.1.6" />
       <branch-config>
         <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
         <uri-scheme value="branchcordova" />
@@ -94,25 +97,26 @@
       </branch-config>
     ```
 
-  - Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)
-    - `com.eneff.branch.cordovatestbed`
-    - `key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3`
-    - `branchcordova`
-    - `cordova.app.link`
-    - `PW4Q8885U7`
+  * Change the following values to match your [Branch Dashboard](https://dashboard.branch.io/settings/link)
+    * `com.eneff.branch.cordovatestbed`
+    * `key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3`
+    * `branchcordova`
+    * `cordova.app.link`
+    * `PW4Q8885U7`
 
-- #### Initialize Branch
+* #### Initialize Branch
 
-  - Cordova and PhoneGap
+  * Cordova and PhoneGap
+
     ```js
     // sample index.js
     var app = {
       initialize: function() {
-        this.bindEvents();
+        app.bindEvents();
       },
       bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-        document.addEventListener('resume', this.onDeviceResume, false);
+        document.addEventListener("deviceready", app.onDeviceReady, false);
+        document.addEventListener("resume", app.onDeviceResume, false);
       },
       onDeviceReady: function() {
         app.branchInit();
@@ -122,10 +126,10 @@
       },
       branchInit: function() {
         // Branch initialization
-        Branch.initSession(function(data) {
-          if (data['+clicked_branch_link']) {
+        Branch.initSession().then(function(data) {
+          if (data["+clicked_branch_link"]) {
             // read deep link data on click
-            alert('Deep Link Data: ' + JSON.stringify(data))
+            alert("Deep Link Data: " + JSON.stringify(data));
           }
         });
       }
@@ -134,52 +138,59 @@
     app.initialize();
     ```
 
-  - Ionic 1
+  * Ionic 1
+
     ```js
     // sample app.js
-    angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+    angular
+      .module("starter", ["ionic", "starter.controllers", "starter.services"])
 
-    .run(function($ionicPlatform) {
-      $ionicPlatform.ready(function() {
-        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-          cordova.plugins.Keyboard.disableScroll(true);
-        }
-        if (window.StatusBar) {
-          StatusBar.styleDefault();
-        }
+      .run(function($ionicPlatform) {
+        $ionicPlatform.ready(function() {
+          if (
+            window.cordova &&
+            window.cordova.plugins &&
+            window.cordova.plugins.Keyboard
+          ) {
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            cordova.plugins.Keyboard.disableScroll(true);
+          }
+          if (window.StatusBar) {
+            StatusBar.styleDefault();
+          }
 
-        // Branch
-        $ionicPlatform.on('deviceready', function() {
-          branchInit();
-        });
-
-        $ionicPlatform.on('resume', function() {
-          branchInit();
-        });
-
-        function branchInit() {
-          // Branch initialization
-          Branch.initSession(function(data) {
-            if (data['+clicked_branch_link']) {
-              // read deep link data on click
-              alert('Deep Link Data: ' + JSON.stringify(data));
-            }
+          // Branch
+          $ionicPlatform.on("deviceready", function() {
+            branchInit();
           });
-        }
+
+          $ionicPlatform.on("resume", function() {
+            branchInit();
+          });
+
+          function branchInit() {
+            // Branch initialization
+            Branch.initSession().then(function(data) {
+              if (data["+clicked_branch_link"]) {
+                // read deep link data on click
+                alert("Deep Link Data: " + JSON.stringify(data));
+              }
+            });
+          }
+        });
       });
-    })
     // ...
     ```
 
-  - Ionic 2/3
+  * Ionic 2/3
+
     ```typescript
     // sample app.component.js
-    import { Component } from '@angular/core';
-    import { Platform } from 'ionic-angular';
-    import { StatusBar, Splashscreen } from 'ionic-native';
+    import { Component } from "@angular/core";
+    import { Platform } from "ionic-angular";
+    import { StatusBar, Splashscreen } from "ionic-native";
 
-    import { TabsPage } from '../pages/tabs/tabs';
+    import { TabsPage } from "../pages/tabs/tabs";
 
     @Component({
       template: `<ion-nav [root]="rootPage"></ion-nav>`
@@ -201,443 +212,507 @@
         // Branch initialization
         const branchInit = () => {
           // only on devices
-          if (!platform.is('cordova')) { return }
-          const Branch = window['Branch'];
-          Branch.initSession(data => {
-            if (data['+clicked_branch_link']) {
+          if (!platform.is("cordova")) {
+            return;
+          }
+          const Branch = window["Branch"];
+          Branch.initSession().then(data => {
+            if (data["+clicked_branch_link"]) {
               // read deep link data on click
-              alert('Deep Link Data: ' + JSON.stringify(data));
+              alert("Deep Link Data: " + JSON.stringify(data));
             }
           });
-        }
+        };
       }
     }
     ```
 
-- #### Test Deep Link iOS
+* #### Test Deep Link iOS
 
-  - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
+  * Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
-  - Delete your app from the device
+  * Delete your app from the device
 
-  - Compile your app *(`cordova run ios` `phonegap run ios` `ionic cordova run ios`)*
+  * Compile your app _(`cordova run ios` `phonegap run ios` `ionic cordova run ios`)_
 
-  - Paste deep link in `Apple Notes`
+  * Paste deep link in `Apple Notes`
 
-  - Long press on the deep link *(not 3D Touch)*
+  * Long press on the deep link _(not 3D Touch)_
 
-  - Click `Open in "APP_NAME"` to open your app *([example](http://i.imgur.com/VJVICXd.png))*
+  * Click `Open in "APP_NAME"` to open your app _([example](http://i.imgur.com/VJVICXd.png))_
 
-- #### Test Deep Link Android
+* #### Test Deep Link Android
 
-  - Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
+  * Create a deep link from the [Branch Marketing Dashboard](https://dashboard.branch.io/marketing)
 
-  - Delete your app from the device
+  * Delete your app from the device
 
-  - Compile your app *(`cordova run android` `phonegap run android` `ionic cordova run android`)*
+  * Compile your app _(`cordova run android` `phonegap run android` `ionic cordova run android`)_
 
-  - Paste deep link in `Google Hangouts`
+  * Paste deep link in `Google Hangouts`
 
-  - Click on the deep link to open your app
+  * Click on the deep link to open your app
 
 ## Features
 
-- #### Initialize Branch Features
+* #### Initialize Branch Features
 
-  - Loads Branch into your app
+  * Loads Branch into your app
 
-  - Must be called on `deviceready` and `resume`
+  * Must be called on `deviceready` and `resume`
 
     ```js
     // for development and debugging only
-    Branch.setDebug(true)
+    Branch.setDebug(true);
+
+    // for GDPR compliance (can be called at anytime)
+    Branch.disabledTracking(false);
 
     // for better Android matching
-    Branch.setCookieBasedMatching('cordova.app.link')
+    Branch.setCookieBasedMatching("cordova.app.link");
 
     // Branch initialization
-    Branch.initSession(function(data) {
-      if (data['+clicked_branch_link']) {
+    Branch.initSession().then(function(data) {
+      if (data["+clicked_branch_link"]) {
         // read deep link data on click
-        alert('Deep Link Data: ' + JSON.stringify(data))
+        alert("Deep Link Data: " + JSON.stringify(data));
       }
     });
     ```
 
-- #### Create Content Reference
+* #### Create Content Reference
 
-  - The `Branch Universal Object` encapsulates the thing you want to share (content or user)
+  * The `Branch Universal Object` encapsulates the thing you want to share (content or user)
 
-  - Link Data: [Universal Object Properties](#link-data-universal-object-properties)
+  * Link Data: [Universal Object Properties](#link-data-universal-object-properties)
 
     ```js
     // only canonicalIdentifier is required
     var properties = {
-      canonicalIdentifier: 'content/123',
-      canonicalUrl: 'https://example.com/content/123',
-      title: 'Content 123 Title',
-      contentDescription: 'Content 123 Description ' + Date.now(),
-      contentImageUrl: 'http://lorempixel.com/400/400/',
+      canonicalIdentifier: "content/123",
+      canonicalUrl: "https://example.com/content/123",
+      title: "Content 123 Title",
+      contentDescription: "Content 123 Description " + Date.now(),
+      contentImageUrl: "http://lorempixel.com/400/400/",
       price: 12.12,
-      currency: 'GBD',
-      contentIndexingMode: 'private',
+      currency: "GBD",
+      contentIndexingMode: "private",
       contentMetadata: {
-        custom: 'data',
+        custom: "data",
         testing: 123,
         this_is: true
       }
-    }
+    };
 
     // create a branchUniversalObj variable to reference with other Branch methods
-    var branchUniversalObj = null
-    Branch.createBranchUniversalObject(properties).then(function (res) {
-      branchUniversalObj = res
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
+    var branchUniversalObj = null;
+    Branch.createBranchUniversalObject(properties)
+      .then(function(res) {
+        branchUniversalObj = res;
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
     ```
 
-- #### Create Deep Link
+* #### Create Deep Link
 
-  - Creates a deep link URL with encapsulated data
+  * Creates a deep link URL with encapsulated data
 
-  - Needs a [Branch Universal Object](#create-content-reference)
+  * Needs a [Branch Universal Object](#create-content-reference)
 
-  - Link Data: [Deep Link Properties](#link-data-deep-link-properties)
-  
-  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/links)
+  * Link Data: [Deep Link Properties](#link-data-deep-link-properties)
+
+  * Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/links)
+
+  * All function's parameters are mandatory 
 
     ```js
     // optional fields
     var analytics = {
-      channel: 'facebook',
-      feature: 'onboarding',
-      campaign: 'content 123 launch',
-      stage: 'new user',
-      tags: ['one', 'two', 'three']
-    }
+      channel: "facebook",
+      feature: "onboarding",
+      campaign: "content 123 launch",
+      stage: "new user",
+      tags: ["one", "two", "three"]
+    };
 
     // optional fields
     var properties = {
-      $desktop_url: 'http://www.example.com/desktop',
-      $android_url: 'http://www.example.com/android',
-      $ios_url: 'http://www.example.com/ios',
-      $ipad_url: 'http://www.example.com/ipad',
-      $deeplink_path: 'content/123',
+      $desktop_url: "http://www.example.com/desktop",
+      $android_url: "http://www.example.com/android",
+      $ios_url: "http://www.example.com/ios",
+      $ipad_url: "http://www.example.com/ipad",
+      $deeplink_path: "content/123",
       $match_duration: 2000,
-      custom_string: 'data',
+      custom_string: "data",
       custom_integer: Date.now(),
       custom_boolean: true
-    }
+    };
 
-    branchUniversalObj.generateShortUrl(analytics, properties).then(function (res) {
-      alert('Response: ' + JSON.stringify(res.url))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
+    branchUniversalObj
+      .generateShortUrl(analytics, properties)
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res.url));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
     ```
 
-- #### Share Deep Link
+* #### Share Deep Link
 
-  -  Will generate a Branch deep link and tag it with the channel the user selects
+  * Will generate a Branch deep link and tag it with the channel the user selects
 
-  - Needs a [Branch Universal Object](#create-content-reference)
+  * Needs a [Branch Universal Object](#create-content-reference)
 
-  - Link Data: [Deep Link Properties](#link-data-deep-link-properties)
+  * Link Data: [Deep Link Properties](#link-data-deep-link-properties)
+
+  * All function's parameters are mandatory 
 
     ```js
     // optional fields
     var analytics = {
-      channel: 'facebook',
-      feature: 'onboarding',
-      campaign: 'content 123 launch',
-      stage: 'new user',
-      tags: ['one', 'two', 'three']
-    }
+      channel: "facebook",
+      feature: "onboarding",
+      campaign: "content 123 launch",
+      stage: "new user",
+      tags: ["one", "two", "three"]
+    };
 
     // optional fields
     var properties = {
-      $desktop_url: 'http://www.example.com/desktop',
-      custom_string: 'data',
+      $desktop_url: "http://www.example.com/desktop",
+      custom_string: "data",
       custom_integer: Date.now(),
       custom_boolean: true
-    }
+    };
 
-    var message = 'Check out this link'
+    var message = "Check out this link";
 
     // optional listeners (must be called before showShareSheet)
-    branchUniversalObj.onShareSheetLaunched(function (res) {
+    branchUniversalObj.onShareSheetLaunched(function(res) {
       // android only
-      console.log(res)
-    })
-    branchUniversalObj.onShareSheetDismissed(function (res) {
-      console.log(res)
-    })
-    branchUniversalObj.onLinkShareResponse(function (res) {
-      console.log(res)
-    })
-    branchUniversalObj.onChannelSelected(function (res) {
+      console.log(res);
+    });
+    branchUniversalObj.onShareSheetDismissed(function(res) {
+      console.log(res);
+    });
+    branchUniversalObj.onLinkShareResponse(function(res) {
+      console.log(res);
+    });
+    branchUniversalObj.onChannelSelected(function(res) {
       // android only
-      console.log(res)
-    })
+      console.log(res);
+    });
 
     // share sheet
-    branchUniversalObj.showShareSheet(analytics, properties, message)
+    branchUniversalObj.showShareSheet(analytics, properties, message);
     ```
 
-- #### Read Deep Link
+* #### Read Deep Link
 
-  - Retrieve Branch data from a deep link
+  * Retrieve Branch data from a deep link
 
-  - Best practice to receive data from the `listener`
+  * Best practice to receive data from the `listener`
 
-  - Listener
+  * Listener
+
     ```js
     // Branch initialization within your deviceready and resume
-    Branch.initSession(function(deepLinkData) {
-      if (data['+clicked_branch_link']) {
-        // handler for deep link data on click
-        alert('Response: ' + JSON.stringify(deepLinkData))
-      }
-    })
+    Branch.initSession()
+      .then(function success(res) {
+        if (res["+clicked_branch_link"]) {
+          alert("Open app with a Branch deep link: " + JSON.stringify(res));
+          // Branch quick link: https://cordova.app.link/uJcOH1IFpM
+          // Branch web link: https://cordova-alternate.app.link/uJcOH1IFpM
+          // Branch dynamic link: https://cordova.app.link?tags=one&tags=two&tags=three&channel=Copy&feature=onboarding&stage=new+user&campaign=content+123+launch&type=0&duration=0&source=android&data
+          // Branch uri scheme: branchcordova://open?link_click_id=link-500015444967786346
+          // Branch android intent: intent://open?link_click_id=518106399270344237#Intent;scheme=looprocks;package=com.eneff.branch.cordovatestbed;S.browser_fallback_url=https%3A%2F%2Fcordova.app.link%2FuJcOH1IFpM%3F__branch_flow_type%3Dchrome_deepview%26__branch_flow_id%3D518106399312287278;S.market_referrer=link_click_id-518106399270344237%26utm_source%3DCopy%26utm_campaign%3Dcontent%20123%20launch%26utm_feature%3Donboarding;S.branch_data=%7B%22~feature%22%3A%22onboarding%22%2C%22this_is%22%3A%22true%22%2C%22custom_string%22%3A%22data%22%2C%22testing%22%3A%22123%22%2C%22%24publicly_indexable%22%3A%22false%22%2C%22%24desktop_url%22%3A%22http%3A%2F%2Fwww.example.com%2Fdesktop%22%2C%22%24one_time_use%22%3Afalse%2C%22custom_object%22%3A%22%7B%5C%5C%5C%22random%5C%5C%5C%22%3A%5C%5C%5C%22dictionary%5C%5C%5C%22%7D%22%2C%22~id%22%3A%22517795540654792902%22%2C%22~campaign%22%3A%22content%20123%20launch%22%2C%22%2Bclick_timestamp%22%3A1524764418%2C%22%2Burl%22%3A%22https%3A%2F%2Fcordova.app.link%2FuJcOH1IFpM%22%2C%22custom_boolean%22%3A%22true%22%2C%22custom%22%3A%22data%22%2C%22source%22%3A%22android%22%2C%22%24og_image_url%22%3A%22http%3A%2F%2Florempixel.com%2F400%2F400%2F%22%2C%22%2Bdomain%22%3A%22cordova.app.link%22%2C%22custom_integer%22%3A%221524690301794%22%2C%22~tags%22%3A%5B%22one%22%2C%22two%22%2C%22three%22%5D%2C%22custom_array%22%3A%22%5B1%2C2%2C3%2C4%2C5%5D%22%2C%22~channel%22%3A%22Copy%22%2C%22~creation_source%22%3A2%2C%22%24canonical_identifier%22%3A%22content%2F123%22%2C%22%24og_title%22%3A%22Content%20123%20Title%22%2C%22%24og_description%22%3A%22Content%20123%20Description%201524690296449%22%2C%22%24identity_id%22%3A%22453670943617990547%22%2C%22~stage%22%3A%22new%20user%22%2C%22%2Bclicked_branch_link%22%3Atrue%2C%22%2Bmatch_guaranteed%22%3Atrue%2C%22%2Bis_first_session%22%3Afalse%7D;B.branch_intent=true;end
+          // Branch android app link (device controlled): https://cordova.app.link/uJcOH1IFpM
+          // Branch ios universal link (device controlled): https://cordova.app.link/uJcOH1IFpM
+        } else if (res["+non_branch_link"]) {
+          alert("Open app with a non Branch deep link: " + JSON.stringify(res));
+          // Competitor uri scheme: anotherurischeme://hello=world
+        } else {
+          alert("Open app organically");
+          // Clicking on app icon or push notification
+        }
+      })
+      .catch(function error(err) {
+        logger(err, true);
+      });
     ```
 
-  - First data
-    ```js
-    Branch.getFirstReferringParams().then(function(res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
-    ```
-
-  - Latest data
-    ```js
-    Branch.getLatestReferringParams().then(function(res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
-    ```
-
-- #### Display Content
-
-  - List content on iOS Spotlight
-
-  - Needs a [Branch Universal Object](#create-content-reference)
+  * First data
 
     ```js
-    branchUniversalObj.listOnSpotlight().then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
+    Branch.getFirstReferringParams()
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
     ```
 
-- #### Track Content
+  * Latest data
+    ```js
+    Branch.getLatestReferringParams()
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
+    ```
 
-  - Track how many times a user views a particular piece of content
+* #### Display Content
 
-  - Needs a [Branch Universal Object](#create-content-reference)
-  
-  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/content)
+  * List content on iOS Spotlight
+
+  * Needs a [Branch Universal Object](#create-content-reference)
 
     ```js
-    branchUniversalObj.registerView().then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
+    branchUniversalObj
+      .listOnSpotlight()
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
     ```
 
-- #### Track User
+* #### Track Content
 
-  - Sets the identity of a user (email, ID, UUID, etc) for events, deep links, and referrals
-  
-  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/identities)  
+  * Track how many times a user views a particular piece of content
+
+  * Needs a [Branch Universal Object](#create-content-reference)
+
+  * Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/content)
 
     ```js
-    var userId = '123456'
-    Branch.setIdentity(userId).then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err.message))
-    })
+    branchUniversalObj
+      .registerView()
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
     ```
 
-  - Removes the identity of a user
+* #### Track User
+
+  * Sets the identity of a user (email, ID, UUID, etc) for events, deep links, and referrals
+
+  * Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/identities)
 
     ```js
-    Branch.logout().then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err.message))
-    })
+    var userId = "123456";
+    Branch.setIdentity(userId)
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err.message));
+      });
     ```
 
-- #### Track Event
-
-  - Registers a custom event
-  
-  - Events named `open`, `close`, `install`, and `referred session` are Branch restricted
-
-  - Recommended to [Track User](#track-user) before [Track Event](#track-event) to associate custom events with a user
-  
-  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/events)
+  * Removes the identity of a user
 
     ```js
-    var eventName = 'clicked_on_this'
-    var metadata = { 'custom_dictionary': 123, 'anything': 'everything' }
-    Branch.userCompletedAction(eventName, metadata).then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err.message))
-    })
+    Branch.logout()
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err.message));
+      });
+    ```
+
+* #### Track Event
+
+  * Registers a custom event
+
+  * Events named `open`, `close`, `install`, and `referred session` are Branch restricted
+
+  * Recommended to [Track User](#track-user) before [Track Event](#track-event) to associate custom events with a user
+
+  * Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/events)
+
+    ```js
+    var eventName = "clicked_on_this";
+    var metadata = { custom_dictionary: 123, anything: "everything" };
+    Branch.userCompletedAction(eventName, metadata)
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err.message));
+      });
     ```
 
     ```js
-    var eventName = 'clicked_on_this'
-    Branch.userCompletedAction(eventName).then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err.message))
-    })
+    var eventName = "clicked_on_this";
+    Branch.userCompletedAction(eventName)
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err.message));
+      });
     ```
 
-- #### Track Commerce
+* #### Track Commerce
 
-  - Registers a custom commerce event
+  * Registers a custom commerce event
 
-  - Link Data: [Track commerce properties](#link-data-commerce-properties) for `Currency` and `Category` 
-  
-  - Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/commerce)
+  * Link Data: [Track commerce properties](#link-data-commerce-properties) for `Currency` and `Category`
+
+  * Verify on the [Branch Dashboard](https://dashboard.branch.io/liveview/commerce)
 
     ```js
     // only revenue is required
     var event = {
-      'revenue': 50.29,
-      'currency': 148, // USD
-      'transactionID': 'transaction id',
-      'coupon': 'coupon',
-      'shipping': 2.22,
-      'tax': 5.11,
-      'affiliation': 'affiliation',
-      'products': [
+      revenue: 50.29,
+      currency: 148, // USD
+      transactionID: "transaction id",
+      coupon: "coupon",
+      shipping: 2.22,
+      tax: 5.11,
+      affiliation: "affiliation",
+      products: [
         {
-          'sku': 'u123',
-          'name': 'cactus',
-          'price': 4.99,
-          'quantity': 2,
-          'brand': 'brand',
-          'category': 17, // Software
-          'variant': 'variant'
+          sku: "u123",
+          name: "cactus",
+          price: 4.99,
+          quantity: 2,
+          brand: "brand",
+          category: 17, // Software
+          variant: "variant"
         },
         {
-          'sku': 'u456',
-          'name': 'grass',
-          'price': 0.00,
-          'quantity': 1
+          sku: "u456",
+          name: "grass",
+          price: 0.0,
+          quantity: 1
         }
       ]
-    }
+    };
 
     // optional fields
     var metadata = {
-      'custom_dictionary': 123,
-      'anything': 'everything'
-    }
+      custom_dictionary: 123,
+      anything: "everything"
+    };
 
-    Branch.sendCommerceEvent(event, metadata).then(function (res) {
-      console.log(res)
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      console.error(err)
-      alert('Error: ' + JSON.stringify(err.message))
-    })
+    Branch.sendCommerceEvent(event, metadata)
+      .then(function(res) {
+        console.log(res);
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        console.error(err);
+        alert("Error: " + JSON.stringify(err.message));
+      });
     ```
 
-- #### Handle Referrals
+* #### Handle Referrals
 
-  - Referral points are obtained from events triggered by users from rules created on the [Branch Dashboard](https://dashboard.branch.io/referrals/rules)
-  
-  - Verify on the [Branch Dashboard](https://dashboard.branch.io/referrals/analytics)
+  * Referral points are obtained from events triggered by users from rules created on the [Branch Dashboard](https://dashboard.branch.io/referrals/rules)
 
-  - Get credits
+  * Verify on the [Branch Dashboard](https://dashboard.branch.io/referrals/analytics)
 
-    - Referrer is [tracked](#track-user)
+  * Get credits
 
-    - Referrer [creates a deep link](#create-deep-link)
+    * Referrer is [tracked](#track-user)
 
-    - Referrer [shares the deep Link](#share-deep-link)
+    * Referrer [creates a deep link](#create-deep-link)
 
-    - Referee clicks on deep link
+    * Referrer [shares the deep Link](#share-deep-link)
 
-    - Referee triggers a [custom event](#track-event)
+    * Referee clicks on deep link
 
-    - Catch the event in your Branch Dashboard as a [rule](https://dashboard.branch.io/referrals/rules)
+    * Referee triggers a [custom event](#track-event)
 
-    - Referrer gets referral points
+    * Catch the event in your Branch Dashboard as a [rule](https://dashboard.branch.io/referrals/rules)
 
-  - Spend credits
+    * Referrer gets referral points
 
-    ```js
-    var amount = 10
-    var bucket = 'this_bucket'
-    Branch.redeemRewards(amount, bucket).then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
-    ```
+  * Spend credits
 
     ```js
-    var amount = 10
-    Branch.redeemRewards(amount).then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
-    ```
-
-  - Load credits
-
-    ```js
-    var bucket = 'this_bucket'
-    Branch.loadRewards(bucket).then(function(res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function(err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
+    var amount = 10;
+    var bucket = "this_bucket";
+    Branch.redeemRewards(amount, bucket)
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
     ```
 
     ```js
-    Branch.loadRewards().then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
+    var amount = 10;
+    Branch.redeemRewards(amount)
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
     ```
 
-  - Load history
+  * Load credits
 
     ```js
-    Branch.creditHistory().then(function (res) {
-      alert('Response: ' + JSON.stringify(res))
-    }).catch(function (err) {
-      alert('Error: ' + JSON.stringify(err))
-    })
+    var bucket = "this_bucket";
+    Branch.loadRewards(bucket)
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
+    ```
+
+    ```js
+    Branch.loadRewards()
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
+    ```
+
+  * Load history
+
+    ```js
+    Branch.creditHistory()
+      .then(function(res) {
+        alert("Response: " + JSON.stringify(res));
+      })
+      .catch(function(err) {
+        alert("Error: " + JSON.stringify(err));
+      });
     ```
 
 ## Troubleshooting
 
-- #### Testing: Key Points
+* #### Testing: Key Points
 
-  - Need to checkmark "app uses IDFA and GAID" when publishing your app
+  * Need to select "app uses IDFA and GAID" when publishing your app
 
-  - Best to enable [Deepviews](https://dashboard.branch.io/settings/deepviews) ([Testing: Supported Platforms](#testing-supported-platforms))
+  * Best to enable [Deepviews](https://dashboard.branch.io/settings/deepviews) ([Testing: Supported Platforms](#testing-supported-platforms))
 
-- #### Testing: Optional App Config
+  * Mobile browser capability: `Android 4.4.4+`, `Safari 8+`, `Chrome 32+`, `Firefox 29+`
+
+* #### Testing: Optional App Config
 
   ```xml
   <!-- sample config.xml -->
@@ -652,7 +727,7 @@
       <link-domain value="bnc.lt" />  <!-- optional previous link domain -->
       <ios-team-release value="PW4Q8885U7" /> <!-- required if iOS app -->
       <ios-team-debug value="FG35JLLMXX" /> <!-- optional -->
-      <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt and custom domains) -->
+      <android-prefix value="/WSuf" /> <!-- optional (for bnc.lt link domains) -->
       <android-testmode value="true" /> <!-- optional (simulate installs) -->
     </branch-config>
   ```
@@ -661,417 +736,417 @@
   <widget ios-CFBundleIdentifier="com.eneff.branch.cordovatestbedios" android-packageName="com.eneff.branch.cordovatestbedandroid" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   ```
 
-- #### Testing: Branch Analytics
-  
-  - Whenever a user `clicks` on a deep link and opens the app, and will trigger either an `install` or an `open`
+* #### Testing: Branch Analytics
 
-  - `installs` represent Branch recognizing the app_id and device_id for the first time
+  * Whenever a user `clicks` on a deep link and opens the app, and will trigger either an `install` or an `open`
 
-  - `installs` represent new app users and the success rate of your Branch deep links    
+  * `installs` represent Branch recognizing the app_id and device_id for the first time
 
-  - `installs` do **not** represent App Store downloads
+  * `installs` represent new app users and the success rate of your Branch deep links
 
-  - `non-Branch installs` are installs outside of Branch deep link clicks
+  * `installs` do **not** represent App Store downloads
 
-  - `opens` are non-installs
+  * `non-Branch installs` are installs outside of Branch deep link clicks
 
-  - If a user uninstalls and reinstalls the app, this will be an `open` because Branch recognizes the device
+  * `opens` are non-installs
 
-  - If a user has the app and clicks a Branch deep link, this will be an `open` because the user is not new
+  * If a user uninstalls and reinstalls the app, this will be an `open` because Branch recognizes the device
 
-- #### Testing: Simulating an Install
-  
-  - Delete your app
+  * If a user has the app and clicks a Branch deep link, this will be an `open` because the user is not new
 
-  - **[iOS]** iPhone Device -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
+* #### Testing: Simulating an Install
 
-  - **[Android]** Add `<android-testmode value="true" />` to your `Config.xml` ([Testing: Optional App Config](#testing-optional-app-config))
+  * Delete your app
 
-  - Add `Branch.setDebug(true);` before `Branch.initSession();` ([Initialize Branch Features](#initialize-branch-features))   
-  
-  - Click on a deep link to navigate to your `$fallback_url` because your app is not installed
+  * **[iOS]** iPhone Device -> Settings -> Privacy -> Advertising -> Reset Advertising Identifier -> Reset Identifier
 
-  - Install your app
+  * **[Android]** Add `<android-testmode value="true" />` to your `Config.xml` ([Testing: Optional App Config](#testing-optional-app-config))
 
-  - Open your app
+  * Add `Branch.setDebug(true);` before `Branch.initSession();` ([Initialize Branch Features](#initialize-branch-features))
 
-  - Read from `Branch.initSession(data)` for `+is_first_session = true` 
+  * Click on a deep link to navigate to your `$fallback_url` because your app is not installed
 
-- #### Testing: Supported Platforms
+  * Install your app
 
-  - Apps which support Branch deep links
+  * Open your app
 
-    | | iOS | Details | Android | Details
-    | --- | :-: | --- | :-: | ---
-    | Facebook NewsFeed | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
-    | Facebook Messanger | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ | |
-    | Twitter | ✅ | | ✅ |
-    | Pinterest | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
-    | Slack | ✅ | | ✅ | |
-    | Chrome address bar | 🅾️ | | 🅾️ |
-    | Chrome web page | ✅ | | ✅ |
-    | FireFox address bar | 🅾️ | | 🅾️ |
-    | FireFox web page | ✅ | | ✅ |
-    | Safari address bar | 🅾️ | | |
-    | Safari web page | ✅ | | |
-    | WeChat | ✅ | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled | ✅ |
-    | WhatsApp | ✅ | `app.link` requires https/http to be clickable | ✅ | `app.link` requires https/http to be clickable
-    | Hangouts | ✅ | | ✅ |
-    | iMessage | ✅ | | |
-    | Apple Mail | ✅ | | |
-    | Gmail | ✅ | | ✅ |
+  * Read from `Branch.initSession(data)` for `+is_first_session = true`
 
-- #### Testing: Sample Testing App
+* #### Testing: Supported Platforms
 
-  - [Branch Testing App](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/testbed)
+  * Apps which support Branch deep links
 
-- #### Link Data: Universal Object Properties
+    |                     | iOS | Details                                                                            | Android | Details                                        |
+    | ------------------- | :-: | ---------------------------------------------------------------------------------- | :-----: | ---------------------------------------------- |
+    | Facebook NewsFeed   | ✅  | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled |   ✅    |
+    | Facebook Messanger  | ✅  | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled |   ✅    |                                                |
+    | Twitter             | ✅  |                                                                                    |   ✅    |
+    | Pinterest           | ✅  | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled |   ✅    |
+    | Slack               | ✅  |                                                                                    |   ✅    |                                                |
+    | Chrome address bar  | 🅾️  |                                                                                    |   🅾️    |
+    | Chrome web page     | ✅  |                                                                                    |   ✅    |
+    | FireFox address bar | 🅾️  |                                                                                    |   🅾️    |
+    | FireFox web page    | ✅  |                                                                                    |   ✅    |
+    | Safari address bar  | 🅾️  |                                                                                    |         |
+    | Safari web page     | ✅  |                                                                                    |         |
+    | WeChat              | ✅  | Works when [DeepViews](https://dashboard.branch.io/settings/deepviews) are enabled |   ✅    |
+    | WhatsApp            | ✅  | `app.link` requires https/http to be clickable                                     |   ✅    | `app.link` requires https/http to be clickable |
+    | Hangouts            | ✅  |                                                                                    |   ✅    |
+    | iMessage            | ✅  |                                                                                    |         |
+    | Apple Mail          | ✅  |                                                                                    |         |
+    | Gmail               | ✅  |                                                                                    |   ✅    |
 
-  - For [Create Content Reference](#create-content-reference)
+* #### Testing: Sample Testing App
 
-  - Properties
+  * [Branch Testing App](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/tree/master/testbed)
 
-    | Key | Default | Usage | Link Property
-    | --- | :-: | --- | :-:
-    | canonicalIdentifier | | **(Required)** This is the unique identifier for content that will help Branch dedupe across many instances of the same thing. Suitable options: a website with pathing, or a database with identifiers for entities | `$canonical_identifier`
-    | canonicalUrl | | The canonical URL, used for SEO purposes | `$canonical_url`
-    | title | | The name for the piece of content | `$og_title`
-    | contentDescription | | A description for the content | `$og_description`
-    | contentImageUrl | | The image URL for the content. Must be an absolute path | `$og_image_url `
-    | price | | The price of the item | `$amount`
-    | currency | | The currency representing the price in ISO 4217 currency code | `$currency`
-    | contentIndexingMode | `"public"` | Can be set to either `"public"` or `"private"`. Public indicates that you’d like this content to be discovered by other apps. | `$publicly_indexable`
-    | contentMetadata | | Any custom key-value data e.g. `{ "custom": "data" }`
+* #### Link Data: Universal Object Properties
 
-- #### Link Data: Deep Link Properties
+  * For [Create Content Reference](#create-content-reference)
 
-  - For [Create Deep Link](#create-deep-link) and [Share Deep Link](#share-deep-link)
+  * Properties
 
-  - Analytics
+    | Key                 |  Default   | Usage                                                                                                                                                                                                                |      Link Property      |
+    | ------------------- | :--------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------: |
+    | canonicalIdentifier |            | **(Required)** This is the unique identifier for content that will help Branch dedupe across many instances of the same thing. Suitable options: a website with pathing, or a database with identifiers for entities | `$canonical_identifier` |
+    | canonicalUrl        |            | The canonical URL, used for SEO purposes                                                                                                                                                                             |    `$canonical_url`     |
+    | title               |            | The name for the piece of content                                                                                                                                                                                    |       `$og_title`       |
+    | contentDescription  |            | A description for the content                                                                                                                                                                                        |    `$og_description`    |
+    | contentImageUrl     |            | The image URL for the content. Must be an absolute path                                                                                                                                                              |     `$og_image_url`     |
+    | price               |            | The price of the item                                                                                                                                                                                                |        `$amount`        |
+    | currency            |            | The currency representing the price in ISO 4217 currency code                                                                                                                                                        |       `$currency`       |
+    | contentIndexingMode | `"public"` | Can be set to either `"public"` or `"private"`. Public indicates that you’d like this content to be discovered by other apps.                                                                                        |  `$publicly_indexable`  |
+    | contentMetadata     |            | Any custom key-value data e.g. `{ "custom": "data" }`                                                                                                                                                                |
 
-    | Key | Default | Usage
-    | --- | :-: | ---
-    | channel | | Use channel to tag the route that your link reaches users. For example, tag links with `"Facebook"` or `"LinkedIn"` to help track clicks and installs through those paths separately
-    | feature | | This is the feature of your app that the link might be associated with. For example, if you had built a referral program, you would label links with the feature ‘referral’
-    | campaign | | Use this field to organize the links by actual campaign. For example, if you launched a new feature or product and want to run a campaign around that
-    | stage | | Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter
-    | tags | | This is a free form entry with unlimited values `["string"]`. Use it to organize your link data with labels that don’t fit within the bounds of the above
-    | alias | | Specify a link alias in place of the standard encoded short URL e.g. `yourdomain.com/youralias`. Link aliases are unique, immutable objects that cannot be deleted. You cannot change the alias of existing links. Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight
-    | type | `0` | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make the link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing) while adding `$marketing_title` to `data`. Must be an `int`. Does not work with the Cordova SDK (limitation of native SDKs)
+* #### Link Data: Deep Link Properties
 
-  - Properties
+  * For [Create Deep Link](#create-deep-link) and [Share Deep Link](#share-deep-link)
 
-    - Custom Data
+  * Analytics
 
-      | Key | Value | Usage
-      | --- | :-: | ---
-      | random | `123` | Any key-value pair
-      | hello | `"world"` | Any key-value pair
-      | custom_data | `true` | Any key-value pair
+    | Key      | Default | Usage                                                                                                                                                                                                                                                                                                                    |
+    | -------- | :-----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+    | channel  |         | Use channel to tag the route that your link reaches users. For example, tag links with `"Facebook"` or `"LinkedIn"` to help track clicks and installs through those paths separately                                                                                                                                     |
+    | feature  |         | This is the feature of your app that the link might be associated with. For example, if you had built a referral program, you would label links with the feature ‘referral’                                                                                                                                              |
+    | campaign |         | Use this field to organize the links by actual campaign. For example, if you launched a new feature or product and want to run a campaign around that                                                                                                                                                                    |
+    | stage    |         | Use this to categorize the progress or category of a user when the link was generated. For example, if you had an invite system accessible on level 1, level 3 and 5, you could differentiate links generated at each level with this parameter                                                                          |
+    | tags     |         | This is a free form entry with unlimited values `["string"]`. Use it to organize your link data with labels that don’t fit within the bounds of the above                                                                                                                                                                |
+    | alias    |         | Specify a link alias in place of the standard encoded short URL e.g. `yourdomain.com/youralias`. Link aliases are unique, immutable objects that cannot be deleted. You cannot change the alias of existing links. Aliases on the legacy `bnc.lt` domain are incompatible with Universal Links and Spotlight             |
+    | type     |   `0`   | Set to `1` to limit deep linking behavior of the generated link to a single use. Set type to `2` to make the link show up under [Marketing Dashboard](https://dashboard.branch.io/marketing) while adding `$marketing_title` to `data`. Must be an `int`. Does not work with the Cordova SDK (limitation of native SDKs) |
 
-    - Redirection
+  * Properties
 
-      | Key | Default | Usage
-      | --- | :-: | ---
-      | $fallback_url | | Change the redirect endpoint for all platforms - so you don’t have to enable it by platform. Note that Branch will forward all robots to this URL, which **overrides any OG tags** entered in the link.  System-wide Default URL (set in Link Settings)
-      | $desktop_url | | Change the redirect endpoint on desktops Text-Me-The-App page (set in Link Settings)
-      | $ios_url | | Change the redirect endpoint for iOS  App Store page for your app (set in Link Settings)
-      | $ipad_url | | Change the redirect endpoint for iPads `$ios_url` value
-      | $android_url  | | Change the redirect endpoint for Android  Play Store page for your app (set in Link Settings)
-      | $windows_phone_url  | | Change the redirect endpoint for Windows OS Windows Phone default URL (set in Link Settings)
-      | $blackberry_url | | Change the redirect endpoint for Blackberry OS  BlackBerry default URL (set in Link Settings)
-      | $fire_url | | Change the redirect endpoint for Amazon Fire OS Fire default URL (set in Link Settings)
-      | $ios_wechat_url | | Change the redirect endpoint for WeChat on iOS devices `$ios_url value`
-      | $android_wechat_url | | Change the redirect endpoint for WeChat on Android devices  `$android_url` value
-      | $after_click_url | | URL redirect to after the main click redirect has completed
-      | $web_only | `false` | Force to open the `$fallback_url` instead of the app
+    * Custom Data
 
-    - Deep Link
+      | Key         |   Value   | Usage              |
+      | ----------- | :-------: | ------------------ |
+      | random      |   `123`   | Any key-value pair |
+      | hello       | `"world"` | Any key-value pair |
+      | custom_data |  `true`   | Any key-value pair |
 
-      | Key | Default | Usage
-      | --- | :-: | ---
-      | $deeplink_path | `open?link_click_id=1234` | Set the deep link path for all platforms - so you don’t have to enable it by platform. When the Branch SDK receives a link with this parameter set, it will automatically load the custom URI path contained within
-      | $android_deeplink_path | | Set the deep link path for Android apps When the Branch SDK receives a link with this parameter set, it will automatically load the custom URI path contained within
-      | $ios_deeplink_path | | Set the deep link path for iOS apps. When the Branch SDK receives a link with this parameter set, it will automatically load the custom URI path contained within
-      | $match_duration | `7200` | Lets you control the fingerprinting match timeout (the time that a click will wait for an app open to match) also known as attribution window. Specified in seconds
-      | $always_deeplink | `true` | Set to `false` to make links always fall back to your mobile site. Does not apply to Universal Links or Android App Links.
-      | $ios_redirect_timeout | `750` | Control the timeout that the client-side JS waits after trying to open up the app before redirecting to the App Store. Specified in milliseconds
-      | $android_redirect_timeout | `750` | Control the timeout that the clientside JS waits after trying to open up the app before redirecting to the Play Store. Specified in milliseconds
-      | $one_time_use | `false` | Set to `true` to limit deep linking behavior of the generated link to a single use. Can also be set using type
-      | $custom_sms_text | | Text for SMS link sent for desktop clicks to this link. Must contain `{{ link }}` Value of Text me the app page in Settings
-      | $marketing_title | | The Marketing Title for the deep link in the [Marketing Dashboard](https://dashboard.branch.io/marketing)
+    * Redirection
 
-    - Content
+      | Key                 | Default | Usage                                                                                                                                                                                                                                                  |
+      | ------------------- | :-----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+      | $fallback_url       |         | Change the redirect endpoint for all platforms - so you don’t have to enable it by platform. Note that Branch will forward all robots to this URL, which **overrides any OG tags** entered in the link. System-wide Default URL (set in Link Settings) |
+      | $desktop_url        |         | Change the redirect endpoint on desktops Text-Me-The-App page (set in Link Settings)                                                                                                                                                                   |
+      | $ios_url            |         | Change the redirect endpoint for iOS App Store page for your app (set in Link Settings)                                                                                                                                                                |
+      | $ipad_url           |         | Change the redirect endpoint for iPads `$ios_url` value                                                                                                                                                                                                |
+      | $android_url        |         | Change the redirect endpoint for Android Play Store page for your app (set in Link Settings)                                                                                                                                                           |
+      | $windows_phone_url  |         | Change the redirect endpoint for Windows OS Windows Phone default URL (set in Link Settings)                                                                                                                                                           |
+      | $blackberry_url     |         | Change the redirect endpoint for Blackberry OS BlackBerry default URL (set in Link Settings)                                                                                                                                                           |
+      | $fire_url           |         | Change the redirect endpoint for Amazon Fire OS Fire default URL (set in Link Settings)                                                                                                                                                                |
+      | $ios_wechat_url     |         | Change the redirect endpoint for WeChat on iOS devices `$ios_url value`                                                                                                                                                                                |
+      | $android_wechat_url |         | Change the redirect endpoint for WeChat on Android devices `$android_url` value                                                                                                                                                                        |
+      | $after_click_url    |         | URL redirect to after the main click redirect has completed                                                                                                                                                                                            |
+      | $web_only           | `false` | Force to open the `$fallback_url` instead of the app                                                                                                                                                                                                   |
 
-      | Key | Default | Usage
-      | --- | :-: | ---
-      | $publicly_indexable | `1` | Cannot modify here. Needs to be set by the Branch Universal Object
-      | $keywords | | Keywords for which this content should be discovered by. Just assign an array of strings with the keywords you’d like to use
-      | $canonical_identifier | | This is the unique identifier for content that will help Branch dedupe across many instances of the same thing. Suitable options: a website with pathing, or a database with identifiers for entities
-      | $exp_date | `0` | Cannot modify here. Needs to be set by the Branch Universal Object. Must be epoch timestamp with milliseconds
-      | $content_type | | This is a label for the type of content present. Apple recommends that you use uniform type identifier as described here
+    * Deep Link
 
-    - DeepView
+      | Key                       |          Default          | Usage                                                                                                                                                                                                               |
+      | ------------------------- | :-----------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+      | $deeplink_path            | `open?link_click_id=1234` | Set the deep link path for all platforms - so you don’t have to enable it by platform. When the Branch SDK receives a link with this parameter set, it will automatically load the custom URI path contained within |
+      | $android_deeplink_path    |                           | Set the deep link path for Android apps When the Branch SDK receives a link with this parameter set, it will automatically load the custom URI path contained within                                                |
+      | $ios_deeplink_path        |                           | Set the deep link path for iOS apps. When the Branch SDK receives a link with this parameter set, it will automatically load the custom URI path contained within                                                   |
+      | $match_duration           |          `7200`           | Lets you control the fingerprinting match timeout (the time that a click will wait for an app open to match) also known as attribution window. Specified in seconds                                                 |
+      | $always_deeplink          |          `true`           | Set to `false` to make links always fall back to your mobile site. Does not apply to Universal Links or Android App Links.                                                                                          |
+      | $ios_redirect_timeout     |           `750`           | Control the timeout that the client-side JS waits after trying to open up the app before redirecting to the App Store. Specified in milliseconds                                                                    |
+      | $android_redirect_timeout |           `750`           | Control the timeout that the clientside JS waits after trying to open up the app before redirecting to the Play Store. Specified in milliseconds                                                                    |
+      | $one_time_use             |          `false`          | Set to `true` to limit deep linking behavior of the generated link to a single use. Can also be set using type                                                                                                      |
+      | $custom_sms_text          |                           | Text for SMS link sent for desktop clicks to this link. Must contain `{{ link }}` Value of Text me the app page in Settings                                                                                         |
+      | $marketing_title          |                           | The Marketing Title for the deep link in the [Marketing Dashboard](https://dashboard.branch.io/marketing)                                                                                                           |
 
-      | Key | Default | Usage
-      | --- | :-: | ---
-      | $ios_deepview | `default_template` | The name of the deepview template to use for iOS
-      | $android_deepview | `default_template` | The name of the deepview template to use for Android
-      | $desktop_deepview | `default_template` | The name of the deepview template to use for the Desktop
+    * Content
 
-    - Open Graph
+      | Key                   | Default | Usage                                                                                                                                                                                                 |
+      | --------------------- | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+      | $publicly_indexable   |   `1`   | Cannot modify here. Needs to be set by the Branch Universal Object                                                                                                                                    |
+      | $keywords             |         | Keywords for which this content should be discovered by. Just assign an array of strings with the keywords you’d like to use                                                                          |
+      | $canonical_identifier |         | This is the unique identifier for content that will help Branch dedupe across many instances of the same thing. Suitable options: a website with pathing, or a database with identifiers for entities |
+      | $exp_date             |   `0`   | Cannot modify here. Needs to be set by the Branch Universal Object. Must be epoch timestamp with milliseconds                                                                                         |
+      | $content_type         |         | This is a label for the type of content present. Apple recommends that you use uniform type identifier as described here                                                                              |
 
-      | Key | Default | Usage
-      | --- | :-: | ---
-      | $og_title | | Set the title of the link as it will be seen in social media displays
-      | $og_description | | Set the description of the link as it will be seen in social media displays
-      | $og_image_url | | Set the image of the link as it will be seen in social media displays
-      | $og_image_width | | Set the image’s width in pixels for social media displays
-      | $og_image_height | | Set the image’s height in pixels for social media displays
-      | $og_video | | Set a video as it will be seen in social media displays
-      | $og_url | | Set the base URL of the link as it will be seen in social media displays
-      | $og_type | | Set the type of custom card format link as it will be seen in social media displays
-      | $og_redirect | | (Advanced, not recommended) Set a custom URL that we redirect the social media robots to in order to retrieve all the appropriate tags
-      | $og_app_id | | (Rarely used) Sets the app id tag
+    * DeepView
 
-    - Twitter
+      | Key               |      Default       | Usage                                                    |
+      | ----------------- | :----------------: | -------------------------------------------------------- |
+      | $ios_deepview     | `default_template` | The name of the deepview template to use for iOS         |
+      | $android_deepview | `default_template` | The name of the deepview template to use for Android     |
+      | $desktop_deepview | `default_template` | The name of the deepview template to use for the Desktop |
 
-      | Key | Default | Usage
-      | --- | :-: | ---
-      | $twitter_card | | Set the Twitter card type of the link
-      | $twitter_title | | Set the title of the Twitter card
-      | $twitter_description | | Set the description of the Twitter card
-      | $twitter_image_url | | Set the image URL for the Twitter card
-      | $twitter_site | | Set the site for Twitter
-      | $twitter_app_country | | Set the app country for the app card
-      | $twitter_player | | Set the video player’s URL. Defaults to the value of `$og_video`.
-      | $twitter_player_width | | Set the player’s width in pixels
-      | $twitter_player_height | | Set the player’s height in pixels
+    * Open Graph
 
-- #### Link Data: Commerce Properties
-  
-    - For [Track Commerce](#track-commerce)
-    
-    - Categories
+      | Key              | Default | Usage                                                                                                                                  |
+      | ---------------- | :-----: | -------------------------------------------------------------------------------------------------------------------------------------- |
+      | $og_title        |         | Set the title of the link as it will be seen in social media displays                                                                  |
+      | $og_description  |         | Set the description of the link as it will be seen in social media displays                                                            |
+      | $og_image_url    |         | Set the image of the link as it will be seen in social media displays                                                                  |
+      | $og_image_width  |         | Set the image’s width in pixels for social media displays                                                                              |
+      | $og_image_height |         | Set the image’s height in pixels for social media displays                                                                             |
+      | $og_video        |         | Set a video as it will be seen in social media displays                                                                                |
+      | $og_url          |         | Set the base URL of the link as it will be seen in social media displays                                                               |
+      | $og_type         |         | Set the type of custom card format link as it will be seen in social media displays                                                    |
+      | $og_redirect     |         | (Advanced, not recommended) Set a custom URL that we redirect the social media robots to in order to retrieve all the appropriate tags |
+      | $og_app_id       |         | (Rarely used) Sets the app id tag                                                                                                      |
 
-      | Value | Category |
-      | --- | --- |
-      | 0 | Animals & Pet Supplies |
-      | 1 | Apparel & Accessories |
-      | 2 | Arts & Entertainment |
-      | 3 | Baby & Toddler |
-      | 4 | Business & Industrial |
-      | 5 | Camera & Optics |
-      | 6 | Electronics |
-      | 7 | Food, Beverage & Tobacco |
-      | 8 | Furniture |
-      | 9 | Hardware |
-      | 10 | Health & Beauty |
-      | 11 | Home & Garden |
-      | 12 | Luggage & Bags |
-      | 13 | Mature |
-      | 14 | Media |
-      | 15 | Office Supplies |
-      | 16 | Religious & Ceremonial |
-      | 17 | Software |
-      | 18 | Sporting Goods |
-      | 19 | Toys & Games |
-      | 20 | Vehicles & Parts |
+    * Twitter
 
-    - Currencies
+      | Key                    | Default | Usage                                                             |
+      | ---------------------- | :-----: | ----------------------------------------------------------------- |
+      | $twitter_card          |         | Set the Twitter card type of the link                             |
+      | $twitter_title         |         | Set the title of the Twitter card                                 |
+      | $twitter_description   |         | Set the description of the Twitter card                           |
+      | $twitter_image_url     |         | Set the image URL for the Twitter card                            |
+      | $twitter_site          |         | Set the site for Twitter                                          |
+      | $twitter_app_country   |         | Set the app country for the app card                              |
+      | $twitter_player        |         | Set the video player’s URL. Defaults to the value of `$og_video`. |
+      | $twitter_player_width  |         | Set the player’s width in pixels                                  |
+      | $twitter_player_height |         | Set the player’s height in pixels                                 |
 
-      | Value | Currency  |
-      | --- | --- |
-      | 0 | AED | 
-      | 1 | AFN | 
-      | 2 | ALL | 
-      | 3 | AMD | 
-      | 4 | ANG | 
-      | 5 | AOA | 
-      | 6 | ARS | 
-      | 7 | AUD | 
-      | 8 | AWG | 
-      | 9 | AZN | 
-      | 10 | BAM | 
-      | 11 | BBD | 
-      | 12 | BDT | 
-      | 13 | BGN | 
-      | 14 | BHD | 
-      | 15 | BIF | 
-      | 16 | BMD | 
-      | 17 | BND | 
-      | 18 | BOB | 
-      | 19 | BOV | 
-      | 20 | BRL | 
-      | 21 | BSD | 
-      | 22 | BTN | 
-      | 23 | BWP | 
-      | 24 | BYN | 
-      | 25 | BYR | 
-      | 26 | BZD | 
-      | 27 | CAD | 
-      | 28 | CDF | 
-      | 29 | CHE | 
-      | 30 | CHF | 
-      | 31 | CHW | 
-      | 32 | CLF | 
-      | 33 | CLP | 
-      | 34 | CNY | 
-      | 35 | COP | 
-      | 36 | COU | 
-      | 37 | CRC | 
-      | 38 | CUC | 
-      | 39 | CUP | 
-      | 40 | CVE | 
-      | 41 | CZK | 
-      | 42 | DJF | 
-      | 43 | DKK | 
-      | 44 | DOP | 
-      | 45 | DZD | 
-      | 46 | EGP | 
-      | 47 | ERN | 
-      | 48 | ETB | 
-      | 49 | EUR | 
-      | 50 | FJD | 
-      | 51 | FKP | 
-      | 52 | GBP | 
-      | 53 | GEL | 
-      | 54 | GHS | 
-      | 55 | GIP | 
-      | 56 | GMD | 
-      | 57 | GNF | 
-      | 58 | GTQ | 
-      | 59 | GYD | 
-      | 60 | HKD | 
-      | 61 | HNL | 
-      | 62 | HRK | 
-      | 63 | HTG | 
-      | 64 | HUF | 
-      | 65 | IDR | 
-      | 66 | ILS | 
-      | 67 | INR | 
-      | 68 | IQD | 
-      | 69 | IRR | 
-      | 70 | ISK | 
-      | 71 | JMD | 
-      | 72 | JOD | 
-      | 73 | JPY | 
-      | 74 | KES | 
-      | 75 | KGS | 
-      | 76 | KHR | 
-      | 77 | KMF | 
-      | 78 | KPW | 
-      | 79 | KRW | 
-      | 80 | KWD | 
-      | 81 | KYD | 
-      | 82 | KZT | 
-      | 83 | LAK | 
-      | 84 | LBP | 
-      | 85 | LKR | 
-      | 86 | LRD | 
-      | 87 | LSL | 
-      | 88 | LYD | 
-      | 89 | MAD | 
-      | 90 | MDL | 
-      | 91 | MGA | 
-      | 92 | MKD | 
-      | 93 | MMK | 
-      | 94 | MNT | 
-      | 95 | MOP | 
-      | 96 | MRO | 
-      | 97 | MUR | 
-      | 98 | MVR | 
-      | 99 | MWK | 
-      | 100 | MXN | 
-      | 101 | MXV | 
-      | 102 | MYR | 
-      | 103 | MZN | 
-      | 104 | NAD | 
-      | 105 | NGN | 
-      | 106 | NIO | 
-      | 107 | NOK | 
-      | 108 | NPR | 
-      | 109 | NZD | 
-      | 110 | OMR | 
-      | 111 | PAB | 
-      | 112 | PEN | 
-      | 113 | PGK | 
-      | 114 | PHP | 
-      | 115 | PKR | 
-      | 116 | PLN | 
-      | 117 | PYG | 
-      | 118 | QAR | 
-      | 119 | RON | 
-      | 120 | RSD | 
-      | 121 | RUB | 
-      | 122 | RWF | 
-      | 123 | SAR | 
-      | 124 | SBD | 
-      | 125 | SCR | 
-      | 126 | SDG | 
-      | 127 | SEK | 
-      | 128 | SGD | 
-      | 129 | SHP | 
-      | 130 | SLL | 
-      | 131 | SOS | 
-      | 132 | SRD | 
-      | 133 | SSP | 
-      | 134 | STD | 
-      | 135 | SYP | 
-      | 136 | SZL | 
-      | 137 | THB | 
-      | 138 | TJS | 
-      | 139 | TMT | 
-      | 140 | TND | 
-      | 141 | TOP | 
-      | 142 | TRY | 
-      | 143 | TTD | 
-      | 144 | TWD | 
-      | 145 | TZS | 
-      | 146 | UAH | 
-      | 147 | UGX | 
-      | 148 | USD | 
-      | 149 | USN | 
-      | 150 | UYI | 
-      | 151 | UYU | 
-      | 152 | UZS | 
-      | 153 | VEF | 
-      | 154 | VND | 
-      | 155 | VUV | 
-      | 156 | WST | 
-      | 157 | XAF | 
-      | 158 | XAG | 
-      | 159 | XAU | 
-      | 160 | XBA | 
-      | 161 | XBB | 
-      | 162 | XBC | 
-      | 163 | XBD | 
-      | 164 | XCD | 
-      | 165 | XDR | 
-      | 166 | XFU | 
-      | 167 | XOF | 
-      | 168 | XPD | 
-      | 169 | XPF | 
-      | 170 | XPT | 
-      | 171 | XSU | 
-      | 172 | XTS | 
-      | 173 | XUA | 
-      | 174 | XXX | 
-      | 175 | YER | 
-      | 176 | ZAR | 
-      | 177 | ZMW | 
+* #### Link Data: Commerce Properties
 
-- #### Link data: Mixpanel Integration
+  * For [Track Commerce](#track-commerce)
 
-  - Sync with Mixpanel if plugin is installed
+  * Categories
+
+    | Value | Category                 |
+    | ----- | ------------------------ |
+    | 0     | Animals & Pet Supplies   |
+    | 1     | Apparel & Accessories    |
+    | 2     | Arts & Entertainment     |
+    | 3     | Baby & Toddler           |
+    | 4     | Business & Industrial    |
+    | 5     | Camera & Optics          |
+    | 6     | Electronics              |
+    | 7     | Food, Beverage & Tobacco |
+    | 8     | Furniture                |
+    | 9     | Hardware                 |
+    | 10    | Health & Beauty          |
+    | 11    | Home & Garden            |
+    | 12    | Luggage & Bags           |
+    | 13    | Mature                   |
+    | 14    | Media                    |
+    | 15    | Office Supplies          |
+    | 16    | Religious & Ceremonial   |
+    | 17    | Software                 |
+    | 18    | Sporting Goods           |
+    | 19    | Toys & Games             |
+    | 20    | Vehicles & Parts         |
+
+  * Currencies
+
+    | Value | Currency |
+    | ----- | -------- |
+    | 0     | AED      |
+    | 1     | AFN      |
+    | 2     | ALL      |
+    | 3     | AMD      |
+    | 4     | ANG      |
+    | 5     | AOA      |
+    | 6     | ARS      |
+    | 7     | AUD      |
+    | 8     | AWG      |
+    | 9     | AZN      |
+    | 10    | BAM      |
+    | 11    | BBD      |
+    | 12    | BDT      |
+    | 13    | BGN      |
+    | 14    | BHD      |
+    | 15    | BIF      |
+    | 16    | BMD      |
+    | 17    | BND      |
+    | 18    | BOB      |
+    | 19    | BOV      |
+    | 20    | BRL      |
+    | 21    | BSD      |
+    | 22    | BTN      |
+    | 23    | BWP      |
+    | 24    | BYN      |
+    | 25    | BYR      |
+    | 26    | BZD      |
+    | 27    | CAD      |
+    | 28    | CDF      |
+    | 29    | CHE      |
+    | 30    | CHF      |
+    | 31    | CHW      |
+    | 32    | CLF      |
+    | 33    | CLP      |
+    | 34    | CNY      |
+    | 35    | COP      |
+    | 36    | COU      |
+    | 37    | CRC      |
+    | 38    | CUC      |
+    | 39    | CUP      |
+    | 40    | CVE      |
+    | 41    | CZK      |
+    | 42    | DJF      |
+    | 43    | DKK      |
+    | 44    | DOP      |
+    | 45    | DZD      |
+    | 46    | EGP      |
+    | 47    | ERN      |
+    | 48    | ETB      |
+    | 49    | EUR      |
+    | 50    | FJD      |
+    | 51    | FKP      |
+    | 52    | GBP      |
+    | 53    | GEL      |
+    | 54    | GHS      |
+    | 55    | GIP      |
+    | 56    | GMD      |
+    | 57    | GNF      |
+    | 58    | GTQ      |
+    | 59    | GYD      |
+    | 60    | HKD      |
+    | 61    | HNL      |
+    | 62    | HRK      |
+    | 63    | HTG      |
+    | 64    | HUF      |
+    | 65    | IDR      |
+    | 66    | ILS      |
+    | 67    | INR      |
+    | 68    | IQD      |
+    | 69    | IRR      |
+    | 70    | ISK      |
+    | 71    | JMD      |
+    | 72    | JOD      |
+    | 73    | JPY      |
+    | 74    | KES      |
+    | 75    | KGS      |
+    | 76    | KHR      |
+    | 77    | KMF      |
+    | 78    | KPW      |
+    | 79    | KRW      |
+    | 80    | KWD      |
+    | 81    | KYD      |
+    | 82    | KZT      |
+    | 83    | LAK      |
+    | 84    | LBP      |
+    | 85    | LKR      |
+    | 86    | LRD      |
+    | 87    | LSL      |
+    | 88    | LYD      |
+    | 89    | MAD      |
+    | 90    | MDL      |
+    | 91    | MGA      |
+    | 92    | MKD      |
+    | 93    | MMK      |
+    | 94    | MNT      |
+    | 95    | MOP      |
+    | 96    | MRO      |
+    | 97    | MUR      |
+    | 98    | MVR      |
+    | 99    | MWK      |
+    | 100   | MXN      |
+    | 101   | MXV      |
+    | 102   | MYR      |
+    | 103   | MZN      |
+    | 104   | NAD      |
+    | 105   | NGN      |
+    | 106   | NIO      |
+    | 107   | NOK      |
+    | 108   | NPR      |
+    | 109   | NZD      |
+    | 110   | OMR      |
+    | 111   | PAB      |
+    | 112   | PEN      |
+    | 113   | PGK      |
+    | 114   | PHP      |
+    | 115   | PKR      |
+    | 116   | PLN      |
+    | 117   | PYG      |
+    | 118   | QAR      |
+    | 119   | RON      |
+    | 120   | RSD      |
+    | 121   | RUB      |
+    | 122   | RWF      |
+    | 123   | SAR      |
+    | 124   | SBD      |
+    | 125   | SCR      |
+    | 126   | SDG      |
+    | 127   | SEK      |
+    | 128   | SGD      |
+    | 129   | SHP      |
+    | 130   | SLL      |
+    | 131   | SOS      |
+    | 132   | SRD      |
+    | 133   | SSP      |
+    | 134   | STD      |
+    | 135   | SYP      |
+    | 136   | SZL      |
+    | 137   | THB      |
+    | 138   | TJS      |
+    | 139   | TMT      |
+    | 140   | TND      |
+    | 141   | TOP      |
+    | 142   | TRY      |
+    | 143   | TTD      |
+    | 144   | TWD      |
+    | 145   | TZS      |
+    | 146   | UAH      |
+    | 147   | UGX      |
+    | 148   | USD      |
+    | 149   | USN      |
+    | 150   | UYI      |
+    | 151   | UYU      |
+    | 152   | UZS      |
+    | 153   | VEF      |
+    | 154   | VND      |
+    | 155   | VUV      |
+    | 156   | WST      |
+    | 157   | XAF      |
+    | 158   | XAG      |
+    | 159   | XAU      |
+    | 160   | XBA      |
+    | 161   | XBB      |
+    | 162   | XBC      |
+    | 163   | XBD      |
+    | 164   | XCD      |
+    | 165   | XDR      |
+    | 166   | XFU      |
+    | 167   | XOF      |
+    | 168   | XPD      |
+    | 169   | XPF      |
+    | 170   | XPT      |
+    | 171   | XSU      |
+    | 172   | XTS      |
+    | 173   | XUA      |
+    | 174   | XXX      |
+    | 175   | YER      |
+    | 176   | ZAR      |
+    | 177   | ZMW      |
+
+* #### Link data: Mixpanel Integration
+
+  * Sync with Mixpanel if plugin is installed
 
     ```js
-    Branch.setRequestMetadata("$mixpanel_distinct_id", "123")
+    Branch.setRequestMetadata("$mixpanel_distinct_id", "123");
     ```
 
-- #### Compiling: Cordova Dependencies
+* #### Compiling: Cordova Dependencies
 
-  - Node
+  * Node
 
     ```sh
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)";
@@ -1079,25 +1154,25 @@
     brew install node;
     ```
 
-  - Xcode
+  * Xcode
 
-    - Install [Xcode](https://developer.apple.com/download/)
+    * Install [Xcode](https://developer.apple.com/download/)
 
-    - Open Xcode -> agree to SDK license agreement
+    * Open Xcode -> agree to SDK license agreement
 
-    - Open Xcode -> Create new Xcode project -> Run simulator -> Agree to developer mode on mac
+    * Open Xcode -> Create new Xcode project -> Run simulator -> Agree to developer mode on mac
 
-  - Android Studio
+  * Android Studio
 
-    - Read [instructions](https://developer.android.com/studio/install.html)
+    * Read [instructions](https://developer.android.com/studio/install.html)
 
-    - Install [JVM](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+    * Install [JVM](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
-    - Install [Android Studio](https://developer.android.com/studio/index.html)
+    * Install [Android Studio](https://developer.android.com/studio/index.html)
 
-    - Open Android Studio -> configure -> appearance/system settings/android sdk -> android 6.0 -> Okay
+    * Open Android Studio -> configure -> appearance/system settings/android sdk -> android 6.0 -> Okay
 
-    - Open Android Studio -> New project -> ... -> Run -> Create new emulator -> Nexus 6p 23 -> Finish
+    * Open Android Studio -> New project -> ... -> Run -> Create new emulator -> Nexus 6p 23 -> Finish
 
       ```sh
       # add to ~/.bash_profile
@@ -1114,68 +1189,68 @@
       android update sdk;
       ```
 
-    - Install Android SDK build-tools 24.0.1
-    
-    - Generate Android Keystore
-    
+    * Install Android SDK build-tools 24.0.1
+
+    * Generate Android Keystore
+
       ```sh
-      keytool -genkeypair -dname "cn=Full Name, ou=Business Unit, o=Company, c=US" -alias release -keypass aaa111 -keystore release.keystore -storepass aaa111 -validity 10000 
+      keytool -genkeypair -dname "cn=Full Name, ou=Business Unit, o=Company, c=US" -alias release -keypass aaa111 -keystore release.keystore -storepass aaa111 -validity 10000
       keytool -list -v -keystore release.keystore
       ```
 
-  - Genymotion *[optional]*
+  * Genymotion _[optional]_
 
-    - Install [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
+    * Install [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
 
-    - Install [Genymotion](https://www.genymotion.com/download/)
+    * Install [Genymotion](https://www.genymotion.com/download/)
 
-    - Genymotion -> Add virtual device -> Google Nexus 6P - 6.0.0 - API 23 -> Next
+    * Genymotion -> Add virtual device -> Google Nexus 6P - 6.0.0 - API 23 -> Next
 
-- #### Compiling: Show Console Logs
+* #### Compiling: Show Console Logs
 
-  - iOS Simulator
+  * iOS Simulator
 
-    - `cordova run ios;`
+    * `cordova run ios;`
 
-    - Safari -> Preferences -> Advance -> Show Develop menu in menu bar
+    * Safari -> Preferences -> Advance -> Show Develop menu in menu bar
 
-    - Safari -> Develop -> Simulator -> index.html -> Console
+    * Safari -> Develop -> Simulator -> index.html -> Console
 
-    - *May need to unplug and replug device*
+    * _May need to unplug and replug device_
 
-    - *May need to open Xcode and update provisioning profile*
+    * _May need to open Xcode and update provisioning profile_
 
-  - iOS Xcode
+  * iOS Xcode
 
-    - `cordova plugin add cordova-plugin-console;`
+    * `cordova plugin add cordova-plugin-console;`
 
-    - `cordova build ios;`
+    * `cordova build ios;`
 
-    - Xcode -> APP_LOCATION/platforms/ios/APP_NAME.Xcodeproj
+    * Xcode -> APP_LOCATION/platforms/ios/APP_NAME.Xcodeproj
 
-    - Xcode -> App -> General -> Signing -> Team
+    * Xcode -> App -> General -> Signing -> Team
 
-    - Xcode -> Product -> Run
+    * Xcode -> Product -> Run
 
-    - Xcode -> View -> Debug Area -> Activate Console
+    * Xcode -> View -> Debug Area -> Activate Console
 
-  - Android Device
+  * Android Device
 
-    - Plug device in
+    * Plug device in
 
-    - `cordova run android;`
+    * `cordova run android;`
 
-    - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
+    * Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
 
-  - Android Genymotion
+  * Android Genymotion
 
-    - Genymotion -> Start
+    * Genymotion -> Start
 
-    - `cordova run android;`
+    * `cordova run android;`
 
-    - Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
+    * Chrome -> [chrome://inspect/#devices](chrome://inspect/#devices) -> Console
 
-- #### Compiling: Updating the Branch SDK
+* #### Compiling: Updating the Branch SDK
 
   ```bash
   # terminal
@@ -1188,24 +1263,37 @@
   <plugin name="branch-cordova-sdk" spec="^2.6.0" />
   ```
 
-  - [Test Deep Link iOS](#test-deep-link-ios)
-  - [Test Deep Link Android](#test-deep-link-android)
+  * [Test Deep Link iOS](#test-deep-link-ios)
+  * [Test Deep Link Android](#test-deep-link-android)
 
-- #### Compiling: Incompatible Plugins
+* #### Compiling: Incompatible Plugins
 
-  - The following plugins will not work with the Branch SDK
+  * The following plugins will not work with the Branch SDK
 
-  - [PhoneGap NFC Plugin](https://github.com/chariotsolutions/phonegap-nfc)
+  * [PhoneGap NFC Plugin](https://github.com/chariotsolutions/phonegap-nfc)
 
-  - [Custom URL scheme](https://github.com/EddyVerbruggen/Custom-URL-scheme)
+  * [Custom URL scheme](https://github.com/EddyVerbruggen/Custom-URL-scheme)
 
-  - [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
+  * [Cordova Universal Links Plugin](https://github.com/nordnet/cordova-universal-links-plugin)
 
-  - [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
+  * [Ionic Deeplinks Plugin](https://github.com/driftyco/ionic-plugin-deeplinks)
 
-- #### Compiling: Errors
+* #### Compiling: Errors
 
-  - error
+  * ##### Migrating Branch Cordova SDK from v2.5+ to v3.0+
+
+    ```diff
+    // Branch initialization
+    - Branch.initSession(function(data) {
+    + Branch.initSession().then(function(data) {
+      if (data["+clicked_branch_link"]) {
+        // read deep link data on click
+        alert("Deep Link Data: " + JSON.stringify(data));
+      }
+    });
+    ```
+
+  * error
 
     ```sh
     ORIGINAL EXCEPTION: Branch is not defined
@@ -1215,20 +1303,22 @@
     ReferenceError: Branch is not defined
     ```
 
-    - Branch opens and installs your app. You cannot simulate Branch in the desktop browser
+    * Branch opens and installs your app. You cannot simulate Branch in the desktop browser
 
       ```js
       // Ionic 2/3 - running on browser instead of device
-      if (!platform.is('cordova')) { return }
-      Branch.userCompletedAction('did_this')
+      if (!platform.is("cordova")) {
+        return;
+      }
+      Branch.userCompletedAction("did_this");
       ```
 
       ```js
       // Ionic 2/3 - missing Branch import
-      declare var Branch
+      declare var Branch;
       ```
 
-  - error
+  * error
 
     ```sh
     ** ARCHIVE FAILED **
@@ -1239,9 +1329,9 @@
     Error: Error code 65 for command: xcodebuild with args: -xcconfig,cordova/build-debug.xcconfig,-workspace,Branch Testing.xcworkspace,-scheme,Branch Testing,-configuration,Debug,-destination,generic/platform=iOS,-archivePath,Branch Testing.xcarchive,archive,CONFIGURATION_BUILD_DIR=build/device,SHARED_PRECOMPS_DIR=build/sharedpch
     ```
 
-      - Open app in `Xcode` and launch from there (to select a `Provisioning Profile`)
+    * Open app in `Xcode` and launch from there (to select a `Provisioning Profile`)
 
-  - error
+  * error
 
     ```sh
     An invalid value 'XC com eneff branch cordova_testbed' was provided for the parameter 'appIdName'.
@@ -1251,12 +1341,10 @@
     No profiles for 'com.eneff.branch.cordova_testbed' were found
     ```
 
-      - Don't use `cordova`, `hyphens` (Android), or `underscores` (iOS) in your bundle id (widget id)
+    * Don't use `cordova`, `hyphens` (Android), or `underscores` (iOS) in your bundle id (widget id)
 
     ```sh
     Error: Error code 1 for command: /gradlew with args: cdvBuildDebug,-b,/build.gradle,-Dorg.gradle.daemon=true,-Pandroid.useDeprecatedNdk=true
     ```
 
-      - Add `<preference name="android-minSdkVersion" value="16" />` to your `config.xml`
-
-
+    * Add `<preference name="android-minSdkVersion" value="16" />` to your `config.xml`

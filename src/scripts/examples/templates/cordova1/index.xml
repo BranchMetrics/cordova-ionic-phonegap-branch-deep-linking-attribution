@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.eneff.branch.cordovatestbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <branch-config>
+        <branch-key value="key_live_ndqptlgXNE4LHqIahH1WIpbiyFlb62J3" />
+        <uri-scheme value="branchcordova" />
+        <link-domain value="cordova.app.link" />
+        <ios-team-release value="PW4Q8885U7" />
+    </branch-config>
+    <preference name="android-minSdkVersion" value="16" />
+    <name>Cordova1</name>
+    <description>Testing App For Branch Cordova</description>
+    <author email="support@branch.io" href="https://support.branch.io/support/tickets/new">Branch Support</author>
+    <content src="index.html" />
+    <plugin name="cordova-plugin-console" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+</widget>

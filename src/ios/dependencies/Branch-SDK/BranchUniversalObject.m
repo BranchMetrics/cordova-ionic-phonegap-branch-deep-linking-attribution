@@ -88,6 +88,7 @@ BranchCondition _Nonnull BranchConditionRefurbished   = @"REFURBISHED";
     addDouble(ratingAverage,    $rating_average);
     addInteger(ratingCount,     $rating_count);
     addDouble(ratingMax,        $rating_max);
+    addDouble(rating,           $rating);
     addString(addressStreet,    $address_street);
     addString(addressCity,      $address_city);
     addString(addressRegion,    $address_region);
@@ -122,6 +123,7 @@ BranchCondition _Nonnull BranchConditionRefurbished   = @"REFURBISHED";
     addDouble(ratingAverage,    $rating_average);
     addInteger(ratingCount,     $rating_count);
     addDouble(ratingMax,        $rating_max);
+    addDouble(rating,           $rating);
     addString(addressStreet,    $address_street);
     addString(addressCity,      $address_city);
     addString(addressRegion,    $address_region);
@@ -480,7 +482,8 @@ BranchCondition _Nonnull BranchConditionRefurbished   = @"REFURBISHED";
             // Log share completed event
             if (completed && !activityError) {
                 [[BranchEvent customEventWithName:BNCShareCompletedEvent contentItem:self] logEvent];
-                [BNCFabricAnswers sendEventWithName:@"Branch Share" andAttributes:[self getDictionaryWithCompleteLinkProperties:linkProperties]];
+                [BNCFabricAnswers sendEventWithName:@"Branch Share" andAttributes:
+                    [self getDictionaryWithCompleteLinkProperties:linkProperties]];
             }
             if (completion)
                 completion(activityType, completed);
@@ -606,7 +609,7 @@ BranchCondition _Nonnull BranchConditionRefurbished   = @"REFURBISHED";
     } else {
         NSError *error = [NSError branchErrorWithCode:BNCSpotlightPublicIndexError
                                      localizedMessage:@"Publically indexed cannot be removed from Spotlight"];
-        completion(error);
+        if (completion) completion(error);
     }
 }
 
@@ -684,6 +687,7 @@ BranchCondition _Nonnull BranchConditionRefurbished   = @"REFURBISHED";
         @"$rating_average",
         @"$rating_count",
         @"$rating_max",
+        @"$rating",
         @"$address_street",
         @"$address_city",
         @"$address_region",

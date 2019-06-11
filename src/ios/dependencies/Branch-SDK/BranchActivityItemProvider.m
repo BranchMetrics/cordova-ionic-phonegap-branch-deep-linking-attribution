@@ -107,7 +107,14 @@
     
     // Because Facebook et al immediately scrape URLs, we add an additional parameter to the
     // existing list, telling the backend to ignore the first click
-    NSArray *scrapers = @[@"Facebook", @"Twitter", @"Slack", @"Apple Notes"];
+    NSArray *scrapers = @[
+        @"Facebook",
+        @"Twitter",
+        @"Slack",
+        @"Apple Notes",
+        @"Skype",
+        @"SMS"
+    ];
     for (NSString *scraper in scrapers) {
         if ([channel isEqualToString:scraper]) {
             NSURL *URL = [NSURL URLWithString:[[Branch getInstance]
@@ -169,7 +176,6 @@
 #pragma mark - Internals
 
 + (NSString *)humanReadableChannelWithActivityType:(NSString *)activityString {
-    NSString *channel = activityString; //default
     NSDictionary *channelMappings = [[NSDictionary alloc] initWithObjectsAndKeys:
         @"Pasteboard",  UIActivityTypeCopyToPasteboard,
         @"Email",       UIActivityTypeMail,
@@ -188,6 +194,8 @@
         @"WeChat",      @"com.tencent.xin.sharetimeline",
         @"LINE",        @"jp.naver.line.Share",
 		@"Pinterest",   @"pinterest.ShareExtension",
+        @"Skype",       @"com.skype.skype.sharingextension",
+        @"Apple Reminders", @"com.apple.reminders.RemindersEditorExtension",
 
         //  Keys for older app versions --
 
@@ -196,11 +204,12 @@
 
         nil
     ];
-    // Set to a more human readible sting if we can identify it
-    if ([channelMappings objectForKey:activityString]) {
-        channel = channelMappings[activityString];
+    // Set to a more human readable string if we can identify it.
+    if (activityString) {
+        NSString*humanString = channelMappings[activityString];
+        if (humanString) activityString = humanString;
     }
-    return channel;
+    return activityString;
 }
 
 - (NSDictionary *)paramsForChannel:(NSString *)channel {

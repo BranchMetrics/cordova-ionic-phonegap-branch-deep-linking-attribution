@@ -1,10 +1,12 @@
-//
-//  BNCError.h
-//  Branch-SDK
-//
-//  Created by Qinwei Gong on 11/17/14.
-//  Copyright (c) 2014 Branch Metrics. All rights reserved.
-//
+/**
+ @file          BNCError.h
+ @package       Branch-SDK
+ @brief         Branch errors.
+
+ @author        Qinwei Gong
+ @date          November 2014
+ @copyright     Copyright © 2014 Branch. All rights reserved.
+*/
 
 #if __has_feature(modules)
 @import Foundation;
@@ -30,6 +32,7 @@ typedef NS_ENUM(NSInteger, BNCErrorCode) {
     BNCRedeemZeroCreditsError       = 1012,
     BNCSpotlightIdentifierError     = 1013,
     BNCSpotlightPublicIndexError    = 1014,
+    BNCTrackingDisabledError        = 1015,
     BNCHighestError,
 };
 
@@ -39,4 +42,5 @@ typedef NS_ENUM(NSInteger, BNCErrorCode) {
 + (NSError*_Nonnull) branchErrorWithCode:(BNCErrorCode)errorCode localizedMessage:(NSString*_Nullable)message;
 @end
 
-void BNCForceNSErrorCategoryToLoad(void) __attribute__((constructor));
+void BNCForceNSErrorCategoryToLoad(void)
+    __attribute__((constructor));

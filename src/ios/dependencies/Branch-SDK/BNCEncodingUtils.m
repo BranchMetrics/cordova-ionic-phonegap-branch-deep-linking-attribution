@@ -11,7 +11,47 @@
 #import "BNCLog.h"
 #import <CommonCrypto/CommonDigest.h>
 
-#pragma mark BNCKeyValue
+#pragma mark BNCWireFormat
+
+NSDate* BNCDateFromWireFormat(id object) {
+    NSDate *date = nil;
+    if ([object respondsToSelector:@selector(doubleValue)]) {
+        NSTimeInterval t = [object doubleValue];
+        date = [NSDate dateWithTimeIntervalSince1970:t/1000.0];
+    }
+    return date;
+}
+
+NSNumber* BNCWireFormatFromDate(NSDate *date) {
+    NSNumber *number = nil;
+    NSTimeInterval t = [date timeIntervalSince1970];
+    if (date && t != 0.0 ) {
+        number = [NSNumber numberWithLongLong:(long long)(t*1000.0)];
+    }
+    return number;
+}
+
+NSNumber* BNCWireFormatFromBool(BOOL b) {
+    return (b) ? (__bridge NSNumber*) kCFBooleanTrue : nil;
+}
+
+NSString* BNCStringFromWireFormat(id object) {
+    if ([object isKindOfClass:NSString.class])
+        return object;
+    else
+    if ([object respondsToSelector:@selector(stringValue)])
+        return [object stringValue];
+    else
+    if ([object respondsToSelector:@selector(description)])
+        return [object description];
+    return nil;
+}
+
+NSString* BNCWireFormatFromString(NSString *string) {
+    return string;
+}
+
+#pragma mark - BNCKeyValue
 
 @implementation BNCKeyValue
 
@@ -103,10 +143,15 @@
 
 + (NSString *)sanitizedStringFromString:(NSString *)dirtyString {
     NSString *dirtyCopy = [dirtyString copy]; // dirtyString seems to get dealloc'ed sometimes. Make a copy.
-    NSString *cleanString = [[[[dirtyCopy stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]
-                                          stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"]
-                                          stringByReplacingOccurrencesOfString:@"’" withString:@"'"]
-                                          stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+    NSString *cleanString = [[[[[[[[dirtyCopy
+        stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"]
+        stringByReplacingOccurrencesOfString:@"\b" withString:@"\\b"]
+        stringByReplacingOccurrencesOfString:@"\f" withString:@"\\f"]
+        stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"]
+        stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"]
+        stringByReplacingOccurrencesOfString:@"\t" withString:@"\\t"]
+        stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]
+        stringByReplacingOccurrencesOfString:@"`"  withString:@"'"];
     return cleanString;
 }
 
@@ -289,6 +334,11 @@
     return [string stringByRemovingPercentEncoding];
 }
 
++ (NSString*) stringByPercentEncodingStringForQuery:(NSString *)string {
+    return [string stringByAddingPercentEncodingWithAllowedCharacters:
+                [NSCharacterSet URLQueryAllowedCharacterSet]];
+}
+
 #pragma mark - Param Decoding Methods
 
 + (NSDictionary *)decodeJsonDataToDictionary:(NSData *)jsonData {
@@ -394,7 +444,7 @@
     int highValue = -1;
     const uint8_t *p = (const uint8_t*) [inputData bytes];
     for (NSUInteger i = 0; i < inputData.length; ++i) {
-        int value = -1;
+        int value;
         if (*p >= '0' && *p <= '9')
             value = *p - '0';
         else

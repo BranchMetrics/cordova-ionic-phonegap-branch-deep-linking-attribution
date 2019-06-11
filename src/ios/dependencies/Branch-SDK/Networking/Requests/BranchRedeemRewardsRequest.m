@@ -11,11 +11,9 @@
 #import "BranchConstants.h"
 
 @interface BranchRedeemRewardsRequest ()
-
 @property (assign, nonatomic) NSInteger amount;
 @property (strong, nonatomic) NSString *bucket;
 @property (copy) callbackWithStatus callback;
-
 @end
 
 @implementation BranchRedeemRewardsRequest
@@ -32,14 +30,12 @@
 
 - (void)makeRequest:(BNCServerInterface *)serverInterface key:(NSString *)key callback:(BNCServerCallback)callback {
     BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
-    NSDictionary *params = @{
-        BRANCH_REQUEST_KEY_BUCKET: self.bucket,
-        BRANCH_REQUEST_KEY_AMOUNT: @(self.amount),
-        BRANCH_REQUEST_KEY_DEVICE_FINGERPRINT_ID: preferenceHelper.deviceFingerprintID,
-        BRANCH_REQUEST_KEY_BRANCH_IDENTITY: preferenceHelper.identityID,
-        BRANCH_REQUEST_KEY_SESSION_ID: preferenceHelper.sessionID
-    };
-
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    params[BRANCH_REQUEST_KEY_BUCKET] = self.bucket;
+    params[BRANCH_REQUEST_KEY_AMOUNT] = @(self.amount);
+    params[BRANCH_REQUEST_KEY_DEVICE_FINGERPRINT_ID] = preferenceHelper.deviceFingerprintID;
+    params[BRANCH_REQUEST_KEY_BRANCH_IDENTITY] = preferenceHelper.identityID;
+    params[BRANCH_REQUEST_KEY_SESSION_ID] = preferenceHelper.sessionID;
     [serverInterface postRequest:params url:[preferenceHelper getAPIURL:BRANCH_REQUEST_ENDPOINT_REDEEM_REWARDS] key:key callback:callback];
 }
 
@@ -62,12 +58,12 @@
     }
 }
 
-#pragma mark - NSCoding methods
+#pragma mark - NSSecureCoding methods
 
 - (id)initWithCoder:(NSCoder *)decoder {
     if ((self = [super initWithCoder:decoder])) {
         _amount = [decoder decodeIntegerForKey:@"amount"];
-        _bucket = [decoder decodeObjectForKey:@"bucket"];
+        _bucket = [decoder decodeObjectOfClass:NSString.class forKey:@"bucket"];
     }
     
     return self;
@@ -75,7 +71,6 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     [super encodeWithCoder:coder];
-    
     [coder encodeInteger:self.amount forKey:@"amount"];
     [coder encodeObject:self.bucket forKey:@"bucket"];
 }

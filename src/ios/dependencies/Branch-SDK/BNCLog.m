@@ -1,21 +1,15 @@
+/**
+ @file          BNCLog.m
+ @package       Branch-SDK
+ @brief         Simple logging functions.
 
-
-//--------------------------------------------------------------------------------------------------
-//
-//                                                                                          BNCLog.m
-//                                                                                  Branch.framework
-//
-//                                                                          Simple logging functions
-//                                                                        Edward Smith, October 2016
-//
-//                                             -©- Copyright © 2016 Branch, all rights reserved. -©-
-//
-//--------------------------------------------------------------------------------------------------
-
+ @author        Edward Smith
+ @date          October 2016
+ @copyright     Copyright © 2016 Branch. All rights reserved.
+*/
 
 #import "BNCLog.h"
 #import <stdatomic.h> // import not available in Xcode 7
-
 
 #define _countof(array)  (sizeof(array)/sizeof(array[0]))
 static NSNumber *bnc_LogIsInitialized = nil;
@@ -48,6 +42,7 @@ void BNCLogInternalErrorFunction(int linenumber, NSString*format, ...) {
 
 
 inline static void BNCLogInitializeClient_Internal() {
+    BNCLogInitialize();
     BNCLogClientInitializeFunctionPtr initFunction = BNCLogSetClientInitializeFunction(NULL);
     if (initFunction) {
         initFunction();
@@ -434,9 +429,8 @@ BOOL BNCLogByteWrapOpenURL_Internal(NSURL *url, long maxBytes) {
     NSString *record = BNCLogByteWrapReadNextRecord();
     while (record) {
         NSDate *date = nil;
-        NSString *dateString = @"";
         if (record.length >= 27) {
-            dateString = [record substringWithRange:NSMakeRange(0, 27)];
+            NSString *dateString = [record substringWithRange:NSMakeRange(0, 27)];
             date = [bnc_LogDateFormatter dateFromString:dateString];
         }
         if (!date || [date compare:lastDate] < 0) {
@@ -477,6 +471,7 @@ void BNCLogSetOutputToURLByteWrap(NSURL *_Nullable URL, long maxBytes) {
 static BNCLogLevel bnc_LogDisplayLevel = BNCLogLevelWarning;
 
 BNCLogLevel BNCLogDisplayLevel() {
+    BNCLogInitializeClient_Internal();
     __block BNCLogLevel level = BNCLogLevelAll;
     dispatch_sync(bnc_LogQueue, ^{
         level = bnc_LogDisplayLevel;
@@ -599,7 +594,7 @@ void BNCLogSetFlushFunction(BNCLogFlushFunctionPtr flushFunction) {
 void BNCLogWriteMessageFormat(
         BNCLogLevel logLevel,
         const char *_Nullable file,
-        int lineNumber,
+        int32_t lineNumber,
         NSString *_Nullable message,
         ...
     ) {
@@ -648,10 +643,10 @@ void BNCLogWriteMessageFormat(
 void BNCLogWriteMessage(
         BNCLogLevel logLevel,
         NSString *_Nonnull file,
-        NSUInteger lineNumber,
+        int32_t lineNumber,
         NSString *_Nonnull message
     ) {
-    BNCLogWriteMessageFormat(logLevel, file.UTF8String, (int)lineNumber, @"%@", message);
+    BNCLogWriteMessageFormat(logLevel, file.UTF8String, lineNumber, @"%@", message);
 }
 
 void BNCLogFlushMessages() {

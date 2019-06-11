@@ -36,19 +36,6 @@ BranchStandardEvent BranchStandardEventCompleteTutorial       = @"COMPLETE_TUTOR
 BranchStandardEvent BranchStandardEventAchieveLevel           = @"ACHIEVE_LEVEL";
 BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVEMENT";
 
-#pragma mark - BranchEventRequest
-
-@interface BranchEventRequest : BNCServerRequest <NSCoding>
-
-- (instancetype) initWithServerURL:(NSURL*)serverURL
-                   eventDictionary:(NSDictionary*)eventDictionary
-                        completion:(void (^)(NSDictionary* response, NSError* error))completion;
-
-@property (strong) NSDictionary *eventDictionary;
-@property (strong) NSURL *serverURL;
-@property (copy)   void (^completion)(NSDictionary* response, NSError* error);
-@end
-
 @implementation BranchEventRequest
 
 - (instancetype) initWithServerURL:(NSURL*)serverURL
@@ -84,14 +71,14 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
 		self.completion(dictionary, error);
 }
 
-#pragma mark BranchEventRequest NSCoding
+#pragma mark BranchEventRequest NSSecureCoding
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [super initWithCoder:decoder];
 	if (!self) return self;
 
-	self.serverURL = [decoder decodeObjectForKey:@"serverURL"];
-	self.eventDictionary = [decoder decodeObjectForKey:@"eventDictionary"];
+	self.serverURL = [decoder decodeObjectOfClass:NSString.class forKey:@"serverURL"];
+	self.eventDictionary = [decoder decodeObjectOfClass:NSDictionary.class forKey:@"eventDictionary"];
     return self;
 }
 
@@ -99,6 +86,10 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
     [super encodeWithCoder:coder];
     [coder encodeObject:self.serverURL forKey:@"serverURL"];
     [coder encodeObject:self.eventDictionary forKey:@"eventDictionary"];
+}
+
++ (BOOL) supportsSecureCoding {
+    return YES;
 }
 
 @end

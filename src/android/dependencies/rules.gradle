@@ -1,0 +1,11 @@
+dependencies {
+    compile (name:'Branch', ext:'aar')
+}
+repositories {
+    flatDir {
+        dirs 'app/libs', 'libs'
+    }
+}
+
+
+
