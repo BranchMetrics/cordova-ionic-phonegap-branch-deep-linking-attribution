@@ -5,7 +5,8 @@
   const compare = require("node-version-compare");
   const IOS_DEPLOYMENT_TARGET = "8.0";
   const COMMENT_KEY = /_comment$/;
-  const CODESIGNIDENTITY = "iPhone Developer";
+  const DEBUGCODESIGNIDENTITY = "iPhone Developer";
+  const RELEASECODESIGNIDENTITY = "iPhone Distribution";
 
   // entry
   module.exports = {
@@ -37,12 +38,20 @@
       xcodeProject.pbxXCBuildConfigurationSection()
     );
     let config;
+    let configurationConfig;
     let buildSettings;
 
     for (config in configurations) {
-      buildSettings = configurations[config].buildSettings;
-      buildSettings.CODE_SIGN_IDENTITY = `"${CODESIGNIDENTITY}"`;
+      configurationConfig = configurations[config];
+      buildSettings = configurationConfig.buildSettings;
+
       buildSettings.CODE_SIGN_ENTITLEMENTS = `"${entitlementsFile}"`;
+
+      if (configurationConfig.name === 'Release') {
+        buildSettings.CODE_SIGN_IDENTITY = `"${RELEASECODESIGNIDENTITY}"`;
+      } else {
+        buildSettings.CODE_SIGN_IDENTITY = `"${DEBUGCODESIGNIDENTITY}"`;
+      }
 
       // if deployment target is less then the required one - increase it
       if (buildSettings.IPHONEOS_DEPLOYMENT_TARGET) {
