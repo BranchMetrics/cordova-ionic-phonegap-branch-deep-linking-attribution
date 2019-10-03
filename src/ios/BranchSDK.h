@@ -37,7 +37,6 @@
 - (void)userCompletedAction:(CDVInvokedUrlCommand*)command;
 - (void)logout:(CDVInvokedUrlCommand*)command;
 - (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command;
-- (void)setAppleSearchAdsDebugMode:(CDVInvokedUrlCommand*)command;
 
 // Branch Referral Reward System
 - (void)loadRewards:(CDVInvokedUrlCommand*)command;

@@ -29,7 +29,7 @@
     manifest.file = updateBranchAppLinks(
       manifest.file,
       manifest.mainActivityIndex,
-      preferences,
+      preferences
     );
 
     // save manifest
