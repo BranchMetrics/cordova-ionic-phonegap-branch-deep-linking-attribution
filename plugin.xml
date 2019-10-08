@@ -65,7 +65,6 @@ SOFTWARE.
     <framework src="io.branch.sdk.android:library:4.1.0"/>
   </platform>
 
-
   <!-- iOS -->
   <platform name="ios">
       <plugins-plist key="BranchSDK" string="BranchSDK" />

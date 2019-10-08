@@ -739,6 +739,58 @@
   }];
 }
 
+#pragma mark Branch Query Methods
+
+- (void)crossPlatformIds:(CDVInvokedUrlCommand *)command {
+  NSMutableDictionary *json = [NSMutableDictionary new];
+  
+  Branch *branch = [self getInstance];
+  [branch crossPlatformIdDataWithCompletion:^(BranchCrossPlatformID *cpid) {
+    CDVPluginResult* pluginResult = nil;
+    if (cpid) {
+      // Convert the ObjC object back into JSON.  Should have kept the raw JSON response.
+      [json setObject:cpid.developerID forKey:@"developer_identity"];
+      [json setObject:cpid.crossPlatformID forKey:@"cross_platform_id"];
+      [json setObject:cpid.pastCrossPlatformIDs forKey:@"past_cross_platform_ids"];
+
+      NSMutableArray *probCPIDs = [NSMutableArray new];
+      for (BranchProbabilisticCrossPlatformID *tmp in cpid.probabiliticCrossPlatformIDs) {
+        if (tmp.crossPlatformID && tmp.score) {
+          NSMutableDictionary *pair = [NSMutableDictionary new];
+          [pair setObject:tmp.crossPlatformID forKey:@"id"];   
+          [pair setObject:tmp.score forKey:@"probability"];
+          [probCPIDs addObject:pair];             
+        }
+      }
+      [json setObject:probCPIDs forKey:@"prob_cross_platform_ids"];
+
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:json];
+    } else {
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No CPIDs available"];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }];
+}
+
+- (void)lastAttributedTouchData:(CDVInvokedUrlCommand *)command {
+  NSMutableDictionary *json = [NSMutableDictionary new];
+  
+  Branch *branch = [self getInstance];
+  [branch lastTouchAttributedDataWithCompletion:^(BranchLastAttributedTouchData * _Nullable latd) {
+    CDVPluginResult* pluginResult = nil;
+    if (latd) {
+      [json setObject:latd.attributionWindow forKey:@"attribution_window"];
+      [json setObject:latd.lastAttributedTouchJSON forKey:@"last_attributed_touch_data"];
+
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:json];
+    } else {
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No LATD available"];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }];
+}
+
+
 #pragma mark - URL Methods (not fully implemented YET!)
 
 - (NSString *)getShortURL:(CDVInvokedUrlCommand*)command

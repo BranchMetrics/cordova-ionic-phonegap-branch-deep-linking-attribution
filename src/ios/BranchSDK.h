@@ -52,4 +52,8 @@
 - (void)onLinkShareResponse:(CDVInvokedUrlCommand*)command;
 - (void)listOnSpotlight:(CDVInvokedUrlCommand*)command;
 
+// Branch Query Methods
+- (void)crossPlatformIds:(CDVInvokedUrlCommand *)command;
+- (void)lastAttributedTouchData:(CDVInvokedUrlCommand *)command;
+
 @end
