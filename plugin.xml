@@ -62,9 +62,9 @@ SOFTWARE.
     <!-- Manifest configuration is done via a js script.  We should move it to this config in the future. -->
 
     <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-    <source-file src="src/android/dependencies/Branch.aar" target-dir="app/libs" />
-    <framework src="src/android/dependencies/rules.gradle" custom="true" type="gradleReference" />
+    <framework src="io.branch.sdk.android:library:4.1.0"/>
   </platform>
+
 
   <!-- iOS -->
   <platform name="ios">
