@@ -1,3 +1,16 @@
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.2.0...v4.0.0) (2019-10-10)
+
+* Update iOS SDK to 0.29.1
+* Update Android SDK to 4.1.0
+* Switch to Cocoapods
+* Switch to Maven
+* Add CPID and LATD methods
+
+Known issues:
+iOS command line build fails due to switch to cocoapods.  https://github.com/apache/cordova-ios/issues/659
+CPID and LATD methods do not work on Android.
+
 <a name="3.2.0"></a>
 # [3.2.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.6...v3.2.0) (2019-5-24)
 
