@@ -41,6 +41,7 @@
   function getManifest(context) {
     let pathToManifest;
     let manifest;
+    let targetSdk;
 
     try {
       // cordova platform add android@6.0.0
@@ -71,8 +72,12 @@
     const mainActivityIndex = getMainLaunchActivityIndex(
       manifest.manifest.application[0].activity
     );
-    const targetSdk =
-      manifest.manifest["uses-sdk"][0].$["android:targetSdkVersion"];
+
+    /**
+     * https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking-attribution/issues/581
+     */
+    const useSdk = manifest.manifest["uses-sdk"];
+    targetSdk = Array.isArray(useSdk) ? useSdk[0].$["android:targetSdkVersion"] : targetSdk;
 
     return {
       file: manifest,
