@@ -896,6 +896,7 @@ public class BranchSDK extends CordovaPlugin {
                     jsonObject.put("prob_cross_platform_ids", branchCPID.getProbabilisticCrossPlatformIds());
                 } catch (Exception e) {
                     // just send back and empty object on json error
+                    jsonObject = new JSONObject();
                 }
 
                 Log.d(LCAT, jsonObject.toString());
