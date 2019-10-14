@@ -817,6 +817,8 @@ public class BranchSDK extends CordovaPlugin {
                 event.setDescription(metaData.getString("description"));
             } else if (key.equals("searchQuery")) {
                 event.setSearchQuery(metaData.getString("searchQuery"));
+            } else if (key.equals("customerEventAlias")) {
+                event.setCustomerEventAlias(metaData.getString("customerEventAlias"));
             } else if (key.equals("customData")) {
                 JSONObject customData = metaData.getJSONObject("customData");
                 keys = customData.keys();
