@@ -10,9 +10,9 @@
 * Fix foreground linking
 
 Known issues:
-iOS command line build fails due a cordova issue, workaround is to build from xcode.  https://github.com/apache/cordova-ios/issues/659
-Android installation hooks require Android platform to be added before the plugin.
-CPID and LATD methods do not work on Android.
+iOS command line build fails due a cordova issue, workaround is to build from xcode.  SDK-558  https://github.com/apache/cordova-ios/issues/659
+Android installation hooks require Android platform to be added before the plugin.  SDK-585
+CPID and LATD methods do not work on Android.  SDK-557
 
 <a name="3.2.0"></a>
 # [3.2.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.6...v3.2.0) (2019-5-24)
