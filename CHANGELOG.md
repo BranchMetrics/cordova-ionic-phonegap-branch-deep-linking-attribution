@@ -1,8 +1,8 @@
 <a name="4.0.0"></a>
-# [4.0.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.2.0...v4.0.0) (2019-10-10)
+# [4.0.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.2.0...v4.0.0) (2019-10-15)
 
 * Update iOS SDK to 0.29.1
-* Update Android SDK to 4.1.0
+* Update Android SDK to 4.1.1
 * Switch to Cocoapods
 * Switch to Maven
 * Add Event Alias
