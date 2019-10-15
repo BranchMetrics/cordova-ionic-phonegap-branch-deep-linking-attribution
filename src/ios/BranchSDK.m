@@ -279,7 +279,7 @@
             event.eventDescription = [metadata objectForKey:key];
         }
         else if ([key isEqualToString:@"customerEventAlias"]) {
-            event.customerEventAlias = [metadata objectForKey:key];
+            event.alias = [metadata objectForKey:key];
         }
         else if ([key isEqualToString:@"customData"] && [[metadata objectForKey:key] isKindOfClass:[NSMutableDictionary class]]) {
             event.customData = [metadata objectForKey:key];

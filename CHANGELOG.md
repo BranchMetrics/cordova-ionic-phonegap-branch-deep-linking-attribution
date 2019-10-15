@@ -6,9 +6,10 @@
 * Switch to Cocoapods
 * Switch to Maven
 * Add CPID and LATD methods
+* Add Event alias
 
 Known issues:
-iOS command line build fails due to switch to cocoapods.  https://github.com/apache/cordova-ios/issues/659
+iOS command line build fails due a cordova issue, workaround is to build from xcode.  https://github.com/apache/cordova-ios/issues/659
 CPID and LATD methods do not work on Android.
 
 <a name="3.2.0"></a>
