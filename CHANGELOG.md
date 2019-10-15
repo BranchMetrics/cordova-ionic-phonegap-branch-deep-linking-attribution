@@ -7,6 +7,7 @@
 * Switch to Maven
 * Add Event Alias
 * Add CPID and LATD methods
+* Add Amazon Fire ID
 * Fix foreground linking
 
 Known issues:
