@@ -5,11 +5,13 @@
 * Update Android SDK to 4.1.0
 * Switch to Cocoapods
 * Switch to Maven
+* Add Event Alias
 * Add CPID and LATD methods
-* Add Event alias
+* Fix foreground linking
 
 Known issues:
 iOS command line build fails due a cordova issue, workaround is to build from xcode.  https://github.com/apache/cordova-ios/issues/659
+Android installation hooks require Android platform to be added before the plugin.
 CPID and LATD methods do not work on Android.
 
 <a name="3.2.0"></a>
