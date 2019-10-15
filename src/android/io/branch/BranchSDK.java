@@ -48,6 +48,8 @@ public class BranchSDK extends CordovaPlugin {
     private Branch instance;
     private String deepLinkUrl;
 
+    private SessionListener sessionListener;
+
     /**
      * Class Constructor
      */
@@ -79,6 +81,7 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity.setIntent(intent);
 
+        this.reInitSession();
     }
 
     /**
@@ -284,9 +287,18 @@ public class BranchSDK extends CordovaPlugin {
             this.deepLinkUrl = data.toString();
         }
 
+        this.sessionListener = new SessionListener(callbackContext);
         this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-        this.instance.initSession(new SessionListener(callbackContext), data, activity);
+        this.instance.initSession(this.sessionListener, data, activity);
+    }
 
+    private void reInitSession() {
+        if (this.sessionListener == null) {
+            return;
+        }
+
+        this.activity = this.cordova.getActivity();
+        this.instance.reInitSession(this.activity, this.sessionListener);
     }
 
     /**
