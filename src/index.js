@@ -122,14 +122,6 @@ Branch.prototype.delayInitToCheckForSearchAds = function delayInitToCheckForSear
   return execute("delayInitToCheckForSearchAds", [value]);
 };
 
-Branch.prototype.setAppleSearchAdsDebugMode = function setAppleSearchAdsDebugMode(
-  isEnabled
-) {
-  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
-
-  return execute("setAppleSearchAdsDebugMode", [value]);
-};
-
 Branch.prototype.getFirstReferringParams = function getFirstReferringParams() {
   return execute("getFirstReferringParams");
 };
@@ -302,6 +294,14 @@ Branch.prototype.redeemRewards = function redeemRewards(value, bucket) {
 
 Branch.prototype.creditHistory = function creditHistory() {
   return execute("getCreditHistory");
+};
+
+Branch.prototype.crossPlatformIds = function crossPlatformIds() {
+  return execute("crossPlatformIds");
+};
+
+Branch.prototype.lastAttributedTouchData = function lastAttributedTouchData() {
+  return execute("lastAttributedTouchData");
 };
 
 // export Branch object
