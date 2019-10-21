@@ -29,8 +29,7 @@
     manifest.file = updateBranchAppLinks(
       manifest.file,
       manifest.mainActivityIndex,
-      preferences,
-      manifest.targetSdk
+      preferences
     );
 
     // save manifest
@@ -72,7 +71,6 @@
     const mainActivityIndex = getMainLaunchActivityIndex(
       manifest.manifest.application[0].activity
     );
-
     /**
      * https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking-attribution/issues/581
      */
@@ -82,8 +80,7 @@
     return {
       file: manifest,
       path: pathToManifest,
-      mainActivityIndex: mainActivityIndex,
-      targetSdk: targetSdk
+      mainActivityIndex: mainActivityIndex
     };
   }
 
@@ -235,8 +232,7 @@
   function updateBranchAppLinks(
     manifest,
     mainActivityIndex,
-    preferences,
-    targetSdk
+    preferences
   ) {
     let intentFilters =
       manifest.manifest.application[0].activity[mainActivityIndex][
@@ -248,9 +244,6 @@
       "android:name": androidName,
       "android:autoVerify": "true"
     };
-    if (targetSdk && parseInt(targetSdk) < 23) {
-      delete header["android:autoVerify"];
-    }
 
     // remove
     intentFilters = removeBasedOnAndroidName(intentFilters, androidName);
