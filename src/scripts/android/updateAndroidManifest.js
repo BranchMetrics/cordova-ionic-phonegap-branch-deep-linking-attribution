@@ -41,6 +41,7 @@
   function getManifest(context) {
     let pathToManifest;
     let manifest;
+    let targetSdk;
 
     try {
       // cordova platform add android@6.0.0
@@ -71,8 +72,8 @@
     const mainActivityIndex = getMainLaunchActivityIndex(
       manifest.manifest.application[0].activity
     );
-    const targetSdk =
-      manifest.manifest["uses-sdk"][0].$["android:targetSdkVersion"];
+    const usesSdk = manifest.manifest["uses-sdk"];
+    targetSdk = Array.isArray(usesSdk) ? usesSdk[0].$["android:targetSdkVersion"] : undefined;
 
     return {
       file: manifest,
