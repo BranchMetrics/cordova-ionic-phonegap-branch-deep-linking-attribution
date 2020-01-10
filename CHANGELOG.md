@@ -1,3 +1,8 @@
+<a name="3.2.1"></a>
+# [3.2.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.2.0...v3.2.1) (2020-1-10)
+
+* Fix uses-sdk issue.
+
 <a name="3.2.0"></a>
 # [3.2.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.1.6...v3.2.0) (2019-5-24)
 
