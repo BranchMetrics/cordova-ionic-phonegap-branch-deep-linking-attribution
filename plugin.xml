@@ -36,7 +36,7 @@ SOFTWARE.
 
   <!-- Dependencies -->
   <engines>
-    <engine name="cordova" version=">=3.5.0" />
+    <engine name="cordova" version=">=9.0.0" />
   </engines>
 
   <!-- Hooks -->
@@ -62,7 +62,7 @@ SOFTWARE.
     <!-- Manifest configuration is done via a js script.  We should move it to this config in the future. -->
 
     <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-    <framework src="io.branch.sdk.android:library:4.1.1"/>
+    <framework src="io.branch.sdk.android:library:4.2.1"/>
   </platform>
 
   <!-- iOS -->
@@ -86,7 +86,7 @@ SOFTWARE.
               <source url="https://github.com/CocoaPods/Specs.git"/>
           </config>
           <pods use-frameworks="true">
-              <pod name="Branch" spec="~> 0.29.0" />
+              <pod name="Branch" spec="~> 0.31.3" />
           </pods>
       </podspec>
   </platform>
