@@ -24,7 +24,7 @@ SOFTWARE.
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="branch-cordova-sdk"
-  version="4.0.0">
+  version="4.0.1">
 
   <!-- Description -->
   <name>branch-cordova-sdk</name>
@@ -85,7 +85,7 @@ SOFTWARE.
           <config>
               <source url="https://github.com/CocoaPods/Specs.git"/>
           </config>
-          <pods use-frameworks="true">
+          <pods>
               <pod name="Branch" spec="~> 0.31.3" />
           </pods>
       </podspec>
