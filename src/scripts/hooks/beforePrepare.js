@@ -1,9 +1,8 @@
-(function() {
+(function () {
   // properties
 
   const configPreferences = require("../npm/processConfigXml.js");
   const iosPlist = require("../ios/updatePlist.js");
-  const iosCapabilities = require("../ios/enableEntitlements.js");
   const iosAssociatedDomains = require("../ios/updateAssociatedDomains.js");
   const IOS = "ios";
 
@@ -18,7 +17,6 @@
     platforms.forEach(platform => {
       if (platform === IOS) {
         iosPlist.addBranchSettings(preferences);
-        iosCapabilities.enableAssociatedDomains(preferences);
         iosAssociatedDomains.addAssociatedDomains(preferences);
       }
     });
