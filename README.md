@@ -1373,6 +1373,7 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
     * For BOTH Cordova and Capacitor, you must use Xcode >= 11.1, CocoaPods >= 1.8.4, Cordova >= 9.0.0, Ionic-CLI >= 5.1, cordova-ios >= 5.1.0
       * Every single one of these dependencies has fixes that allow the command line build, and the pod dependency resolution to work correctly
     * You MUST use @capacitor/ios >= 1.4.0. Versions prior to that version did not federate the OpenURL notifications to other plugins, including Branch.
+    * `use_frameworks` has been removed from this plugin and will now be statically built. If the other podfile uses `use_frameworks` that is fine but this plugin no longer flags itself as dynamic.
     * When using Capacitor, you must add the following entries yourself to `ios/App/App/Info.plist`:
       ```sh
         <key>CFBundleURLTypes</key>
