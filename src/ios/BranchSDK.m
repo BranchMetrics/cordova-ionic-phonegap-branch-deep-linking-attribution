@@ -746,7 +746,7 @@
 
 - (void)crossPlatformIds:(CDVInvokedUrlCommand *)command {
   NSMutableDictionary *json = [NSMutableDictionary new];
-  
+
   Branch *branch = [self getInstance];
   [branch crossPlatformIdDataWithCompletion:^(BranchCrossPlatformID *cpid) {
     CDVPluginResult* pluginResult = nil;
@@ -760,9 +760,9 @@
       for (BranchProbabilisticCrossPlatformID *tmp in cpid.probabiliticCrossPlatformIDs) {
         if (tmp.crossPlatformID && tmp.score) {
           NSMutableDictionary *pair = [NSMutableDictionary new];
-          [pair setObject:tmp.crossPlatformID forKey:@"id"];   
+          [pair setObject:tmp.crossPlatformID forKey:@"id"];
           [pair setObject:tmp.score forKey:@"probability"];
-          [probCPIDs addObject:pair];             
+          [probCPIDs addObject:pair];
         }
       }
       [json setObject:probCPIDs forKey:@"prob_cross_platform_ids"];
@@ -777,9 +777,9 @@
 
 - (void)lastAttributedTouchData:(CDVInvokedUrlCommand *)command {
   NSMutableDictionary *json = [NSMutableDictionary new];
-  
+
   Branch *branch = [self getInstance];
-  [branch lastTouchAttributedDataWithCompletion:^(BranchLastAttributedTouchData * _Nullable latd) {
+  [branch lastAttributedTouchDataWithAttributionWindow:30 completion:^(BranchLastAttributedTouchData * _Nullable latd) {
     CDVPluginResult* pluginResult = nil;
     if (latd) {
       [json setObject:latd.attributionWindow forKey:@"attribution_window"];
