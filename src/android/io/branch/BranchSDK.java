@@ -20,6 +20,8 @@ import java.util.Iterator;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
+import io.branch.referral.BranchUtil;
+import io.branch.referral.PrefHelper;
 import io.branch.referral.BranchError;
 import io.branch.referral.BranchViewHandler;
 import io.branch.referral.SharingHelper;
@@ -31,8 +33,8 @@ import io.branch.referral.util.Product;
 import io.branch.referral.util.ProductCategory;
 import io.branch.referral.util.ShareSheetStyle;
 
-import io.branch.referral.util.BranchCrossPlatformId;
-import io.branch.referral.util.BranchLastAttributedTouchData;
+//import io.branch.referral.util.BranchCrossPlatformId;
+//import io.branch.referral.util.BranchLastAttributedTouchData;
 
 public class BranchSDK extends CordovaPlugin {
 
@@ -70,8 +72,13 @@ public class BranchSDK extends CordovaPlugin {
         this.activity = this.cordova.getActivity();
 
         Branch.disableInstantDeepLinking(true);
-        Branch.getAutoInstance(this.activity.getApplicationContext());
-
+        BranchUtil.setPluginType(BranchUtil.PluginType.CordovaIonic);
+        if (this.instance == null) {
+            this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
+            PrefHelper.Debug("pluginInitialize, creating new Branch instance");
+        } else {
+            PrefHelper.Debug("pluginInitialize, Branch instance already exists");
+        }
     }
 
     /**
@@ -260,11 +267,11 @@ public class BranchSDK extends CordovaPlugin {
     }
     
     public void crossPlatformIds(CallbackContext callbackContext) {
-        this.instance.getCrossPlatformIds(new BranchCPIDListener(callbackContext));
+//        this.instance.getCrossPlatformIds(new BranchCPIDListener(callbackContext));
     }
 
     public void lastAttributedTouchData(CallbackContext callbackContext) {
-        this.instance.getLastAttributedTouchData(new BranchLATDListener(callbackContext), 30);
+//        this.instance.getLastAttributedTouchData(new BranchLATDListener(callbackContext), 30);
     }
 
     //////////////////////////////////////////////////
@@ -288,7 +295,8 @@ public class BranchSDK extends CordovaPlugin {
         }
 
         this.sessionListener = new SessionListener(callbackContext);
-        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
+        Branch.enableLogging();
+        PrefHelper.Debug("BranchSDK.initSession");
         this.instance.initSession(this.sessionListener, data, activity);
     }
 
@@ -298,6 +306,7 @@ public class BranchSDK extends CordovaPlugin {
         }
 
         this.activity = this.cordova.getActivity();
+        PrefHelper.Debug("BranchSDK.reInitSession");
         this.instance.reInitSession(this.activity, this.sessionListener);
     }
 
@@ -609,10 +618,8 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity = this.cordova.getActivity();
 
-        Branch instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-
         if (linkDomain != null) {
-            instance.enableCookieBasedMatching(linkDomain);
+            Branch.enableCookieBasedMatching(linkDomain);
         }
 
         callbackContext.success("Success");
@@ -627,7 +634,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void setDebug(boolean isEnable, CallbackContext callbackContext) {
         this.activity = this.cordova.getActivity();
-        Branch.getAutoInstance(this.activity.getApplicationContext()).setDebug();
+        Branch.enableDebugMode();
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
     }
 
@@ -641,7 +648,8 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void disableTracking(boolean isEnable, CallbackContext callbackContext) {
         this.activity = this.cordova.getActivity();
-        Branch.getAutoInstance(this.activity.getApplicationContext()).disableTracking(isEnable);
+
+        this.instance.disableTracking(isEnable);
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
     }
 
@@ -888,59 +896,59 @@ public class BranchSDK extends CordovaPlugin {
     //----------- INNER CLASS LISTENERS ------------//
     //////////////////////////////////////////////////
 
-    protected class BranchCPIDListener implements BranchCrossPlatformId.BranchCrossPlatformIdListener {
-        private CallbackContext _callbackContext;
-
-        public BranchCPIDListener(CallbackContext callbackContext) {
-            this._callbackContext = callbackContext;
-        }
-
-        @Override
-        public void onDataFetched(BranchCrossPlatformId.BranchCPID branchCPID, BranchError error) {
-            if (error != null) {
-                Log.d(LCAT, "CPID unavailable");
-                this._callbackContext.error("CPID unavailable");
-            } else {
-
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("developer_identity", branchCPID.getDeveloperIdentity());
-                    jsonObject.put("cross_platform_id", branchCPID.getCrossPlatformID());
-                    jsonObject.put("past_cross_platform_ids", branchCPID.getPastCrossPlatformIds());
-                    jsonObject.put("prob_cross_platform_ids", branchCPID.getProbabilisticCrossPlatformIds());
-                } catch (JSONException e) {
-                    // just send back and empty object on json error
-                    jsonObject = new JSONObject();
-                }
-
-                Log.d(LCAT, jsonObject.toString());
-
-                PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObject);
-                this._callbackContext.sendPluginResult(result);
-            }
-        }
-    }
-
-    protected class BranchLATDListener implements BranchLastAttributedTouchData.BranchLastAttributedTouchDataListener {
-        private CallbackContext _callbackContext;
-
-        public BranchLATDListener(CallbackContext callbackContext) {
-            this._callbackContext = callbackContext;
-        }
-
-        @Override
-        public void onDataFetched(JSONObject jsonObject, BranchError error) {
-            if (error != null) {
-                Log.d(LCAT, "LATD unavailable");
-                this._callbackContext.error("LATD unavailable");
-            } else {
-                Log.d(LCAT, jsonObject.toString());
-
-                PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObject);
-                this._callbackContext.sendPluginResult(result);
-            }
-        }
-    }
+//    protected class BranchCPIDListener implements BranchCrossPlatformId.BranchCrossPlatformIdListener {
+//        private CallbackContext _callbackContext;
+//
+//        public BranchCPIDListener(CallbackContext callbackContext) {
+//            this._callbackContext = callbackContext;
+//        }
+//
+//        @Override
+//        public void onDataFetched(BranchCrossPlatformId.BranchCPID branchCPID, BranchError error) {
+//            if (error != null) {
+//                Log.d(LCAT, "CPID unavailable");
+//                this._callbackContext.error("CPID unavailable");
+//            } else {
+//
+//                JSONObject jsonObject = new JSONObject();
+//                try {
+//                    jsonObject.put("developer_identity", branchCPID.getDeveloperIdentity());
+//                    jsonObject.put("cross_platform_id", branchCPID.getCrossPlatformID());
+//                    jsonObject.put("past_cross_platform_ids", branchCPID.getPastCrossPlatformIds());
+//                    jsonObject.put("prob_cross_platform_ids", branchCPID.getProbabilisticCrossPlatformIds());
+//                } catch (JSONException e) {
+//                    // just send back and empty object on json error
+//                    jsonObject = new JSONObject();
+//                }
+//
+//                Log.d(LCAT, jsonObject.toString());
+//
+//                PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObject);
+//                this._callbackContext.sendPluginResult(result);
+//            }
+//        }
+//    }
+//
+//    protected class BranchLATDListener implements BranchLastAttributedTouchData.BranchLastAttributedTouchDataListener {
+//        private CallbackContext _callbackContext;
+//
+//        public BranchLATDListener(CallbackContext callbackContext) {
+//            this._callbackContext = callbackContext;
+//        }
+//
+//        @Override
+//        public void onDataFetched(JSONObject jsonObject, BranchError error) {
+//            if (error != null) {
+//                Log.d(LCAT, "LATD unavailable");
+//                this._callbackContext.error("LATD unavailable");
+//            } else {
+//                Log.d(LCAT, jsonObject.toString());
+//
+//                PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObject);
+//                this._callbackContext.sendPluginResult(result);
+//            }
+//        }
+//    }
 
     protected class BranchViewEventsListener implements BranchViewHandler.IBranchViewEvents {
 
@@ -986,6 +994,7 @@ public class BranchSDK extends CordovaPlugin {
 
             if (error == null && referringParams != null) {
                 if (this._callbackContext != null) {
+                    PrefHelper.Debug("success returning referringParams = " + referringParams);
                     this._callbackContext.success(referringParams);
                 }
             } else {
@@ -996,6 +1005,7 @@ public class BranchSDK extends CordovaPlugin {
                     e.printStackTrace();
                 }
                 if (this._callbackContext != null) {
+                    PrefHelper.Debug("fail returning error = " + error.getMessage());
                     this._callbackContext.error(message);
                 }
             }
