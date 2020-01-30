@@ -69,10 +69,8 @@ public class BranchSDK extends CordovaPlugin {
      */
     @Override
     protected void pluginInitialize() {
-        PrefHelper.Debug("pluginInitialize");
 
         this.activity = this.cordova.getActivity();
-//        Branch.enableLogging();
         Branch.disableInstantDeepLinking(true);
         BranchUtil.setPluginType(BranchUtil.PluginType.CordovaIonic);
         if (this.instance == null) {
@@ -294,7 +292,6 @@ public class BranchSDK extends CordovaPlugin {
         }
 
         this.sessionListener = new SessionListener(callbackContext);
-        PrefHelper.Debug("BranchSDK.initSession");
         this.instance.initSession(this.sessionListener, data, activity);
     }
 
@@ -304,7 +301,6 @@ public class BranchSDK extends CordovaPlugin {
         }
 
         this.activity = this.cordova.getActivity();
-        PrefHelper.Debug("BranchSDK.reInitSession");
         this.instance.reInitSession(this.activity, this.sessionListener);
     }
 
@@ -992,7 +988,6 @@ public class BranchSDK extends CordovaPlugin {
 
             if (error == null && referringParams != null) {
                 if (this._callbackContext != null) {
-                    PrefHelper.Debug("success returning referringParams = " + referringParams);
                     this._callbackContext.success(referringParams);
                 }
             } else {
@@ -1003,7 +998,6 @@ public class BranchSDK extends CordovaPlugin {
                     e.printStackTrace();
                 }
                 if (this._callbackContext != null) {
-                    PrefHelper.Debug("fail returning error = " + error.getMessage());
                     this._callbackContext.error(message);
                 }
             }
