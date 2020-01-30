@@ -71,7 +71,7 @@ public class BranchSDK extends CordovaPlugin {
         PrefHelper.Debug("pluginInitialize");
 
         this.activity = this.cordova.getActivity();
-        Branch.enableLogging();
+//        Branch.enableLogging();
         Branch.disableInstantDeepLinking(true);
         BranchUtil.setPluginType(BranchUtil.PluginType.CordovaIonic);
         if (this.instance == null) {
@@ -83,7 +83,7 @@ public class BranchSDK extends CordovaPlugin {
      * Called when the activity receives a new intent.
      */
     public void onNewIntent(Intent intent) {
-
+        intent.putExtra("branch_force_new_session", true);
         this.activity.setIntent(intent);
 
         this.reInitSession();
