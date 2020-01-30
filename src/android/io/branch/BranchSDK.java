@@ -33,8 +33,9 @@ import io.branch.referral.util.Product;
 import io.branch.referral.util.ProductCategory;
 import io.branch.referral.util.ShareSheetStyle;
 
-//import io.branch.referral.util.BranchCrossPlatformId;
-//import io.branch.referral.util.BranchLastAttributedTouchData;
+import io.branch.referral.ServerRequestGetLATD.BranchLastAttributedTouchDataListener;
+import io.branch.referral.ServerRequestGetCPID.BranchCrossPlatformIdListener;
+import io.branch.referral.util.BranchCPID;
 
 public class BranchSDK extends CordovaPlugin {
 
@@ -265,11 +266,11 @@ public class BranchSDK extends CordovaPlugin {
     }
     
     public void crossPlatformIds(CallbackContext callbackContext) {
-//        this.instance.getCrossPlatformIds(new BranchCPIDListener(callbackContext));
+        this.instance.getCrossPlatformIds(new BranchCPIDListener(callbackContext));
     }
 
     public void lastAttributedTouchData(CallbackContext callbackContext) {
-//        this.instance.getLastAttributedTouchData(new BranchLATDListener(callbackContext), 30);
+        this.instance.getLastAttributedTouchData(new BranchLATDListener(callbackContext), 30);
     }
 
     //////////////////////////////////////////////////
@@ -893,59 +894,59 @@ public class BranchSDK extends CordovaPlugin {
     //----------- INNER CLASS LISTENERS ------------//
     //////////////////////////////////////////////////
 
-//    protected class BranchCPIDListener implements BranchCrossPlatformId.BranchCrossPlatformIdListener {
-//        private CallbackContext _callbackContext;
-//
-//        public BranchCPIDListener(CallbackContext callbackContext) {
-//            this._callbackContext = callbackContext;
-//        }
-//
-//        @Override
-//        public void onDataFetched(BranchCrossPlatformId.BranchCPID branchCPID, BranchError error) {
-//            if (error != null) {
-//                Log.d(LCAT, "CPID unavailable");
-//                this._callbackContext.error("CPID unavailable");
-//            } else {
-//
-//                JSONObject jsonObject = new JSONObject();
-//                try {
-//                    jsonObject.put("developer_identity", branchCPID.getDeveloperIdentity());
-//                    jsonObject.put("cross_platform_id", branchCPID.getCrossPlatformID());
-//                    jsonObject.put("past_cross_platform_ids", branchCPID.getPastCrossPlatformIds());
-//                    jsonObject.put("prob_cross_platform_ids", branchCPID.getProbabilisticCrossPlatformIds());
-//                } catch (JSONException e) {
-//                    // just send back and empty object on json error
-//                    jsonObject = new JSONObject();
-//                }
-//
-//                Log.d(LCAT, jsonObject.toString());
-//
-//                PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObject);
-//                this._callbackContext.sendPluginResult(result);
-//            }
-//        }
-//    }
-//
-//    protected class BranchLATDListener implements BranchLastAttributedTouchData.BranchLastAttributedTouchDataListener {
-//        private CallbackContext _callbackContext;
-//
-//        public BranchLATDListener(CallbackContext callbackContext) {
-//            this._callbackContext = callbackContext;
-//        }
-//
-//        @Override
-//        public void onDataFetched(JSONObject jsonObject, BranchError error) {
-//            if (error != null) {
-//                Log.d(LCAT, "LATD unavailable");
-//                this._callbackContext.error("LATD unavailable");
-//            } else {
-//                Log.d(LCAT, jsonObject.toString());
-//
-//                PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObject);
-//                this._callbackContext.sendPluginResult(result);
-//            }
-//        }
-//    }
+    protected class BranchCPIDListener implements BranchCrossPlatformIdListener {
+        private CallbackContext _callbackContext;
+
+        public BranchCPIDListener(CallbackContext callbackContext) {
+            this._callbackContext = callbackContext;
+        }
+
+        @Override
+        public void onDataFetched(BranchCPID branchCPID, BranchError error) {
+            if (error != null) {
+                Log.d(LCAT, "CPID unavailable");
+                this._callbackContext.error("CPID unavailable");
+            } else {
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("developer_identity", branchCPID.getDeveloperIdentity());
+                    jsonObject.put("cross_platform_id", branchCPID.getCrossPlatformID());
+                    jsonObject.put("past_cross_platform_ids", branchCPID.getPastCrossPlatformIds());
+                    jsonObject.put("prob_cross_platform_ids", branchCPID.getProbabilisticCrossPlatformIds());
+                } catch (JSONException e) {
+                    // just send back and empty object on json error
+                    jsonObject = new JSONObject();
+                }
+
+                Log.d(LCAT, jsonObject.toString());
+
+                PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObject);
+                this._callbackContext.sendPluginResult(result);
+            }
+        }
+    }
+
+    protected class BranchLATDListener implements BranchLastAttributedTouchDataListener {
+        private CallbackContext _callbackContext;
+
+        public BranchLATDListener(CallbackContext callbackContext) {
+            this._callbackContext = callbackContext;
+        }
+
+        @Override
+        public void onDataFetched(JSONObject jsonObject, BranchError error) {
+            if (error != null) {
+                Log.d(LCAT, "LATD unavailable");
+                this._callbackContext.error("LATD unavailable");
+            } else {
+                Log.d(LCAT, jsonObject.toString());
+
+                PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObject);
+                this._callbackContext.sendPluginResult(result);
+            }
+        }
+    }
 
     protected class BranchViewEventsListener implements BranchViewHandler.IBranchViewEvents {
 
