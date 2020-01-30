@@ -68,16 +68,14 @@ public class BranchSDK extends CordovaPlugin {
      */
     @Override
     protected void pluginInitialize() {
+        PrefHelper.Debug("pluginInitialize");
 
         this.activity = this.cordova.getActivity();
-
+        Branch.enableLogging();
         Branch.disableInstantDeepLinking(true);
         BranchUtil.setPluginType(BranchUtil.PluginType.CordovaIonic);
         if (this.instance == null) {
             this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-            PrefHelper.Debug("pluginInitialize, creating new Branch instance");
-        } else {
-            PrefHelper.Debug("pluginInitialize, Branch instance already exists");
         }
     }
 
@@ -295,7 +293,6 @@ public class BranchSDK extends CordovaPlugin {
         }
 
         this.sessionListener = new SessionListener(callbackContext);
-        Branch.enableLogging();
         PrefHelper.Debug("BranchSDK.initSession");
         this.instance.initSession(this.sessionListener, data, activity);
     }
