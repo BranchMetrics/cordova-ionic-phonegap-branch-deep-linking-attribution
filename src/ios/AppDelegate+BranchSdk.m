@@ -8,6 +8,9 @@
 #import <Branch/Branch.h>
 #endif
 
+// Provides Ionic Capacitor compatibility
+#import <Cordova/CDVPlugin.h>
+
 @interface AppDelegate (BranchSDK)
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler;
