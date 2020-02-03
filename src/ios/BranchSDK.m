@@ -1,5 +1,7 @@
 #import "BranchSDK.h"
 
+NSString * const pluginVersion = @"4.0.1";
+
 @interface BranchSDK()
 
 @property (strong, nonatomic) NSString *deepLinkUrl;
@@ -77,6 +79,7 @@
 
 - (void)initSession:(CDVInvokedUrlCommand*)command
 {
+  [[Branch getInstance] registerPluginName:"CordovaIonic" versio:pluginVersion];
   [[Branch getInstance] initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
 
     NSString *resultString = nil;

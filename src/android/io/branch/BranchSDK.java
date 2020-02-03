@@ -44,6 +44,8 @@ public class BranchSDK extends CordovaPlugin {
 
     // Standard Debugging Variables
     private static final String LCAT = "CordovaBranchSDK";
+    // todo pick up plugin version dynamically
+    private static final String BRANCH_PLUGIN_VERSION = "4.0.1";
 
     // Private Method Properties
     private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;
@@ -73,6 +75,7 @@ public class BranchSDK extends CordovaPlugin {
         this.activity = this.cordova.getActivity();
         Branch.disableInstantDeepLinking(true);
         BranchUtil.setPluginType(BranchUtil.PluginType.CordovaIonic);
+        BranchUtil.setPluginVersion(BRANCH_PLUGIN_VERSION);
         if (this.instance == null) {
             this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
         }
