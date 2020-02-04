@@ -1,6 +1,6 @@
 #import "BranchSDK.h"
 
-NSString * const pluginVersion = @"4.1.0";
+NSString * const pluginVersion = @"4.1.1";
 
 @interface BranchSDK()
 
@@ -79,7 +79,7 @@ NSString * const pluginVersion = @"4.1.0";
 
 - (void)initSession:(CDVInvokedUrlCommand*)command
 {
-  [[Branch getInstance] registerPluginName:"CordovaIonic" versio:pluginVersion];
+  [[Branch getInstance] registerPluginName:@"CordovaIonic" version:pluginVersion];
   [[Branch getInstance] initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
 
     NSString *resultString = nil;
