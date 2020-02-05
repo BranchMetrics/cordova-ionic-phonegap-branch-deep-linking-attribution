@@ -1,4 +1,14 @@
 <a name="4.0.0"></a>
+# [4.1.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.1.0...v4.1.1) (2020-2-3)
+
+* Hotfix removing typo in iOS code
+
+# [4.1.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.0.0...v4.1.0) (2020-2-3)
+
+* Update update iOS SDK 0.31.x
+* Update update Android SDK 4.3.2
+* Set plugin type/name and version
+
 # [4.0.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v3.2.0...v4.0.0) (2019-10-15)
 
 * Update iOS SDK to 0.29.1
