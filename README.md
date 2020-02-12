@@ -1365,7 +1365,7 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 
     Command-line builds result in the above error. Please see the section below [Compiling: Capacitor](#compiling-capacitor) for the full list of up-to-date dependencies needed for CLI builds to work.
 
-* #### Compiling: Capacitor
+* #### Compiling: Cordova 8
 
   * ##### Version 4.1.x of this plugin works with Cordova 8, but you need to add some fields to your config.xml file:
 
