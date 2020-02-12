@@ -55,6 +55,7 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
   * [Compiling: Updating the Branch SDK](#compiling-updating-the-branch-sdk)
   * [Compiling: Incompatible Plugins](#compiling-incompatible-plugins)
   * [Compiling: Errors](#compiling-errors)
+  * [Compiling: Cordova 8](#compiling-cordova-8)
   * [Compiling: Capacitor](#compiling-capacitor)
   * [AppStore: iOS](#appstore-ios)
 
@@ -1364,17 +1365,42 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
 
     Command-line builds result in the above error. Please see the section below [Compiling: Capacitor](#compiling-capacitor) for the full list of up-to-date dependencies needed for CLI builds to work.
 
+* #### Compiling: Cordova 8
+
+  * ##### Version 4.1.x of this plugin works with Cordova 8, but you need to add some fields to your config.xml file:
+
+    * Cordova 8 does not correctly support CocoaPods, which the 4.x releases of this plugin utilize
+    * This plugin can't include both versions of the pod spec, which changed between Cordova 8 and Cordova 9. We have chosen to include the Cordova 9 version.
+    * In order to support Cordova 8's handling of CocoaPods, you must install an extra Cordova plugin to correctly incorporate our CocoaPod ("Branch" v.0.31.3 as of 2020.02.10)
+    * Install the plugin [cordova-plugin-cocoapods-support](https://github.com/blakgeek/cordova-plugin-cocoapods-support)
+    * That plugin does not add any code to your app, it is strictly a Cordova hook to create your Podfile before building your app.
+    * Add the following lines to the `widget/platform[name="ios"]` path in config.xml:
+      ```
+      <preference name="pods_ios_min_version" value="<YOUR MINIMUM VALUE>" />
+      <pod name="Branch" spec="~> 0.31.3" />
+      ```
+    * Replace `<YOUR MINIMUM VALUE>` with the minimum iOS version your app requires, e.g. "8" or "10.0" or "11.4"
+    * Run `cordova prepare ios` again and ensure you see console output similar to 
+      ```
+      Searching for new pods
+      Checking config.xml for pods.
+      config.xml requires pod: Branch
+      Installing pods
+      Sit back and relax this could take a while.
+      ```
+    * Provided that the dependencies listed in the next section are up to date (see [Compiling: Capacitor](#compiling-capacitor)), you should also be able to do `cordova build ios` without issue.
+
 * #### Compiling: Capacitor
 
-  * ##### Version 4.0.1 of this plugin works with Ionic 4 + Cordova and Ionic 4 + Capacitor, with the following caveats:
+  * ##### Version 4.1.0 of this plugin works with Ionic 4 + Cordova and Ionic 4 + Capacitor, with the following caveats:
 
     * We strongly recommend Node >= 10.15. Node 8 might work, but it is not tested.
-    * For BOTH Cordova and Capacitor, you must use Xcode >= 11.1, CocoaPods >= 1.8.4, Cordova >= 9.0.0, Ionic-CLI >= 5.1, cordova-ios >= 5.1.0
+    * For BOTH Cordova and Capacitor, you must use Xcode >= 11.1, CocoaPods >= 1.8.4, Cordova >= 8.0.0, Ionic-CLI >= 5.1, cordova-ios >= 5.1.0
       * Every single one of these dependencies has fixes that allow the command line build, and the pod dependency resolution to work correctly
     * You MUST use @capacitor/ios >= 1.4.0. Versions prior to that version did not federate the OpenURL notifications to other plugins, including Branch.
-    * `use_frameworks` has been removed from this plugin and will now be statically built. If the other podfile uses `use_frameworks` that is fine but this plugin no longer flags itself as dynamic.
+    * `use_frameworks` has been removed from this plugin and will now be statically built. If the another podfile uses `use_frameworks` that is fine but this plugin no longer flags itself as dynamic. Ideally your app should be updated to remove `use_frameworks!` from your Podfile.
     * When using Capacitor, you must add the following entries yourself to `ios/App/App/Info.plist`:
-      ```sh
+      ```
         <key>CFBundleURLTypes</key>
         <array>
           <dict>
@@ -1399,11 +1425,12 @@ _Questions? [Contact us](https://support.branch.io/support/tickets/new)_
         <key>branch_app_domain</key>
         <string>[YOUR DOMAIN].app.link</string>
       ```
+      This is a limitation of Capacitor where explicit config changes are the developer's responsibility in order to avoid "magic config"
     * When using Capacitor, you must add your Associated Domains entitlements via the Xcode entitlement editor yourself
-      * This MUST be done using Xcode - this is part of Capacitor's philosophy whereby you are in control of every config file change
+      * This MUST be done using Xcode - again this is part of Capacitor's core philosophy whereby you are in control of every config file change
       * Open the "Signing & Entitlements" tab in Xcode, add the Associated Domains entitlement, and add the urls found on your Branch dashboard.
 
 * #### AppStore: iOS
 
   * #### App rejected because it uses push notification features but does not declare the aps-environment key
-    When branch-cordova-sdk moved to use CocoaPods, a change was introduced in Cordova 9 where the separate entitlement files were no longer flattened together. This issue has been fixed in version 4.0.1 of this plugin.
+    When branch-cordova-sdk moved to use CocoaPods, a change was introduced in Cordova 9 where the separate entitlement files were no longer flattened together. This issue has been fixed in version 4.1.0 of this plugin by directly adding the Branch config to your existing entitlements rather than creating new entitlement files. This change is backward-compatible with Cordova 8.
