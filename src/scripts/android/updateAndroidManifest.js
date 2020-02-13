@@ -17,10 +17,10 @@
     // update manifest
     manifest.file = updateBranchMetaData(manifest.file, preferences);
     manifest.file = updateBranchReferrerTracking(manifest.file);
-    manifest.file = updateLaunchOptionToSingleTask(
+    /*manifest.file = updateLaunchOptionToSingleTask(
       manifest.file,
       manifest.mainActivityIndex
-    );
+    );*/
     manifest.file = updateBranchURIScheme(
       manifest.file,
       manifest.mainActivityIndex,
@@ -392,7 +392,8 @@
       const isLauncherCategory =
         category[0].$["android:name"] === "android.intent.category.LAUNCHER";
 
-      return isMainAction && isLauncherCategory;
+      //return isMainAction && isLauncherCategory;
+      return isMainAction;
     });
 
     return isLauncher;
