@@ -366,7 +366,7 @@
   }
 
   // determine if <activity> is the main activity
-  function isLaunchActivity(activity) {
+    function isLaunchActivity(activity) {
     const intentFilters = activity["intent-filter"];
     let isLauncher = false;
 
@@ -376,23 +376,17 @@
 
     isLauncher = intentFilters.some(intentFilter => {
       const action = intentFilter.action;
-      const category = intentFilter.category;
 
       if (
         action == null ||
-        action.length !== 1 ||
-        category == null ||
-        category.length !== 1
+        action.length !== 1 
       ) {
         return false;
       }
 
       const isMainAction =
         action[0].$["android:name"] === "android.intent.action.MAIN";
-      const isLauncherCategory =
-        category[0].$["android:name"] === "android.intent.category.LAUNCHER";
-
-      //return isMainAction && isLauncherCategory;
+      
       return isMainAction;
     });
 
