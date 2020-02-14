@@ -16,7 +16,6 @@
 
     // update manifest
     manifest.file = updateBranchMetaData(manifest.file, preferences);
-    manifest.file = updateBranchReferrerTracking(manifest.file);
     manifest.file = updateLaunchOptionToSingleTask(
       manifest.file,
       manifest.mainActivityIndex
@@ -107,43 +106,6 @@
       });
     }
     manifest.manifest.application[0]["meta-data"] = metadatas.concat(metadata);
-
-    return manifest;
-  }
-
-  // adds to <application> for install referrer tracking (optional)
-  //    <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
-  //       <intent-filter>
-  //           <action android:name="com.android.vending.INSTALL_REFERRER" />
-  //       </intent-filter>
-  //    </receiver>
-  function updateBranchReferrerTracking(manifest) {
-    let receivers = manifest.manifest.application[0].receiver || [];
-    const androidName = "io.branch.referral.InstallListener";
-
-    // remove old
-    receivers = removeBasedOnAndroidName(receivers, androidName);
-
-    // add new
-    manifest.manifest.application[0].receiver = receivers.concat([
-      {
-        $: {
-          "android:name": androidName,
-          "android:exported": true
-        },
-        "intent-filter": [
-          {
-            action: [
-              {
-                $: {
-                  "android:name": "com.android.vending.INSTALL_REFERRER"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]);
 
     return manifest;
   }
