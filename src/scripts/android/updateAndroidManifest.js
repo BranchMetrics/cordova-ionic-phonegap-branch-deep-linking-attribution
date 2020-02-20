@@ -16,7 +16,7 @@
 
     // update manifest
     manifest.file = updateBranchMetaData(manifest.file, preferences);
-    manifest.file = updateBranchReferrerTracking(manifest.file);
+    manifest.file = removeDeprecatedInstalReferrerBroadcastReceiver(manifest.file);
     manifest.file = updateLaunchOptionToSingleTask(
       manifest.file,
       manifest.mainActivityIndex
@@ -111,41 +111,12 @@
     return manifest;
   }
 
-  // adds to <application> for install referrer tracking (optional)
-  //    <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
-  //       <intent-filter>
-  //           <action android:name="com.android.vending.INSTALL_REFERRER" />
-  //       </intent-filter>
-  //    </receiver>
-  function updateBranchReferrerTracking(manifest) {
-    let receivers = manifest.manifest.application[0].receiver || [];
+  function removeDeprecatedInstalReferrerBroadcastReceiver(manifest) { 
+    let receivers = manifest.manifest.application[0].receiver || [];  
     const androidName = "io.branch.referral.InstallListener";
+    manifest.manifest.application[0].receiver = removeBasedOnAndroidName(receivers, androidName);
 
-    // remove old
-    receivers = removeBasedOnAndroidName(receivers, androidName);
-
-    // add new
-    manifest.manifest.application[0].receiver = receivers.concat([
-      {
-        $: {
-          "android:name": androidName,
-          "android:exported": true
-        },
-        "intent-filter": [
-          {
-            action: [
-              {
-                $: {
-                  "android:name": "com.android.vending.INSTALL_REFERRER"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]);
-
-    return manifest;
+    return manifest;  
   }
 
   // adds to main <activity>:
