@@ -1,4 +1,8 @@
 <a name="4.0.0"></a>
+# [4.1.3](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.1.2...v4.1.3) (2020-2-20)
+
+* Fix intra-app linking.
+
 # [4.1.2](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.1.1...v4.1.2) (2020-2-12)
 
 * Allow Cordova 8. Update readme with instructions.
