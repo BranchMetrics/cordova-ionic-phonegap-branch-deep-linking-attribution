@@ -53,8 +53,6 @@ public class BranchSDK extends CordovaPlugin {
     private Branch instance;
     private String deepLinkUrl;
 
-    private SessionListener sessionListener;
-
     /**
      * Class Constructor
      */
