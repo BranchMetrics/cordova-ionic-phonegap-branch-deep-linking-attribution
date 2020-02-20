@@ -45,7 +45,7 @@ public class BranchSDK extends CordovaPlugin {
     // Standard Debugging Variables
     private static final String LCAT = "CordovaBranchSDK";
     // todo pick up plugin version dynamically
-    private static final String BRANCH_PLUGIN_VERSION = "4.1.2";
+    private static final String BRANCH_PLUGIN_VERSION = "4.1.3";
 
     // Private Method Properties
     private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;
@@ -87,8 +87,6 @@ public class BranchSDK extends CordovaPlugin {
     public void onNewIntent(Intent intent) {
         intent.putExtra("branch_force_new_session", true);
         this.activity.setIntent(intent);
-
-        this.reInitSession();
     }
 
     /**
@@ -298,17 +296,7 @@ public class BranchSDK extends CordovaPlugin {
             this.deepLinkUrl = data.toString();
         }
 
-        this.sessionListener = new SessionListener(callbackContext);
-        this.instance.initSession(this.sessionListener, data, activity);
-    }
-
-    private void reInitSession() {
-        if (this.sessionListener == null) {
-            return;
-        }
-
-        this.activity = this.cordova.getActivity();
-        this.instance.reInitSession(this.activity, this.sessionListener);
+        this.instance.initSession(new SessionListener(callbackContext), data, activity);
     }
 
     /**
