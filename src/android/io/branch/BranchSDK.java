@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
+import io.branch.referral.BranchUtil;
 import io.branch.referral.BranchError;
 import io.branch.referral.BranchViewHandler;
 import io.branch.referral.SharingHelper;
@@ -38,11 +39,12 @@ public class BranchSDK extends CordovaPlugin {
 
     // Standard Debugging Variables
     private static final String LCAT = "CordovaBranchSDK";
+        // todo pick up plugin version dynamically
+    private static final String BRANCH_PLUGIN_VERSION = "3.3.0";
 
     // Private Method Properties
     private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;
     private Activity activity;
-    private Branch instance;
     private String deepLinkUrl;
 
     /**
@@ -51,7 +53,6 @@ public class BranchSDK extends CordovaPlugin {
     public BranchSDK() {
 
         this.activity = null;
-        this.instance = null;
         this.branchObjectWrappers = new ArrayList<BranchUniversalObjectWrapper>();
 
     }
@@ -61,9 +62,9 @@ public class BranchSDK extends CordovaPlugin {
      */
     @Override
     protected void pluginInitialize() {
-
         this.activity = this.cordova.getActivity();
-
+        BranchUtil.setPluginType(BranchUtil.PluginType.CordovaIonic);
+        BranchUtil.setPluginVersion(BRANCH_PLUGIN_VERSION);
         Branch.disableInstantDeepLinking(true);
         Branch.getAutoInstance(this.activity.getApplicationContext());
 
@@ -73,9 +74,8 @@ public class BranchSDK extends CordovaPlugin {
      * Called when the activity receives a new intent.
      */
     public void onNewIntent(Intent intent) {
-
+        intent.putExtra("branch_force_new_session", true);
         this.activity.setIntent(intent);
-
     }
 
     /**
@@ -110,24 +110,24 @@ public class BranchSDK extends CordovaPlugin {
 
         Runnable r = new RunnableThread(action, args, callbackContext);
 
-        if (action.equals("setDebug")) {
-            cordova.getActivity().runOnUiThread(r);
-            return true;
-        } else if (action.equals("setCookieBasedMatching")) {
-            cordova.getActivity().runOnUiThread(r);
-            return true;
-       } else if (action.equals("disableTracking")) {
-            cordova.getActivity().runOnUiThread(r);
-            return true;
-        } else if (action.equals("initSession")) {
-            cordova.getActivity().runOnUiThread(r);
-            return true;
-        } else if (action.equals("setRequestMetadata")) {
+        if (action.equals("setCookieBasedMatching")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
         } else {
-            if (this.instance != null) {
-                if (action.equals("setIdentity")) {
+            if (Branch.getInstance() != null) {
+                if (action.equals("setDebug")) {
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
+                } else if (action.equals("disableTracking")) {
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
+                } else if (action.equals("initSession")) {
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
+                } else if (action.equals("setRequestMetadata")) {
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
+                } else if (action.equals("setIdentity")) {
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("userCompletedAction")) {
@@ -234,13 +234,14 @@ public class BranchSDK extends CordovaPlugin {
                 return true;
 
             } else {
-                callbackContext.error("Branch instance not set. Please execute initSession() first.");
+                callbackContext.error("Branch instance not set. Ensure plugin is initialized.");
             }
         }
 
         return false;
 
     }
+
 
     //////////////////////////////////////////////////
     //----------- CLASS PRIVATE METHODS ------------//
@@ -262,8 +263,7 @@ public class BranchSDK extends CordovaPlugin {
             this.deepLinkUrl = data.toString();
         }
 
-        this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-        this.instance.initSession(new SessionListener(callbackContext), data, activity);
+        Branch.getInstance().initSession(new SessionListener(callbackContext), data, activity);
 
     }
 
@@ -276,7 +276,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void logout(CallbackContext callbackContext) {
 
-        this.instance.logout(new LogoutStatusListener(callbackContext));
+        Branch.getInstance().logout(new LogoutStatusListener(callbackContext));
 
     }
 
@@ -291,7 +291,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void redeemRewards(final int value, CallbackContext callbackContext) {
 
-        this.instance.redeemRewards(value, new RedeemRewardsListener(callbackContext));
+        Branch.getInstance().redeemRewards(value, new RedeemRewardsListener(callbackContext));
 
     }
 
@@ -307,7 +307,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void redeemRewards(int value, String bucket, CallbackContext callbackContext) {
 
-        this.instance.redeemRewards(bucket, value, new RedeemRewardsListener(callbackContext));
+        Branch.getInstance().redeemRewards(bucket, value, new RedeemRewardsListener(callbackContext));
 
     }
 
@@ -321,7 +321,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void loadRewards(String bucket, CallbackContext callbackContext) {
 
-        this.instance.loadRewards(new LoadRewardsListener(bucket, callbackContext, this.instance));
+        Branch.getInstance().loadRewards(new LoadRewardsListener(bucket, callbackContext, Branch.getInstance()));
 
     }
 
@@ -334,7 +334,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void loadRewards(CallbackContext callbackContext) {
 
-        this.instance.loadRewards(new LoadRewardsListener(callbackContext, this.instance));
+        Branch.getInstance().loadRewards(new LoadRewardsListener(callbackContext, Branch.getInstance()));
 
     }
 
@@ -351,7 +351,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void getLatestReferringParams(CallbackContext callbackContext) {
 
-        JSONObject sessionParams = this.instance.getLatestReferringParams();
+        JSONObject sessionParams = Branch.getInstance().getLatestReferringParams();
 
         if (sessionParams == null || sessionParams.length() == 0) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ false));
@@ -373,7 +373,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void getFirstReferringParams(CallbackContext callbackContext) {
 
-        JSONObject installParams = this.instance.getFirstReferringParams();
+        JSONObject installParams = Branch.getInstance().getFirstReferringParams();
 
         if (installParams == null || installParams.length() == 0) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: false as the data */ false));
@@ -575,10 +575,8 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity = this.cordova.getActivity();
 
-        Branch instance = Branch.getAutoInstance(this.activity.getApplicationContext());
-
         if (linkDomain != null) {
-            instance.enableCookieBasedMatching(linkDomain);
+            Branch.enableCookieBasedMatching(linkDomain);
         }
 
         callbackContext.success("Success");
@@ -593,7 +591,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void setDebug(boolean isEnable, CallbackContext callbackContext) {
         this.activity = this.cordova.getActivity();
-        Branch.getAutoInstance(this.activity.getApplicationContext()).setDebug();
+        Branch.getInstance().setDebug();
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
     }
 
@@ -607,7 +605,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void disableTracking(boolean isEnable, CallbackContext callbackContext) {
         this.activity = this.cordova.getActivity();
-        Branch.getAutoInstance(this.activity.getApplicationContext()).disableTracking(isEnable);
+        Branch.getInstance().disableTracking(isEnable);
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
     }
 
@@ -620,7 +618,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void setIdentity(String newIdentity, CallbackContext callbackContext) {
 
-        this.instance.setIdentity(newIdentity, new SetIdentityListener(callbackContext));
+        Branch.getInstance().setIdentity(newIdentity, new SetIdentityListener(callbackContext));
 
     }
 
@@ -648,7 +646,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void userCompletedAction(String action, CallbackContext callbackContext) {
 
-        this.instance.userCompletedAction(action);
+        Branch.getInstance().userCompletedAction(action);
 
         callbackContext.success("Success");
 
@@ -666,7 +664,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void userCompletedAction(String action, JSONObject metaData, CallbackContext callbackContext) {
 
-        this.instance.userCompletedAction(action, metaData);
+        Branch.getInstance().userCompletedAction(action, metaData);
 
         callbackContext.success("Success");
 
@@ -753,7 +751,7 @@ public class BranchSDK extends CordovaPlugin {
             }
         }
 
-        this.instance.sendCommerceEvent(commerce, metaData, new BranchViewEventsListener(callbackContext));
+        Branch.getInstance().sendCommerceEvent(commerce, metaData, new BranchViewEventsListener(callbackContext));
 
     }
 
@@ -818,7 +816,7 @@ public class BranchSDK extends CordovaPlugin {
      */
     private void getCreditHistory(CallbackContext callbackContext) {
 
-        this.instance.getCreditHistory(new CreditHistoryListener(callbackContext));
+        Branch.getInstance().getCreditHistory(new CreditHistoryListener(callbackContext));
 
     }
 
