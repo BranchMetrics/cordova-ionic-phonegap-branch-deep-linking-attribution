@@ -125,7 +125,8 @@ Branch.prototype.delayInitToCheckForSearchAds = function delayInitToCheckForSear
 Branch.prototype.setAppleSearchAdsDebugMode = function setAppleSearchAdsDebugMode(
   isEnabled
 ) {
-  // This function no longer exists in the SDK but we don't want to break any apps still using the 3.x releases.
+  // This function no longer exists in the SDK but we don't want
+  // to break any apps still using the 3.x releases.
   return new Promise(function promise(resolve, reject) {
     resolve(false);
   });

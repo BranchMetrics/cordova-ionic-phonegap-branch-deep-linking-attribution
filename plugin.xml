@@ -24,7 +24,7 @@ SOFTWARE.
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="branch-cordova-sdk"
-  version="3.2.0">
+  version="3.3.1">
 
   <!-- Description -->
   <name>branch-cordova-sdk</name>
@@ -73,24 +73,26 @@ SOFTWARE.
       </feature>
     </config-file>
 
-    <framework src="iAd.framework" />
     <framework src="SafariServices.framework" />
-    <framework src="AdSupport.framework" />
     <framework src="CoreSpotlight.framework" />
+    <framework src="iAd.framework" />
+    <framework src="AdSupport.framework" />
     <framework src="MobileCoreServices.framework" />
+    <framework src="SystemConfiguration.framework" />
+    <framework src="CoreTelephony.framework" />
+    <framework src="WebKit.framework" />
 
     <header-file src="src/ios/BranchNPM.h" />
     <header-file src="src/ios/BranchSDK.h" />
     <source-file src="src/ios/BranchSDK.m" />
     <source-file src="src/ios/AppDelegate+BranchSdk.m" />
 
-    <header-file src="src/ios/dependencies/Fabric/ANSCompatibility.h" />
-    <header-file src="src/ios/dependencies/Fabric/Answers.h" />
-    <header-file src="src/ios/dependencies/Fabric/FABAttributes.h" />
-    <header-file src="src/ios/dependencies/Fabric/FABKitProtocol.h" />
-    <header-file src="src/ios/dependencies/Fabric/Fabric+FABKits.h" />
-    <header-file src="src/ios/dependencies/Fabric/Fabric.h" />
-
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCAppleAdClient.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCAppleAdClient.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCAppleReceipt.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCAppleReceipt.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCAppleSearchAds.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCAppleSearchAds.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCApplication.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCApplication.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCAvailability.h" />
@@ -112,11 +114,11 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BNCDeviceInfo.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCEncodingUtils.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCEncodingUtils.m" />
-    <header-file src="src/ios/dependencies/Branch-SDK/BNCError.h" />
-    <source-file src="src/ios/dependencies/Branch-SDK/BNCError.m" />
-    <header-file src="src/ios/dependencies/Branch-SDK/BNCFabricAnswers.h" />
-    <source-file src="src/ios/dependencies/Branch-SDK/BNCFabricAnswers.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCFacebookAppLinks.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCFacebookAppLinks.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCFieldDefines.h" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCJSONUtility.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCJSONUtility.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCKeyChain.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCKeyChain.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCLinkCache.h" />
@@ -127,26 +129,32 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BNCLocalization.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCLog.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCLog.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCNetworkInterface.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCNetworkInterface.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCPreferenceHelper.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCPreferenceHelper.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCReachability.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCReachability.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCSpotlightService.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCSpotlightService.m" />
-    <header-file src="src/ios/dependencies/Branch-SDK/BNCStrongMatchHelper.h" />
-    <source-file src="src/ios/dependencies/Branch-SDK/BNCStrongMatchHelper.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCSystemObserver.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCTelephony.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCTelephony.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCThreads.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCThreads.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCTuneUtility.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCTuneUtility.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCURLBlackList.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCURLBlackList.m" />
-    <header-file src="src/ios/dependencies/Branch-SDK/Branch+Validator.h" />
-    <source-file src="src/ios/dependencies/Branch-SDK/Branch+Validator.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCUserAgentCollector.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCUserAgentCollector.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/Branch.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Branch.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/Branch+Validator.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/Branch+Validator.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchActivityItemProvider.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchActivityItemProvider.m" />
-    <header-file src="src/ios/dependencies/Branch-SDK/BranchCSSearchableItemAttributeSet.h" />
-    <source-file src="src/ios/dependencies/Branch-SDK/BranchCSSearchableItemAttributeSet.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchConstants.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchConstants.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchContentDiscoverer.h" />
@@ -155,21 +163,25 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BranchContentDiscoveryManifest.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchContentPathProperties.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchContentPathProperties.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BranchCrossPlatformID.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BranchCrossPlatformID.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BranchCSSearchableItemAttributeSet.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BranchCSSearchableItemAttributeSet.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchDeepLinkingController.h" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchDelegate.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchDelegate.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchEvent.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchEvent.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BranchLastAttributedTouchData.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BranchLastAttributedTouchData.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchLinkProperties.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchLinkProperties.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchShareLink.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchShareLink.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BranchUniversalObject.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BranchUniversalObject.m" />
-    <header-file src="src/ios/dependencies/Branch-SDK/BranchView.h" />
-    <source-file src="src/ios/dependencies/Branch-SDK/BranchView.m" />
-    <header-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.h" />
-    <source-file src="src/ios/dependencies/Branch-SDK/BranchViewHandler.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/NSError+Branch.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/NSError+Branch.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/NSMutableDictionary+Branch.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/NSMutableDictionary+Branch.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/NSString+Branch.h" />
@@ -191,10 +203,14 @@ SOFTWARE.
 
     <header-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchCloseRequest.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchCloseRequest.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchCPIDRequest.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchCPIDRequest.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchCreditHistoryRequest.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchCreditHistoryRequest.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchInstallRequest.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchInstallRequest.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchLATDRequest.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchLATDRequest.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchLoadRewardsRequest.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchLoadRewardsRequest.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/Networking/Requests/BranchLogoutRequest.h" />
