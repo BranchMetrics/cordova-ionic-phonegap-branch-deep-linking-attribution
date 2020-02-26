@@ -306,13 +306,5 @@ Branch.prototype.creditHistory = function creditHistory() {
   return execute("getCreditHistory");
 };
 
-Branch.prototype.crossPlatformIds = function crossPlatformIds() {
-  return execute("crossPlatformIds");
-};
-
-Branch.prototype.lastAttributedTouchData = function lastAttributedTouchData() {
-  return execute("lastAttributedTouchData");
-};
-
 // export Branch object
 module.exports = new Branch();
