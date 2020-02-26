@@ -1,7 +1,7 @@
 var exec = require("cordova/exec");
 var deviceVendor =
   typeof window.clientInformation != "undefined" &&
-  typeof window.clientInformation.vendor != "undefined"
+    typeof window.clientInformation.vendor != "undefined"
     ? window.clientInformation.vendor
     : "unknownVendor";
 
@@ -39,7 +39,7 @@ function execute(method, params) {
 
   if (method == "getStandardEvents") {
     return new Promise(function promise(resolve, reject) {
-      resolve(standardEvent);  
+      resolve(standardEvent);
     });
   }
 
@@ -125,9 +125,11 @@ Branch.prototype.delayInitToCheckForSearchAds = function delayInitToCheckForSear
 Branch.prototype.setAppleSearchAdsDebugMode = function setAppleSearchAdsDebugMode(
   isEnabled
 ) {
-  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
-
-  return execute("setAppleSearchAdsDebugMode", [value]);
+  // This function no longer exists in the SDK but we don't want
+  // to break any apps still using the 3.x releases.
+  return new Promise(function promise(resolve, reject) {
+    resolve(false);
+  });
 };
 
 Branch.prototype.getFirstReferringParams = function getFirstReferringParams() {

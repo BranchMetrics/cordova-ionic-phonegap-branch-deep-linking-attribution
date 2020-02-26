@@ -37,7 +37,6 @@
 - (void)userCompletedAction:(CDVInvokedUrlCommand*)command;
 - (void)logout:(CDVInvokedUrlCommand*)command;
 - (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command;
-- (void)setAppleSearchAdsDebugMode:(CDVInvokedUrlCommand*)command;
 
 // Branch Referral Reward System
 - (void)loadRewards:(CDVInvokedUrlCommand*)command;
@@ -52,5 +51,9 @@
 - (void)onShareLinkDialogDismissed:(CDVInvokedUrlCommand*)command;
 - (void)onLinkShareResponse:(CDVInvokedUrlCommand*)command;
 - (void)listOnSpotlight:(CDVInvokedUrlCommand*)command;
+
+// Branch Query Methods
+- (void)crossPlatformIds:(CDVInvokedUrlCommand *)command;
+- (void)lastAttributedTouchData:(CDVInvokedUrlCommand *)command;
 
 @end

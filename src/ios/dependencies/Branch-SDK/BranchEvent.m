@@ -20,6 +20,10 @@ BranchStandardEvent BranchStandardEventInitiatePurchase   = @"INITIATE_PURCHASE"
 BranchStandardEvent BranchStandardEventAddPaymentInfo     = @"ADD_PAYMENT_INFO";
 BranchStandardEvent BranchStandardEventPurchase           = @"PURCHASE";
 BranchStandardEvent BranchStandardEventSpendCredits       = @"SPEND_CREDITS";
+BranchStandardEvent BranchStandardEventSubscribe          = @"SUBSCRIBE";
+BranchStandardEvent BranchStandardEventStartTrial         = @"START_TRIAL";
+BranchStandardEvent BranchStandardEventClickAd            = @"CLICK_AD";
+BranchStandardEvent BranchStandardEventViewAd             = @"VIEW_AD";
 
 // Content Events
 
@@ -35,6 +39,9 @@ BranchStandardEvent BranchStandardEventCompleteRegistration   = @"COMPLETE_REGIS
 BranchStandardEvent BranchStandardEventCompleteTutorial       = @"COMPLETE_TUTORIAL";
 BranchStandardEvent BranchStandardEventAchieveLevel           = @"ACHIEVE_LEVEL";
 BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVEMENT";
+BranchStandardEvent BranchStandardEventInvite                 = @"INVITE";
+BranchStandardEvent BranchStandardEventLogin                  = @"LOGIN";
+BranchStandardEvent BranchStandardEventReserve                = @"RESERVE";
 
 @implementation BranchEventRequest
 
@@ -96,10 +103,7 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
 
 #pragma mark - BranchEvent
 
-@interface BranchEvent () {
-    NSMutableDictionary *_customData;
-    NSMutableArray      *_contentItems;
-}
+@interface BranchEvent ()
 @property (nonatomic, strong) NSString*  eventName;
 @end
 
@@ -109,6 +113,9 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
     self = [super init];
     if (!self) return self;
     _eventName = name;
+    _contentItems = [NSArray new];
+    _customData = [NSDictionary new];
+    _adType = BranchEventAdTypeNone;
     return self;
 }
 
@@ -120,7 +127,7 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
                withContentItem:(BranchUniversalObject*)contentItem {
     BranchEvent *e = [BranchEvent standardEvent:standardEvent];
     if (contentItem) {
-        e.contentItems = (NSMutableArray*) @[ contentItem ];
+        e.contentItems = @[ contentItem ];
     }
     return e;
 }
@@ -131,39 +138,36 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
 
 + (instancetype) customEventWithName:(NSString*)name
                          contentItem:(BranchUniversalObject*)contentItem {
-    BranchEvent *e = [[BranchEvent alloc] initWithName:name];
+    BranchEvent *e = [BranchEvent customEventWithName:name];
     if (contentItem) {
-        e.contentItems = (NSMutableArray*) @[ contentItem ];
+        e.contentItems = @[ contentItem ];
     }
     return e;
 }
 
-- (NSMutableDictionary*) customData {
-    if (!_customData) _customData = [NSMutableDictionary new];
-    return _customData;
-}
-
-- (void) setCustomData:(NSMutableDictionary<NSString *,NSString *> *)userInfo {
-    _customData = [userInfo mutableCopy];
-}
-
-- (NSMutableArray*) contentItems {
-    if (!_contentItems) _contentItems = [NSMutableArray new];
-    return _contentItems;
-}
-
-- (void) setContentItems:(NSMutableArray<BranchUniversalObject *> *)contentItems {
-    if ([contentItems isKindOfClass:[BranchUniversalObject class]]) {
-        _contentItems = [NSMutableArray arrayWithObject:contentItems];
-    } else
-    if ([contentItems isKindOfClass:[NSArray class]]) {
-        _contentItems = [contentItems mutableCopy];
+- (NSString *)jsonStringForAdType:(BranchEventAdType)adType {
+    switch (adType) {
+        case BranchEventAdTypeBanner:
+            return @"BANNER";
+            
+        case BranchEventAdTypeInterstitial:
+            return @"INTERSTITIAL";
+            
+        case BranchEventAdTypeRewardedVideo:
+            return @"REWARDED_VIDEO";
+            
+        case BranchEventAdTypeNative:
+            return @"NATIVE";
+            
+        case BranchEventAdTypeNone:
+        default:
+            return nil;
     }
 }
 
 - (NSDictionary*) dictionary {
     NSMutableDictionary *dictionary = [NSMutableDictionary new];
-
+    
     #define BNCFieldDefinesDictionaryFromSelf
     #include "BNCFieldDefines.h"
 
@@ -180,6 +184,11 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
     
     #include "BNCFieldDefines.h"
 
+    NSString *adTypeString = [self jsonStringForAdType:self.adType];
+    if (adTypeString.length > 0) {
+        [dictionary setObject:adTypeString forKey:@"ad_type"];
+    }
+    
     return dictionary;
 }
 
@@ -201,6 +210,13 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
         BranchStandardEventCompleteTutorial,
         BranchStandardEventAchieveLevel,
         BranchStandardEventUnlockAchievement,
+        BranchStandardEventInvite,
+        BranchStandardEventLogin,
+        BranchStandardEventReserve,
+        BranchStandardEventSubscribe,
+        BranchStandardEventStartTrial,
+        BranchStandardEventClickAd,
+        BranchStandardEventViewAd,
     ];
 }
 
@@ -211,16 +227,43 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
         return;
     }
 
+    NSDictionary *eventDictionary = [self buildEventDictionary];
+    BranchEventRequest *request = [self buildRequestWithEventDictionary:eventDictionary];
+    [[Branch getInstance] sendServerRequest:request];
+}
+
+- (BranchEventRequest *)buildRequestWithEventDictionary:(NSDictionary *)eventDictionary {
+    BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
+    
+    NSString *serverURL =
+    ([self.class.standardEvents containsObject:self.eventName])
+    ? [NSString stringWithFormat:@"%@/%@", preferenceHelper.branchAPIURL, @"v2/event/standard"]
+    : [NSString stringWithFormat:@"%@/%@", preferenceHelper.branchAPIURL, @"v2/event/custom"];
+    
+    BranchEventRequest *request =
+    [[BranchEventRequest alloc]
+     initWithServerURL:[NSURL URLWithString:serverURL]
+     eventDictionary:eventDictionary
+     completion:nil];
+    
+    return request;
+}
+
+- (NSDictionary *)buildEventDictionary {
     NSMutableDictionary *eventDictionary = [NSMutableDictionary new];
     eventDictionary[@"name"] = _eventName;
-
+    
+    if (self.alias.length > 0) {
+        eventDictionary[@"customer_event_alias"] = self.alias;
+    }
+    
     NSDictionary *propertyDictionary = [self dictionary];
     if (propertyDictionary.count) {
         eventDictionary[@"event_data"] = propertyDictionary;
     }
     eventDictionary[@"custom_data"] = eventDictionary[@"event_data"][@"custom_data"];
     eventDictionary[@"event_data"][@"custom_data"] = nil;
-
+    
     NSMutableArray *contentItemDictionaries = [NSMutableArray new];
     for (BranchUniversalObject *contentItem in self.contentItems) {
         NSDictionary *dictionary = [contentItem dictionary];
@@ -228,24 +271,11 @@ BranchStandardEvent BranchStandardEventUnlockAchievement      = @"UNLOCK_ACHIEVE
             [contentItemDictionaries addObject:dictionary];
         }
     }
-
+    
     if (contentItemDictionaries.count) {
         eventDictionary[@"content_items"] = contentItemDictionaries;
     }
-
-    BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
-    NSString *serverURL =
-        ([self.class.standardEvents containsObject:self.eventName])
-        ? [NSString stringWithFormat:@"%@/%@", preferenceHelper.branchAPIURL, @"v2/event/standard"]
-        : [NSString stringWithFormat:@"%@/%@", preferenceHelper.branchAPIURL, @"v2/event/custom"];
-
-    BranchEventRequest *request =
-		[[BranchEventRequest alloc]
-			initWithServerURL:[NSURL URLWithString:serverURL]
-			eventDictionary:eventDictionary
-			completion:nil];
-
-    [[Branch getInstance] sendServerRequestWithoutSession:request];
+    return eventDictionary;
 }
 
 - (NSString*_Nonnull) description {

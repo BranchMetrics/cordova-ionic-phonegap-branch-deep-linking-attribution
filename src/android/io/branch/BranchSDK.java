@@ -40,7 +40,7 @@ public class BranchSDK extends CordovaPlugin {
     // Standard Debugging Variables
     private static final String LCAT = "CordovaBranchSDK";
         // todo pick up plugin version dynamically
-    private static final String BRANCH_PLUGIN_VERSION = "3.3.0";
+    private static final String BRANCH_PLUGIN_VERSION = "3.4.0";
 
     // Private Method Properties
     private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;

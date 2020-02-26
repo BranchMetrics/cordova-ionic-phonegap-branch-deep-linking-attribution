@@ -1,10 +1,12 @@
-(function() {
+(function () {
   // properties
 
   const path = require("path");
   const fs = require("fs");
   const plist = require("plist");
   const mkpath = require("mkpath");
+  // TODO [codinronan 15.01.2020]: Read these from {preferences.projectName}.plist --
+  //  most people don't change them, but some do, and more importantly, some people add new ones!
   const BUILD_TYPES = ["Debug", "Release"];
   const ASSOCIATED_DOMAINS = "com.apple.developer.associated-domains";
 
@@ -29,24 +31,6 @@
   // get the xcode .entitlements and provisioning profile .plist
   function getEntitlementFiles(preferences) {
     const files = [];
-    const entitlements = path.join(
-      preferences.projectRoot,
-      "platforms",
-      "ios",
-      preferences.projectName,
-      "Resources",
-      `${preferences.projectName}.entitlements`
-    );
-    files.push(
-      path.join(
-        preferences.projectRoot,
-        "platforms",
-        "ios",
-        preferences.projectName,
-        `${preferences.projectName}.entitlements`
-      )
-    );
-    files.push(entitlements);
 
     for (let i = 0; i < BUILD_TYPES.length; i++) {
       const buildType = BUILD_TYPES[i];
