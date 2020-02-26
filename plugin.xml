@@ -112,6 +112,8 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BNCDeepLinkViewControllerInstance.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCDeviceInfo.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCDeviceInfo.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCDeviceSystem.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCDeviceSystem.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCEncodingUtils.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCEncodingUtils.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCFacebookAppLinks.h" />
@@ -125,6 +127,8 @@ SOFTWARE.
     <source-file src="src/ios/dependencies/Branch-SDK/BNCLinkCache.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCLinkData.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCLinkData.m" />
+    <header-file src="src/ios/dependencies/Branch-SDK/BNCLocale.h" />
+    <source-file src="src/ios/dependencies/Branch-SDK/BNCLocale.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCLocalization.h" />
     <source-file src="src/ios/dependencies/Branch-SDK/BNCLocalization.m" />
     <header-file src="src/ios/dependencies/Branch-SDK/BNCLog.h" />
