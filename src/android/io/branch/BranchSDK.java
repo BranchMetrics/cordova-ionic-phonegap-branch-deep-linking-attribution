@@ -263,15 +263,11 @@ public class BranchSDK extends CordovaPlugin {
     }
     
     public void crossPlatformIds(CallbackContext callbackContext) {
-        // stub call from known issue with caching
-        // this.instance.getCrossPlatformIds(new BranchCPIDListener(callbackContext));
-        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, false));
+        this.instance.getCrossPlatformIds(new BranchCPIDListener(callbackContext));
     }
 
     public void lastAttributedTouchData(CallbackContext callbackContext) {
-        // stub call from known issue with caching
-        // this.instance.getLastAttributedTouchData(new BranchLATDListener(callbackContext), 30);
-        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, false));
+        this.instance.getLastAttributedTouchData(new BranchLATDListener(callbackContext), 30);
     }
 
     //////////////////////////////////////////////////
