@@ -61,6 +61,8 @@
       CFBundleURLName: SDK,
       CFBundleURLSchemes: [preferences.uriScheme]
     };
+    // ios specific domain will be preferred
+    const linkDomains = [...preferences.iosLinkDomain, ...preferences.linkDomain];
 
     if (!obj.hasOwnProperty("CFBundleURLTypes")) {
       // add
@@ -89,7 +91,7 @@
 
     // override
     obj.branch_key = preferences.branchKey;
-    obj.branch_app_domain = preferences.linkDomain[0];
+    obj.branch_app_domain = linkDomains[0];
 
     return obj;
   }

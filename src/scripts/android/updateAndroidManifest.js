@@ -248,7 +248,7 @@
   // determine the Branch link domain <data> to append to the App Link intent filter
   function getAppLinkIntentFilterData(preferences) {
     const intentFilterData = [];
-    const linkDomains = preferences.linkDomain;
+    const linkDomains = [...preferences.androidLinkDomain, ...preferences.linkDomain];
 
     for (let i = 0; i < linkDomains.length; i++) {
       const linkDomain = linkDomains[i];

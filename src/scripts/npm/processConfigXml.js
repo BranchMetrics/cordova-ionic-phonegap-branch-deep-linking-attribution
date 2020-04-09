@@ -59,6 +59,8 @@
       projectName: getProjectName(configXml),
       branchKey: getBranchValue(branchXml, "branch-key"),
       linkDomain: getBranchLinkDomains(branchXml, "link-domain"),
+      androidLinkDomain: getBranchLinkDomains(branchXml, "android-link-domain"),
+      iosLinkDomain: getBranchLinkDomains(branchXml, "ios-link-domain"),
       uriScheme: getBranchValue(branchXml, "uri-scheme"),
       iosBundleId: getBundleId(configXml, "ios"),
       iosProjectModule: getProjectModule(context),
@@ -97,7 +99,8 @@
     return branchXml.hasOwnProperty(key) ? branchXml[key][0].$.value : null;
   }
 
-  // read branch value from <branch-config> for multiple <link-domain>
+  // read branch value from <branch-config>
+  // for multiple <link-domain>, <android-link-domain> or <ios-link-domain>
   function getBranchLinkDomains(branchXml, key) {
     const output = [];
     if (branchXml.hasOwnProperty(key)) {
@@ -218,9 +221,8 @@
       );
     }
     if (
-      preferences.linkDomain === null ||
       !/^(?!.*?www).*([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/.test(
-        preferences.linkDomain
+        [...preferences.linkDomain, ...preferences.androidLinkDomain, preferences.iosLinkDomain]
       )
     ) {
       throw new Error(
