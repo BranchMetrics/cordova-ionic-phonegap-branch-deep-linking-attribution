@@ -58,6 +58,15 @@ NSString * const pluginVersion = @"4.1.3";
   return [NSNumber numberWithBool:[[Branch getInstance] handleDeepLink:url]];
 }
 
+- (id)handleDeepLinkWithNewSession:(CDVInvokedUrlCommand*)command
+{
+  NSString *arg = [command.arguments objectAtIndex:0];
+  NSURL *url = [NSURL URLWithString:arg];
+  self.deepLinkUrl = [url absoluteString];
+
+  return [NSNumber numberWithBool:[[Branch getInstance] handleDeepLinkWithNewSession:url]];
+}
+
 - (void)continueUserActivity:(CDVInvokedUrlCommand*)command
 {
 
