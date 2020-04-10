@@ -20,7 +20,6 @@ import java.util.Iterator;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
-import io.branch.referral.BranchUtil;
 import io.branch.referral.PrefHelper;
 import io.branch.referral.BranchError;
 import io.branch.referral.BranchViewHandler;
@@ -44,8 +43,9 @@ public class BranchSDK extends CordovaPlugin {
 
     // Standard Debugging Variables
     private static final String LCAT = "CordovaBranchSDK";
-    // todo pick up plugin version dynamically
-    private static final String BRANCH_PLUGIN_VERSION = "4.1.3";
+
+    private static final String BRANCH_PLUGIN_TYPE = "CordovaIonic";
+    private static final String BRANCH_PLUGIN_VERSION = "%BRANCH_PLUGIN_VERSION%";
 
     // Private Method Properties
     private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;
@@ -72,8 +72,7 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity = this.cordova.getActivity();
         Branch.disableInstantDeepLinking(true);
-        BranchUtil.setPluginType(BranchUtil.PluginType.CordovaIonic);
-        BranchUtil.setPluginVersion(BRANCH_PLUGIN_VERSION);
+        Branch.registerPlugin(BRANCH_PLUGIN_TYPE, BRANCH_PLUGIN_VERSION);
         if (this.instance == null) {
             this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
         }
