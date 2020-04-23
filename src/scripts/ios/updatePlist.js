@@ -90,7 +90,15 @@
     }
 
     // override
-    obj.branch_key = preferences.branchKey;
+    if (preferences.branchKeyTest) {
+      obj.branch_key = {
+        live: preferences.branchKey,
+        test: preferences.branchKeyTest
+      };
+    } else {
+      obj.branch_key = preferences.branchKey;
+    }
+    
     obj.branch_app_domain = linkDomains[0];
 
     return obj;

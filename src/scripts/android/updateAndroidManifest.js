@@ -87,8 +87,13 @@
     const keys = ["io.branch.sdk.BranchKey", "io.branch.sdk.TestMode"];
     const vals = [
       preferences.branchKey,
-      preferences.androidTestMode || "false"
+      preferences.branchTestMode || preferences.androidTestMode || "false"
     ];
+
+    if (preferences.branchKeyTest) {
+      keys.push("io.branch.sdk.BranchKey.test");
+      vals.push(preferences.branchKeyTest);
+    }
 
     // remove old
     for (var i = 0; i < keys.length; i++) {
