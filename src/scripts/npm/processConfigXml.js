@@ -57,8 +57,12 @@
     return {
       projectRoot: getProjectRoot(context),
       projectName: getProjectName(configXml),
-      branchKey: getBranchValue(branchXml, "branch-key"),
+      branchKey: getBranchKey(branchXml, "branch-key-live"),
+      branchKeyTest: getBranchValue(branchXml, "branch-key-test"),
+      branchTestMode: getBranchValue(branchXml, "branch-test-mode"),
       linkDomain: getBranchLinkDomains(branchXml, "link-domain"),
+      androidLinkDomain: getBranchLinkDomains(branchXml, "android-link-domain"),
+      iosLinkDomain: getBranchLinkDomains(branchXml, "ios-link-domain"),
       uriScheme: getBranchValue(branchXml, "uri-scheme"),
       iosBundleId: getBundleId(configXml, "ios"),
       iosProjectModule: getProjectModule(context),
@@ -66,7 +70,7 @@
       iosTeamDebug: getBranchValue(branchXml, "ios-team-debug"), // optional
       androidBundleId: getBundleId(configXml, "android"), // optional
       androidPrefix: getBranchValue(branchXml, "android-prefix"), // optional
-      androidTestMode: getBranchValue(branchXml, "android-testmode") // optional
+      androidTestMode: getBranchValue(branchXml, "android-testmode") // DEPRECATED optional
     };
   }
 
@@ -97,7 +101,14 @@
     return branchXml.hasOwnProperty(key) ? branchXml[key][0].$.value : null;
   }
 
-  // read branch value from <branch-config> for multiple <link-domain>
+  // read branch value from (<branch-key> DEPRECATED)
+  // or <branch-key-live>
+  function getBranchKey(branchXml) {
+    return getBranchValue(branchXml, "branch-key-live") || getBranchValue(branchXml, "branch-key");
+  }
+
+  // read branch value from <branch-config>
+  // for multiple <link-domain>, <android-link-domain> or <ios-link-domain>
   function getBranchLinkDomains(branchXml, key) {
     const output = [];
     if (branchXml.hasOwnProperty(key)) {
@@ -204,9 +215,14 @@
         'BRANCH SDK: Invalid "name" in your config.xml. Docs https://goo.gl/GijGKP'
       );
     }
-    if (preferences.branchKey === null) {
+    if (preferences.branchKey === null && preferences.branchKeyLive === null) {
       throw new Error(
-        'BRANCH SDK: Invalid "branch-key" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP'
+        'BRANCH SDK: Invalid "branch-key-live" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP'
+      );
+    }
+    if (preferences.branchKey === null && preferences.branchKeyTest === null) {
+      throw new Error(
+        'BRANCH SDK: Invalid "branch-key-test" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP'
       );
     }
     if (
@@ -218,9 +234,8 @@
       );
     }
     if (
-      preferences.linkDomain === null ||
       !/^(?!.*?www).*([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/.test(
-        preferences.linkDomain
+        [...preferences.linkDomain, ...preferences.androidLinkDomain, preferences.iosLinkDomain]
       )
     ) {
       throw new Error(
@@ -276,6 +291,17 @@
     ) {
       throw new Error(
         'BRANCH SDK: Invalid "android-testmode" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP'
+      );
+    }
+    if (
+      !(
+        preferences.branchTestMode === "true" ||
+        preferences.branchTestMode === "false" ||
+        preferences.branchTestMode === null
+      )
+    ) {
+      throw new Error(
+        'BRANCH SDK: Invalid "branch-test-mode" in <branch-config> in your config.xml. Docs https://goo.gl/GijGKP'
       );
     }
   }

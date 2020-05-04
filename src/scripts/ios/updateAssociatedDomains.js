@@ -91,7 +91,7 @@
   // removed previous associated domains related to Branch (will not remove link domain changes from custom domains or custom sub domains)
   function removePreviousAssociatedDomains(preferences, domains) {
     const output = [];
-    const linkDomains = preferences.linkDomain;
+    const linkDomains = [...preferences.iosLinkDomain, ...preferences.linkDomain];
 
     if (!domains) return output;
     for (let i = 0; i < domains.length; i++) {
@@ -122,7 +122,7 @@
   function updateAssociatedDomains(preferences) {
     const domainList = [];
     const prefix = "applinks:";
-    const linkDomains = preferences.linkDomain;
+    const linkDomains = [...preferences.iosLinkDomain, ...preferences.linkDomain];
 
     for (let i = 0; i < linkDomains.length; i++) {
       const linkDomain = linkDomains[i];

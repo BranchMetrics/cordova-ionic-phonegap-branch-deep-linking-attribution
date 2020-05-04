@@ -31,6 +31,7 @@ const standardEvent = {
 var Branch = function Branch() {
   this.debugMode = false;
   this.trackingDisabled = false;
+  this.sessionInitialized = false;
 };
 
 // JavsSript to SDK wrappers
@@ -85,7 +86,15 @@ Branch.prototype.disableTracking = function disableTracking(isEnabled) {
   return execute("disableTracking", [value]);
 };
 
+Branch.prototype.enableTestMode = function initSession() {
+  if (this.sessionInitialized) {
+    return executeReject("[enableTestMode] should be called before [initSession]");
+  }
+  return execute("enableTestMode");
+};
+
 Branch.prototype.initSession = function initSession() {
+  this.sessionInitialized = true;
   return execute("initSession");
 };
 
