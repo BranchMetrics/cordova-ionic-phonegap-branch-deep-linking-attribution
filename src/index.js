@@ -114,12 +114,18 @@ Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
     : null;
 };
 
+//DEPRECATED
 Branch.prototype.delayInitToCheckForSearchAds = function delayInitToCheckForSearchAds(
   isEnabled
 ) {
-  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+  // stub call from known issue calling it from JS
+  return new Promise(function promise(resolve, reject) {
+    resolve(false);
+  });
 
-  return execute("delayInitToCheckForSearchAds", [value]);
+  // var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+
+  // return execute("delayInitToCheckForSearchAds", [value]);
 };
 
 Branch.prototype.getFirstReferringParams = function getFirstReferringParams() {
