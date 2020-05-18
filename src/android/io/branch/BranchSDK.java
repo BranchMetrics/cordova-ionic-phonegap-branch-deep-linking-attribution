@@ -781,6 +781,20 @@ public class BranchSDK extends CordovaPlugin {
 
     }
 
+    public void sendBranchEvent(String eventName, CallbackContext callbackContext) throws JSONException {
+
+        BranchEvent event;
+        try {
+            BRANCH_STANDARD_EVENT standardEvent = BRANCH_STANDARD_EVENT.valueOf(eventName);
+            event = new BranchEvent(standardEvent);
+        } catch(IllegalArgumentException e) {
+            event = new BranchEvent(eventName);
+        }
+
+        event.logEvent(this.activity);
+        //callbackContext.success();
+    }
+
     public void sendBranchEvent(String eventName, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
 
         BranchEvent event;
@@ -1422,7 +1436,11 @@ public class BranchSDK extends CordovaPlugin {
                     } else if (this.action.equals("sendCommerceEvent")) {
                         sendCommerceEvent(this.args.getJSONObject(0), this.args.getJSONObject(1), this.callbackContext);
                     } else if (this.action.equals("sendBranchEvent")) {
-                        sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
+                        if (this.args.length() == 2) {
+                            sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
+                        } else if (this.args.length() == 1) {
+                            sendBranchEvent(this.args.getString(0), this.callbackContext);
+                        }
                     } else if (this.action.equals("getFirstReferringParams")) {
                         getFirstReferringParams(this.callbackContext);
                     } else if (this.action.equals("getLatestReferringParams")) {
