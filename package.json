@@ -23,10 +23,11 @@
     }
   ],
   "scripts": {
-    "commitmsg": "echo 'validate commit messages'; commitlint -e $GIT_PARAMS",
-    "precommit": "echo 'run prettier on commit'; lint-staged",
-    "prettier": "echo 'run prettier'; prettier --write './{src,testbed,tests}/**/*.js'",
-    "lint": "echo 'run code linter'; eslint --ext=js --fix ./src"
+    "commitmsg": " echo 'validate commit messages'; commitlint -e $GIT_PARAMS",
+    "precommit": " echo 'run prettier on commit';   lint-staged",
+    "prettier": "  echo 'run prettier';             prettier --write './{src,testbed,tests}/**/*.js'",
+    "lint": "      echo 'run code linter';          eslint --ext=js --fix ./src",
+    "examples": "  echo 'generate examples';        node ./src/scripts/examples"
   },
   "eslintConfig": {
     "extends": [
