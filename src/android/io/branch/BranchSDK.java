@@ -570,6 +570,8 @@ public class BranchSDK extends CordovaPlugin {
 
         branchUniversalWrapper.branchUniversalObj.registerView(new RegisterViewStatusListener(callbackContext));
 
+        callbackContext.success("Success");
+
     }
 
     /**

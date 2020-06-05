@@ -31,6 +31,6 @@ SOFTWARE.
     <name>branch-cordova-sdk-tests</name>
     <license>Apache 2.0</license>
 
-    <js-module src="tests.js" name="tests"></js-module>
+    <js-module src="index.js" name="tests"></js-module>
 
 </plugin>
