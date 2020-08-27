@@ -1,6 +1,6 @@
 #import "BranchSDK.h"
 
-NSString * const pluginVersion = @"4.1.3";
+NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
 
 @interface BranchSDK()
 
@@ -58,6 +58,15 @@ NSString * const pluginVersion = @"4.1.3";
   return [NSNumber numberWithBool:[[Branch getInstance] handleDeepLink:url]];
 }
 
+- (id)handleDeepLinkWithNewSession:(CDVInvokedUrlCommand*)command
+{
+  NSString *arg = [command.arguments objectAtIndex:0];
+  NSURL *url = [NSURL URLWithString:arg];
+  self.deepLinkUrl = [url absoluteString];
+
+  return [NSNumber numberWithBool:[[Branch getInstance] handleDeepLinkWithNewSession:url]];
+}
+
 - (void)continueUserActivity:(CDVInvokedUrlCommand*)command
 {
 
@@ -76,6 +85,11 @@ NSString * const pluginVersion = @"4.1.3";
 
 #pragma mark - Public APIs
 #pragma mark - Branch Basic Methods
+
+- (void)enableTestMode:(CDVInvokedUrlCommand*)command
+{
+  [Branch setUseTestBranchKey:TRUE];
+}
 
 - (void)initSession:(CDVInvokedUrlCommand*)command
 {

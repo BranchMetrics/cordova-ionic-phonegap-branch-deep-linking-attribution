@@ -1,0 +1,10 @@
+{
+  "name": "branch-cordova-sdk-tests",
+  "version": "1.0.0",
+  "description": "Branch Metrics Cordova SDK Tests",
+  "cordova": {
+    "id": "branch-cordova-sdk-tests",
+    "platforms": []
+  },
+  "license": "MIT"
+}
