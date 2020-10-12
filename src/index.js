@@ -31,6 +31,7 @@ const standardEvent = {
 var Branch = function Branch() {
   this.debugMode = false;
   this.trackingDisabled = false;
+  this.sessionInitialized = false;
 };
 
 // JavsSript to SDK wrappers
@@ -85,7 +86,15 @@ Branch.prototype.disableTracking = function disableTracking(isEnabled) {
   return execute("disableTracking", [value]);
 };
 
+Branch.prototype.enableTestMode = function initSession() {
+  if (this.sessionInitialized) {
+    return executeReject("[enableTestMode] should be called before [initSession]");
+  }
+  return execute("enableTestMode");
+};
+
 Branch.prototype.initSession = function initSession() {
+  this.sessionInitialized = true;
   return execute("initSession");
 };
 
@@ -114,12 +123,18 @@ Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
     : null;
 };
 
+//DEPRECATED
 Branch.prototype.delayInitToCheckForSearchAds = function delayInitToCheckForSearchAds(
   isEnabled
 ) {
-  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+  // stub call from known issue calling it from JS
+  return new Promise(function promise(resolve, reject) {
+    resolve(false);
+  });
 
-  return execute("delayInitToCheckForSearchAds", [value]);
+  // var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+
+  // return execute("delayInitToCheckForSearchAds", [value]);
 };
 
 Branch.prototype.getFirstReferringParams = function getFirstReferringParams() {

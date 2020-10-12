@@ -20,7 +20,6 @@ import java.util.Iterator;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
-import io.branch.referral.BranchUtil;
 import io.branch.referral.PrefHelper;
 import io.branch.referral.BranchError;
 import io.branch.referral.BranchViewHandler;
@@ -44,8 +43,9 @@ public class BranchSDK extends CordovaPlugin {
 
     // Standard Debugging Variables
     private static final String LCAT = "CordovaBranchSDK";
-    // todo pick up plugin version dynamically
-    private static final String BRANCH_PLUGIN_VERSION = "4.1.3";
+
+    private static final String BRANCH_PLUGIN_TYPE = "CordovaIonic";
+    private static final String BRANCH_PLUGIN_VERSION = "%BRANCH_PLUGIN_VERSION%";
 
     // Private Method Properties
     private ArrayList<BranchUniversalObjectWrapper> branchObjectWrappers;
@@ -72,8 +72,7 @@ public class BranchSDK extends CordovaPlugin {
 
         this.activity = this.cordova.getActivity();
         Branch.disableInstantDeepLinking(true);
-        BranchUtil.setPluginType(BranchUtil.PluginType.CordovaIonic);
-        BranchUtil.setPluginVersion(BRANCH_PLUGIN_VERSION);
+        Branch.registerPlugin(BRANCH_PLUGIN_TYPE, BRANCH_PLUGIN_VERSION);
         if (this.instance == null) {
             this.instance = Branch.getAutoInstance(this.activity.getApplicationContext());
         }
@@ -263,15 +262,11 @@ public class BranchSDK extends CordovaPlugin {
     }
     
     public void crossPlatformIds(CallbackContext callbackContext) {
-        // stub call from known issue with caching
-        // this.instance.getCrossPlatformIds(new BranchCPIDListener(callbackContext));
-        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, false));
+        this.instance.getCrossPlatformIds(new BranchCPIDListener(callbackContext));
     }
 
     public void lastAttributedTouchData(CallbackContext callbackContext) {
-        // stub call from known issue with caching
-        // this.instance.getLastAttributedTouchData(new BranchLATDListener(callbackContext), 30);
-        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, false));
+        this.instance.getLastAttributedTouchData(new BranchLATDListener(callbackContext), 30);
     }
 
     //////////////////////////////////////////////////
@@ -575,6 +570,8 @@ public class BranchSDK extends CordovaPlugin {
 
         branchUniversalWrapper.branchUniversalObj.registerView(new RegisterViewStatusListener(callbackContext));
 
+        callbackContext.success("Success");
+
     }
 
     /**
@@ -784,6 +781,20 @@ public class BranchSDK extends CordovaPlugin {
 
         this.instance.sendCommerceEvent(commerce, metaData, new BranchViewEventsListener(callbackContext));
 
+    }
+
+    public void sendBranchEvent(String eventName, CallbackContext callbackContext) throws JSONException {
+
+        BranchEvent event;
+        try {
+            BRANCH_STANDARD_EVENT standardEvent = BRANCH_STANDARD_EVENT.valueOf(eventName);
+            event = new BranchEvent(standardEvent);
+        } catch(IllegalArgumentException e) {
+            event = new BranchEvent(eventName);
+        }
+
+        event.logEvent(this.activity);
+        //callbackContext.success();
     }
 
     public void sendBranchEvent(String eventName, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
@@ -1427,7 +1438,11 @@ public class BranchSDK extends CordovaPlugin {
                     } else if (this.action.equals("sendCommerceEvent")) {
                         sendCommerceEvent(this.args.getJSONObject(0), this.args.getJSONObject(1), this.callbackContext);
                     } else if (this.action.equals("sendBranchEvent")) {
-                        sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
+                        if (this.args.length() == 2) {
+                            sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
+                        } else if (this.args.length() == 1) {
+                            sendBranchEvent(this.args.getString(0), this.callbackContext);
+                        }
                     } else if (this.action.equals("getFirstReferringParams")) {
                         getFirstReferringParams(this.callbackContext);
                     } else if (this.action.equals("getLatestReferringParams")) {
