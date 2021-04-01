@@ -793,21 +793,21 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
 }
 
 - (void)lastAttributedTouchData:(CDVInvokedUrlCommand *)command {
-  NSMutableDictionary *json = [NSMutableDictionary new];
+//   NSMutableDictionary *json = [NSMutableDictionary new];
 
-  Branch *branch = [self getInstance];
-  [branch lastAttributedTouchDataWithAttributionWindow:30 completion:^(BranchLastAttributedTouchData * _Nullable latd) {
-    CDVPluginResult* pluginResult = nil;
-    if (latd) {
-      [json setObject:latd.attributionWindow forKey:@"attribution_window"];
-      [json setObject:latd.lastAttributedTouchJSON forKey:@"last_attributed_touch_data"];
+//   Branch *branch = [self getInstance];
+//   [branch lastAttributedTouchDataWithAttributionWindow:30 completion:^(BranchLastAttributedTouchData * _Nullable latd) {
+//     CDVPluginResult* pluginResult = nil;
+//     if (latd) {
+//       [json setObject:latd.attributionWindow forKey:@"attribution_window"];
+//       [json setObject:latd.lastAttributedTouchJSON forKey:@"last_attributed_touch_data"];
 
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:json];
-    } else {
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No LATD available"];
-    }
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-  }];
+//       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:json];
+//     } else {
+//       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No LATD available"];
+//     }
+//     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//   }];
 }
 
 
