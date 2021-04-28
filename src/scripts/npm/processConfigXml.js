@@ -1,6 +1,7 @@
 (function() {
   // properties
 
+  const fs = require("fs");
   const path = require("path");
   const xmlHelper = require("../lib/xmlHelper.js");
 
@@ -57,6 +58,7 @@
     return {
       projectRoot: getProjectRoot(context),
       projectName: getProjectName(configXml),
+      branchJson: getBranchJson(context),
       branchKey: getBranchKey(branchXml, "branch-key-live"),
       branchKeyTest: getBranchValue(branchXml, "branch-key-test"),
       branchTestMode: getBranchValue(branchXml, "branch-test-mode"),
@@ -94,6 +96,24 @@
     }
 
     return output;
+  }
+
+  // Checks if branch.json exists in projectRoot and returns its path
+  function getBranchJson(context) {
+    const pathToBranchJson = path.join(context.opts.projectRoot, "branch.json");
+    let exists;
+
+    try {
+      fs.existsSync(pathToBranchJson);
+      exists = true;
+    } catch(err) {
+      exists = false;
+    }
+
+    return {
+      exists: exists,
+      path: pathToBranchJson
+    };
   }
 
   // read branch value from <branch-config>
