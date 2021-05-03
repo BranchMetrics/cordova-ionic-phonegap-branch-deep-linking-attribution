@@ -1,3 +1,9 @@
+4.2.4 - May 3, 2021
+
+CORE-1898 correct iOS API signature for LATD
+Fix alternate link domain issue - Thanks MaximBelov
+Fix exist check - Thanks MaximBelov
+
 4.2.3 - April 29, 2021
 
 Update Android SDK to 5.0.8
