@@ -1,5 +1,17 @@
-# [4.2.2](https://github.com/BranchMetrics/ios-branch-deep-linking-attribution/releases) (2021-04-01)
-* Update iOS SDK to 1.39.2
+4.2.4 - May 3, 2021
+
+CORE-1898 correct iOS API signature for LATD
+Fix alternate link domain issue - Thanks MaximBelov
+Fix exist check - Thanks MaximBelov
+
+4.2.3 - April 29, 2021
+
+Update Android SDK to 5.0.8
+
+4.2.2 - April 28, 2021
+
+Update iOS SDK to 1.39.2
+Update Android SDK to 5.0.7
 
 # [4.2.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.2.0...v4.2.1) (2020-11-05)
 

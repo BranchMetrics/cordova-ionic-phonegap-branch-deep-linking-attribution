@@ -12,7 +12,8 @@
 
   // entry
   module.exports = {
-    addAssociatedDomains: addAssociatedDomains
+    addAssociatedDomains: addAssociatedDomains,
+    updateAssociatedDomains: updateAssociatedDomains
   };
 
   // updates the associated domains from the link-domain field of the app's config.xml
@@ -126,6 +127,11 @@
 
     for (let i = 0; i < linkDomains.length; i++) {
       const linkDomain = linkDomains[i];
+
+      const isAlternateDomain = linkDomain.indexOf("-alternate") !== -1;
+      if(isAlternateDomain){
+        continue;
+      }
 
       // add link domain to associated domain
       domainList.push(prefix + linkDomain);
