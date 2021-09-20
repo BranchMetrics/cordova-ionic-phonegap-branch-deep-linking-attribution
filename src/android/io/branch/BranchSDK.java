@@ -170,19 +170,6 @@ public class BranchSDK extends CordovaPlugin {
                 } else if (action.equals("logout")) {
                     cordova.getActivity().runOnUiThread(r);
                     return true;
-                } else if (action.equals("loadRewards")) {
-                    cordova.getActivity().runOnUiThread(r);
-                    return true;
-                } else if (action.equals("redeemRewards")) {
-                    if (args.length() < 1 && args.length() > 2) {
-                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
-                        return false;
-                    }
-                    cordova.getActivity().runOnUiThread(r);
-                    return true;
-                } else if (action.equals("getCreditHistory")) {
-                    cordova.getActivity().runOnUiThread(r);
-                    return true;
                 } else if (action.equals("createBranchUniversalObject")) {
                     if (args.length() != 1) {
                         callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
@@ -302,64 +289,6 @@ public class BranchSDK extends CordovaPlugin {
     private void logout(CallbackContext callbackContext) {
 
         this.instance.logout(new LogoutStatusListener(callbackContext));
-
-    }
-
-    /**
-     * <p>Redeems the specified number of credits from the "default" bucket, if there are sufficient
-     * credits within it. If the number to redeem exceeds the number available in the bucket, all of
-     * the available credits will be redeemed instead.</p>
-     *
-     * @param value           An {@link Integer} specifying the number of credits to attempt to redeem from
-     *                        the bucket.
-     * @param callbackContext A callback to execute at the end of this method
-     */
-    private void redeemRewards(final int value, CallbackContext callbackContext) {
-
-        this.instance.redeemRewards(value, new RedeemRewardsListener(callbackContext));
-
-    }
-
-    /**
-     * <p>Redeems the specified number of credits from the "default" bucket, if there are sufficient
-     * credits within it. If the number to redeem exceeds the number available in the bucket, all of
-     * the available credits will be redeemed instead.</p>
-     *
-     * @param value           An {@link Integer} specifying the number of credits to attempt to redeem from
-     *                        the bucket.
-     * @param bucket          The name of the bucket to remove the credits from.
-     * @param callbackContext A callback to execute at the end of this method
-     */
-    private void redeemRewards(int value, String bucket, CallbackContext callbackContext) {
-
-        this.instance.redeemRewards(bucket, value, new RedeemRewardsListener(callbackContext));
-
-    }
-
-    /**
-     * <p>Retrieves rewards for the current session, with a callback to perform a predefined
-     * action following successful report of state change. You'll then need to call getCredits
-     * in the callback to update the credit totals in your UX.</p>
-     *
-     * @param callbackContext A callback to execute at the end of this method
-     * @param bucket          Load reward of a specific bucket
-     */
-    private void loadRewards(String bucket, CallbackContext callbackContext) {
-
-        this.instance.loadRewards(new LoadRewardsListener(bucket, callbackContext, this.instance));
-
-    }
-
-    /**
-     * <p>Retrieves rewards for the current session, with a callback to perform a predefined
-     * action following successful report of state change. You'll then need to call getCredits
-     * in the callback to update the credit totals in your UX.</p>
-     *
-     * @param callbackContext A callback to execute at the end of this method
-     */
-    private void loadRewards(CallbackContext callbackContext) {
-
-        this.instance.loadRewards(new LoadRewardsListener(callbackContext, this.instance));
 
     }
 
@@ -853,18 +782,6 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
-     * <p>Gets the credit history of the specified bucket and triggers a callback to handle the
-     * response.</p>
-     *
-     * @param callbackContext A callback to execute at the end of this method
-     */
-    private void getCreditHistory(CallbackContext callbackContext) {
-
-        this.instance.getCreditHistory(new CreditHistoryListener(callbackContext));
-
-    }
-
-    /**
      * @access protected
      * @class BranchUniversalObjectWrapper
      */
@@ -1097,78 +1014,6 @@ public class BranchSDK extends CordovaPlugin {
         }
     }
 
-    protected class LoadRewardsListener implements Branch.BranchReferralStateChangedListener {
-        private CallbackContext _callbackContext;
-        private Branch _instance;
-        private String _bucket;
-
-        public LoadRewardsListener(String bucket, CallbackContext callbackContext, Branch instance) {
-            this._callbackContext = callbackContext;
-            this._instance = instance;
-            this._bucket = bucket;
-        }
-
-        public LoadRewardsListener(CallbackContext callbackContext, Branch instance) {
-            this._callbackContext = callbackContext;
-            this._instance = instance;
-            this._bucket = "";
-        }
-
-        // Listener that implements BranchReferralStateChangedListener for loadRewards
-        @Override
-        public void onStateChanged(boolean changed, BranchError error) {
-            if (error == null) {
-
-                int credits = 0;
-
-                if (this._bucket.length() > 0) {
-                    credits = this._instance.getCreditsForBucket(this._bucket);
-                } else {
-                    credits = this._instance.getCredits();
-                }
-
-                this._callbackContext.success(credits);
-
-            } else {
-
-                String errorMessage = error.getMessage();
-
-                Log.d(LCAT, errorMessage);
-
-                this._callbackContext.error(errorMessage);
-
-            }
-
-        }
-    }
-
-    protected class RedeemRewardsListener implements Branch.BranchReferralStateChangedListener {
-        private CallbackContext _callbackContext;
-
-        // Constructor that takes in a required callbackContext object
-        public RedeemRewardsListener(CallbackContext callbackContext) {
-            this._callbackContext = callbackContext;
-        }
-
-        // Listener that implements BranchReferralStateChangedListener for redeemRewards
-        @Override
-        public void onStateChanged(boolean changed, BranchError error) {
-
-            if (error == null) {
-
-                this._callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, /* send boolean: is changed */ changed));
-
-            } else {
-
-                String errorMessage = error.getMessage();
-
-                Log.d(LCAT, errorMessage);
-
-                this._callbackContext.error(errorMessage);
-            }
-        }
-    }
-
     protected class GenerateShortUrlListener implements Branch.BranchLinkCreateListener {
         private CallbackContext _callbackContext;
 
@@ -1342,64 +1187,6 @@ public class BranchSDK extends CordovaPlugin {
         }
     }
 
-    protected class CreditHistoryListener implements Branch.BranchListResponseListener {
-        private CallbackContext _callbackContext;
-
-        // Constructor that takes in a required callbackContext object
-        public CreditHistoryListener(CallbackContext callbackContext) {
-            this._callbackContext = callbackContext;
-        }
-
-        // Listener that implements BranchListResponseListener for getCreditHistory()
-        @Override
-        public void onReceivingResponse(JSONArray list, BranchError error) {
-
-            ArrayList<String> errors = new ArrayList<String>();
-
-            if (error == null) {
-
-                JSONArray data = new JSONArray();
-
-                if (list != null) {
-
-                    for (int i = 0, limit = list.length(); i < limit; ++i) {
-
-                        JSONObject entry;
-
-                        try {
-                            entry = list.getJSONObject(i);
-                            data.put(entry);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            errors.add(e.getMessage());
-                        }
-
-                    }
-
-                }
-
-                if (errors.size() > 0) {
-                    StringBuilder sb = new StringBuilder();
-                    for (String s : errors) {
-                        sb.append(s);
-                        sb.append("\n");
-                    }
-                    this._callbackContext.error(sb.toString());
-                } else {
-                    this._callbackContext.success(data);
-                }
-            } else {
-
-                String errorMessage = error.getMessage();
-
-                Log.d(LCAT, errorMessage);
-
-                this._callbackContext.error(errorMessage);
-
-            }
-        }
-    }
-
     protected class RunnableThread implements Runnable {
 
         private String action;
@@ -1449,20 +1236,6 @@ public class BranchSDK extends CordovaPlugin {
                         getLatestReferringParams(this.callbackContext);
                     } else if (this.action.equals("logout")) {
                         logout(this.callbackContext);
-                    } else if (this.action.equals("loadRewards")) {
-                        if (this.args.length() == 1) {
-                            loadRewards(this.args.getString(0), this.callbackContext);
-                        } else {
-                            loadRewards(this.callbackContext);
-                        }
-                    } else if (this.action.equals("redeemRewards")) {
-                        if (this.args.length() == 1) {
-                            redeemRewards(this.args.getInt(0), this.callbackContext);
-                        } else if (this.args.length() == 2) {
-                            redeemRewards(this.args.getInt(0), this.args.getString(1), this.callbackContext);
-                        }
-                    } else if (this.action.equals("getCreditHistory")) {
-                        getCreditHistory(this.callbackContext);
                     } else if (this.action.equals("createBranchUniversalObject")) {
                         createBranchUniversalObject(this.args.getJSONObject(0), this.callbackContext);
                     } else if (this.action.equals("crossPlatformIds")) {

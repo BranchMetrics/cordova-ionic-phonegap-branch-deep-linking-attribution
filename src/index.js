@@ -15,7 +15,6 @@ const standardEvent = {
   STANDARD_EVENT_INITIATE_PURCHASE: "INITIATE_PURCHASE",
   STANDARD_EVENT_ADD_PAYMENT_INFO: "ADD_PAYMENT_INFO",
   STANDARD_EVENT_PURCHASE: "PURCHASE",
-  STANDARD_EVENT_SPEND_CREDITS: "SPEND_CREDITS",
   STANDARD_EVENT_SEARCH: "SEARCH",
   STANDARD_EVENT_VIEW_ITEM: "VIEW_ITEM",
   STANDARD_EVENT_VIEW_ITEMS: "VIEW_ITEMS",
@@ -291,24 +290,6 @@ Branch.prototype.createBranchUniversalObject = function createBranchUniversalObj
       }
     );
   });
-};
-
-Branch.prototype.loadRewards = function loadRewards(bucket) {
-  var output = !bucket ? "" : bucket;
-  return execute("loadRewards", [output]);
-};
-
-Branch.prototype.redeemRewards = function redeemRewards(value, bucket) {
-  var params = [value];
-  if (bucket) {
-    params.push(bucket);
-  }
-
-  return execute("redeemRewards", params);
-};
-
-Branch.prototype.creditHistory = function creditHistory() {
-  return execute("getCreditHistory");
 };
 
 Branch.prototype.crossPlatformIds = function crossPlatformIds() {
