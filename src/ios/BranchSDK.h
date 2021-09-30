@@ -39,11 +39,6 @@
 - (void)logout:(CDVInvokedUrlCommand*)command;
 - (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command;
 
-// Branch Referral Reward System
-- (void)loadRewards:(CDVInvokedUrlCommand*)command;
-- (void)redeemRewards:(CDVInvokedUrlCommand*)command;
-- (void)getCreditHistory:(CDVInvokedUrlCommand*)command;
-
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;
 - (void)registerView:(CDVInvokedUrlCommand*)command;
