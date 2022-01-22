@@ -1,16 +1,15 @@
 package io.branch;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
-import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,21 +19,17 @@ import java.util.Iterator;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
-import io.branch.referral.PrefHelper;
 import io.branch.referral.BranchError;
 import io.branch.referral.BranchViewHandler;
+import io.branch.referral.ServerRequestGetCPID.BranchCrossPlatformIdListener;
+import io.branch.referral.ServerRequestGetLATD.BranchLastAttributedTouchDataListener;
 import io.branch.referral.SharingHelper;
 import io.branch.referral.util.BRANCH_STANDARD_EVENT;
-import io.branch.referral.util.BranchEvent;
-import io.branch.referral.util.CommerceEvent;
-import io.branch.referral.util.CurrencyType;
-import io.branch.referral.util.Product;
-import io.branch.referral.util.ProductCategory;
-import io.branch.referral.util.ShareSheetStyle;
-
-import io.branch.referral.ServerRequestGetLATD.BranchLastAttributedTouchDataListener;
-import io.branch.referral.ServerRequestGetCPID.BranchCrossPlatformIdListener;
 import io.branch.referral.util.BranchCPID;
+import io.branch.referral.util.BranchEvent;
+import io.branch.referral.util.ContentMetadata;
+import io.branch.referral.util.CurrencyType;
+import io.branch.referral.util.ShareSheetStyle;
 
 public class BranchSDK extends CordovaPlugin {
 
@@ -141,13 +136,6 @@ public class BranchSDK extends CordovaPlugin {
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("userCompletedAction")) {
-                    if (args.length() < 1 && args.length() > 2) {
-                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
-                        return false;
-                    }
-                    cordova.getActivity().runOnUiThread(r);
-                    return true;
-                } else if (action.equals("sendCommerceEvent")) {
                     if (args.length() < 1 && args.length() > 2) {
                         callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
                         return false;
@@ -627,91 +615,6 @@ public class BranchSDK extends CordovaPlugin {
 
     }
 
-    /**
-     * <p>A void call to indicate that the user has performed a specific commerce event and for that to be
-     * reported to the Branch API.</p>
-     *
-     * @param action          A {@link String} value to be passed as an commerce event that the user has
-     *                        carried out.
-     * @param metaData        A {@link JSONObject} containing app-defined meta-data to be attached to a
-     *                        user action that has just been completed.
-     * @param callbackContext A callback to execute at the end of this method
-     */
-    private void sendCommerceEvent(JSONObject action, JSONObject metaData, CallbackContext callbackContext) throws JSONException {
-
-        CommerceEvent commerce = new CommerceEvent();
-        Iterator<String> keys = action.keys();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            String val;
-            try {
-                val = action.getString(key);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                callbackContext.error("Invalid key-value for " + key);
-                return;
-            }
-            if (key.equals("revenue")) {
-                commerce.setRevenue(Double.parseDouble(val));
-            } else if (key.equals("currency")) {
-                commerce.setCurrencyType(CurrencyType.values()[Integer.parseInt(val)]);
-            } else if (key.equals("transactionID")) {
-                commerce.setTransactionID(val);
-            } else if (key.equals("coupon")) {
-                commerce.setCoupon(val);
-            } else if (key.equals("shipping")) {
-                commerce.setShipping(Double.parseDouble(val));
-            } else if (key.equals("tax")) {
-                commerce.setTax(Double.parseDouble(val));
-            } else if (key.equals("affiliation")) {
-                commerce.setAffiliation(val);
-            } else if (key.equals("products")) {
-                JSONArray products = new JSONArray();
-                try {
-                    products = action.getJSONArray(key);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    callbackContext.error("Invalid key-value for " + key);
-                    return;
-                }
-                for (int i = 0; i < products.length(); ++i) {
-                    Product product = new Product();
-                    JSONObject item = products.getJSONObject(i);
-                    keys = item.keys();
-                    while (keys.hasNext()) {
-                        key = keys.next();
-                        try {
-                            val = item.getString(key);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            callbackContext.error("Invalid key-value for product for " + key);
-                            return;
-                        }
-                        if (key.equals("sku")) {
-                            product.setSku(val);
-                        } else if (key.equals("name")) {
-                            product.setName(val);
-                        } else if (key.equals("price")) {
-                            product.setPrice(Double.parseDouble(val));
-                        } else if (key.equals("quantity")) {
-                            product.setQuantity(Integer.parseInt(val));
-                        } else if (key.equals("brand")) {
-                            product.setBrand(val);
-                        } else if (key.equals("category")) {
-                            product.setCategory(ProductCategory.values()[Integer.parseInt(val)]);
-                        } else if (key.equals("variant")) {
-                            product.setVariant(val);
-                        }
-                    }
-                    commerce.addProduct(product);
-                }
-            }
-        }
-
-        this.instance.sendCommerceEvent(commerce, metaData, new BranchViewEventsListener(callbackContext));
-
-    }
-
     public void sendBranchEvent(String eventName, CallbackContext callbackContext) throws JSONException {
 
         BranchEvent event;
@@ -768,17 +671,65 @@ public class BranchSDK extends CordovaPlugin {
                 event.setCustomerEventAlias(metaData.getString("customerEventAlias"));
             } else if (key.equals("customData")) {
                 JSONObject customData = metaData.getJSONObject("customData");
-                keys = customData.keys();
+                Iterator<String> customDataKeys = customData.keys();
 
-                while (keys.hasNext()) {
-                    String keyValue = (String) keys.next();
+                while (customDataKeys.hasNext()) {
+                    String keyValue = (String) customDataKeys.next();
                     event.addCustomDataProperty(keyValue, customData.getString(keyValue));
+                }
+            } else if (key.equals("contentMetadata")) {
+                JSONArray contentMetadata = metaData.getJSONArray("contentMetadata");
+                for (int i = 0; i < contentMetadata.length(); i++) {
+                    JSONObject item = contentMetadata.getJSONObject(i);
+                    BranchUniversalObject universalObject =  this.getContentItem(item);
+                    event.addContentItems(universalObject);
                 }
             }
 
         }
         event.logEvent(this.activity);
         //callbackContext.success();
+    }
+
+    private BranchUniversalObject getContentItem(JSONObject item) throws JSONException {
+        BranchUniversalObject universalObject = new BranchUniversalObject();
+        ContentMetadata contentMetadata = new ContentMetadata();
+        Iterator<String> keys = item.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+
+            switch (key) {
+                case "quantity":
+                    contentMetadata.setQuantity(Double.parseDouble(item.getString(key)));
+                    break;
+                case "price":
+                    contentMetadata.price = Double.parseDouble(item.getString(key));
+                    break;
+                case "currency":
+                    String currencyString = item.getString(key);
+                    CurrencyType currency = CurrencyType.getValue(currencyString);
+                    if (currency != null) {
+                        contentMetadata.currencyType = currency;
+                    }
+                    break;
+                case "productName":
+                    contentMetadata.setProductName(item.getString(key));
+                    break;
+                case "productBrand":
+                    contentMetadata.setProductBrand(item.getString(key));
+                    break;
+                case "sku":
+                    contentMetadata.setSku(item.getString(key));
+                    break;
+                default:
+                    contentMetadata.addCustomMetadata(key, item.getString(key));
+                    break;
+            }
+        }
+
+        universalObject.setContentMetadata(contentMetadata);
+
+        return universalObject;
     }
 
     /**
@@ -1222,8 +1173,6 @@ public class BranchSDK extends CordovaPlugin {
                         } else if (this.args.length() == 1) {
                             userCompletedAction(this.args.getString(0), this.callbackContext);
                         }
-                    } else if (this.action.equals("sendCommerceEvent")) {
-                        sendCommerceEvent(this.args.getJSONObject(0), this.args.getJSONObject(1), this.callbackContext);
                     } else if (this.action.equals("sendBranchEvent")) {
                         if (this.args.length() == 2) {
                             sendBranchEvent(this.args.getString(0), this.args.getJSONObject(1), this.callbackContext);
