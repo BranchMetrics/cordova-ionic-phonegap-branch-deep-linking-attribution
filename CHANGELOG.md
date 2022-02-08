@@ -1,3 +1,13 @@
+5.0.1 February 8, 2022
+* Remove request package (thanks for catching Sujay-shetty)
+
+5.0.0
+* Add content items support in sendBranchEvent
+* Remove sendCommerceEvent
+* Fix bug where custom data would clobber other fields when creating event in Android plugin
+* Update iOS SDK to 1.40.2
+* Update Android SDK to 5.0.15
+
 4.2.4 - May 3, 2021
 
 CORE-1898 correct iOS API signature for LATD
