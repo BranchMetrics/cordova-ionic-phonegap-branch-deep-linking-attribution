@@ -2,7 +2,7 @@
   "name": "branch-cordova-sdk",
   "description": "Branch Metrics Cordova SDK",
   "main": "src/index.js",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "homepage": "https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking",
   "repository": {
     "type": "git",
@@ -60,7 +60,6 @@
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.1",
     "plist": "^3.0.1",
-    "request": "^2.85.0",
     "shelljs": "^0.8.3",
     "xcode": "^2.0.0",
     "xml2js": "^0.4.19"
