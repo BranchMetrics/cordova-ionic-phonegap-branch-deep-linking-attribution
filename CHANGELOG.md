@@ -1,7 +1,7 @@
 5.0.1 February 8, 2022
 * Remove request package (thanks for catching Sujay-shetty)
 
-5.0.0
+5.0.0 January 21, 2022
 * Add content items support in sendBranchEvent
 * Remove sendCommerceEvent
 * Fix bug where custom data would clobber other fields when creating event in Android plugin
