@@ -294,6 +294,7 @@
       );
     }
     if (
+      [...preferences.linkDomain, ...preferences.androidLinkDomain, preferences.iosLinkDomain].find(domain => domain === 'bnc.lt') &&
       preferences.androidPrefix !== null &&
       !/^[/].[a-zA-Z0-9]{3,4}$/.test(preferences.androidPrefix)
     ) {
