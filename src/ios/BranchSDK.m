@@ -86,11 +86,6 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
 #pragma mark - Public APIs
 #pragma mark - Branch Basic Methods
 
-- (void)enableTestMode:(CDVInvokedUrlCommand*)command
-{
-  [Branch setUseTestBranchKey:TRUE];
-}
-
 - (void)initSession:(CDVInvokedUrlCommand*)command
 {
   [[Branch getInstance] registerPluginName:@"CordovaIonic" version:pluginVersion];
@@ -153,11 +148,11 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (void)setDebug:(CDVInvokedUrlCommand*)command
+- (void)enableLogging:(CDVInvokedUrlCommand*)command
 {
-  bool enableDebug = [[command.arguments objectAtIndex:0] boolValue];
-  if (enableDebug) {
-    [[Branch getInstance] setDebug];
+  bool enableLogging = [[command.arguments objectAtIndex:0] boolValue];
+  if (enableLogging) {
+    [[Branch getInstance] enableLogging];
   }
 
   CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enableDebug];

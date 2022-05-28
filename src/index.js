@@ -34,7 +34,7 @@ const standardEvent = {
 
 // Branch prototype
 var Branch = function Branch() {
-  this.debugMode = false;
+  this.enableLogging = false;
   this.trackingDisabled = false;
   this.sessionInitialized = false;
 };
@@ -113,11 +113,18 @@ Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
   return execute("setRequestMetadata", [key, val]);
 };
 
+// Deprecated. Replaced by setLogging(isEnabled) and test devices. https://help.branch.io/using-branch/docs/adding-test-devices
 Branch.prototype.setDebug = function setDebug(isEnabled) {
-  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
-  this.debugMode = value;
+  return new Promise(function promise(resolve, reject) {
+    resolve(false);
+  });
+};
 
-  return execute("setDebug", [value]);
+Branch.prototype.setLogging = function setLogging(isEnabled) {
+  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+  this.enableLogging = value;
+
+  return execute("enableLogging", [value]);
 };
 
 Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
