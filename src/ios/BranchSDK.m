@@ -86,6 +86,11 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
 #pragma mark - Public APIs
 #pragma mark - Branch Basic Methods
 
+- (void)enableTestMode:(CDVInvokedUrlCommand*)command
+{
+  [Branch setUseTestBranchKey:TRUE];
+}
+
 - (void)initSession:(CDVInvokedUrlCommand*)command
 {
   [[Branch getInstance] registerPluginName:@"CordovaIonic" version:pluginVersion];
