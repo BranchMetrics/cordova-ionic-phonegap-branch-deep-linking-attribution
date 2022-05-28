@@ -527,15 +527,19 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
-     * <p>Sets the library to function in debug mode, enabling logging of all requests.</p>
-     * <p>If you want to flag debug, call this <b>before</b> initUserSession</p>
+     * <p>Enabling Branch SDK logging</p>
      *
-     * @param isEnable        A {@link Boolean} value to enable/disable debugging mode for the app.
+     * @param isEnable        A {@link Boolean} value to enable/disable logging
      * @param callbackContext A callback to execute at the end of this method
      */
-    private void setDebug(boolean isEnable, CallbackContext callbackContext) {
+    private void setLogging(boolean isEnable, CallbackContext callbackContext) {
         this.activity = this.cordova.getActivity();
-        Branch.enableDebugMode();
+        if (isEnable == true) {
+            Branch.enableLogging();
+        } else {
+            Branch.disableLogging();
+        }
+
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
     }
 

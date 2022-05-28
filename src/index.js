@@ -120,6 +120,7 @@ Branch.prototype.setDebug = function setDebug(isEnabled) {
   });
 };
 
+// For early lifecycle logging, we recommend you enable logging in the native iOS or Android code.
 Branch.prototype.setLogging = function setLogging(isEnabled) {
   var value = typeof isEnabled !== "boolean" ? false : isEnabled;
   this.enableLogging = value;

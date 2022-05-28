@@ -160,7 +160,7 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
     [[Branch getInstance] enableLogging];
   }
 
-  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enableDebug];
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:enableLogging];
 
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
