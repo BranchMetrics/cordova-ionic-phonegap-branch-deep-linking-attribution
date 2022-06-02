@@ -115,7 +115,7 @@ public class BranchSDK extends CordovaPlugin {
 
         Runnable r = new RunnableThread(action, args, callbackContext);
 
-        if (action.equals("setDebug")) {
+        if (action.equals("setLogging")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
         } else if (action.equals("setCookieBasedMatching")) {
@@ -1158,8 +1158,8 @@ public class BranchSDK extends CordovaPlugin {
             try {
                 Log.d(LCAT, "Runnable: " + this.action);
 
-                if (this.action.equals("setDebug")) {
-                    setDebug(this.args.getBoolean(0), this.callbackContext);
+                if (this.action.equals("setLogging")) {
+                    setLogging(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("setCookieBasedMatching")) {
                     setCookieBasedMatching(this.args.getString(0), this.callbackContext);
                 } else if (this.action.equals("disableTracking")) {
