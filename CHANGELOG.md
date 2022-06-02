@@ -1,3 +1,12 @@
+5.1.0 May 27, 2022
+* Update iOS SDK to 1.42.0
+* Update Android SDK to 5.1.5
+* Update 3rd party dependencies. Of note the plist vulnerability. (Thanks Sujay-shetty)
+* Replace setDebug with setLogging and test devices. https://help.branch.io/using-branch/docs/adding-test-devices
+
+5.0.2 February 9, 2022
+* Update dependencies to latest non-breaking versions, of note the shelljs vulnerability. (Thanks again Sujay-shetty!)
+
 5.0.1 February 8, 2022
 * Remove request package (thanks for catching Sujay-shetty)
 
