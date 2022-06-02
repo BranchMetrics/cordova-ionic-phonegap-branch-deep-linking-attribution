@@ -63,7 +63,7 @@ SOFTWARE.
     <!-- Manifest configuration is done via a js script.  We should move it to this config in the future. -->
 
     <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-    <framework src="io.branch.sdk.android:library:5.1.4"/>
+    <framework src="io.branch.sdk.android:library:5.1.5"/>
   </platform>
 
   <!-- iOS -->
