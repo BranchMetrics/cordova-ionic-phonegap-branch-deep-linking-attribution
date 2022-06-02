@@ -1,6 +1,6 @@
 5.1.0 May 27, 2022
 * Update iOS SDK to 1.42.0
-* Update Android SDK to 5.1.4
+* Update Android SDK to 5.1.5
 * Update 3rd party dependencies. Of note the plist vulnerability. (Thanks Sujay-shetty)
 * Replace setDebug with setLogging and test devices. https://help.branch.io/using-branch/docs/adding-test-devices
 
