@@ -223,6 +223,9 @@ public class BranchSDK extends CordovaPlugin {
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
+                } else if (action.equals("getBranchQRCode")) {
+                    cordova.getActivity().runOnUiThread(r);
+                    return true; 
                 }
 
                 return true;
@@ -505,6 +508,45 @@ public class BranchSDK extends CordovaPlugin {
         BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
 
         branchUniversalWrapper.branchUniversalObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener(callbackContext));
+
+    }
+
+    /**
+     * Generate a QR code.
+     *
+     * @param qrCodeSettings   A {@link JSONObject} value to set QR cide options.
+     * @param instanceIdx   The instance index from branchObjects array
+     * @param options       A {@link JSONObject} value to set URL options.
+     * @param controlParams A {@link JSONObject} value to set the URL control parameters.
+     */
+    private void getBranchQRCode(JSONObject qrCodeSettings, int instanceIdx, JSONObject options, JSONObject controlParams, CallbackContext callbackContext) throws JSONException {
+
+        BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
+
+        BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
+        BranchUniversalObject buo = branchUniversalWrapper.branchUniversalObj;
+
+        try {
+            qrCode.getQRCodeAsData(getReactApplicationContext().getCurrentActivity(), branchUniversalObject, linkProperties, new BranchQRCode.BranchQRCodeDataHandler() {
+                @Override
+                public void onSuccess(byte[] qrCodeData) {
+                    String qrCodeString = Base64.encodeToString(qrCodeData, Base64.DEFAULT);
+                    promise.resolve(qrCodeString);
+                }
+    
+                @Override
+                public void onFailure(Exception e) {
+                    Log.d("Failed to get QR Code", e.getMessage());
+                    promise.reject("Failed to get QR Code", e.getMessage());
+                }    
+                });
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("Failed to get QR Code", e.getMessage());
+            promise.reject("Failed to get QR Code", e.getMessage());
+        }
+        
+        //branchUniversalWrapper.branchUniversalObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener(callbackContext));
 
     }
 

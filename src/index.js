@@ -39,7 +39,7 @@ var Branch = function Branch() {
   this.sessionInitialized = false;
 };
 
-// JavsSript to SDK wrappers
+// JavaScript to SDK wrappers
 function execute(method, params) {
   var output = !params ? [] : params;
 
@@ -313,6 +313,30 @@ Branch.prototype.crossPlatformIds = function crossPlatformIds() {
 Branch.prototype.lastAttributedTouchData = function lastAttributedTouchData() {
   return execute("lastAttributedTouchData");
 };
+
+Branch.prototype.getBranchQRCode = function getBranchQRCode(
+  qrCodeSettings,
+  branchUniversalObject,
+  analytics,
+  properties
+) {
+  var args = [];
+  if (qrCodeSettings) {
+    args.push(qrCodeSettings);
+  }
+  if (branchUniversalObject) {
+    args.push(branchUniversalObject.instanceId);
+  }
+  if (analytics) {
+    args.push(analytics);
+  }
+  if (properties) {
+    args.push(properties);
+  }
+
+  return execute("getBranchQRCode", args);
+};
+
 
 // export Branch object
 module.exports = new Branch();

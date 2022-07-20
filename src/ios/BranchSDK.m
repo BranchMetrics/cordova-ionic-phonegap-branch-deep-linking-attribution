@@ -648,6 +648,133 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
   }];
 }
 
+- (void)getBranchQRCode:(CDVInvokedUrlCommand*)command
+{
+    int branchUniversalObjectId = [[command.arguments objectAtIndex:1] intValue];
+    NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
+    BranchUniversalObject *branchUniversalObj = [branchUniversalObjDict objectForKey:@"branchUniversalObj"];
+      //BranchUniversalObject *branchUniversalObj = [BranchUniversalObject new];//[[BranchUniversalObject alloc] initWithMap:universalObjectProperties];
+
+    BranchLinkProperties *linkProperties = [BranchLinkProperties new];//[self createLinkProperties:linkPropertiesMap withControlParams:controlParamsMap];
+    
+    NSDictionary *arg1 = [command.arguments objectAtIndex:2];
+    NSDictionary *arg2 = [command.arguments objectAtIndex:3];
+
+    for (id key in arg1) {
+      if ([key isEqualToString:@"duration"]) {
+        linkProperties.matchDuration = (NSUInteger)[((NSNumber *)[arg1 objectForKey:key]) integerValue];
+      }
+      else if ([key isEqualToString:@"feature"]) {
+        linkProperties.feature = [arg1 objectForKey:key];
+      }
+      else if ([key isEqualToString:@"stage"]) {
+        linkProperties.stage = [arg1 objectForKey:key];
+      }
+      else if ([key isEqualToString:@"campaign"]) {
+        linkProperties.campaign = [arg1 objectForKey:key];
+      }
+      else if ([key isEqualToString:@"alias"]) {
+        linkProperties.alias = [arg1 objectForKey:key];
+      }
+      else if ([key isEqualToString:@"channel"]) {
+        linkProperties.channel = [arg1 objectForKey:key];
+      }
+      else if ([key isEqualToString:@"tags"] && [[arg1 objectForKey:key] isKindOfClass:[NSArray class]]) {
+        linkProperties.tags = [arg1 objectForKey:key];
+      }
+    }
+    if (arg2) {
+      for (id key in arg2) {
+        [linkProperties addControlParam:key withValue:[arg2 objectForKey:key]];
+      }
+    }
+
+
+    NSMutableDictionary *qrCodeSettingsMap = [command.arguments objectAtIndex:0];
+
+    BranchQRCode *qrCode = [BranchQRCode new];
+    
+    if (qrCodeSettingsMap[@"codeColor"]) {
+        qrCode.codeColor = [self colorWithHexString:qrCodeSettingsMap[@"codeColor"]];
+    }
+    if (qrCodeSettingsMap[@"backgroundColor"]) {
+        qrCode.backgroundColor = [self colorWithHexString:qrCodeSettingsMap[@"backgroundColor"]];
+    }
+    if (qrCodeSettingsMap[@"centerLogo"]) {
+        qrCode.centerLogo = qrCodeSettingsMap[@"centerLogo"];
+    }
+    if (qrCodeSettingsMap[@"width"]) {
+        qrCode.width = qrCodeSettingsMap[@"width"];
+    }
+    if (qrCodeSettingsMap[@"margin"]) {
+        qrCode.margin = qrCodeSettingsMap[@"margin"];
+    }
+    if (qrCodeSettingsMap[@"imageFormat"]) {
+        if ([qrCodeSettingsMap[@"imageFormat"] isEqual:@"JPEG"]) {
+            qrCode.imageFormat = BranchQRCodeImageFormatJPEG;
+        } else {
+            qrCode.imageFormat = BranchQRCodeImageFormatPNG;
+        }
+    }
+
+    [qrCode getQRCodeAsData:branchUniversalObj linkProperties:linkProperties completion:^(NSData * _Nonnull qrCodeData, NSError * _Nonnull error) {
+      CDVPluginResult* pluginResult = nil;
+        
+        if (!error) {
+            NSString* imageString = [qrCodeData base64EncodedStringWithOptions:nil];
+            NSLog(@"Success");
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:imageString];
+        } else {
+            NSLog(@"Error");
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+        }
+
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
+}
+
+- (UIColor *) colorWithHexString: (NSString *) hexString {
+    NSString *colorString = [[hexString stringByReplacingOccurrencesOfString: @"#" withString: @""] uppercaseString];
+    CGFloat alpha, red, blue, green;
+    switch ([colorString length]) {
+        case 3: // #RGB
+            alpha = 1.0f;
+            red   = [self colorComponentFrom: colorString start: 0 length: 1];
+            green = [self colorComponentFrom: colorString start: 1 length: 1];
+            blue  = [self colorComponentFrom: colorString start: 2 length: 1];
+            break;
+        case 4: // #ARGB
+            alpha = [self colorComponentFrom: colorString start: 0 length: 1];
+            red   = [self colorComponentFrom: colorString start: 1 length: 1];
+            green = [self colorComponentFrom: colorString start: 2 length: 1];
+            blue  = [self colorComponentFrom: colorString start: 3 length: 1];          
+            break;
+        case 6: // #RRGGBB
+            alpha = 1.0f;
+            red   = [self colorComponentFrom: colorString start: 0 length: 2];
+            green = [self colorComponentFrom: colorString start: 2 length: 2];
+            blue  = [self colorComponentFrom: colorString start: 4 length: 2];                      
+            break;
+        case 8: // #AARRGGBB
+            alpha = [self colorComponentFrom: colorString start: 0 length: 2];
+            red   = [self colorComponentFrom: colorString start: 2 length: 2];
+            green = [self colorComponentFrom: colorString start: 4 length: 2];
+            blue  = [self colorComponentFrom: colorString start: 6 length: 2];                      
+            break;
+        default:
+            NSLog(@"Error: Invalid color value. It should be a hex value of the form #RBG, #ARGB, #RRGGBB, or #AARRGGBB");
+            break;
+    }
+    return [UIColor colorWithRed: red green: green blue: blue alpha: alpha];
+}
+
+- (CGFloat) colorComponentFrom: (NSString *) string start: (NSUInteger) start length: (NSUInteger) length {
+    NSString *substring = [string substringWithRange: NSMakeRange(start, length)];
+    NSString *fullHex = length == 2 ? substring : [NSString stringWithFormat: @"%@%@", substring, substring];
+    unsigned hexComponent;
+    [[NSScanner scannerWithString: fullHex] scanHexInt: &hexComponent];
+    return hexComponent / 255.0;
+}
 
 #pragma mark - URL Methods (not fully implemented YET!)
 
