@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.util.Base64;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.IOException;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -24,12 +26,14 @@ import io.branch.referral.BranchViewHandler;
 import io.branch.referral.ServerRequestGetCPID.BranchCrossPlatformIdListener;
 import io.branch.referral.ServerRequestGetLATD.BranchLastAttributedTouchDataListener;
 import io.branch.referral.SharingHelper;
+import io.branch.referral.QRCode.BranchQRCode;
 import io.branch.referral.util.BRANCH_STANDARD_EVENT;
 import io.branch.referral.util.BranchCPID;
 import io.branch.referral.util.BranchEvent;
 import io.branch.referral.util.ContentMetadata;
 import io.branch.referral.util.CurrencyType;
 import io.branch.referral.util.ShareSheetStyle;
+
 
 public class BranchSDK extends CordovaPlugin {
 
@@ -526,26 +530,36 @@ public class BranchSDK extends CordovaPlugin {
         BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
         BranchUniversalObject buo = branchUniversalWrapper.branchUniversalObj;
 
+        BranchQRCode qrCode = new BranchQRCode();
+        //setCodeColor, setWidth, etc.
+
         try {
-            qrCode.getQRCodeAsData(getReactApplicationContext().getCurrentActivity(), branchUniversalObject, linkProperties, new BranchQRCode.BranchQRCodeDataHandler() {
-                @Override
-                public void onSuccess(byte[] qrCodeData) {
-                    String qrCodeString = Base64.encodeToString(qrCodeData, Base64.DEFAULT);
-                    promise.resolve(qrCodeString);
-                }
-    
-                @Override
-                public void onFailure(Exception e) {
-                    Log.d("Failed to get QR Code", e.getMessage());
-                    promise.reject("Failed to get QR Code", e.getMessage());
-                }    
-                });
+            qrCode.getQRCodeAsData(this.activity, buo, linkProperties, new GetBranchQRCodeListener(callbackContext));
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("Failed to get QR Code", e.getMessage());
-            promise.reject("Failed to get QR Code", e.getMessage());
         }
-        
+
+        //try {
+        //     qrCode.getQRCodeAsData(this.activity, branchUniversalObject, linkProperties, new GetBranchQRCodeListener(callbackContext)) {
+        //         @Override
+        //         public void onSuccess(byte[] qrCodeData) {
+        //             String qrCodeString = Base64.encodeToString(qrCodeData, Base64.DEFAULT);
+        //             promise.resolve(qrCodeString);
+        //         }
+    
+        //         @Override
+        //         public void onFailure(Exception e) {
+        //             Log.d("Failed to get QR Code", e.getMessage());
+        //             promise.reject("Failed to get QR Code", e.getMessage());
+        //         }    
+        //         });
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        //     Log.d("Failed to get QR Code", e.getMessage());
+        //     promise.reject("Failed to get QR Code", e.getMessage());
+        // }
+
         //branchUniversalWrapper.branchUniversalObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener(callbackContext));
 
     }
@@ -1060,6 +1074,38 @@ public class BranchSDK extends CordovaPlugin {
 
     }
 
+    protected class GetBranchQRCodeListener implements BranchQRCode.BranchQRCodeDataHandler {
+        private CallbackContext _callbackContext;
+
+        // Constructor that takes in a required callbackContext object
+        public GetBranchQRCodeListener(CallbackContext callbackContext) {
+
+            this._callbackContext = callbackContext;
+
+        }
+
+        @Override
+        public void onSuccess(byte[] qrCodeData) {
+
+            String qrCodeString = Base64.encodeToString(qrCodeData, Base64.DEFAULT);
+
+            String response = qrCodeString;
+         
+            Log.d(LCAT, response);
+            this._callbackContext.success(response);
+        }
+
+        @Override
+        public void onFailure(Exception e) {
+                
+            String errorMessage = String.valueOf(e);
+
+            Log.d(LCAT, errorMessage);
+            this._callbackContext.error(errorMessage);
+        }
+
+    }
+
     protected class ShowShareSheetListener implements Branch.BranchLinkShareListener {
 
         private CallbackContext _onShareLinkDialogLaunched;
@@ -1239,6 +1285,8 @@ public class BranchSDK extends CordovaPlugin {
                         lastAttributedTouchData(this.callbackContext);
                     } else if (this.action.equals(("generateShortUrl"))) {
                         generateShortUrl(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), this.callbackContext);
+                    } else if (this.action.equals(("getBranchQRCode"))) {
+                        getBranchQRCode(this.args.getJSONObject(0), this.args.getInt(1), this.args.getJSONObject(2), this.args.getJSONObject(3), this.callbackContext);
                     } else if (this.action.equals("registerView")) {
                         registerView(this.args.getInt(0), this.callbackContext);
                     } else if (this.action.equals("showShareSheet")) {
