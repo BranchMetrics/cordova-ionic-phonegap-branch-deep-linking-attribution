@@ -653,9 +653,8 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
     int branchUniversalObjectId = [[command.arguments objectAtIndex:1] intValue];
     NSMutableDictionary *branchUniversalObjDict = [self.branchUniversalObjArray objectAtIndex:branchUniversalObjectId];
     BranchUniversalObject *branchUniversalObj = [branchUniversalObjDict objectForKey:@"branchUniversalObj"];
-      //BranchUniversalObject *branchUniversalObj = [BranchUniversalObject new];//[[BranchUniversalObject alloc] initWithMap:universalObjectProperties];
 
-    BranchLinkProperties *linkProperties = [BranchLinkProperties new];//[self createLinkProperties:linkPropertiesMap withControlParams:controlParamsMap];
+    BranchLinkProperties *linkProperties = [BranchLinkProperties new];
     
     NSDictionary *arg1 = [command.arguments objectAtIndex:2];
     NSDictionary *arg2 = [command.arguments objectAtIndex:3];
@@ -689,7 +688,6 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
       }
     }
 
-
     NSMutableDictionary *qrCodeSettingsMap = [command.arguments objectAtIndex:0];
 
     BranchQRCode *qrCode = [BranchQRCode new];
@@ -722,10 +720,8 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
         
         if (!error) {
             NSString* imageString = [qrCodeData base64EncodedStringWithOptions:nil];
-            NSLog(@"Success");
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:imageString];
         } else {
-            NSLog(@"Error");
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
         }
 

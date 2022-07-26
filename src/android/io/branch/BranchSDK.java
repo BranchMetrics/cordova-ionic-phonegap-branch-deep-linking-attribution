@@ -228,6 +228,10 @@ public class BranchSDK extends CordovaPlugin {
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
                 } else if (action.equals("getBranchQRCode")) {
+                      if (args.length() != 4) {
+                        callbackContext.error(String.format("Parameter mismatched. 4 is required but %d is given", args.length()));
+                        return false;
+                    }
                     cordova.getActivity().runOnUiThread(r);
                     return true; 
                 }
@@ -530,38 +534,43 @@ public class BranchSDK extends CordovaPlugin {
         BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
         BranchUniversalObject buo = branchUniversalWrapper.branchUniversalObj;
 
-        BranchQRCode qrCode = new BranchQRCode();
-        //setCodeColor, setWidth, etc.
-
-        try {
-            qrCode.getQRCodeAsData(this.activity, buo, linkProperties, new GetBranchQRCodeListener(callbackContext));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("Failed to get QR Code", e.getMessage());
+        BranchQRCode branchQRCode = new BranchQRCode();
+        if (qrCodeSettings.has("codeColor")) branchQRCode.setCodeColor(qrCodeSettings.getString("codeColor"));
+        if (qrCodeSettings.has("backgroundColor")) branchQRCode.setBackgroundColor(qrCodeSettings.getString("backgroundColor"));
+        if (qrCodeSettings.has("centerLogo")) branchQRCode.setCenterLogo(qrCodeSettings.getString("centerLogo"));
+        if (qrCodeSettings.has("width")) branchQRCode.setWidth(qrCodeSettings.getInt("width"));
+        if (qrCodeSettings.has("margin")) branchQRCode.setMargin(qrCodeSettings.getInt("margin"));
+        if (qrCodeSettings.has("imageFormat")) {
+            String imageFormat = qrCodeSettings.getString("imageFormat");
+            if (imageFormat != null ) {
+                if (imageFormat.equals("JPEG")) {
+                    branchQRCode.setImageFormat(BranchQRCode.BranchImageFormat.JPEG);
+                } else {
+                    branchQRCode.setImageFormat(BranchQRCode.BranchImageFormat.PNG);
+                }
+            }
         }
 
-        //try {
-        //     qrCode.getQRCodeAsData(this.activity, branchUniversalObject, linkProperties, new GetBranchQRCodeListener(callbackContext)) {
-        //         @Override
-        //         public void onSuccess(byte[] qrCodeData) {
-        //             String qrCodeString = Base64.encodeToString(qrCodeData, Base64.DEFAULT);
-        //             promise.resolve(qrCodeString);
-        //         }
+        try {
+            branchQRCode.getQRCodeAsData(this.activity, buo, linkProperties, new BranchQRCode.BranchQRCodeDataHandler() {
+                @Override
+                public void onSuccess(byte[] qrCodeData) {
+                    String qrCodeString = Base64.encodeToString(qrCodeData, Base64.DEFAULT);
+                    Log.d(LCAT, qrCodeString);
+                    callbackContext.success(qrCodeString);
+                }
     
-        //         @Override
-        //         public void onFailure(Exception e) {
-        //             Log.d("Failed to get QR Code", e.getMessage());
-        //             promise.reject("Failed to get QR Code", e.getMessage());
-        //         }    
-        //         });
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        //     Log.d("Failed to get QR Code", e.getMessage());
-        //     promise.reject("Failed to get QR Code", e.getMessage());
-        // }
-
-        //branchUniversalWrapper.branchUniversalObj.generateShortUrl(this.activity, linkProperties, new GenerateShortUrlListener(callbackContext));
-
+                @Override
+                public void onFailure(Exception e) {
+                    Log.d(LCAT, e.getMessage());
+                    callbackContext.error(e.getMessage());
+                }    
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(LCAT, e.getMessage());
+            callbackContext.error(e.getMessage());
+        }
     }
 
     /**
@@ -1073,39 +1082,7 @@ public class BranchSDK extends CordovaPlugin {
         }
 
     }
-
-    protected class GetBranchQRCodeListener implements BranchQRCode.BranchQRCodeDataHandler {
-        private CallbackContext _callbackContext;
-
-        // Constructor that takes in a required callbackContext object
-        public GetBranchQRCodeListener(CallbackContext callbackContext) {
-
-            this._callbackContext = callbackContext;
-
-        }
-
-        @Override
-        public void onSuccess(byte[] qrCodeData) {
-
-            String qrCodeString = Base64.encodeToString(qrCodeData, Base64.DEFAULT);
-
-            String response = qrCodeString;
-         
-            Log.d(LCAT, response);
-            this._callbackContext.success(response);
-        }
-
-        @Override
-        public void onFailure(Exception e) {
-                
-            String errorMessage = String.valueOf(e);
-
-            Log.d(LCAT, errorMessage);
-            this._callbackContext.error(errorMessage);
-        }
-
-    }
-
+    
     protected class ShowShareSheetListener implements Branch.BranchLinkShareListener {
 
         private CallbackContext _onShareLinkDialogLaunched;
