@@ -535,11 +535,21 @@ public class BranchSDK extends CordovaPlugin {
         BranchUniversalObject buo = branchUniversalWrapper.branchUniversalObj;
 
         BranchQRCode branchQRCode = new BranchQRCode();
-        if (qrCodeSettings.has("codeColor")) branchQRCode.setCodeColor(qrCodeSettings.getString("codeColor"));
-        if (qrCodeSettings.has("backgroundColor")) branchQRCode.setBackgroundColor(qrCodeSettings.getString("backgroundColor"));
-        if (qrCodeSettings.has("centerLogo")) branchQRCode.setCenterLogo(qrCodeSettings.getString("centerLogo"));
-        if (qrCodeSettings.has("width")) branchQRCode.setWidth(qrCodeSettings.getInt("width"));
-        if (qrCodeSettings.has("margin")) branchQRCode.setMargin(qrCodeSettings.getInt("margin"));
+        if (qrCodeSettings.has("codeColor")) {
+            branchQRCode.setCodeColor(qrCodeSettings.getString("codeColor"));
+        }
+        if (qrCodeSettings.has("backgroundColor")) {
+            branchQRCode.setBackgroundColor(qrCodeSettings.getString("backgroundColor"));
+        }
+        if (qrCodeSettings.has("centerLogo")) {
+            branchQRCode.setCenterLogo(qrCodeSettings.getString("centerLogo"));
+        }
+        if (qrCodeSettings.has("width")) {
+            branchQRCode.setWidth(qrCodeSettings.getInt("width"));
+        }
+        if (qrCodeSettings.has("margin")) {
+            branchQRCode.setMargin(qrCodeSettings.getInt("margin"));
+        }
         if (qrCodeSettings.has("imageFormat")) {
             String imageFormat = qrCodeSettings.getString("imageFormat");
             if (imageFormat != null ) {
