@@ -141,14 +141,14 @@ public class BranchSDK extends CordovaPlugin {
                     return true;
                 } else if (action.equals("userCompletedAction")) {
                     if (args.length() < 1 && args.length() > 2) {
-                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("sendBranchEvent")) {
                     if (args.length() < 1 && args.length() > 2) {
-                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
@@ -164,7 +164,7 @@ public class BranchSDK extends CordovaPlugin {
                     return true;
                 } else if (action.equals("createBranchUniversalObject")) {
                     if (args.length() != 1) {
-                        callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
@@ -180,21 +180,21 @@ public class BranchSDK extends CordovaPlugin {
 
                 } else if (action.equals(("generateShortUrl"))) {
                     if (args.length() != 3) {
-                        callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("registerView")) {
                     if (args.length() != 1) {
-                        callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("showShareSheet")) {
                     if (args.length() < 3) {
-                        callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
@@ -229,7 +229,7 @@ public class BranchSDK extends CordovaPlugin {
 
                 } else if (action.equals("getBranchQRCode")) {
                       if (args.length() != 4) {
-                        callbackContext.error(String.format("Parameter mismatched. 4 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
