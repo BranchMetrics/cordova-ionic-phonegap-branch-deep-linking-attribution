@@ -1,3 +1,8 @@
+5.2.0 August 8th, 2022
+* Update iOS SDK to 1.43.1
+* Update Android SDK to 5.2.0
+* Added method to generate Branch QR codes, getBranchQRCode().
+
 5.1.0 May 27, 2022
 * Update iOS SDK to 1.42.0
 * Update Android SDK to 5.1.5
