@@ -14,6 +14,21 @@ var _typeof =
           : typeof obj;
       };
 
+var sessionInitialized = false;
+
+function initSession(done) {
+  return new Promise(function promise(resolve, reject) {
+    if (sessionInitialized) {
+      return resolve();
+    }
+
+    window.Branch.initSession().then(function() {
+      sessionInitialized = true;
+      resolve();
+    });
+  });
+}
+
 /**
  * Branch.IO Cordova Plugin Unit-Test
  * ----------------------------------
@@ -51,23 +66,12 @@ exports.defineAutoTests = function() {
       expect(window.Branch.userCompletedAction).toBeDefined();
       expect(_typeof(window.Branch.userCompletedAction)).toBe("function");
     });
-    it("should contain a method called loadRewards()", function() {
-      expect(window.Branch.loadRewards).toBeDefined();
-      expect(_typeof(window.Branch.loadRewards)).toBe("function");
-    });
-    it("should contain a method called redeemRewards()", function() {
-      expect(window.Branch.redeemRewards).toBeDefined();
-      expect(_typeof(window.Branch.redeemRewards)).toBe("function");
-    });
-    it("should contain a method called creditHistory()", function() {
-      expect(window.Branch.creditHistory).toBeDefined();
-      expect(_typeof(window.Branch.creditHistory)).toBe("function");
-    });
+
   });
 
   describe("Branch.getLatestReferringParams()", function() {
     beforeEach(function(done) {
-      window.Branch.initSession().then(function() {
+      initSession().then(function() {
         done();
       });
     }, 3000);
@@ -87,7 +91,7 @@ exports.defineAutoTests = function() {
 
   describe("Branch.getFirstReferringParams()", function() {
     beforeEach(function(done) {
-      window.Branch.initSession().then(function() {
+      initSession().then(function() {
         done();
       });
     }, 3000);
@@ -106,7 +110,7 @@ exports.defineAutoTests = function() {
 
   describe("Branch.setIdentity()", function() {
     beforeEach(function(done) {
-      window.Branch.initSession().then(function() {
+      initSession().then(function() {
         done();
       });
     }, 3000);
@@ -128,7 +132,7 @@ exports.defineAutoTests = function() {
     var branchUniversalObj;
 
     beforeEach(function(done) {
-      window.Branch.initSession().then(function() {
+      initSession().then(function() {
         var properties = {
           canonicalIdentifier: "testbed",
           title: "testbed",
@@ -149,9 +153,7 @@ exports.defineAutoTests = function() {
       "should execute register view",
       function(done) {
         branchUniversalObj.registerView().then(function(res) {
-          expect(typeof res === "undefined" ? "undefined" : _typeof(res)).toBe(
-            "object"
-          );
+          expect(typeof res).not.toBe("undefined");
           done();
         });
       },
@@ -192,7 +194,7 @@ exports.defineAutoTests = function() {
 
   describe("Branch.userCompletedAction()", function() {
     beforeEach(function(done) {
-      window.Branch.initSession().then(function() {
+      initSession().then(function() {
         done();
       });
     }, 3000);
@@ -202,82 +204,6 @@ exports.defineAutoTests = function() {
         window.Branch.userCompletedAction("login");
         expect("Success").toBe("Success");
         done();
-      },
-      10000
-    );
-  });
-
-  describe("Branch.loadRewards()", function() {
-    beforeEach(function(done) {
-      window.Branch.initSession().then(function() {
-        done();
-      });
-    }, 3000);
-    it(
-      "should return an object response",
-      function(done) {
-        window.Branch.loadRewards().then(
-          function(res) {
-            expect(
-              typeof res === "undefined" ? "undefined" : _typeof(res)
-            ).toBe("number");
-            done();
-          },
-          function(err) {
-            expect(
-              typeof err === "undefined" ? "undefined" : _typeof(err)
-            ).toBe("string");
-            done();
-          }
-        );
-      },
-      10000
-    );
-  });
-
-  describe("Branch.redeemRewards()", function() {
-    beforeEach(function(done) {
-      window.Branch.initSession().then(function() {
-        done();
-      });
-    }, 3000);
-    it(
-      "should return an object/string error response",
-      function(done) {
-        window.Branch.redeemRewards(100).then(
-          function(res) {
-            expect(
-              typeof res === "undefined" ? "undefined" : _typeof(res)
-            ).toBe("object");
-            done();
-          },
-          function(err) {
-            expect(
-              typeof err === "undefined" ? "undefined" : _typeof(err)
-            ).toBe("string");
-            done();
-          }
-        );
-      },
-      10000
-    );
-  });
-
-  describe("Branch.creditHistory()", function() {
-    beforeEach(function(done) {
-      window.Branch.initSession().then(function() {
-        done();
-      });
-    }, 3000);
-    it(
-      "should return the credit balance",
-      function(done) {
-        window.Branch.creditHistory().then(function(res) {
-          expect(typeof res === "undefined" ? "undefined" : _typeof(res)).toBe(
-            "object"
-          );
-          done();
-        });
       },
       10000
     );

@@ -15,25 +15,31 @@ const standardEvent = {
   STANDARD_EVENT_INITIATE_PURCHASE: "INITIATE_PURCHASE",
   STANDARD_EVENT_ADD_PAYMENT_INFO: "ADD_PAYMENT_INFO",
   STANDARD_EVENT_PURCHASE: "PURCHASE",
-  STANDARD_EVENT_SPEND_CREDITS: "SPEND_CREDITS",
   STANDARD_EVENT_SEARCH: "SEARCH",
   STANDARD_EVENT_VIEW_ITEM: "VIEW_ITEM",
   STANDARD_EVENT_VIEW_ITEMS: "VIEW_ITEMS",
   STANDARD_EVENT_RATE: "RATE",
   STANDARD_EVENT_SHARE: "SHARE",
+  STANDARD_EVENT_INITIATE_STREAM: "INITIATE_STREAM",
+  STANDARD_EVENT_COMPLETE_STREAM: "COMPLETE_STREAM",
   STANDARD_EVENT_COMPLETE_REGISTRATION: "COMPLETE_REGISTRATION",
   STANDARD_EVENT_COMPLETE_TUTORIAL: "COMPLETE_TUTORIAL",
   STANDARD_EVENT_ACHIEVE_LEVEL: "ACHIEVE_LEVEL",
-  STANDARD_EVENT_UNLOCK_ACHIEVEMENT: "UNLOCK_ACHIEVEMENT"
+  STANDARD_EVENT_UNLOCK_ACHIEVEMENT: "UNLOCK_ACHIEVEMENT",
+  STANDARD_EVENT_INVITE: "INVITE",
+  STANDARD_EVENT_LOGIN: "LOGIN",
+  STANDARD_EVENT_SUBSCRIBE: "SUBSCRIBE",
+  STANDARD_EVENT_START_TRIAL: "START_TRIAL"
 }
 
 // Branch prototype
 var Branch = function Branch() {
-  this.debugMode = false;
+  this.enableLogging = false;
   this.trackingDisabled = false;
+  this.sessionInitialized = false;
 };
 
-// JavsSript to SDK wrappers
+// JavaScript to SDK wrappers
 function execute(method, params) {
   var output = !params ? [] : params;
 
@@ -85,7 +91,15 @@ Branch.prototype.disableTracking = function disableTracking(isEnabled) {
   return execute("disableTracking", [value]);
 };
 
+Branch.prototype.enableTestMode = function initSession() {
+  if (this.sessionInitialized) {
+    return executeReject("[enableTestMode] should be called before [initSession]");
+  }
+  return execute("enableTestMode");
+};
+
 Branch.prototype.initSession = function initSession() {
+  this.sessionInitialized = true;
   return execute("initSession");
 };
 
@@ -99,11 +113,19 @@ Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
   return execute("setRequestMetadata", [key, val]);
 };
 
+// Deprecated. Replaced by setLogging(isEnabled) and test devices. https://help.branch.io/using-branch/docs/adding-test-devices
 Branch.prototype.setDebug = function setDebug(isEnabled) {
-  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
-  this.debugMode = value;
+  return new Promise(function promise(resolve, reject) {
+    resolve(false);
+  });
+};
 
-  return execute("setDebug", [value]);
+// For early lifecycle logging, we recommend you enable logging in the native iOS or Android code.
+Branch.prototype.setLogging = function setLogging(isEnabled) {
+  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+  this.enableLogging = value;
+
+  return execute("enableLogging", [value]);
 };
 
 Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
@@ -114,12 +136,18 @@ Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
     : null;
 };
 
+//DEPRECATED
 Branch.prototype.delayInitToCheckForSearchAds = function delayInitToCheckForSearchAds(
   isEnabled
 ) {
-  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+  // stub call from known issue calling it from JS
+  return new Promise(function promise(resolve, reject) {
+    resolve(false);
+  });
 
-  return execute("delayInitToCheckForSearchAds", [value]);
+  // var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+
+  // return execute("delayInitToCheckForSearchAds", [value]);
 };
 
 Branch.prototype.getFirstReferringParams = function getFirstReferringParams() {
@@ -278,24 +306,6 @@ Branch.prototype.createBranchUniversalObject = function createBranchUniversalObj
   });
 };
 
-Branch.prototype.loadRewards = function loadRewards(bucket) {
-  var output = !bucket ? "" : bucket;
-  return execute("loadRewards", [output]);
-};
-
-Branch.prototype.redeemRewards = function redeemRewards(value, bucket) {
-  var params = [value];
-  if (bucket) {
-    params.push(bucket);
-  }
-
-  return execute("redeemRewards", params);
-};
-
-Branch.prototype.creditHistory = function creditHistory() {
-  return execute("getCreditHistory");
-};
-
 Branch.prototype.crossPlatformIds = function crossPlatformIds() {
   return execute("crossPlatformIds");
 };
@@ -303,6 +313,30 @@ Branch.prototype.crossPlatformIds = function crossPlatformIds() {
 Branch.prototype.lastAttributedTouchData = function lastAttributedTouchData() {
   return execute("lastAttributedTouchData");
 };
+
+Branch.prototype.getBranchQRCode = function getBranchQRCode(
+  qrCodeSettings,
+  branchUniversalObject,
+  analytics,
+  properties
+) {
+  var args = [];
+  if (qrCodeSettings) {
+    args.push(qrCodeSettings);
+  }
+  if (branchUniversalObject) {
+    args.push(branchUniversalObject.instanceId);
+  }
+  if (analytics) {
+    args.push(analytics);
+  }
+  if (properties) {
+    args.push(properties);
+  }
+
+  return execute("getBranchQRCode", args);
+};
+
 
 // export Branch object
 module.exports = new Branch();

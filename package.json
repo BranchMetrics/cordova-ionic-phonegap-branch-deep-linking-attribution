@@ -2,7 +2,7 @@
   "name": "branch-cordova-sdk",
   "description": "Branch Metrics Cordova SDK",
   "main": "src/index.js",
-  "version": "4.1.2",
+  "version": "5.2.0",
   "homepage": "https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking",
   "repository": {
     "type": "git",
@@ -22,16 +22,56 @@
       "version": ">=8.0.0"
     }
   ],
-  "dependencies": {
-    "fs": "0.0.1-security",
-    "glob": "^7.1.4",
-    "mkpath": "^1.0.0",
-    "node-version-compare": "^1.0.1",
-    "plist": "^3.0.1",
-    "request": "^2.85.0",
-    "shelljs": "^0.8.3",
-    "xcode": "^2.0.0",
-    "xml2js": "^0.4.19"
+  "scripts": {
+    "commitmsg": " echo 'validate commit messages'; commitlint -e $GIT_PARAMS",
+    "precommit": " echo 'run prettier on commit';   lint-staged",
+    "prettier": "  echo 'run prettier';             prettier --write './{src,testbed,tests}/**/*.js'",
+    "lint": "      echo 'run code linter';          eslint --ext=js --fix ./src",
+    "examples": "  echo 'generate examples';        node ./src/scripts/examples"
   },
-  "devDependencies": {}
+  "eslintConfig": {
+    "extends": [
+      "airbnb-base/legacy"
+    ],
+    "rules": {
+      "no-console": 0,
+      "no-alert": 0,
+      "no-use-before-define": 0
+    },
+    "globals": {
+      "Promise": true,
+      "Branch": true
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "src/*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "glob": "^8.0.3",
+    "mkpath": "^1.0.0",
+    "node-version-compare": "^1.0.3",
+    "plist": "^3.0.5",
+    "shelljs": "^0.8.5",
+    "xcode": "^3.0.1",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "fs": "0.0.1-security",
+    "@commitlint/cli": "^17.0.1",
+    "@commitlint/config-conventional": "^17.0.0",
+    "eslint": "^8.16.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^12.4.2",
+    "prettier": "^2.6.2"
+  }
 }

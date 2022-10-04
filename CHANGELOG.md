@@ -1,4 +1,52 @@
-<a name="4.0.0"></a>
+5.2.0 August 8th, 2022
+* Update iOS SDK to 1.43.1
+* Update Android SDK to 5.2.0
+* Added method to generate Branch QR codes, getBranchQRCode().
+
+5.1.0 May 27, 2022
+* Update iOS SDK to 1.42.0
+* Update Android SDK to 5.1.5
+* Update 3rd party dependencies. Of note the plist vulnerability. (Thanks Sujay-shetty)
+* Replace setDebug with setLogging and test devices. https://help.branch.io/using-branch/docs/adding-test-devices
+
+5.0.2 February 9, 2022
+* Update dependencies to latest non-breaking versions, of note the shelljs vulnerability. (Thanks again Sujay-shetty!)
+
+5.0.1 February 8, 2022
+* Remove request package (thanks for catching Sujay-shetty)
+
+5.0.0 January 21, 2022
+* Add content items support in sendBranchEvent
+* Remove sendCommerceEvent
+* Fix bug where custom data would clobber other fields when creating event in Android plugin
+* Update iOS SDK to 1.40.2
+* Update Android SDK to 5.0.15
+
+4.2.4 - May 3, 2021
+
+CORE-1898 correct iOS API signature for LATD
+Fix alternate link domain issue - Thanks MaximBelov
+Fix exist check - Thanks MaximBelov
+
+4.2.3 - April 29, 2021
+
+Update Android SDK to 5.0.8
+
+4.2.2 - April 28, 2021
+
+Update iOS SDK to 1.39.2
+Update Android SDK to 5.0.7
+
+# [4.2.1](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.2.0...v4.2.1) (2020-11-05)
+
+# [4.2.0](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.1.3...v4.2.0) (2020-8-26)
+
+* Update iOS SDK to 0.35.0
+
+# [4.1.3](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.1.2...v4.1.3) (2020-2-20)
+
+* Fix intra-app linking.
+
 # [4.1.2](https://github.com/BranchMetrics/cordova-ionic-phonegap-branch-deep-linking/compare/v4.1.1...v4.1.2) (2020-2-12)
 
 * Allow Cordova 8. Update readme with instructions.

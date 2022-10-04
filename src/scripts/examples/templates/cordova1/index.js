@@ -29,10 +29,6 @@ var branchUser = document.getElementById("branchUser");
 var branchLogout = document.getElementById("branchLogout");
 var branchEvent = document.getElementById("branchEvent");
 var branchCommerce = document.getElementById("branchCommerce");
-var branchReferralsReward = document.getElementById("branchReferralsReward");
-var branchReferralsLoad = document.getElementById("branchReferralsLoad");
-var branchReferralsRedeem = document.getElementById("branchReferralsRedeem");
-var branchReferralsHistory = document.getElementById("branchReferralsHistory");
 
 // handle DOM
 branchUniversalObject.addEventListener("click", BranchUniversalObject);
@@ -46,10 +42,6 @@ branchUser.addEventListener("click", BranchUser);
 branchLogout.addEventListener("click", BranchLogout);
 branchEvent.addEventListener("click", BranchEvent);
 branchCommerce.addEventListener("click", BranchCommerce);
-branchReferralsReward.addEventListener("click", BranchReferralsReward);
-branchReferralsLoad.addEventListener("click", BranchReferralsLoad);
-branchReferralsRedeem.addEventListener("click", BranchReferralsRedeem);
-branchReferralsHistory.addEventListener("click", BranchReferralsHistory);
 
 // run
 app.initialize();
@@ -346,47 +338,6 @@ function BranchSpotlight() {
   }
   branchUniversalObj
     .listOnSpotlight()
-    .then(function success(res) {
-      logger(res);
-    })
-    .catch(function error(err) {
-      logger(err, true);
-    });
-}
-
-function BranchReferralsReward() {
-  Branch.userCompletedAction("add5credits")
-    .then(function success(res) {
-      logger(res);
-    })
-    .catch(function error(err) {
-      logger(err, true);
-    });
-}
-
-function BranchReferralsLoad() {
-  Branch.loadRewards()
-    .then(function success(res) {
-      logger(res);
-    })
-    .catch(function error(err) {
-      logger(err, true);
-    });
-}
-
-function BranchReferralsRedeem() {
-  var amount = 10;
-  Branch.redeemRewards(amount)
-    .then(function success(res) {
-      logger(res);
-    })
-    .catch(function error(err) {
-      logger(err, true);
-    });
-}
-
-function BranchReferralsHistory() {
-  Branch.creditHistory()
     .then(function success(res) {
       logger(res);
     })
