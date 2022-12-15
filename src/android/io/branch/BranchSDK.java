@@ -119,7 +119,7 @@ public class BranchSDK extends CordovaPlugin {
 
         Runnable r = new RunnableThread(action, args, callbackContext);
 
-        if (action.equals("setLogging")) {
+        if (action.equals("enableLogging")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
         } else if (action.equals("setCookieBasedMatching")) {
@@ -607,7 +607,7 @@ public class BranchSDK extends CordovaPlugin {
      * @param isEnable        A {@link Boolean} value to enable/disable logging
      * @param callbackContext A callback to execute at the end of this method
      */
-    private void setLogging(boolean isEnable, CallbackContext callbackContext) {
+    private void enableLogging(boolean isEnable, CallbackContext callbackContext) {
         this.activity = this.cordova.getActivity();
         if (isEnable == true) {
             Branch.enableLogging();
@@ -1233,8 +1233,8 @@ public class BranchSDK extends CordovaPlugin {
             try {
                 Log.d(LCAT, "Runnable: " + this.action);
 
-                if (this.action.equals("setLogging")) {
-                    setLogging(this.args.getBoolean(0), this.callbackContext);
+                if (this.action.equals("enableLogging")) {
+                    enableLogging(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("setCookieBasedMatching")) {
                     setCookieBasedMatching(this.args.getString(0), this.callbackContext);
                 } else if (this.action.equals("disableTracking")) {
