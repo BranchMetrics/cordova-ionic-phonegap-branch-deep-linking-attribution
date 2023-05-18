@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.util.Base64;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.IOException;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -24,12 +26,14 @@ import io.branch.referral.BranchViewHandler;
 import io.branch.referral.ServerRequestGetCPID.BranchCrossPlatformIdListener;
 import io.branch.referral.ServerRequestGetLATD.BranchLastAttributedTouchDataListener;
 import io.branch.referral.SharingHelper;
+import io.branch.referral.QRCode.BranchQRCode;
 import io.branch.referral.util.BRANCH_STANDARD_EVENT;
 import io.branch.referral.util.BranchCPID;
 import io.branch.referral.util.BranchEvent;
 import io.branch.referral.util.ContentMetadata;
 import io.branch.referral.util.CurrencyType;
 import io.branch.referral.util.ShareSheetStyle;
+
 
 public class BranchSDK extends CordovaPlugin {
 
@@ -115,7 +119,7 @@ public class BranchSDK extends CordovaPlugin {
 
         Runnable r = new RunnableThread(action, args, callbackContext);
 
-        if (action.equals("setDebug")) {
+        if (action.equals("enableLogging")) {
             cordova.getActivity().runOnUiThread(r);
             return true;
         } else if (action.equals("setCookieBasedMatching")) {
@@ -137,14 +141,14 @@ public class BranchSDK extends CordovaPlugin {
                     return true;
                 } else if (action.equals("userCompletedAction")) {
                     if (args.length() < 1 && args.length() > 2) {
-                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("sendBranchEvent")) {
                     if (args.length() < 1 && args.length() > 2) {
-                        callbackContext.error(String.format("Parameter mismatched. 1-2 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
@@ -160,7 +164,7 @@ public class BranchSDK extends CordovaPlugin {
                     return true;
                 } else if (action.equals("createBranchUniversalObject")) {
                     if (args.length() != 1) {
-                        callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
@@ -176,21 +180,21 @@ public class BranchSDK extends CordovaPlugin {
 
                 } else if (action.equals(("generateShortUrl"))) {
                     if (args.length() != 3) {
-                        callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("registerView")) {
                     if (args.length() != 1) {
-                        callbackContext.error(String.format("Parameter mismatched. 1 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("showShareSheet")) {
                     if (args.length() < 3) {
-                        callbackContext.error(String.format("Parameter mismatched. 3 is required but %d is given", args.length()));
+                        callbackContext.error(String.format("Parameter count mismatch"));
                         return false;
                     }
                     cordova.getActivity().runOnUiThread(r);
@@ -223,6 +227,13 @@ public class BranchSDK extends CordovaPlugin {
 
                     branchObjectWrappers.set(args.getInt(0), branchObjWrapper);
 
+                } else if (action.equals("getBranchQRCode")) {
+                      if (args.length() != 4) {
+                        callbackContext.error(String.format("Parameter count mismatch"));
+                        return false;
+                    }
+                    cordova.getActivity().runOnUiThread(r);
+                    return true; 
                 }
 
                 return true;
@@ -509,6 +520,70 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
+     * Generate a QR code.
+     *
+     * @param qrCodeSettings   A {@link JSONObject} value to set QR cide options.
+     * @param instanceIdx   The instance index from branchObjects array
+     * @param options       A {@link JSONObject} value to set URL options.
+     * @param controlParams A {@link JSONObject} value to set the URL control parameters.
+     */
+    private void getBranchQRCode(JSONObject qrCodeSettings, int instanceIdx, JSONObject options, JSONObject controlParams, CallbackContext callbackContext) throws JSONException {
+
+        BranchLinkProperties linkProperties = createLinkProperties(options, controlParams);
+
+        BranchUniversalObjectWrapper branchUniversalWrapper = (BranchUniversalObjectWrapper) this.branchObjectWrappers.get(instanceIdx);
+        BranchUniversalObject buo = branchUniversalWrapper.branchUniversalObj;
+
+        BranchQRCode branchQRCode = new BranchQRCode();
+        if (qrCodeSettings.has("codeColor")) {
+            branchQRCode.setCodeColor(qrCodeSettings.getString("codeColor"));
+        }
+        if (qrCodeSettings.has("backgroundColor")) {
+            branchQRCode.setBackgroundColor(qrCodeSettings.getString("backgroundColor"));
+        }
+        if (qrCodeSettings.has("centerLogo")) {
+            branchQRCode.setCenterLogo(qrCodeSettings.getString("centerLogo"));
+        }
+        if (qrCodeSettings.has("width")) {
+            branchQRCode.setWidth(qrCodeSettings.getInt("width"));
+        }
+        if (qrCodeSettings.has("margin")) {
+            branchQRCode.setMargin(qrCodeSettings.getInt("margin"));
+        }
+        if (qrCodeSettings.has("imageFormat")) {
+            String imageFormat = qrCodeSettings.getString("imageFormat");
+            if (imageFormat != null ) {
+                if (imageFormat.equals("JPEG")) {
+                    branchQRCode.setImageFormat(BranchQRCode.BranchImageFormat.JPEG);
+                } else {
+                    branchQRCode.setImageFormat(BranchQRCode.BranchImageFormat.PNG);
+                }
+            }
+        }
+
+        try {
+            branchQRCode.getQRCodeAsData(this.activity, buo, linkProperties, new BranchQRCode.BranchQRCodeDataHandler() {
+                @Override
+                public void onSuccess(byte[] qrCodeData) {
+                    String qrCodeString = Base64.encodeToString(qrCodeData, Base64.DEFAULT);
+                    Log.d(LCAT, qrCodeString);
+                    callbackContext.success(qrCodeString);
+                }
+    
+                @Override
+                public void onFailure(Exception e) {
+                    Log.d(LCAT, e.getMessage());
+                    callbackContext.error(e.getMessage());
+                }    
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(LCAT, e.getMessage());
+            callbackContext.error(e.getMessage());
+        }
+    }
+
+    /**
      * <p>Sets the cookie based matching for all incoming requests.</p>
      * <p>If you want cookie based matching, call this <b>before</b> initUserSession</p>
      *
@@ -527,15 +602,19 @@ public class BranchSDK extends CordovaPlugin {
     }
 
     /**
-     * <p>Sets the library to function in debug mode, enabling logging of all requests.</p>
-     * <p>If you want to flag debug, call this <b>before</b> initUserSession</p>
+     * <p>Enabling Branch SDK logging</p>
      *
-     * @param isEnable        A {@link Boolean} value to enable/disable debugging mode for the app.
+     * @param isEnable        A {@link Boolean} value to enable/disable logging
      * @param callbackContext A callback to execute at the end of this method
      */
-    private void setDebug(boolean isEnable, CallbackContext callbackContext) {
+    private void enableLogging(boolean isEnable, CallbackContext callbackContext) {
         this.activity = this.cordova.getActivity();
-        Branch.enableDebugMode();
+        if (isEnable == true) {
+            Branch.enableLogging();
+        } else {
+            Branch.disableLogging();
+        }
+
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
     }
 
@@ -1013,7 +1092,7 @@ public class BranchSDK extends CordovaPlugin {
         }
 
     }
-
+    
     protected class ShowShareSheetListener implements Branch.BranchLinkShareListener {
 
         private CallbackContext _onShareLinkDialogLaunched;
@@ -1154,8 +1233,8 @@ public class BranchSDK extends CordovaPlugin {
             try {
                 Log.d(LCAT, "Runnable: " + this.action);
 
-                if (this.action.equals("setDebug")) {
-                    setDebug(this.args.getBoolean(0), this.callbackContext);
+                if (this.action.equals("enableLogging")) {
+                    enableLogging(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("setCookieBasedMatching")) {
                     setCookieBasedMatching(this.args.getString(0), this.callbackContext);
                 } else if (this.action.equals("disableTracking")) {
@@ -1193,6 +1272,8 @@ public class BranchSDK extends CordovaPlugin {
                         lastAttributedTouchData(this.callbackContext);
                     } else if (this.action.equals(("generateShortUrl"))) {
                         generateShortUrl(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), this.callbackContext);
+                    } else if (this.action.equals(("getBranchQRCode"))) {
+                        getBranchQRCode(this.args.getJSONObject(0), this.args.getInt(1), this.args.getJSONObject(2), this.args.getJSONObject(3), this.callbackContext);
                     } else if (this.action.equals("registerView")) {
                         registerView(this.args.getInt(0), this.callbackContext);
                     } else if (this.action.equals("showShareSheet")) {

@@ -29,7 +29,7 @@
 - (void)enableTestMode:(CDVInvokedUrlCommand*)command;
 - (void)initSession:(CDVInvokedUrlCommand*)command;
 - (void)disableTracking:(CDVInvokedUrlCommand*)command;
-- (void)setDebug:(CDVInvokedUrlCommand*)command;
+- (void)enableLogging:(CDVInvokedUrlCommand*)command;
 - (void)getAutoInstance:(CDVInvokedUrlCommand*)command;
 - (void)getLatestReferringParams:(CDVInvokedUrlCommand*)command;
 - (void)getFirstReferringParams:(CDVInvokedUrlCommand*)command;
