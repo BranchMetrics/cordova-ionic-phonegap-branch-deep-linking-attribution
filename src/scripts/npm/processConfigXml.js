@@ -71,7 +71,7 @@
       iosTeamRelease: getBranchValue(branchXml, "ios-team-release"), // optional
       iosTeamDebug: getBranchValue(branchXml, "ios-team-debug"), // optional
       androidBundleId: getBundleId(configXml, "android"), // optional
-      androidPrefix: getBranchValue(branchXml, "android-prefix"), // optional
+      androidPrefix: getBranchValue(branchXml, "android-prefix").split(','), // optional
       androidTestMode: getBranchValue(branchXml, "android-testmode") // DEPRECATED optional
     };
   }
