@@ -34,12 +34,12 @@ const standardEvent = {
 
 // Branch prototype
 var Branch = function Branch() {
-  this.debugMode = false;
+  this.enableLogging = false;
   this.trackingDisabled = false;
   this.sessionInitialized = false;
 };
 
-// JavsSript to SDK wrappers
+// JavaScript to SDK wrappers
 function execute(method, params) {
   var output = !params ? [] : params;
 
@@ -113,11 +113,19 @@ Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
   return execute("setRequestMetadata", [key, val]);
 };
 
+// Deprecated. Replaced by setLogging(isEnabled) and test devices. https://help.branch.io/using-branch/docs/adding-test-devices
 Branch.prototype.setDebug = function setDebug(isEnabled) {
-  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
-  this.debugMode = value;
+  return new Promise(function promise(resolve, reject) {
+    resolve(false);
+  });
+};
 
-  return execute("setDebug", [value]);
+// For early lifecycle logging, we recommend you enable logging in the native iOS or Android code.
+Branch.prototype.setLogging = function setLogging(isEnabled) {
+  var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+  this.enableLogging = value;
+
+  return execute("enableLogging", [value]);
 };
 
 Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
@@ -305,6 +313,30 @@ Branch.prototype.crossPlatformIds = function crossPlatformIds() {
 Branch.prototype.lastAttributedTouchData = function lastAttributedTouchData() {
   return execute("lastAttributedTouchData");
 };
+
+Branch.prototype.getBranchQRCode = function getBranchQRCode(
+  qrCodeSettings,
+  branchUniversalObject,
+  analytics,
+  properties
+) {
+  var args = [];
+  if (qrCodeSettings) {
+    args.push(qrCodeSettings);
+  }
+  if (branchUniversalObject) {
+    args.push(branchUniversalObject.instanceId);
+  }
+  if (analytics) {
+    args.push(analytics);
+  }
+  if (properties) {
+    args.push(properties);
+  }
+
+  return execute("getBranchQRCode", args);
+};
+
 
 // export Branch object
 module.exports = new Branch();
