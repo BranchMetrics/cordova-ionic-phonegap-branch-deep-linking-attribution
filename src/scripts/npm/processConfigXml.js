@@ -104,8 +104,7 @@
     let exists;
 
     try {
-      fs.existsSync(pathToBranchJson);
-      exists = true;
+      exists = fs.existsSync(pathToBranchJson);
     } catch(err) {
       exists = false;
     }

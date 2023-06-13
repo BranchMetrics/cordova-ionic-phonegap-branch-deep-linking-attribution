@@ -29,7 +29,7 @@
 - (void)enableTestMode:(CDVInvokedUrlCommand*)command;
 - (void)initSession:(CDVInvokedUrlCommand*)command;
 - (void)disableTracking:(CDVInvokedUrlCommand*)command;
-- (void)setDebug:(CDVInvokedUrlCommand*)command;
+- (void)enableLogging:(CDVInvokedUrlCommand*)command;
 - (void)getAutoInstance:(CDVInvokedUrlCommand*)command;
 - (void)getLatestReferringParams:(CDVInvokedUrlCommand*)command;
 - (void)getFirstReferringParams:(CDVInvokedUrlCommand*)command;
@@ -38,11 +38,6 @@
 - (void)userCompletedAction:(CDVInvokedUrlCommand*)command;
 - (void)logout:(CDVInvokedUrlCommand*)command;
 - (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command;
-
-// Branch Referral Reward System
-- (void)loadRewards:(CDVInvokedUrlCommand*)command;
-- (void)redeemRewards:(CDVInvokedUrlCommand*)command;
-- (void)getCreditHistory:(CDVInvokedUrlCommand*)command;
 
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;

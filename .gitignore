@@ -9,4 +9,5 @@ npm-debug.log*
 yarn-error.log*
 .vscode
 .idea
+cordova-ionic-phonegap-branch-deep-linking-attribution.iml
 src/android/.idea

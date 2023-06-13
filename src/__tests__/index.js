@@ -66,18 +66,7 @@ exports.defineAutoTests = function() {
       expect(window.Branch.userCompletedAction).toBeDefined();
       expect(_typeof(window.Branch.userCompletedAction)).toBe("function");
     });
-    it("should contain a method called loadRewards()", function() {
-      expect(window.Branch.loadRewards).toBeDefined();
-      expect(_typeof(window.Branch.loadRewards)).toBe("function");
-    });
-    it("should contain a method called redeemRewards()", function() {
-      expect(window.Branch.redeemRewards).toBeDefined();
-      expect(_typeof(window.Branch.redeemRewards)).toBe("function");
-    });
-    it("should contain a method called creditHistory()", function() {
-      expect(window.Branch.creditHistory).toBeDefined();
-      expect(_typeof(window.Branch.creditHistory)).toBe("function");
-    });
+
   });
 
   describe("Branch.getLatestReferringParams()", function() {
@@ -215,82 +204,6 @@ exports.defineAutoTests = function() {
         window.Branch.userCompletedAction("login");
         expect("Success").toBe("Success");
         done();
-      },
-      10000
-    );
-  });
-
-  describe("Branch.loadRewards()", function() {
-    beforeEach(function(done) {
-      initSession().then(function() {
-        done();
-      });
-    }, 3000);
-    it(
-      "should return an object response",
-      function(done) {
-        window.Branch.loadRewards().then(
-          function(res) {
-            expect(
-              typeof res === "undefined" ? "undefined" : _typeof(res)
-            ).toBe("number");
-            done();
-          },
-          function(err) {
-            expect(
-              typeof err === "undefined" ? "undefined" : _typeof(err)
-            ).toBe("string");
-            done();
-          }
-        );
-      },
-      10000
-    );
-  });
-
-  describe("Branch.redeemRewards()", function() {
-    beforeEach(function(done) {
-      initSession().then(function() {
-        done();
-      });
-    }, 3000);
-    it(
-      "should return an object/string error response",
-      function(done) {
-        window.Branch.redeemRewards(100).then(
-          function(res) {
-            expect(
-              typeof res === "undefined" ? "undefined" : _typeof(res)
-            ).toBe("object");
-            done();
-          },
-          function(err) {
-            expect(
-              typeof err === "undefined" ? "undefined" : _typeof(err)
-            ).toBe("string");
-            done();
-          }
-        );
-      },
-      10000
-    );
-  });
-
-  describe("Branch.creditHistory()", function() {
-    beforeEach(function(done) {
-      initSession().then(function() {
-        done();
-      });
-    }, 3000);
-    it(
-      "should return the credit balance",
-      function(done) {
-        window.Branch.creditHistory().then(function(res) {
-          expect(typeof res === "undefined" ? "undefined" : _typeof(res)).toBe(
-            "object"
-          );
-          done();
-        });
       },
       10000
     );

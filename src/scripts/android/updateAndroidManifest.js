@@ -6,7 +6,8 @@
 
   // entry
   module.exports = {
-    writePreferences: writePreferences
+    writePreferences: writePreferences,
+    getAppLinkIntentFilterData: getAppLinkIntentFilterData
   };
 
   // injects config.xml preferences into AndroidManifest.xml file.
@@ -260,6 +261,10 @@
 
       // app.link link domains need -alternate associated domains as well (for Deep Views)
       if (linkDomain.indexOf("app.link") !== -1) {
+        const isAlternateDomain = linkDomain.indexOf("-alternate") !== -1;
+        if(isAlternateDomain){
+          continue;
+        }
         const first = linkDomain.split(".")[0];
         const rest = linkDomain
           .split(".")
