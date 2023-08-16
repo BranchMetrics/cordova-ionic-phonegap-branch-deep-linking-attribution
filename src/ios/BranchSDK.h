@@ -35,7 +35,6 @@
 - (void)getFirstReferringParams:(CDVInvokedUrlCommand*)command;
 - (void)setIdentity:(CDVInvokedUrlCommand*)command;
 - (void)registerDeepLinkController:(CDVInvokedUrlCommand*)command;
-- (void)userCompletedAction:(CDVInvokedUrlCommand*)command;
 - (void)logout:(CDVInvokedUrlCommand*)command;
 - (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command;
 

@@ -225,34 +225,6 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
   [branch registerDeepLinkController:controller forKey:[command.arguments objectAtIndex:0]];
 }
 
-- (void)userCompletedAction:(CDVInvokedUrlCommand*)command
-{
-  NSString *name;
-  NSDictionary *state;
-
-  // if a state dictionary is passed as an argument
-  if ([command.arguments count] == 2) {
-    name = [command.arguments objectAtIndex:0];
-    state = [command.arguments objectAtIndex:1];
-  }
-  else {
-    name = [command.arguments objectAtIndex:0];
-  }
-
-  Branch *branch = [self getInstance];
-
-  if (state) {
-    [branch userCompletedAction:name withState:state];
-  }
-  else {
-    [branch userCompletedAction:name];
-  }
-
-  // TODO: iOS Branch.userCompletedAction needs a callback for success or failure
-  CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"Success"];
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
 -(void)sendBranchEvent:(CDVInvokedUrlCommand*)command
 {
     NSString *eventName = [command.arguments objectAtIndex:0];
