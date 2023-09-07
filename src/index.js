@@ -169,41 +169,6 @@ Branch.prototype.logout = function logout() {
   return execute("logout");
 };
 
-//DEPRECATED
-Branch.prototype.userCompletedAction = function userCompletedAction(
-  action,
-  metaData
-) {
-  var args = [action];
-  if (!action) {
-    return executeReject("Please set an event name");
-  }
-
-  if (metaData) {
-    args.push(metaData);
-  }
-
-  return execute("userCompletedAction", args);
-};
-
-//DEPRECATED
-Branch.prototype.sendCommerceEvent = function sendCommerceEvent(
-  action,
-  metaData
-) {
-  var args = [action];
-  if (!action) {
-    return executeReject("Please set a commerce event");
-  }
-
-  if (metaData) {
-    args.push(metaData);
-  }
-
-  return execute("sendCommerceEvent", args);
-};
-
-
 Branch.prototype.getStandardEvents = function getStandardEvents() {
   return execute("getStandardEvents");
 
