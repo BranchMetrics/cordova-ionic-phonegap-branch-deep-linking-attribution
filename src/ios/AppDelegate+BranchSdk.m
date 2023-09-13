@@ -5,7 +5,7 @@
 #ifdef BRANCH_NPM
 #import "Branch.h"
 #else
-#import <Branch/Branch.h>
+#import <BranchSDK/Branch.h>
 #endif
 
 // Provides Ionic Capacitor compatibility
