@@ -24,7 +24,7 @@
     config = config.split("\n")
       .map(function (line) {
         if (line.indexOf("HEADER_SEARCH_PATHS") > -1 && line.indexOf("Branch-SDK") === -1) {
-          line += ' "${PODS_ROOT}/Branch/Branch-SDK"';
+          line += ' "${PODS_ROOT}/BranchSDK/Branch-SDK"';
         }
         return line;
       });

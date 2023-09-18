@@ -5,9 +5,9 @@
 #import "BranchLinkProperties.h"
 #import "BranchUniversalObject.h"
 #else
-#import <Branch/Branch.h>
-#import <Branch/BranchLinkProperties.h>
-#import <Branch/BranchUniversalObject.h>
+#import <BranchSDK/Branch.h>
+#import <BranchSDK/BranchLinkProperties.h>
+#import <BranchSDK/BranchUniversalObject.h>
 #endif
 
 #import <Cordova/CDV.h>
