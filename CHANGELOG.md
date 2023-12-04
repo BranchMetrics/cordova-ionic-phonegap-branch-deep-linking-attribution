@@ -1,3 +1,7 @@
+6.0.0 Dec 1, 2023
+* Update Android SDK to 5.7.5
+* Update iOS SDK to 3.0.1
+
 5.2.1 Jan 4, 2023
 * Fix Javascript method setLogging to enable logging in the native layer.
 * Update Android SDK to 5.2.7
