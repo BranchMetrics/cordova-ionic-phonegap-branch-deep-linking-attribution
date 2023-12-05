@@ -3,11 +3,13 @@
 #ifdef BRANCH_NPM
 #import "Branch.h"
 #import "BranchEvent.h"
+#import "BranchQRCode.h"
 #import "BranchLinkProperties.h"
 #import "BranchUniversalObject.h"
 #else
 #import <BranchSDK/Branch.h>
 #import <BranchSDK/BranchEvent.h>
+#import <BranchSDK/BranchQRCode.h>
 #import <BranchSDK/BranchLinkProperties.h>
 #import <BranchSDK/BranchUniversalObject.h>
 #endif
