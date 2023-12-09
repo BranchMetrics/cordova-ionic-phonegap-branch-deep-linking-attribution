@@ -15,13 +15,13 @@ jobs:
           channel-id: "C063MQJMKJN" #sdk-releases
           payload: |
             {
-                "text": "New Release: Branch Cordova SDK v${{ github.event.release.tag_name }}",
+                "text": "New Release: Branch Cordova SDK ${{ github.event.release.tag_name }}",
                 "blocks": [
                     {
                         "type": "header",
                         "text": {
                             "type": "plain_text",
-                            "text": ":rocket: New Release: Branch Cordova SDK v${{ github.event.release.tag_name }}",                            
+                            "text": ":rocket: New Release: Branch Cordova SDK ${{ github.event.release.tag_name }}",                            
                             "emoji": true
                         }
                     },
