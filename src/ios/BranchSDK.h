@@ -2,10 +2,14 @@
 
 #ifdef BRANCH_NPM
 #import "Branch.h"
+#import "BranchEvent.h"
+#import "BranchQRCode.h"
 #import "BranchLinkProperties.h"
 #import "BranchUniversalObject.h"
 #else
 #import <BranchSDK/Branch.h>
+#import <BranchSDK/BranchEvent.h>
+#import <BranchSDK/BranchQRCode.h>
 #import <BranchSDK/BranchLinkProperties.h>
 #import <BranchSDK/BranchUniversalObject.h>
 #endif
@@ -36,7 +40,6 @@
 - (void)setIdentity:(CDVInvokedUrlCommand*)command;
 - (void)registerDeepLinkController:(CDVInvokedUrlCommand*)command;
 - (void)logout:(CDVInvokedUrlCommand*)command;
-- (void)delayInitToCheckForSearchAds:(CDVInvokedUrlCommand*)command;
 
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;
@@ -48,7 +51,6 @@
 - (void)listOnSpotlight:(CDVInvokedUrlCommand*)command;
 
 // Branch Query Methods
-- (void)crossPlatformIds:(CDVInvokedUrlCommand *)command;
 - (void)lastAttributedTouchData:(CDVInvokedUrlCommand *)command;
 
 @end
