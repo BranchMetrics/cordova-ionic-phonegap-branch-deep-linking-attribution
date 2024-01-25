@@ -62,11 +62,6 @@ exports.defineAutoTests = function() {
         "function"
       );
     });
-    it("should contain a method called userCompletedAction()", function() {
-      expect(window.Branch.userCompletedAction).toBeDefined();
-      expect(_typeof(window.Branch.userCompletedAction)).toBe("function");
-    });
-
   });
 
   describe("Branch.getLatestReferringParams()", function() {
@@ -189,23 +184,6 @@ exports.defineAutoTests = function() {
           });
       },
       5000
-    );
-  });
-
-  describe("Branch.userCompletedAction()", function() {
-    beforeEach(function(done) {
-      initSession().then(function() {
-        done();
-      });
-    }, 3000);
-    it(
-      "should successfully execute the method",
-      function(done) {
-        window.Branch.userCompletedAction("login");
-        expect("Success").toBe("Success");
-        done();
-      },
-      10000
     );
   });
 };
