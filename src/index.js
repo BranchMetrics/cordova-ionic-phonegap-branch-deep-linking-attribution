@@ -300,14 +300,10 @@ Branch.prototype.getBranchQRCode = function getBranchQRCode(
 };
 
 Branch.prototype.setDMAParamsForEEA = function setDMAParamsForEEA(
-  eeaRegion,
-  adPersonalizationConsent,
-  adUserDataUsageConsent
+  eeaRegion = false,
+  adPersonalizationConsent = false,
+  adUserDataUsageConsent = false
 ) {
-  if (!eeaRegion || !adPersonalizationConsent || !adUserDataUsageConsent) {
-    return executeReject("All three parameters (eeaRegion, adPersonalizationConsent, adUserDataUsageConsent) are required.");
-  }
-
   var args = [eeaRegion, adPersonalizationConsent, adUserDataUsageConsent];
   return execute("setDMAParamsForEEA", args);
 };

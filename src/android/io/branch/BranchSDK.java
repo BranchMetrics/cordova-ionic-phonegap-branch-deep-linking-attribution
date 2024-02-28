@@ -199,6 +199,13 @@ public class BranchSDK extends CordovaPlugin {
                     }
                     cordova.getActivity().runOnUiThread(r);
                     return true;
+                } else if (action.equals("setDMAParamsForEEA")) {
+                    if (args.length() != 3) {
+                        callbackContext.error("Parameter count mismatch");
+                        return false;
+                    }
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
                 }
 
                 return true;
