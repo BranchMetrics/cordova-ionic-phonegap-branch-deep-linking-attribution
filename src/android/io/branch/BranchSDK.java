@@ -680,6 +680,17 @@ public class BranchSDK extends CordovaPlugin {
         //callbackContext.success();
     }
 
+    /**
+     * <p>Configures the handling of DMA parameters for users in the EEA region based on their consent.</p>
+     *
+     * @param eeaRegion                  A {@link Boolean} value indicating if the user is from the European Economic Area (EEA).
+     * @param adPersonalizationConsent   A {@link Boolean} value indicating if the user has consented to ad personalization.
+     * @param adUserDataUsageConsent     A {@link Boolean} value indicating if the user has consented to the usage of their data for ads.
+     */
+    public void setDMAParamsForEEA(boolean eeaRegion, boolean adPersonalizationConsent, boolean adUserDataUsageConsent) {
+        Branch.getInstance().setDMAParamsForEEA(eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
+    }
+
     private BranchUniversalObject getContentItem(JSONObject item) throws JSONException {
         BranchUniversalObject universalObject = new BranchUniversalObject();
         ContentMetadata contentMetadata = new ContentMetadata();
@@ -1129,6 +1140,8 @@ public class BranchSDK extends CordovaPlugin {
                             localization.put("shareWith", "Share With");
                         }
                         showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), localization);
+                    } else if (this.action.equals("setDMAParamsForEEA")) {
+                        setDMAParamsForEEA(this.args.getBoolean(0), this.args.getBoolean(1), this.args.getBoolean(2));
                     }
                 }
             } catch (JSONException e) {

@@ -29,8 +29,8 @@ const standardEvent = {
   STANDARD_EVENT_INVITE: "INVITE",
   STANDARD_EVENT_LOGIN: "LOGIN",
   STANDARD_EVENT_SUBSCRIBE: "SUBSCRIBE",
-  STANDARD_EVENT_START_TRIAL: "START_TRIAL"
-}
+  STANDARD_EVENT_START_TRIAL: "START_TRIAL",
+};
 
 // Branch prototype
 var Branch = function Branch() {
@@ -45,7 +45,7 @@ function execute(method, params) {
 
   if (method == "getStandardEvents") {
     return new Promise(function promise(resolve, reject) {
-      resolve(standardEvent);  
+      resolve(standardEvent);
     });
   }
 
@@ -93,7 +93,9 @@ Branch.prototype.disableTracking = function disableTracking(isEnabled) {
 
 Branch.prototype.enableTestMode = function initSession() {
   if (this.sessionInitialized) {
-    return executeReject("[enableTestMode] should be called before [initSession]");
+    return executeReject(
+      "[enableTestMode] should be called before [initSession]"
+    );
   }
   return execute("enableTestMode");
 };
@@ -137,26 +139,26 @@ Branch.prototype.setCookieBasedMatching = function setCookieBasedMatching(
 };
 
 //DEPRECATED
-Branch.prototype.delayInitToCheckForSearchAds = function delayInitToCheckForSearchAds(
-  isEnabled
-) {
-  // stub call from known issue calling it from JS
-  return new Promise(function promise(resolve, reject) {
-    resolve(false);
-  });
+Branch.prototype.delayInitToCheckForSearchAds =
+  function delayInitToCheckForSearchAds(isEnabled) {
+    // stub call from known issue calling it from JS
+    return new Promise(function promise(resolve, reject) {
+      resolve(false);
+    });
 
-  // var value = typeof isEnabled !== "boolean" ? false : isEnabled;
+    // var value = typeof isEnabled !== "boolean" ? false : isEnabled;
 
-  // return execute("delayInitToCheckForSearchAds", [value]);
-};
+    // return execute("delayInitToCheckForSearchAds", [value]);
+  };
 
 Branch.prototype.getFirstReferringParams = function getFirstReferringParams() {
   return execute("getFirstReferringParams");
 };
 
-Branch.prototype.getLatestReferringParams = function getLatestReferringParams() {
-  return execute("getLatestReferringParams");
-};
+Branch.prototype.getLatestReferringParams =
+  function getLatestReferringParams() {
+    return execute("getLatestReferringParams");
+  };
 
 Branch.prototype.setIdentity = function setIdentity(identity) {
   if (identity) {
@@ -171,13 +173,9 @@ Branch.prototype.logout = function logout() {
 
 Branch.prototype.getStandardEvents = function getStandardEvents() {
   return execute("getStandardEvents");
-
 };
 
-Branch.prototype.sendBranchEvent = function sendBranchEvent(
-  action,
-  metaData
-) {
+Branch.prototype.sendBranchEvent = function sendBranchEvent(action, metaData) {
   var args = [action];
   if (!action) {
     return executeReject("Please set a standard event");
@@ -190,86 +188,85 @@ Branch.prototype.sendBranchEvent = function sendBranchEvent(
   return execute("sendBranchEvent", args);
 };
 
-Branch.prototype.createBranchUniversalObject = function createBranchUniversalObject(
-  options
-) {
-  return new Promise(function promise(resolve, reject) {
-    execute("createBranchUniversalObject", [options]).then(
-      function success(res) {
-        var obj = {
-          message: res.message,
-          instanceId: res.branchUniversalObjectId
-        };
+Branch.prototype.createBranchUniversalObject =
+  function createBranchUniversalObject(options) {
+    return new Promise(function promise(resolve, reject) {
+      execute("createBranchUniversalObject", [options]).then(
+        function success(res) {
+          var obj = {
+            message: res.message,
+            instanceId: res.branchUniversalObjectId,
+          };
 
-        obj.registerView = function registerView() {
-          return execute("registerView", [obj.instanceId]);
-        };
+          obj.registerView = function registerView() {
+            return execute("registerView", [obj.instanceId]);
+          };
 
-        obj.generateShortUrl = function generateShortUrl(
-          analytics,
-          properties
-        ) {
-          return execute("generateShortUrl", [
-            obj.instanceId,
+          obj.generateShortUrl = function generateShortUrl(
             analytics,
             properties
-          ]);
-        };
+          ) {
+            return execute("generateShortUrl", [
+              obj.instanceId,
+              analytics,
+              properties,
+            ]);
+          };
 
-        obj.showShareSheet = function showShareSheet(
-          analytics,
-          properties,
-          shareText
-        ) {
-          var message = !shareText ? "This stuff is awesome: " : shareText;
-
-          return execute("showShareSheet", [
-            obj.instanceId,
+          obj.showShareSheet = function showShareSheet(
             analytics,
             properties,
-            message
-          ]);
-        };
+            shareText
+          ) {
+            var message = !shareText ? "This stuff is awesome: " : shareText;
 
-        obj.onShareSheetLaunched = function onShareSheetLaunched(callback) {
-          if (deviceVendor.indexOf("Apple") < 0) {
-            executeCallback("onShareLinkDialogLaunched", callback, [
-              obj.instanceId
+            return execute("showShareSheet", [
+              obj.instanceId,
+              analytics,
+              properties,
+              message,
             ]);
-          }
-        };
+          };
 
-        obj.onShareSheetDismissed = function onShareSheetDismissed(callback) {
-          executeCallback("onShareLinkDialogDismissed", callback, [
-            obj.instanceId
-          ]);
-        };
+          obj.onShareSheetLaunched = function onShareSheetLaunched(callback) {
+            if (deviceVendor.indexOf("Apple") < 0) {
+              executeCallback("onShareLinkDialogLaunched", callback, [
+                obj.instanceId,
+              ]);
+            }
+          };
 
-        obj.onLinkShareResponse = function onLinkShareResponse(callback) {
-          executeCallback("onLinkShareResponse", callback, [obj.instanceId]);
-        };
+          obj.onShareSheetDismissed = function onShareSheetDismissed(callback) {
+            executeCallback("onShareLinkDialogDismissed", callback, [
+              obj.instanceId,
+            ]);
+          };
 
-        obj.onChannelSelected = function onChannelSelected(callback) {
-          if (deviceVendor.indexOf("Apple") < 0) {
-            executeCallback("onChannelSelected", callback, [obj.instanceId]);
-          }
-        };
+          obj.onLinkShareResponse = function onLinkShareResponse(callback) {
+            executeCallback("onLinkShareResponse", callback, [obj.instanceId]);
+          };
 
-        obj.listOnSpotlight = function listOnSpotlight() {
-          if (!(deviceVendor.indexOf("Apple") < 0)) {
-            return execute("listOnSpotlight", [obj.instanceId]);
-          }
-          return executeReject("iOS Spotlight only");
-        };
+          obj.onChannelSelected = function onChannelSelected(callback) {
+            if (deviceVendor.indexOf("Apple") < 0) {
+              executeCallback("onChannelSelected", callback, [obj.instanceId]);
+            }
+          };
 
-        resolve(obj);
-      },
-      function failure(err) {
-        reject(err);
-      }
-    );
-  });
-};
+          obj.listOnSpotlight = function listOnSpotlight() {
+            if (!(deviceVendor.indexOf("Apple") < 0)) {
+              return execute("listOnSpotlight", [obj.instanceId]);
+            }
+            return executeReject("iOS Spotlight only");
+          };
+
+          resolve(obj);
+        },
+        function failure(err) {
+          reject(err);
+        }
+      );
+    });
+  };
 
 Branch.prototype.crossPlatformIds = function crossPlatformIds() {
   return execute("crossPlatformIds");
@@ -302,6 +299,18 @@ Branch.prototype.getBranchQRCode = function getBranchQRCode(
   return execute("getBranchQRCode", args);
 };
 
+Branch.prototype.setDMAParamsForEEA = function setDMAParamsForEEA(
+  eeaRegion,
+  adPersonalizationConsent,
+  adUserDataUsageConsent
+) {
+  if (!eeaRegion || !adPersonalizationConsent || !adUserDataUsageConsent) {
+    return executeReject("All three parameters (eeaRegion, adPersonalizationConsent, adUserDataUsageConsent) are required.");
+  }
+
+  var args = [eeaRegion, adPersonalizationConsent, adUserDataUsageConsent];
+  return execute("setDMAParamsForEEA", args);
+};
 
 // export Branch object
 module.exports = new Branch();
