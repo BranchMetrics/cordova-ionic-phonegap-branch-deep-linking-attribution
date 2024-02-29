@@ -293,12 +293,33 @@ Branch.prototype.getBranchQRCode = function getBranchQRCode(
 };
 
 Branch.prototype.setDMAParamsForEEA = function setDMAParamsForEEA(
-  eeaRegion = false,
-  adPersonalizationConsent = false,
-  adUserDataUsageConsent = false
+  eeaRegion,
+  adPersonalizationConsent,
+  adUserDataUsageConsent
 ) {
-  var args = [eeaRegion, adPersonalizationConsent, adUserDataUsageConsent];
-  return execute("setDMAParamsForEEA", args);
+  const isValid =
+    validateParam(eeaRegion, "eeaRegion") &&
+    validateParam(adPersonalizationConsent, "adPersonalizationConsent") &&
+    validateParam(adUserDataUsageConsent, "adUserDataUsageConsent");
+
+  if (isValid) {
+    var args = [eeaRegion, adPersonalizationConsent, adUserDataUsageConsent];
+    return execute("setDMAParamsForEEA", args);
+  } else {
+    return executeReject("Unable to set DMA Params");
+  }
+};
+
+const validateParam = (param, paramName) => {
+  if (param === true || param === false) {
+    return true;
+  } else {
+    console.warn(
+      `setDMAParamsForEEA: ${paramName} must be boolean, but got ${param}`
+    );
+
+    return false;
+  }
 };
 
 // export Branch object
