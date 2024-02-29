@@ -1,7 +1,7 @@
 
 6.1.0 Feb 28, 2024
 * Update Android SDK to 5.9.0
-* Update iOS SDK to 3.3.0
+* Update iOS SDK to 3.2.0
 * Added new method, setDMAParamsForEEA(), for setting DMA compliance parameters.
 
 6.0.0 Dec 1, 2023
