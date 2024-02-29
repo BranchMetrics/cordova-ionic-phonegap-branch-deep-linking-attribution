@@ -115,13 +115,6 @@ Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
   return execute("setRequestMetadata", [key, val]);
 };
 
-// Deprecated. Replaced by setLogging(isEnabled) and test devices. https://help.branch.io/using-branch/docs/adding-test-devices
-Branch.prototype.setDebug = function setDebug(isEnabled) {
-  return new Promise(function promise(resolve, reject) {
-    resolve(false);
-  });
-};
-
 // For early lifecycle logging, we recommend you enable logging in the native iOS or Android code.
 Branch.prototype.setLogging = function setLogging(isEnabled) {
   var value = typeof isEnabled !== "boolean" ? false : isEnabled;
