@@ -302,6 +302,24 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
 }
 
+- (void)setDMAParamsForEEA:(CDVInvokedUrlCommand*)command {
+  if (command.arguments.count < 3) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Insufficient arguments"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return;
+  }
+
+  BOOL eeaRegion = [[command.arguments objectAtIndex:0] boolValue];
+  BOOL adPersonalizationConsent = [[command.arguments objectAtIndex:1] boolValue];
+  BOOL adUserDataUsageConsent = [[command.arguments objectAtIndex:2] boolValue];
+
+  [Branch setDMAParamsForEEA:eeaRegion AdPersonalizationConsent:adPersonalizationConsent AdUserDataUsageConsent:adUserDataUsageConsent];
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+
 #pragma mark - Branch Universal Object Methods
 
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command
@@ -474,20 +492,19 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
       [linkProperties addControlParam:key withValue:[arg2 objectForKey:key]];
     }
   }
+    [branchUniversalObj showShareSheetWithLinkProperties:linkProperties andShareText:shareText fromViewController:self.viewController completionWithError:^(NSString * _Nullable activityType, BOOL completed, NSError * _Nullable error) {
+        
+        int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
 
-  [branchUniversalObj showShareSheetWithLinkProperties:linkProperties andShareText:shareText fromViewController:self.viewController completion:^(NSString *activityType, BOOL completed) {
-
-    int listenerCallbackId = [[command.arguments objectAtIndex:0] intValue];
-
-    if (completed) {
-      NSLog(@"Share link complete");
-      [branchUniversalObj getShortUrlWithLinkProperties:linkProperties andCallback:^(NSString *url, NSError *error) {
-        if (!error) {
-          NSDictionary *response = [[NSDictionary alloc] initWithObjectsAndKeys:url, @"sharedLink", activityType, @"sharedChannel", nil];
-          [self doShareLinkResponse:listenerCallbackId sendResponse:response];
+        if (completed) {
+          NSLog(@"Share link complete");
+          [branchUniversalObj getShortUrlWithLinkProperties:linkProperties andCallback:^(NSString *url, NSError *error) {
+            if (!error) {
+              NSDictionary *response = [[NSDictionary alloc] initWithObjectsAndKeys:url, @"sharedLink", activityType, @"sharedChannel", nil];
+              [self doShareLinkResponse:listenerCallbackId sendResponse:response];
+            }
+          }];
         }
-      }];
-    }
 
     CDVPluginResult *shareDialogDismissed = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
