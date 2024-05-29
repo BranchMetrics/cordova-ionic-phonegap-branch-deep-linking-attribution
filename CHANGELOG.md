@@ -1,3 +1,7 @@
+6.2.0 May 28, 2024
+* Update Android SDK to 5.12.0
+* Update iOS SDK to 3.4.3
+* Updated iOS deployment target to 12.0
 
 6.1.0 Feb 28, 2024
 * Update Android SDK to 5.9.0
