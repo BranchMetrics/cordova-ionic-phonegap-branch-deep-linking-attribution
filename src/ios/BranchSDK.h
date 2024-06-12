@@ -40,6 +40,7 @@
 - (void)setIdentity:(CDVInvokedUrlCommand*)command;
 - (void)registerDeepLinkController:(CDVInvokedUrlCommand*)command;
 - (void)logout:(CDVInvokedUrlCommand*)command;
+- (void)setDMAParamsForEEA:(CDVInvokedUrlCommand*)command;
 
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;
