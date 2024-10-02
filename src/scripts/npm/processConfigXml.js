@@ -71,7 +71,7 @@
       iosTeamRelease: getBranchValue(branchXml, "ios-team-release"), // optional
       iosTeamDebug: getBranchValue(branchXml, "ios-team-debug"), // optional
       androidBundleId: getBundleId(configXml, "android"), // optional
-      androidPrefix: getBranchValue(branchXml, "android-prefix"), // optional
+      androidPrefix: getBranchLinkDomains(branchXml, "android-prefix"), // optional
       androidTestMode: getBranchValue(branchXml, "android-testmode") // DEPRECATED optional
     };
   }
@@ -294,6 +294,7 @@
       );
     }
     if (
+      [...preferences.linkDomain, ...preferences.androidLinkDomain, preferences.iosLinkDomain].find(domain => domain === 'bnc.lt') &&
       preferences.androidPrefix !== null &&
       !/^[/].[a-zA-Z0-9]{3,4}$/.test(preferences.androidPrefix)
     ) {
