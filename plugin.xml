@@ -43,8 +43,7 @@ SOFTWARE.
   <hook src="src/scripts/hooks/beforePluginInstall.js" type="before_plugin_install" />
   <hook src="src/scripts/hooks/beforePrepare.js" type="after_plugin_install" />
   <hook src="src/scripts/hooks/afterPrepare.js" type="after_plugin_add" />
-  <hook src="src/scripts/hooks/beforePrepare.js" type="before_prepare" />
-  <hook src="src/scripts/hooks/afterPrepare.js" type="after_prepare" />
+
 
   <!-- JavaScript -->
   <js-module src="src/index.js" name="Branch">
