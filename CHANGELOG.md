@@ -1,3 +1,7 @@
+6.4.0 Nov 1, 2024
+* Update Android SDK to 5.13.0
+* Update iOS SDK to 3.6.5
+
 6.3.1 Oct 1, 2024
 * Update Android SDK to 5.12.4
 
