@@ -24,7 +24,7 @@ SOFTWARE.
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="branch-cordova-sdk"
-  version="6.2.0">
+  version="6.4.0">
 
   <!-- Description -->
   <name>branch-cordova-sdk</name>
@@ -63,7 +63,7 @@ SOFTWARE.
     <!-- Manifest configuration is done via a js script.  We should move it to this config in the future. -->
 
     <source-file src="src/android/io/branch/BranchSDK.java" target-dir="src/io/branch" />
-    <framework src="io.branch.sdk.android:library:5.12.0"/>
+    <framework src="io.branch.sdk.android:library:5.13.0"/>
   </platform>
 
   <!-- iOS -->
@@ -88,7 +88,7 @@ SOFTWARE.
               <source url="https://cdn.cocoapods.org/"/>
           </config>
           <pods>
-              <pod name="BranchSDK" spec="~> 3.4.3" />
+              <pod name="BranchSDK" spec="~> 3.6.5" />
           </pods>
       </podspec>
   </platform>
