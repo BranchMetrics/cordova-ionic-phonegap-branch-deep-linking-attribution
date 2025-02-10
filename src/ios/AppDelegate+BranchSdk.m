@@ -24,7 +24,19 @@
   // pass the url to the handle deep link call
   if (![[Branch getInstance] application:app openURL:url options:options]) {
     // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
-    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLNotification object:url]];
+    NSMutableDictionary * openURLData = [[NSMutableDictionary alloc] init];
+    [openURLData setValue:url forKey:@"url"];
+    NSMutableString * sourceApplication =
+      [options objectForKey:UIApplicationOpenURLOptionsSourceApplicationKey];
+    if (sourceApplication) {
+        [openURLData setValue:sourceApplication forKey:@"sourceApplication"];
+    }
+    NSMutableString * annotation =
+      [options objectForKey:UIApplicationOpenURLOptionsAnnotationKey];
+    if (annotation) {
+        [openURLData setValue:annotation forKey:@"annotation"];
+    }
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLWithAppSourceAndAnnotationNotification object:openURLData]];
     // send unhandled URL to notification
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"BSDKPostUnhandledURL" object:[url absoluteString]]];
   }
