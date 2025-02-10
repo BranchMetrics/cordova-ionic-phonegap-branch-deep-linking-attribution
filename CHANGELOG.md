@@ -1,3 +1,6 @@
+6.5.1 Feb 10, 2025
+* Bug fix. Thanks @MoemenMostafa!
+
 6.5.0 Feb 7, 2025
 * Update Android SDK to 5.15.1
 * Update iOS SDK to 3.9.0
