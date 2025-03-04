@@ -319,6 +319,30 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)setConsumerProtectionAttributionLevel:(CDVInvokedUrlCommand*)command {
+    NSString *level = [command.arguments objectAtIndex:0];
+    BranchAttributionLevel attributionLevel;
+    
+    if ([level isEqualToString:@"FULL"]) {
+        attributionLevel = BranchAttributionLevelFull;
+    } else if ([level isEqualToString:@"REDUCED"]) {
+        attributionLevel = BranchAttributionLevelReduced;
+    } else if ([level isEqualToString:@"MINIMAL"]) {
+        attributionLevel = BranchAttributionLevelMinimal;
+    } else if ([level isEqualToString:@"NONE"]) {
+        attributionLevel = BranchAttributionLevelNone;
+    } else {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR 
+                                                        messageAsString:@"Invalid attribution level"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        return;
+    }
+    
+    [[Branch getInstance] setConsumerProtectionAttributionLevel:attributionLevel];
+    
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
 
 #pragma mark - Branch Universal Object Methods
 
@@ -745,5 +769,7 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
 
   [self.viewController presentViewController:shareViewController animated:YES completion:nil];
 }
+
+
 
 @end

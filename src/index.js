@@ -322,5 +322,13 @@ const validateParam = (param, paramName) => {
   }
 };
 
+Branch.prototype.setConsumerProtectionAttributionLevel =
+  function setConsumerProtectionAttributionLevel(level) {
+    if (typeof level !== "string") {
+      return executeReject("Attribution level must be a string");
+    }
+    return execute("setConsumerProtectionAttributionLevel", [level]);
+  };
+
 // export Branch object
 module.exports = new Branch();

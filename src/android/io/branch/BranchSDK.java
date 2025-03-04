@@ -30,6 +30,7 @@ import io.branch.referral.util.BranchEvent;
 import io.branch.referral.util.ContentMetadata;
 import io.branch.referral.util.CurrencyType;
 import io.branch.referral.util.ShareSheetStyle;
+import io.branch.referral.Defines.BranchAttributionLevel;
 
 
 public class BranchSDK extends CordovaPlugin {
@@ -112,7 +113,14 @@ public class BranchSDK extends CordovaPlugin {
             return true;
         } else {
             if (this.instance != null) {
-                if (action.equals("setIdentity")) {
+                if (action.equals("setConsumerProtectionAttributionLevel")) {
+                    if (args.length() != 1) {
+                        callbackContext.error("Parameter count mismatch");
+                        return false;
+                    }
+                    cordova.getActivity().runOnUiThread(r);
+                    return true;
+                } else if (action.equals("setIdentity")) {
                     cordova.getActivity().runOnUiThread(r);
                     return true;
                 } else if (action.equals("sendBranchEvent")) {
@@ -698,6 +706,44 @@ public class BranchSDK extends CordovaPlugin {
         Branch.getInstance().setDMAParamsForEEA(eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
     }
 
+    /**
+     * <p>Sets the CPP level.</p>
+     * 
+     * @param level A {@link String} value indicating the desired attribution level. Valid values are:
+     *             "FULL" - Full attribution with all data collection enabled
+     *             "REDUCED" - Reduced attribution with limited data collection
+     *             "MINIMAL" - Minimal attribution with very limited data collection
+     *             "NONE" - No attribution or data collection
+     * @param callbackContext A callback to execute at the end of this method
+     */
+
+    private void setConsumerProtectionAttributionLevel(String level, CallbackContext callbackContext) {
+        Branch branch = Branch.getInstance();
+        BranchAttributionLevel attributionLevel;
+        
+        switch (level) {
+            case "FULL":
+                attributionLevel = BranchAttributionLevel.FULL;
+                break;
+            case "REDUCED":
+                attributionLevel = BranchAttributionLevel.REDUCED;
+                break;
+            case "MINIMAL":
+                attributionLevel = BranchAttributionLevel.MINIMAL;
+                break;
+            case "NONE":
+                attributionLevel = BranchAttributionLevel.NONE;
+                break;
+            default:
+                Log.w(LCAT, "Invalid attribution level: " + level);
+                callbackContext.error("Invalid attribution level: " + level);
+                return;
+        }
+        
+        branch.setConsumerProtectionAttributionLevel(attributionLevel);
+        callbackContext.success("Success");
+    }
+
     private BranchUniversalObject getContentItem(JSONObject item) throws JSONException {
         BranchUniversalObject universalObject = new BranchUniversalObject();
         ContentMetadata contentMetadata = new ContentMetadata();
@@ -1149,6 +1195,8 @@ public class BranchSDK extends CordovaPlugin {
                         showShareSheet(this.args.getInt(0), this.args.getJSONObject(1), this.args.getJSONObject(2), localization);
                     } else if (this.action.equals("setDMAParamsForEEA")) {
                         setDMAParamsForEEA(this.args.getBoolean(0), this.args.getBoolean(1), this.args.getBoolean(2));
+                    } else if (this.action.equals("setConsumerProtectionAttributionLevel")) {
+                        setConsumerProtectionAttributionLevel(this.args.getString(0), this.callbackContext);
                     }
                 }
             } catch (JSONException e) {
@@ -1156,4 +1204,6 @@ public class BranchSDK extends CordovaPlugin {
             }
         }
     }
+
+
 }
