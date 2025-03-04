@@ -71,7 +71,7 @@ SOFTWARE.
       <plugins-plist key="BranchSDK" string="BranchSDK" />
 
       <config-file target="config.xml" parent="/*">
-          <preference name="deployment-target" value="12.0" />
+          <preference name="deployment-target" value="13.0" />
           <feature name="BranchSDK">
               <param name="ios-package" value="BranchSDK" />
               <param name="onload" value="true" />
