@@ -48,6 +48,7 @@ public class BranchSDK extends CordovaPlugin {
     private Activity activity;
     private Branch instance;
     private String deepLinkUrl;
+    private Branch.BranchReferralInitListener branchReferralInitListener;
 
     /**
      * Class Constructor
@@ -80,6 +81,7 @@ public class BranchSDK extends CordovaPlugin {
     public void onNewIntent(Intent intent) {
         intent.putExtra("branch_force_new_session", true);
         this.activity.setIntent(intent);
+        Branch.sessionBuilder(this.activity).withCallback(branchReferralInitListener).reInit();
     }
 
     /**
@@ -241,7 +243,7 @@ public class BranchSDK extends CordovaPlugin {
      *
      * @param callbackContext A callback to execute at the end of this method
      */
-    private void initSession(CallbackContext callbackContext) {
+    private void initSession(boolean isKeepCallBack, CallbackContext callbackContext) {
 
         this.activity = this.cordova.getActivity();
 
@@ -251,7 +253,8 @@ public class BranchSDK extends CordovaPlugin {
             this.deepLinkUrl = data.toString();
         }
 
-        Branch.sessionBuilder(activity).withData(data).withCallback(new SessionListener(callbackContext)).init();
+        this.branchReferralInitListener = new SessionListener(callbackContext, isKeepCallBack);
+        Branch.sessionBuilder(activity).withData(data).withCallback(branchReferralInitListener).init();
     }
 
     /**
@@ -838,9 +841,11 @@ public class BranchSDK extends CordovaPlugin {
 
     protected class SessionListener implements Branch.BranchReferralInitListener {
         private CallbackContext _callbackContext;
+        private Boolean _keepCallback;
 
-        public SessionListener(CallbackContext callbackContext) {
+        public SessionListener(CallbackContext callbackContext, Boolean keepCallback) {
             this._callbackContext = callbackContext;
+            this._keepCallback = keepCallback;
         }
 
         //Listener that implements BranchReferralInitListener for initSession
@@ -851,7 +856,11 @@ public class BranchSDK extends CordovaPlugin {
 
             if (error == null && referringParams != null) {
                 if (this._callbackContext != null) {
-                    this._callbackContext.success(referringParams);
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, referringParams);
+                    if(this._keepCallback){
+                        result.setKeepCallback(true);
+                    }
+                    this._callbackContext.sendPluginResult(result);
                 }
             } else {
                 JSONObject message = new JSONObject();
@@ -1150,7 +1159,8 @@ public class BranchSDK extends CordovaPlugin {
                 } else if (this.action.equals("disableTracking")) {
                     disableTracking(this.args.getBoolean(0), this.callbackContext);
                 } else if (this.action.equals("initSession")) {
-                    initSession(this.callbackContext);
+                    boolean keepCallBack = this.args.length() != 0 && this.args.getBoolean(0);
+                    initSession(keepCallBack, this.callbackContext);
                 } else if (this.action.equals("setRequestMetadata")) {
                     setRequestMetadata(this.args.getString(0), this.args.getString(1), this.callbackContext);
                 } else {
