@@ -61,7 +61,7 @@
     "plist": "^3.0.5",
     "shelljs": "^0.8.5",
     "xcode": "^3.0.1",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "fs": "0.0.1-security",
