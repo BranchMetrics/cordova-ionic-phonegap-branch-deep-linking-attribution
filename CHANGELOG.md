@@ -1,3 +1,10 @@
+6.6.0 Feb 9, 2026
+* Update Android SDK to 5.20.3
+* Update iOS SDK to 3.13.3
+* Exposed new method `setAnonID` to set Meta anonymous ID
+* Exposed new method `setODMInfo` to set ODM info
+* Exposed new method `setSDKWaitTimeForThirdPartyAPIs` to set SDK wait time for third party APIs
+
 6.5.1 Feb 10, 2025
 * Bug fix. Thanks @MoemenMostafa!
 

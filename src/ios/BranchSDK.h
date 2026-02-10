@@ -42,6 +42,9 @@
 - (void)logout:(CDVInvokedUrlCommand*)command;
 - (void)setDMAParamsForEEA:(CDVInvokedUrlCommand*)command;
 - (void)setConsumerProtectionAttributionLevel:(CDVInvokedUrlCommand*)command;
+- (void)setSDKWaitTimeForThirdPartyAPIs:(CDVInvokedUrlCommand*)command;
+- (void)setAnonID:(CDVInvokedUrlCommand*)command;
+- (void)setODMInfo:(CDVInvokedUrlCommand*)command;
 
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;
