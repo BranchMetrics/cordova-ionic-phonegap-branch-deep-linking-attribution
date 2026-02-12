@@ -12,9 +12,16 @@
 
   // updates the platforms/ios/app.plist file with branch settings within app/config.xml
   function addBranchSettings(preferences) {
-    const filePath = `platforms/ios/${preferences.projectName}/${
+    let filePath = `platforms/ios/${preferences.projectName}/${
       preferences.projectName
     }-Info.plist`;
+
+    if (!fs.existsSync(filePath)) {
+        filePath = `platforms/ios/App/App-Info.plist`;
+    }
+
+    console.log("BranchSDK: Updating Info.plist at " + filePath);
+
     let xml = readPlist(filePath);
     let obj = convertXmlToObject(xml);
 

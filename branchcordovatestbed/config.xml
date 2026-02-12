@@ -10,4 +10,12 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+
+    <branch-config>
+        <branch-key value="key_live_hcnegAumkH7Kv18M8AOHhfgiohpXq5tB" />
+        <uri-scheme value="branchcordovatestbed" />
+        <ios-team-release value="R63EM248DP" />
+        <link-domain value="bnctestbed.app.link" /> 
+        <link-domain value="bnctestbed-alternate.app.link" /> 
+    </branch-config>
 </widget>
