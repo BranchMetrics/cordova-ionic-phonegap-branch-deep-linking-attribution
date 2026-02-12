@@ -29,11 +29,11 @@ function onDeviceReady() {
 
     // Google ODM Testing Code
 
+    Branch.setSDKWaitTimeForThirdPartyAPIs(5)
+
     Branch.setAnonID("test_AnonID")
 
     Branch.setODMInfo("test_ODMInfoAgain", Date.now())
-
-    Branch.setSDKWaitTimeForThirdPartyAPIs(5)
 
     Branch.initSession();
 }
