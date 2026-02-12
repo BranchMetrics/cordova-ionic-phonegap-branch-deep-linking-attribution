@@ -4,6 +4,7 @@
 * Exposed new method `setAnonID` to set Meta anonymous ID
 * Exposed new method `setODMInfo` to set ODM info
 * Exposed new method `setSDKWaitTimeForThirdPartyAPIs` to set SDK wait time for third party APIs
+* Added branchcordovatestbed sample application
 
 6.5.1 Feb 10, 2025
 * Bug fix. Thanks @MoemenMostafa!

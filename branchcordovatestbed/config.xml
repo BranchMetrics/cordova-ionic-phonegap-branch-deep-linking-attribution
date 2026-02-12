@@ -11,6 +11,13 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
 
+    <platform name="ios">
+        <preference name="deployment-target" value="13.0" />
+        
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+
     <branch-config>
         <branch-key value="key_live_hcnegAumkH7Kv18M8AOHhfgiohpXq5tB" />
         <uri-scheme value="branchcordovatestbed" />

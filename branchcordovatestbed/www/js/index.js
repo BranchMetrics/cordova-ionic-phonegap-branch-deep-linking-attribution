@@ -27,11 +27,13 @@ function onDeviceReady() {
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     document.getElementById('deviceready').classList.add('ready');
 
-    Branch.initSession().then(function(data) {
-        console.log('Deep Link Data: ' + JSON.stringify(data));
-        alert('Branch Initialized! \n' + JSON.stringify(data));
-    }).catch(function(err) {
-        console.error('Branch Init Failed: ' + JSON.stringify(err));
-        alert('Branch Error: ' + JSON.stringify(err));
-    });  
+    // Google ODM Testing Code
+
+    Branch.setAnonID("test_AnonID")
+
+    Branch.setODMInfo("test_ODMInfoAgain", Date.now())
+
+    Branch.setSDKWaitTimeForThirdPartyAPIs(5)
+
+    Branch.initSession();
 }
