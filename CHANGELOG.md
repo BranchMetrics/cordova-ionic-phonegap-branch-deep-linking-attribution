@@ -6,7 +6,7 @@
 * Exposed new method `setSDKWaitTimeForThirdPartyAPIs` to set SDK wait time for third party APIs
 * Added branchcordovatestbed sample application
 * Updated iOS minimum-deployment target to 15.0
-* See README.md file for detailed instructions on testing Google On Device Measurement and connecting to Firebase with Cordova
+* See README.md file for detailed instructions for connecting to Firebase with Cordova to testing Google On Device Measurement.
 
 6.5.1 Feb 10, 2025
 * Bug fix. Thanks @MoemenMostafa!
