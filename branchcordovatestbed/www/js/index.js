@@ -33,6 +33,9 @@ function onDeviceReady() {
 
     Branch.setAnonID("test_AnonID")
 
+    // setODMInfo() will run with the native BranchSDK
+    // ...and auto generate the odmInfo field.
+    // This line is here to show that the odmInfo field can be set manually.
     Branch.setODMInfo("test_ODMInfoAgain", Date.now())
 
     Branch.initSession();

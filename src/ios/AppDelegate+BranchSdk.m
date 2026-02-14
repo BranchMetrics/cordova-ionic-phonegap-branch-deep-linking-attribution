@@ -45,7 +45,6 @@
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    [[Branch getInstance] enableLogging];
     return YES;
 }
 

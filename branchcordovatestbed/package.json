@@ -14,14 +14,13 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "branch-cordova-sdk": "file:..",
-    "cordova-ios": "^8.0.0"
+    "cordova-plugin-firebasex": "^19.0.1"
   },
   "cordova": {
-    "platforms": [
-      "ios"
-    ],
+    "platforms": [],
     "plugins": {
-      "branch-cordova-sdk": {}
+      "branch-cordova-sdk": {},
+      "cordova-plugin-firebasex": {}
     }
   }
 }

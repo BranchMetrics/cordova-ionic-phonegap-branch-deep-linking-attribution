@@ -5,6 +5,11 @@
 * Exposed new method `setODMInfo` to set ODM info
 * Exposed new method `setSDKWaitTimeForThirdPartyAPIs` to set SDK wait time for third party APIs
 * Added branchcordovatestbed sample application
+* NOTES on testing On Device Measurement ODM Framework: 
+    To connect your app to ODM, add firebase frameworks by running 'cordova plugin add cordova-plugin-firebasex' in terminal
+    ... ensure your GoogleService-Info.plist file is added to your root project folder or the app will crash when it attempts to initializes Firebase.
+    ... Running 'cordova prepare ios' in terminal will Overwrite the Podfile,
+    ... but it's recommended to run "cordova platform rm ios" and "cordova platform add ios" to fully wipe and reset the Podfile.
 
 6.5.1 Feb 10, 2025
 * Bug fix. Thanks @MoemenMostafa!
