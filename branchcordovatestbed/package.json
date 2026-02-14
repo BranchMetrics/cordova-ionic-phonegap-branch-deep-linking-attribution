@@ -13,14 +13,12 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
-    "branch-cordova-sdk": "file:..",
-    "cordova-plugin-firebasex": "^19.0.1"
+    "branch-cordova-sdk": "file:.."
   },
   "cordova": {
     "platforms": [],
     "plugins": {
-      "branch-cordova-sdk": {},
-      "cordova-plugin-firebasex": {}
+      "branch-cordova-sdk": {}
     }
   }
 }
