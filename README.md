@@ -3,8 +3,8 @@
 View [Branch's SDK documentation for Cordova PhoneGap Ionic](https://help.branch.io/developers-hub/docs/cordova-phonegap-ionic)
 
 ## iOS Google On Device Measurement
-* The native iOS Branch SDK will automatically handle Google On Device Measurement transmission when the ODM framework is added to your app.
-* We have added three convenience functions for Google On Device Measurement. These functions are `setODMInfo()`, `setSDKWaitTimeForThirdPartyAPIs()`, and `setAnonID()`.
+* The native Branch iOS SDK will automatically handle the retrieving and sending of Google On Device Measurement info if the ODM framework is added to your app.
+* Three new convenience functions for Google On Device Measurement have been added: `setODMInfo()`, `setSDKWaitTimeForThirdPartyAPIs()`, and `setAnonID()`.
 
 ## Testing Google On Device Measurement and Connecting to Firebase
 * Firebase Analytics requires minimum target deployment to be iOS 15. Set this in config.xml - Link: https://firebase.google.com/support/release-notes/ios#version_1200_-_july_15_2025
