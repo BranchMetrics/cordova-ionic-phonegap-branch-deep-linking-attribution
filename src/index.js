@@ -1,3 +1,4 @@
+const { platformId } = require("cordova");
 var exec = require("cordova/exec");
 var deviceVendor =
   typeof window.clientInformation != "undefined" &&
@@ -328,6 +329,45 @@ Branch.prototype.setConsumerProtectionAttributionLevel =
       return executeReject("Attribution level must be a string");
     }
     return execute("setConsumerProtectionAttributionLevel", [level]);
+  };
+
+Branch.prototype.setSDKWaitTimeForThirdPartyAPIs = 
+  function setSDKWaitTimeForThirdPartyAPIs(waitTime) {
+    if (platformId !== 'ios') {
+      console.warn("setSDKWaitTimeForThirdPartyAPIs is only supported on iOS.");
+      return Promise.resolve("Not supported on this platform.");
+    }
+    if (typeof waitTime !== 'number' || !Number.isFinite(waitTime)) {
+      throw new TypeError("setSDKWaitTimeForThirdPartyAPIs: waitTime must be a number.");
+    }
+    return execute("setSDKWaitTimeForThirdPartyAPIs", [waitTime]);
+  };
+
+Branch.prototype.setAnonID = 
+  function setAnonID(anonID) {
+    if (platformId !== 'ios') {
+      console.warn("setAnonID is only supported on iOS.");
+      return Promise.resolve("Not supported on this platform.");
+    }
+    if (typeof anonID !== 'string') {
+      throw new TypeError("setAnonID: anonID must be a string.");
+    }
+    return execute("setAnonID", [anonID]);
+  };
+
+Branch.prototype.setODMInfo = 
+  function setODMInfo(odmInfo, firstOpenTimeStamp) {
+    if (platformId !== 'ios') {
+      console.warn("setODMInfo is only supported on iOS.");
+      return Promise.resolve("Not supported on this platform.");
+    }
+    if (typeof odmInfo !== 'string') {
+      throw new TypeError("setODMInfo: odmInfo must be a string.");
+    }
+    if (typeof firstOpenTimeStamp !== 'number') {
+      throw new TypeError("setODMInfo: firstOpenTimeStamp must be a number.");
+    }
+    return execute("setODMInfo", [odmInfo, firstOpenTimeStamp]);
   };
 
 // export Branch object

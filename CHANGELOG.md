@@ -1,3 +1,14 @@
+6.6.0 Feb 10, 2026
+* Update Android SDK to 5.20.3
+* Update iOS SDK to 3.14.0
+* Three new convenience functions for Google On Device Measurement have been added: `setODMInfo()`, `setSDKWaitTimeForThirdPartyAPIs()`, and `setAnonID()`.
+* Exposed new method `setAnonID` to set Meta anonymous ID
+* Exposed new method `setODMInfo` to set ODM info
+* Exposed new method `setSDKWaitTimeForThirdPartyAPIs` to set SDK wait time for third party APIs
+* Added branchcordovatestbed sample application
+* Updated iOS minimum-deployment target to 15.0
+* See README.md file for detailed instructions for connecting to Firebase with Cordova to testing Google On Device Measurement.
+
 6.5.1 Feb 10, 2025
 * Bug fix. Thanks @MoemenMostafa!
 

@@ -43,6 +43,11 @@
   return YES;
 }
 
+- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+{
+    return YES;
+}
+
 // Respond to Push Notifications
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
   @try {

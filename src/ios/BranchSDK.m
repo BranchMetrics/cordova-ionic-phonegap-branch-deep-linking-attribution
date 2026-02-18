@@ -1,6 +1,6 @@
 #import "BranchSDK.h"
 
-NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
+NSString * const pluginVersion = @"6.6.0";
 
 @interface BranchSDK()
 
@@ -342,6 +342,68 @@ NSString * const pluginVersion = @"%BRANCH_PLUGIN_VERSION%";
     
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setSDKWaitTimeForThirdPartyAPIs:(CDVInvokedUrlCommand*)command {
+    id rawWaitTime = [command.arguments objectAtIndex:0];
+
+    if (![rawWaitTime isKindOfClass:[NSNumber class]]) {
+      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR 
+                                                          messageAsString:@"Invalid waitTime. waitTime must be a number."];
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+      return;
+    }
+
+    NSTimeInterval timeInSeconds = [rawWaitTime doubleValue];
+    [Branch setSDKWaitTimeForThirdPartyAPIs:timeInSeconds];
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setAnonID:(CDVInvokedUrlCommand*)command {
+    NSString *anonID = [command.arguments objectAtIndex:0];
+    
+    if (![anonID isKindOfClass: [NSString class]]) {
+      CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR 
+                                                          messageAsString:@"Invalid anonID. anonID must be a string."];
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+      return;
+    }
+
+    [Branch setAnonID:anonID];
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setODMInfo:(CDVInvokedUrlCommand*)command {
+  NSString *odmInfo = [command.arguments objectAtIndex:0];
+  NSNumber *firstOpenTimestamp = [command.arguments objectAtIndex:1];
+
+  // Checks each variable for the correct kind of class.
+  // We don't need a separate 'nil' check because isKindOfClass also returns NO if variable is nil.
+  if (![odmInfo isKindOfClass: [NSString class]]) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR 
+                                                        messageAsString:@"Invalid odmInfo. odmInfo must be a string."];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return;
+  }
+  if (![firstOpenTimestamp isKindOfClass: [NSNumber class]]) {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR 
+                                                        messageAsString:@"Invalid firstOpenTimestamp. firstOpenTimestamp must be a number."];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return;
+  }
+
+  // NSTimeInterval is a double in seconds, so we divide the incoming milliseconds by 1000.0
+  NSTimeInterval interval = [firstOpenTimestamp doubleValue] / 1000.0;
+  NSDate *firstOpenDate = [NSDate dateWithTimeIntervalSince1970:interval];
+
+  [Branch setODMInfo:odmInfo andFirstOpenTimestamp:firstOpenDate];
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 #pragma mark - Branch Universal Object Methods
