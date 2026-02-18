@@ -16,7 +16,7 @@ View [Branch's SDK documentation for Cordova PhoneGap Ionic](https://help.branch
 4. Ensure your GoogleService-Info.plist file is added to your root project folder or the app will crash when it attempts to initializes Firebase.
 * Note: If you see an error that Xcode can't find the Google App ID in the GoogleService-Info.plist file open Xcode and check the App -> Resources folder. Click on the GoogleService-Info.plist file. If the file is blank, just move the empty file to trash and manually add your complete file to that folder in Xcode.
 5. Run your project to confirm Firebase is connected.
-* Note: When you need to rebuild the project, we recommended runing the commands in this order. This ensures the firebase plugin does not run into various plugin issues.
+* Note: When you need to rebuild the project, we recommended running the commands in this order. This ensures the firebase plugin does not run into various plugin issues.
 1. `cordova platform rm ios`
 2. `cordova plugin rm cordova-plugin-firebasex`
 3. `cordova platform add ios`
