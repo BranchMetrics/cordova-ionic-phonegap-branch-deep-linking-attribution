@@ -8,7 +8,7 @@ View [Branch's SDK documentation for Cordova PhoneGap Ionic](https://help.branch
 * The Branch SDK will automatically generate an odmInfo field, but our exposed setODMInfo() function allows you to set it manually.
 * The below steps to connect to Firebase were built following this guide and making some modifications: https://github.com/dpa99c/cordova-plugin-firebasex#ios-specific 
 
-# Steps to connect Firebase: 
+# Steps to Connect Firebase: 
 1. Follow the above guide to download your GoogleService-Info.plist file. Then add it to your Cordova project's root folder.
 2. Open terminal and cd into your Cordova project's root folder and enter the command `cordova platform add ios`
 3. AFTER running the above command, enter the command `cordova plugin add cordova-plugin-firebasex` to utilize the plugin for installing the correct Firebase pods to Cordova.
