@@ -9,7 +9,6 @@ View [Branch's SDK documentation for Cordova PhoneGap Ionic](https://help.branch
 ## Testing Google On Device Measurement and Connecting to Firebase
 * Firebase Analytics requires minimum target deployment to be iOS 15. Set this in config.xml - Link: https://firebase.google.com/support/release-notes/ios#version_1200_-_july_15_2025
 * Follow this guide to register an app with Firebase and download your GoogleService-Info.plist file: https://firebase.google.com/docs/ios/setup
-* The Branch SDK will automatically generate an odmInfo field, but our exposed setODMInfo() function allows you to set it manually.
 * The below steps to connect to Firebase were built following this guide and making some modifications: https://github.com/dpa99c/cordova-plugin-firebasex#ios-specific 
 
 ## Steps to Connect Firebase: 
