@@ -1,6 +1,6 @@
 #import "BranchSDK.h"
 
-NSString * const pluginVersion = @"6.6.1-beta.1";
+NSString * const pluginVersion = @"6.6.1";
 
 @interface BranchSDK()
 
