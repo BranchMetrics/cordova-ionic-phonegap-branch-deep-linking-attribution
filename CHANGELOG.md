@@ -1,5 +1,5 @@
 6.6.1 March 3, 2026
-* Bug fix: Removed didFinishLaunchingWithOptions() from AppDelegate+BranchSDK.m to prevent app blank screen.
+* Bug fix: Removed didFinishLaunchingWithOptions() from AppDelegate+BranchSDK.m
 
 6.6.0 Feb 10, 2026
 * Update Android SDK to 5.20.3
