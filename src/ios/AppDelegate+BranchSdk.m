@@ -1,3 +1,5 @@
+#import <Intents/Intents.h>
+
 #import "AppDelegate.h"
 
 #import "BranchNPM.h"
@@ -37,6 +39,44 @@
     // send unhandled URL to notification
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
       [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"BSDKPostUnhandledURL" object:[userActivity.webpageURL absoluteString]]];
+    }
+  }
+
+  // Check for call intents
+  if (@available(iOS 10.0, *)) {
+    BOOL isCallIntent = [userActivity.activityType isEqualToString:@"INStartCallIntent"] ||
+                        [userActivity.activityType isEqualToString:@"INStartAudioCallIntent"] ||
+                        [userActivity.activityType isEqualToString:@"INStartVideoCallIntent"];
+    if (isCallIntent) {
+      NSLog(@"[Branch+CallRelay] Caught %@ — relaying to CordovaCall.", userActivity.activityType);
+      id intent = userActivity.interaction.intent;
+      INPerson *contact;
+      BOOL isVideo = NO;
+      if (@available(iOS 13.0, *)) {
+        if ([intent isKindOfClass:[INStartCallIntent class]]) {
+          INStartCallIntent *startCallIntent = (INStartCallIntent *)intent;
+          contact = startCallIntent.contacts.firstObject;
+          isVideo = startCallIntent.callCapability == INCallCapabilityVideoCall;
+        }
+      }
+      if (!contact) {
+        // Deprecated in iOS 13 but we are more likely to get these.
+        if ([intent isKindOfClass:[INStartAudioCallIntent class]]) {
+          INStartAudioCallIntent *startCallIntent = (INStartAudioCallIntent *)intent;
+          contact = startCallIntent.contacts.firstObject;
+        } else {
+          INStartVideoCallIntent *startCallIntent = (INStartVideoCallIntent *)intent;
+          contact = startCallIntent.contacts.firstObject;
+          isVideo = YES;
+        }
+      }
+      NSString *callId = contact.personHandle.value;
+      NSString *callName = [[NSUserDefaults standardUserDefaults] stringForKey:callId];
+      if(!callName) {
+        callName = callId;
+      }
+      NSDictionary *intentInfo = @{ @"callName" : callName, @"callId" : callId, @"isVideo" : isVideo?@YES:@NO};
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"RecentsCallNotification" object:intentInfo];
     }
   }
 
