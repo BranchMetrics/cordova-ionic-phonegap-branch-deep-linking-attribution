@@ -45,6 +45,7 @@
 - (void)setSDKWaitTimeForThirdPartyAPIs:(CDVInvokedUrlCommand*)command;
 - (void)setAnonID:(CDVInvokedUrlCommand*)command;
 - (void)setODMInfo:(CDVInvokedUrlCommand*)command;
+- (void)getLastNativeInitDebug:(CDVInvokedUrlCommand*)command;
 
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;
