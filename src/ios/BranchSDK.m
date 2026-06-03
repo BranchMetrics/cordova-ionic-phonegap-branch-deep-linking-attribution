@@ -1,6 +1,9 @@
 #import "BranchSDK.h"
 
 NSString * const pluginVersion = @"6.6.1";
+static NSURL *branchPendingOpenURL = nil;
+static NSDictionary *branchPendingOpenURLOptions = nil;
+static NSUserActivity *branchPendingUserActivity = nil;
 
 @interface BranchSDK()
 
@@ -11,6 +14,39 @@ NSString * const pluginVersion = @"6.6.1";
 @end
 
 @implementation BranchSDK
+
++ (void)setPendingOpenURL:(NSURL *)url options:(NSDictionary *)options
+{
+  branchPendingOpenURL = url;
+  branchPendingOpenURLOptions = options;
+}
+
++ (void)setPendingUserActivity:(NSUserActivity *)userActivity
+{
+  branchPendingUserActivity = userActivity;
+}
+
++ (NSURL *)pendingOpenURL
+{
+  return branchPendingOpenURL;
+}
+
++ (NSDictionary *)pendingOpenURLOptions
+{
+  return branchPendingOpenURLOptions;
+}
+
++ (NSUserActivity *)pendingUserActivity
+{
+  return branchPendingUserActivity;
+}
+
++ (void)clearPendingLaunchContext
+{
+  branchPendingOpenURL = nil;
+  branchPendingOpenURLOptions = nil;
+  branchPendingUserActivity = nil;
+}
 
 - (void)pluginInitialize
 {
@@ -94,7 +130,20 @@ NSString * const pluginVersion = @"6.6.1";
 - (void)initSession:(CDVInvokedUrlCommand*)command
 {
   [[Branch getInstance] registerPluginName:@"CordovaIonic" version:pluginVersion];
+
+  NSUserActivity *pendingUserActivity = [BranchSDK pendingUserActivity];
+  NSURL *pendingOpenURL = [BranchSDK pendingOpenURL];
+  NSDictionary *pendingOpenURLOptions = [BranchSDK pendingOpenURLOptions];
+
+  if (pendingUserActivity != nil) {
+    [[Branch getInstance] continueUserActivity:pendingUserActivity];
+  } else if (pendingOpenURL != nil) {
+    NSDictionary *openOptions = pendingOpenURLOptions ? pendingOpenURLOptions : @{};
+    [[Branch getInstance] application:[UIApplication sharedApplication] openURL:pendingOpenURL options:openOptions];
+  }
+
   [[Branch getInstance] initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
+    [BranchSDK clearPendingLaunchContext];
 
     NSString *resultString = nil;
     CDVPluginResult *pluginResult = nil;

@@ -21,6 +21,7 @@
 
 // Respond to URI scheme links
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  [BranchSDK setPendingOpenURL:url options:options];
   // pass the url to the handle deep link call
   if (![[Branch getInstance] application:app openURL:url options:options]) {
     // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
@@ -33,6 +34,7 @@
 
 // Respond to Universal Links
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+  [BranchSDK setPendingUserActivity:userActivity];
   if (![[Branch getInstance] continueUserActivity:userActivity]) {
     // send unhandled URL to notification
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {

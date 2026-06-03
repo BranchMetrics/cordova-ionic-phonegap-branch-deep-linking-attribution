@@ -58,5 +58,11 @@
 // Branch Query Methods
 - (void)lastAttributedTouchData:(CDVInvokedUrlCommand *)command;
 
++ (void)setPendingOpenURL:(NSURL *)url options:(NSDictionary *)options;
++ (void)setPendingUserActivity:(NSUserActivity *)userActivity;
++ (NSURL *)pendingOpenURL;
++ (NSDictionary *)pendingOpenURLOptions;
++ (NSUserActivity *)pendingUserActivity;
++ (void)clearPendingLaunchContext;
 
 @end
