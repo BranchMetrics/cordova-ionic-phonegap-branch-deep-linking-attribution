@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import "BranchNPM.h"
+#import "BranchSDK.h"
 
 #ifdef BRANCH_NPM
 #import "Branch.h"
