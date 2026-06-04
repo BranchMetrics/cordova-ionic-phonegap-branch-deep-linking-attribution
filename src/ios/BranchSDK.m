@@ -5,6 +5,7 @@ static NSURL *branchPendingOpenURL = nil;
 static NSDictionary *branchPendingOpenURLOptions = nil;
 static NSUserActivity *branchPendingUserActivity = nil;
 static NSDictionary *branchLastNativeInitDebug = nil;
+static NSMutableDictionary *branchLifecycleDebug = nil;
 
 @interface BranchSDK()
 
@@ -25,6 +26,56 @@ static NSDictionary *branchLastNativeInitDebug = nil;
 + (void)setPendingUserActivity:(NSUserActivity *)userActivity
 {
   branchPendingUserActivity = userActivity;
+}
+
++ (NSMutableDictionary *)lifecycleDebug
+{
+  if (branchLifecycleDebug == nil) {
+    branchLifecycleDebug = [NSMutableDictionary dictionary];
+  }
+  return branchLifecycleDebug;
+}
+
++ (void)noteOpenURL:(NSURL *)url options:(NSDictionary *)options
+{
+  NSMutableDictionary *debug = [BranchSDK lifecycleDebug];
+  [debug setObject:@YES forKey:@"sawOpenURL"];
+  if (url != nil) {
+    [debug setObject:[url absoluteString] forKey:@"lastOpenURL"];
+  }
+  if (options != nil) {
+    [debug setObject:options forKey:@"lastOpenURLOptions"];
+  }
+}
+
++ (void)noteUserActivity:(NSUserActivity *)userActivity
+{
+  NSMutableDictionary *debug = [BranchSDK lifecycleDebug];
+  [debug setObject:@YES forKey:@"sawContinueUserActivity"];
+  if (userActivity != nil) {
+    [debug setObject:userActivity.activityType ?: @"" forKey:@"lastUserActivityType"];
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] && userActivity.webpageURL != nil) {
+      [debug setObject:[userActivity.webpageURL absoluteString] forKey:@"lastUserActivityWebpageURL"];
+    }
+  }
+}
+
++ (void)noteDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  NSMutableDictionary *debug = [BranchSDK lifecycleDebug];
+  [debug setObject:@YES forKey:@"sawDidFinishLaunchingWithOptions"];
+  if (launchOptions != nil) {
+    [debug setObject:[launchOptions allKeys] forKey:@"launchOptionsKeys"];
+    NSURL *launchURL = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
+    if (launchURL != nil) {
+      [debug setObject:[launchURL absoluteString] forKey:@"launchOptionsURL"];
+    }
+    NSDictionary *userActivityDictionary =
+      [launchOptions objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey];
+    if (userActivityDictionary != nil) {
+      [debug setObject:[userActivityDictionary allKeys] forKey:@"launchUserActivityKeys"];
+    }
+  }
 }
 
 + (NSURL *)pendingOpenURL
@@ -166,6 +217,7 @@ static NSDictionary *branchLastNativeInitDebug = nil;
       [preInitDebug setObject:[pendingUserActivity.webpageURL absoluteString] forKey:@"pendingWebpageURL"];
     }
   }
+  [preInitDebug addEntriesFromDictionary:[BranchSDK lifecycleDebug]];
   [BranchSDK setLastNativeInitDebug:preInitDebug];
 
   [[Branch getInstance] initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {

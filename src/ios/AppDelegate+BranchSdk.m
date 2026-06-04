@@ -20,8 +20,14 @@
 
 @implementation AppDelegate (BranchSDK)
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  [BranchSDK noteDidFinishLaunchingWithOptions:launchOptions];
+  return YES;
+}
+
 // Respond to URI scheme links
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  [BranchSDK noteOpenURL:url options:options];
   [BranchSDK setPendingOpenURL:url options:options];
   // pass the url to the handle deep link call
   if (![[Branch getInstance] application:app openURL:url options:options]) {
@@ -35,6 +41,7 @@
 
 // Respond to Universal Links
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+  [BranchSDK noteUserActivity:userActivity];
   [BranchSDK setPendingUserActivity:userActivity];
   if (![[Branch getInstance] continueUserActivity:userActivity]) {
     // send unhandled URL to notification
