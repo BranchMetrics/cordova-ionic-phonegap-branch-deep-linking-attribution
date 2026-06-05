@@ -64,6 +64,7 @@
 + (void)noteOpenURL:(NSURL *)url options:(NSDictionary *)options;
 + (void)noteUserActivity:(NSUserActivity *)userActivity;
 + (void)noteDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
++ (NSDictionary *)pendingLaunchOptions;
 + (NSURL *)pendingOpenURL;
 + (NSDictionary *)pendingOpenURLOptions;
 + (NSUserActivity *)pendingUserActivity;

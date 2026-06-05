@@ -4,6 +4,7 @@ NSString * const pluginVersion = @"6.6.1";
 static NSURL *branchPendingOpenURL = nil;
 static NSDictionary *branchPendingOpenURLOptions = nil;
 static NSUserActivity *branchPendingUserActivity = nil;
+static NSDictionary *branchPendingLaunchOptions = nil;
 static NSDictionary *branchLastNativeInitDebug = nil;
 static NSMutableDictionary *branchLifecycleDebug = nil;
 
@@ -64,6 +65,7 @@ static NSMutableDictionary *branchLifecycleDebug = nil;
 {
   NSMutableDictionary *debug = [BranchSDK lifecycleDebug];
   [debug setObject:@YES forKey:@"sawDidFinishLaunchingWithOptions"];
+  branchPendingLaunchOptions = launchOptions;
   if (launchOptions != nil) {
     [debug setObject:[launchOptions allKeys] forKey:@"launchOptionsKeys"];
     NSURL *launchURL = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
@@ -93,11 +95,17 @@ static NSMutableDictionary *branchLifecycleDebug = nil;
   return branchPendingUserActivity;
 }
 
++ (NSDictionary *)pendingLaunchOptions
+{
+  return branchPendingLaunchOptions;
+}
+
 + (void)clearPendingLaunchContext
 {
   branchPendingOpenURL = nil;
   branchPendingOpenURLOptions = nil;
   branchPendingUserActivity = nil;
+  branchPendingLaunchOptions = nil;
 }
 
 + (void)setLastNativeInitDebug:(NSDictionary *)debugInfo
@@ -196,6 +204,7 @@ static NSMutableDictionary *branchLifecycleDebug = nil;
   NSUserActivity *pendingUserActivity = [BranchSDK pendingUserActivity];
   NSURL *pendingOpenURL = [BranchSDK pendingOpenURL];
   NSDictionary *pendingOpenURLOptions = [BranchSDK pendingOpenURLOptions];
+  NSDictionary *pendingLaunchOptions = [BranchSDK pendingLaunchOptions];
 
   if (pendingUserActivity != nil) {
     [[Branch getInstance] continueUserActivity:pendingUserActivity];
@@ -208,8 +217,12 @@ static NSMutableDictionary *branchLifecycleDebug = nil;
   [preInitDebug setObject:pluginVersion forKey:@"pluginVersion"];
   [preInitDebug setObject:[NSNumber numberWithBool:(pendingUserActivity != nil)] forKey:@"hadPendingUserActivity"];
   [preInitDebug setObject:[NSNumber numberWithBool:(pendingOpenURL != nil)] forKey:@"hadPendingOpenURL"];
+  [preInitDebug setObject:[NSNumber numberWithBool:(pendingLaunchOptions != nil)] forKey:@"hadPendingLaunchOptions"];
   if (pendingOpenURL != nil) {
     [preInitDebug setObject:[pendingOpenURL absoluteString] forKey:@"pendingOpenURL"];
+  }
+  if (pendingLaunchOptions != nil) {
+    [preInitDebug setObject:[pendingLaunchOptions allKeys] forKey:@"pendingLaunchOptionsKeys"];
   }
   if (pendingUserActivity != nil) {
     [preInitDebug setObject:pendingUserActivity.activityType ?: @"" forKey:@"pendingUserActivityType"];
@@ -220,7 +233,7 @@ static NSMutableDictionary *branchLifecycleDebug = nil;
   [preInitDebug addEntriesFromDictionary:[BranchSDK lifecycleDebug]];
   [BranchSDK setLastNativeInitDebug:preInitDebug];
 
-  [[Branch getInstance] initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
+  [[Branch getInstance] initSessionWithLaunchOptions:pendingLaunchOptions andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
     [BranchSDK clearPendingLaunchContext];
 
     NSMutableDictionary *nativeDebug = [NSMutableDictionary dictionaryWithDictionary:[BranchSDK lastNativeInitDebug] ?: @{}];
