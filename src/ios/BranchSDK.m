@@ -122,12 +122,40 @@ static NSMutableDictionary *branchLifecycleDebug = nil;
 {
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenURLNotification:) name:CDVPluginHandleOpenURLNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenURLWithAppSourceAndAnnotationNotification:) name:CDVPluginHandleOpenURLWithAppSourceAndAnnotationNotification object:nil];
 }
 
 - (void)handleOpenURLNotification:(NSNotification*)notification
 {
     NSURL* url = [notification object];
+    [BranchSDK noteOpenURL:url options:@{ @"source": @"CDVPluginHandleOpenURLNotification" }];
+    [BranchSDK setPendingOpenURL:url options:@{}];
     [[Branch getInstance] application:[UIApplication sharedApplication]  openURL:url options:@{}];
+}
+
+- (void)handleOpenURLWithAppSourceAndAnnotationNotification:(NSNotification*)notification
+{
+    NSDictionary *openURLData = [notification object];
+    NSURL *url = [openURLData objectForKey:@"url"];
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+
+    id sourceApplication = [openURLData objectForKey:@"sourceApplication"];
+    if (sourceApplication != nil) {
+      [options setObject:sourceApplication forKey:UIApplicationOpenURLOptionsSourceApplicationKey];
+    }
+
+    id annotation = [openURLData objectForKey:@"annotation"];
+    if (annotation != nil) {
+      [options setObject:annotation forKey:UIApplicationOpenURLOptionsAnnotationKey];
+    }
+
+    [options setObject:@"CDVPluginHandleOpenURLWithAppSourceAndAnnotationNotification" forKey:@"source"];
+
+    if (url != nil) {
+      [BranchSDK noteOpenURL:url options:options];
+      [BranchSDK setPendingOpenURL:url options:options];
+      [[Branch getInstance] application:[UIApplication sharedApplication] openURL:url options:options];
+    }
 }
 
 #pragma mark - Private APIs
