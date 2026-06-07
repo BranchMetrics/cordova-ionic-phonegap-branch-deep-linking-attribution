@@ -61,6 +61,68 @@ static NSMutableDictionary *branchLifecycleDebug = nil;
   }
 }
 
++ (void)noteSceneWillConnectWithURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts
+                             userActivities:(NSSet<NSUserActivity *> *)userActivities
+{
+  NSMutableDictionary *debug = [BranchSDK lifecycleDebug];
+  [debug setObject:@YES forKey:@"sawSceneWillConnect"];
+  [debug setObject:@([URLContexts count]) forKey:@"sceneURLContextCount"];
+  [debug setObject:@([userActivities count]) forKey:@"sceneUserActivityCount"];
+
+  UIOpenURLContext *context = [URLContexts allObjects].firstObject;
+  if (context != nil) {
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+    if (context.options.sourceApplication != nil) {
+      [options setObject:context.options.sourceApplication
+                  forKey:UIApplicationOpenURLOptionsSourceApplicationKey];
+    }
+    if (context.options.annotation != nil) {
+      [options setObject:context.options.annotation
+                  forKey:UIApplicationOpenURLOptionsAnnotationKey];
+    }
+    [options setObject:@"sceneWillConnect" forKey:@"source"];
+    [BranchSDK noteOpenURL:context.URL options:options];
+    [BranchSDK setPendingOpenURL:context.URL options:options];
+  }
+
+  NSUserActivity *userActivity = [userActivities allObjects].firstObject;
+  if (userActivity != nil) {
+    [BranchSDK noteUserActivity:userActivity];
+    [BranchSDK setPendingUserActivity:userActivity];
+  }
+}
+
++ (void)noteSceneOpenURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts
+{
+  NSMutableDictionary *debug = [BranchSDK lifecycleDebug];
+  [debug setObject:@YES forKey:@"sawSceneOpenURLContexts"];
+  [debug setObject:@([URLContexts count]) forKey:@"sceneOpenURLContextCount"];
+
+  UIOpenURLContext *context = [URLContexts allObjects].firstObject;
+  if (context != nil) {
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+    if (context.options.sourceApplication != nil) {
+      [options setObject:context.options.sourceApplication
+                  forKey:UIApplicationOpenURLOptionsSourceApplicationKey];
+    }
+    if (context.options.annotation != nil) {
+      [options setObject:context.options.annotation
+                  forKey:UIApplicationOpenURLOptionsAnnotationKey];
+    }
+    [options setObject:@"sceneOpenURLContexts" forKey:@"source"];
+    [BranchSDK noteOpenURL:context.URL options:options];
+    [BranchSDK setPendingOpenURL:context.URL options:options];
+  }
+}
+
++ (void)noteSceneUserActivity:(NSUserActivity *)userActivity
+{
+  NSMutableDictionary *debug = [BranchSDK lifecycleDebug];
+  [debug setObject:@YES forKey:@"sawSceneContinueUserActivity"];
+  [BranchSDK noteUserActivity:userActivity];
+  [BranchSDK setPendingUserActivity:userActivity];
+}
+
 + (void)noteDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   NSMutableDictionary *debug = [BranchSDK lifecycleDebug];

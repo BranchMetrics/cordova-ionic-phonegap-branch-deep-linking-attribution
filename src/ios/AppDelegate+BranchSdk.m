@@ -16,6 +16,9 @@
 @interface AppDelegate (BranchSDK)
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler;
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions;
+- (void)scene:(UIScene *)scene continueUserActivity:(NSUserActivity *)userActivity;
+- (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
 
 @end
 
@@ -60,6 +63,8 @@ static void BSDKSwizzleSelectorOnClass(Class targetClass, SEL originalSelector, 
   dispatch_once(&onceToken, ^{
     Class appDelegateClass = NSClassFromString(@"AppDelegate");
     Class cordovaAppDelegateClass = NSClassFromString(@"CDVAppDelegate");
+    Class sceneDelegateClass = NSClassFromString(@"SceneDelegate");
+    Class cordovaSceneDelegateClass = NSClassFromString(@"CDVSceneDelegate");
 
     BSDKSwizzleSelectorOnClass(appDelegateClass,
                                @selector(application:didFinishLaunchingWithOptions:),
@@ -88,6 +93,27 @@ static void BSDKSwizzleSelectorOnClass(Class targetClass, SEL originalSelector, 
     BSDKSwizzleSelectorOnClass(cordovaAppDelegateClass,
                                @selector(application:didReceiveRemoteNotification:),
                                @selector(bsdk_application:didReceiveRemoteNotification:));
+
+    BSDKSwizzleSelectorOnClass(sceneDelegateClass,
+                               @selector(scene:willConnectToSession:options:),
+                               @selector(bsdk_scene:willConnectToSession:options:));
+    BSDKSwizzleSelectorOnClass(cordovaSceneDelegateClass,
+                               @selector(scene:willConnectToSession:options:),
+                               @selector(bsdk_scene:willConnectToSession:options:));
+
+    BSDKSwizzleSelectorOnClass(sceneDelegateClass,
+                               @selector(scene:continueUserActivity:),
+                               @selector(bsdk_scene:continueUserActivity:));
+    BSDKSwizzleSelectorOnClass(cordovaSceneDelegateClass,
+                               @selector(scene:continueUserActivity:),
+                               @selector(bsdk_scene:continueUserActivity:));
+
+    BSDKSwizzleSelectorOnClass(sceneDelegateClass,
+                               @selector(scene:openURLContexts:),
+                               @selector(bsdk_scene:openURLContexts:));
+    BSDKSwizzleSelectorOnClass(cordovaSceneDelegateClass,
+                               @selector(scene:openURLContexts:),
+                               @selector(bsdk_scene:openURLContexts:));
   });
 }
 
@@ -156,6 +182,48 @@ static void BSDKSwizzleSelectorOnClass(Class targetClass, SEL originalSelector, 
                                     @selector(application:didReceiveRemoteNotification:),
                                     @selector(bsdk_application:didReceiveRemoteNotification:))) {
     [self bsdk_application:application didReceiveRemoteNotification:userInfo];
+  }
+}
+
+- (void)bsdk_scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+  [BranchSDK noteSceneWillConnectWithURLContexts:connectionOptions.URLContexts
+                                  userActivities:connectionOptions.userActivities];
+
+  if (BSDKHasOriginalImplementation(self,
+                                    @selector(scene:willConnectToSession:options:),
+                                    @selector(bsdk_scene:willConnectToSession:options:))) {
+    [self bsdk_scene:scene willConnectToSession:session options:connectionOptions];
+  }
+}
+
+- (void)bsdk_scene:(UIScene *)scene continueUserActivity:(NSUserActivity *)userActivity {
+  [BranchSDK noteSceneUserActivity:userActivity];
+  [[Branch getInstance] continueUserActivity:userActivity];
+
+  if (BSDKHasOriginalImplementation(self,
+                                    @selector(scene:continueUserActivity:),
+                                    @selector(bsdk_scene:continueUserActivity:))) {
+    [self bsdk_scene:scene continueUserActivity:userActivity];
+  }
+}
+
+- (void)bsdk_scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
+  [BranchSDK noteSceneOpenURLContexts:URLContexts];
+
+  UIOpenURLContext *context = [URLContexts allObjects].firstObject;
+  if (context != nil) {
+    [[Branch getInstance] application:[UIApplication sharedApplication]
+                              openURL:context.URL
+                              options:@{
+                                UIApplicationOpenURLOptionsSourceApplicationKey: context.options.sourceApplication ?: @"",
+                                UIApplicationOpenURLOptionsAnnotationKey: context.options.annotation ?: @""
+                              }];
+  }
+
+  if (BSDKHasOriginalImplementation(self,
+                                    @selector(scene:openURLContexts:),
+                                    @selector(bsdk_scene:openURLContexts:))) {
+    [self bsdk_scene:scene openURLContexts:URLContexts];
   }
 }
 

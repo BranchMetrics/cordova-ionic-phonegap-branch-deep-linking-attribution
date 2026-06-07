@@ -64,6 +64,10 @@
 + (void)noteOpenURL:(NSURL *)url options:(NSDictionary *)options;
 + (void)noteUserActivity:(NSUserActivity *)userActivity;
 + (void)noteDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
++ (void)noteSceneWillConnectWithURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts
+                             userActivities:(NSSet<NSUserActivity *> *)userActivities;
++ (void)noteSceneOpenURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
++ (void)noteSceneUserActivity:(NSUserActivity *)userActivity;
 + (NSDictionary *)pendingLaunchOptions;
 + (NSURL *)pendingOpenURL;
 + (NSDictionary *)pendingOpenURLOptions;
