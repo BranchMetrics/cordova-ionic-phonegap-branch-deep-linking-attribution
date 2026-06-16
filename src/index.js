@@ -154,10 +154,6 @@ Branch.prototype.getLatestReferringParams =
     return execute("getLatestReferringParams");
   };
 
-Branch.prototype.getLastNativeInitDebug = function getLastNativeInitDebug() {
-  return execute("getLastNativeInitDebug");
-};
-
 Branch.prototype.setIdentity = function setIdentity(identity) {
   if (identity) {
     return execute("setIdentity", [String(identity)]);

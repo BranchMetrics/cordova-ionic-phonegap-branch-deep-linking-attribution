@@ -45,7 +45,6 @@
 - (void)setSDKWaitTimeForThirdPartyAPIs:(CDVInvokedUrlCommand*)command;
 - (void)setAnonID:(CDVInvokedUrlCommand*)command;
 - (void)setODMInfo:(CDVInvokedUrlCommand*)command;
-- (void)getLastNativeInitDebug:(CDVInvokedUrlCommand*)command;
 
 // Branch Universal Object Methods
 - (void)createBranchUniversalObject:(CDVInvokedUrlCommand*)command;
@@ -68,10 +67,10 @@
                              userActivities:(NSSet<NSUserActivity *> *)userActivities;
 + (void)noteSceneOpenURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts;
 + (void)noteSceneUserActivity:(NSUserActivity *)userActivity;
-+ (NSDictionary *)pendingLaunchOptions;
 + (NSURL *)pendingOpenURL;
 + (NSDictionary *)pendingOpenURLOptions;
 + (NSUserActivity *)pendingUserActivity;
++ (NSDictionary *)pendingLaunchOptions;
 + (void)clearPendingLaunchContext;
 
 @end
