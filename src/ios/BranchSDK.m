@@ -98,7 +98,7 @@ NSString * const pluginVersion = @"6.6.1";
 
     NSString *resultString = nil;
     CDVPluginResult *pluginResult = nil;
-    bool enableCallBack = [[command.arguments objectAtIndex:0] boolValue];
+    bool enableCallBack = command.arguments.count > 0 && [[command.arguments objectAtIndex:0] boolValue];
 
     if (!error) {
       if (params != nil && [params count] > 0) {

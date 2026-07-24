@@ -1,3 +1,8 @@
+Unreleased
+* Added initSessionWithCallback(onSuccess, onFail) - like initSession(), but keeps the native
+  callback alive (keepCallback) so Branch links opened while the app is already running
+  (Android onNewIntent -> reInit) are also delivered, not just the first one.
+
 6.6.1 March 3, 2026
 * Bug fix: Removed didFinishLaunchingWithOptions() from AppDelegate+BranchSDK.m
 

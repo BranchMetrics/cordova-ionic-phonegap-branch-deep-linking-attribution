@@ -65,13 +65,17 @@ function execute(method, params) {
   });
 }
 
-function executeCallback(method, callback, params) {
+function executeCallback(method, callback, params, onFail) {
   var output = !params ? [] : params;
 
   exec(
     callback,
     function failure(err) {
-      console.error(err);
+      if (typeof onFail === "function") {
+        onFail(err);
+      } else {
+        console.error(err);
+      }
     },
     API_CLASS,
     method,
@@ -106,12 +110,14 @@ Branch.prototype.initSession = function initSession() {
   return execute("initSession");
 };
 
-Branch.prototype.initSessionWithCallback = function initSession(onSuccess, onFail) {
+// keepCallback keeps the native success handler alive so links opened while the app is
+// already running (Android onNewIntent -> reInit) are delivered too, not just the first one.
+Branch.prototype.initSessionWithCallback = function initSessionWithCallback(onSuccess, onFail) {
   this.sessionInitialized = true;
   if (!onSuccess || typeof onSuccess !== "function") {
     return executeReject("Please set onSuccess callback");
   }
-  return executeCallback("initSession", onSuccess, [true]);
+  return executeCallback("initSession", onSuccess, [true], onFail);
 };
 
 Branch.prototype.setRequestMetadata = function setRequestMetadata(key, val) {
