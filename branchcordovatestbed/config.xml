@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.branch.testbed" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>BranchCordovaTestbed</name>
+    <description>
+        A sample Apache Cordova application that responds to the deviceready event.
+    </description>
+    <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
+        Apache Cordova Team
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+
+    <platform name="ios">
+        <preference name="deployment-target" value="15.0" />
+        
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+
+    <branch-config>
+        <branch-key value="key_live_hcnegAumkH7Kv18M8AOHhfgiohpXq5tB" />
+        <uri-scheme value="branchcordovatestbed" />
+        <ios-team-release value="R63EM248DP" />
+        <link-domain value="bnctestbed.app.link" /> 
+        <link-domain value="bnctestbed-alternate.app.link" /> 
+    </branch-config>
+</widget>
