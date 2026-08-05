@@ -32,6 +32,13 @@
   // get the xcode .entitlements and provisioning profile .plist
   function getEntitlementFiles(preferences) {
     const files = [];
+    // Since cordova-ios 8.0.0 the generated Xcode project/target is always named "App",
+    // regardless of the <name> set in config.xml, so derive the real folder name from the
+    // already-resolved xcodeproj path instead of preferences.projectName.
+    const projectFolderName = path.basename(
+      path.dirname(preferences.iosProjectModule.xcode.filepath),
+      ".xcodeproj"
+    );
 
     for (let i = 0; i < BUILD_TYPES.length; i++) {
       const buildType = BUILD_TYPES[i];
@@ -39,7 +46,7 @@
         preferences.projectRoot,
         "platforms",
         "ios",
-        preferences.projectName,
+        projectFolderName,
         `Entitlements-${buildType}.plist`
       );
       files.push(plist);
