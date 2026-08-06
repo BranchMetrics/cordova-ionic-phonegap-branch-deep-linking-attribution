@@ -1,6 +1,10 @@
 #import "BranchSDK.h"
 
 NSString * const pluginVersion = @"6.6.1";
+static NSURL *branchPendingOpenURL = nil;
+static NSDictionary *branchPendingOpenURLOptions = nil;
+static NSUserActivity *branchPendingUserActivity = nil;
+static NSDictionary *branchPendingLaunchOptions = nil;
 
 @interface BranchSDK()
 
@@ -12,16 +16,148 @@ NSString * const pluginVersion = @"6.6.1";
 
 @implementation BranchSDK
 
++ (void)setPendingOpenURL:(NSURL *)url options:(NSDictionary *)options
+{
+  branchPendingOpenURL = url;
+  branchPendingOpenURLOptions = options;
+}
+
++ (void)setPendingUserActivity:(NSUserActivity *)userActivity
+{
+  branchPendingUserActivity = userActivity;
+}
+
++ (void)noteOpenURL:(NSURL *)url options:(NSDictionary *)options
+{
+  [BranchSDK setPendingOpenURL:url options:options];
+}
+
++ (void)noteUserActivity:(NSUserActivity *)userActivity
+{
+  [BranchSDK setPendingUserActivity:userActivity];
+}
+
++ (void)noteSceneWillConnectWithURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts
+                             userActivities:(NSSet<NSUserActivity *> *)userActivities
+{
+  UIOpenURLContext *context = [URLContexts allObjects].firstObject;
+  if (context != nil) {
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+    if (context.options.sourceApplication != nil) {
+      [options setObject:context.options.sourceApplication
+                  forKey:UIApplicationOpenURLOptionsSourceApplicationKey];
+    }
+    if (context.options.annotation != nil) {
+      [options setObject:context.options.annotation
+                  forKey:UIApplicationOpenURLOptionsAnnotationKey];
+    }
+    [options setObject:@"sceneWillConnect" forKey:@"source"];
+    [BranchSDK noteOpenURL:context.URL options:options];
+    [BranchSDK setPendingOpenURL:context.URL options:options];
+  }
+
+  NSUserActivity *userActivity = [userActivities allObjects].firstObject;
+  if (userActivity != nil) {
+    [BranchSDK noteUserActivity:userActivity];
+    [BranchSDK setPendingUserActivity:userActivity];
+  }
+}
+
++ (void)noteSceneOpenURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts
+{
+  UIOpenURLContext *context = [URLContexts allObjects].firstObject;
+  if (context != nil) {
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+    if (context.options.sourceApplication != nil) {
+      [options setObject:context.options.sourceApplication
+                  forKey:UIApplicationOpenURLOptionsSourceApplicationKey];
+    }
+    if (context.options.annotation != nil) {
+      [options setObject:context.options.annotation
+                  forKey:UIApplicationOpenURLOptionsAnnotationKey];
+    }
+    [options setObject:@"sceneOpenURLContexts" forKey:@"source"];
+    [BranchSDK noteOpenURL:context.URL options:options];
+    [BranchSDK setPendingOpenURL:context.URL options:options];
+  }
+}
+
++ (void)noteSceneUserActivity:(NSUserActivity *)userActivity
+{
+  [BranchSDK noteUserActivity:userActivity];
+}
+
++ (void)noteDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  branchPendingLaunchOptions = launchOptions;
+}
+
++ (NSURL *)pendingOpenURL
+{
+  return branchPendingOpenURL;
+}
+
++ (NSDictionary *)pendingOpenURLOptions
+{
+  return branchPendingOpenURLOptions;
+}
+
++ (NSUserActivity *)pendingUserActivity
+{
+  return branchPendingUserActivity;
+}
+
++ (NSDictionary *)pendingLaunchOptions
+{
+  return branchPendingLaunchOptions;
+}
+
++ (void)clearPendingLaunchContext
+{
+  branchPendingOpenURL = nil;
+  branchPendingOpenURLOptions = nil;
+  branchPendingUserActivity = nil;
+  branchPendingLaunchOptions = nil;
+}
+
 - (void)pluginInitialize
 {
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenURLNotification:) name:CDVPluginHandleOpenURLNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenURLWithAppSourceAndAnnotationNotification:) name:CDVPluginHandleOpenURLWithAppSourceAndAnnotationNotification object:nil];
 }
 
 - (void)handleOpenURLNotification:(NSNotification*)notification
 {
     NSURL* url = [notification object];
+    [BranchSDK noteOpenURL:url options:@{ @"source": @"CDVPluginHandleOpenURLNotification" }];
+    [BranchSDK setPendingOpenURL:url options:@{}];
     [[Branch getInstance] application:[UIApplication sharedApplication]  openURL:url options:@{}];
+}
+
+- (void)handleOpenURLWithAppSourceAndAnnotationNotification:(NSNotification*)notification
+{
+    NSDictionary *openURLData = [notification object];
+    NSURL *url = [openURLData objectForKey:@"url"];
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+
+    id sourceApplication = [openURLData objectForKey:@"sourceApplication"];
+    if (sourceApplication != nil) {
+      [options setObject:sourceApplication forKey:UIApplicationOpenURLOptionsSourceApplicationKey];
+    }
+
+    id annotation = [openURLData objectForKey:@"annotation"];
+    if (annotation != nil) {
+      [options setObject:annotation forKey:UIApplicationOpenURLOptionsAnnotationKey];
+    }
+
+    [options setObject:@"CDVPluginHandleOpenURLWithAppSourceAndAnnotationNotification" forKey:@"source"];
+
+    if (url != nil) {
+      [BranchSDK noteOpenURL:url options:options];
+      [BranchSDK setPendingOpenURL:url options:options];
+      [[Branch getInstance] application:[UIApplication sharedApplication] openURL:url options:options];
+    }
 }
 
 #pragma mark - Private APIs
@@ -94,7 +230,21 @@ NSString * const pluginVersion = @"6.6.1";
 - (void)initSession:(CDVInvokedUrlCommand*)command
 {
   [[Branch getInstance] registerPluginName:@"CordovaIonic" version:pluginVersion];
-  [[Branch getInstance] initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
+
+  NSUserActivity *pendingUserActivity = [BranchSDK pendingUserActivity];
+  NSURL *pendingOpenURL = [BranchSDK pendingOpenURL];
+  NSDictionary *pendingOpenURLOptions = [BranchSDK pendingOpenURLOptions];
+  NSDictionary *pendingLaunchOptions = [BranchSDK pendingLaunchOptions];
+
+  if (pendingUserActivity != nil) {
+    [[Branch getInstance] continueUserActivity:pendingUserActivity];
+  } else if (pendingOpenURL != nil) {
+    NSDictionary *openOptions = pendingOpenURLOptions ? pendingOpenURLOptions : @{};
+    [[Branch getInstance] application:[UIApplication sharedApplication] openURL:pendingOpenURL options:openOptions];
+  }
+
+  [[Branch getInstance] initSessionWithLaunchOptions:pendingLaunchOptions andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
+    [BranchSDK clearPendingLaunchContext];
 
     NSString *resultString = nil;
     CDVPluginResult *pluginResult = nil;
