@@ -55,7 +55,7 @@
     ]
   },
   "dependencies": {
-    "glob": "^8.0.3",
+    "glob": "^9.0.0",
     "mkpath": "^1.0.0",
     "node-version-compare": "^1.0.3",
     "plist": "^3.0.5",
