@@ -16,6 +16,18 @@ NSString * const pluginVersion = @"6.6.1";
 {
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenURLNotification:) name:CDVPluginHandleOpenURLNotification object:nil];
+#if __has_include(<Cordova/CDVPluginNotifications.h>)
+  // From cordova-ios 8 the app declares a UIApplicationSceneManifest, so UIKit calls the scene
+  // delegate and -application:continueUserActivity:restorationHandler: in AppDelegate+BranchSdk.m is
+  // never reached. cordova-ios posts this notification instead. Without observing it, a universal
+  // link opens the app and is then dropped; a URI-scheme link is unaffected, because that arrives as
+  // a URL and is covered by the observer above.
+  //
+  // Guarded on the header: it and CDVPluginContinueUserActivityNotification both arrived in
+  // cordova-ios 8.0.0, and an unguarded reference stops the plugin compiling against 7.x, where the
+  // AppDelegate hook is the one UIKit calls.
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleContinueUserActivityNotification:) name:CDVPluginContinueUserActivityNotification object:nil];
+#endif
 }
 
 - (void)handleOpenURLNotification:(NSNotification*)notification
@@ -23,6 +35,20 @@ NSString * const pluginVersion = @"6.6.1";
     NSURL* url = [notification object];
     [[Branch getInstance] application:[UIApplication sharedApplication]  openURL:url options:@{}];
 }
+
+#if __has_include(<Cordova/CDVPluginNotifications.h>)
+- (void)handleContinueUserActivityNotification:(NSNotification*)notification
+{
+    NSUserActivity* userActivity = [notification object];
+    if (![[Branch getInstance] continueUserActivity:userActivity]) {
+        // Same fallback as the AppDelegate category, so a link Branch does not claim is still
+        // announced.
+        if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"BSDKPostUnhandledURL" object:[userActivity.webpageURL absoluteString]];
+        }
+    }
+}
+#endif
 
 #pragma mark - Private APIs
 #pragma mark - Global Instance Accessors
